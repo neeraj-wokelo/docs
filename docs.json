@@ -76,5 +76,10 @@
     "socials": {
       "linkedin": "https://linkedin.com/company/wokelo-ai"
     }
+  },
+  "integrations": {
+    "gtm": {
+      "tagId": "GTM-XXXXXXX"
+    }
   }
 }
