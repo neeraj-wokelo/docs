@@ -52,10 +52,6 @@
       {
         "label": "Support",
         "href": "mailto:support@akta.pro"
-      },
-      {
-        "href": "https://playground.akta.pro/",
-        "label": "Playground"
       }
     ],
     "primary": {
