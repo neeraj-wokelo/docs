@@ -1,0 +1,84 @@
+{
+  "$schema": "https://mintlify.com/docs.json",
+  "theme": "mint",
+  "name": "Akta API Documentation",
+  "colors": {
+    "primary": "#41af97",
+    "light": "#41af97",
+    "dark": "#1D7C6D"
+  },
+  "favicon": {
+    "light": "/images/SVG.svg",
+    "dark": "/images/SVG.svg"
+  },
+  "navigation": {
+    "tabs": [
+      {
+        "tab": "Documentation",
+        "groups": [
+          {
+            "group": "Overview",
+            "pages": [
+              "getting-started",
+              "credits"
+            ],
+            "icon": "page"
+          },
+          {
+            "group": "API Products",
+            "pages": [
+              "company-news-monitoring-doc",
+              "company-news-monitoring-document"
+            ],
+            "icon": "network-wired"
+          }
+        ]
+      },
+      {
+        "tab": "API Reference",
+        "pages": [
+          "company-news-monitoring"
+        ]
+      }
+    ]
+  },
+  "logo": {
+    "light": "/images/Group2147256098(1).svg",
+    "dark": "/images/Group2147256098.svg",
+    "href": "https://akta.wokelo.ai/"
+  },
+  "navbar": {
+    "links": [
+      {
+        "label": "Support",
+        "href": "mailto:support@akta.pro"
+      },
+      {
+        "href": "https://playground.akta.pro/",
+        "label": "Playground"
+      }
+    ],
+    "primary": {
+      "type": "button",
+      "label": "Dashboard",
+      "href": "https://dashboard.mintlify.com"
+    }
+  },
+  "contextual": {
+    "options": [
+     "copy",
+     "view",
+     "chatgpt",
+     "claude",
+     "perplexity",
+     "mcp",
+     "cursor",
+     "vscode"
+   ]
+  },
+  "footer": {
+    "socials": {
+      "linkedin": "https://linkedin.com/company/wokelo-ai"
+    }
+  }
+}

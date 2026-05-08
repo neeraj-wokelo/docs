@@ -1,0 +1,169 @@
+---
+title: "Company News Monitoring"
+description: "Fetch recent company news articles enriched with AI summaries, event categories, publisher metadata, sentiment, industry tags, and article text."
+api: "GET /api/v1/company/news/"
+---
+
+## Overview
+
+The Company News Monitoring API returns the latest news articles for a given company. Each result is enriched with an AI-generated summary, event classification, publisher metadata, sentiment, company mentions, geography, industry tags, and scraped article text
+
+Results are returned synchronously in the HTTP response.
+
+## Endpoint Details
+
+- **Method:** `GET`
+- **Endpoint:** `/api/v1/company/news/`
+- **Base URL:** `https://api.akta.pro`
+
+## Authentication requirements
+
+Pass your API key in the `x-api-key` request header.
+
+```bash
+-H "x-api-key: YOUR_API_KEY"
+```
+
+## Request
+
+### Request Parameters
+
+### Header Parameters
+
+<ParamField header="x-api-key" type="string" required>
+  API key used to authenticate the request.
+</ParamField>
+
+### Query Parameters
+
+<ParamField query="company" type="string" required>
+  Company permalink or valid company URL for which news articles should be fetched. Example: `tesla`.
+</ParamField>
+
+<ParamField query="start_date" type="string">
+  Start date for the news timeframe, formatted as `YYYY-MM-DD`.
+</ParamField>
+
+<ParamField query="end_date" type="string">
+  End date for the news timeframe, formatted as `YYYY-MM-DD`.
+</ParamField>
+
+<ParamField query="category" type="string">
+  Comma-separated list of news categories to include. Category names must be URL-encoded when sent in a raw query string.
+</ParamField>
+
+<ParamField query="limit" type="integer">
+  Maximum number of news articles to return in the current response.
+</ParamField>
+
+<ParamField query="offset" type="integer">
+  Number of records to skip before returning results. Use this with `limit` for pagination.
+</ParamField>
+
+<ParamField query="blacklisted" type="string">
+  Comma-separated list of publisher domains to exclude from results. Include the publisher domain only, for example `wokelo.ai`.
+</ParamField>
+
+## Response
+
+### Successful Response Fields
+
+Returns a JSON object with the following structure:
+
+<ResponseField name="status" type="string">
+  Request status. Successful requests return `success`.
+</ResponseField>
+
+<ResponseField name="data" type="array">
+  Array of company news article objects.
+</ResponseField>
+
+<ResponseField name="count" type="integer">
+  Number of article objects returned in the current response.
+</ResponseField>
+
+<ResponseField name="total" type="integer">
+  Total number of articles matching the request filters.
+</ResponseField>
+
+<ResponseField name="limit" type="integer">
+  Maximum number of articles requested for the current response.
+</ResponseField>
+
+<ResponseField name="offset" type="integer">
+  Number of records skipped before the current response.
+</ResponseField>
+
+## Article Object Fields
+
+<ResponseField name="ai_summary" type="string">
+  AI-generated summary of the article.
+</ResponseField>
+
+<ResponseField name="type" type="string">
+  Event type assigned to the article.
+</ResponseField>
+
+<ResponseField name="url" type="string">
+  Source article URL.
+</ResponseField>
+
+<ResponseField name="title" type="string">
+  Article headline.
+</ResponseField>
+
+<ResponseField name="company_name" type="string">
+  Primary company associated with the article.
+</ResponseField>
+
+<ResponseField name="publisher" type="string">
+  Publisher or source domain label.
+</ResponseField>
+
+<ResponseField name="published_date" type="string">
+  Publication timestamp returned by the API.
+</ResponseField>
+
+<ResponseField name="author" type="string">
+  Article author, when available.
+</ResponseField>
+
+<ResponseField name="countries" type="array of strings">
+  Countries associated with the article.
+</ResponseField>
+
+<ResponseField name="sentiment" type="string">
+  Sentiment classification for the article. Example: `Positive`, `Neutral`.
+</ResponseField>
+
+<ResponseField name="company_names" type="array of objects">
+  Companies mentioned in the article, with `name` and `website` where available.
+</ResponseField>
+
+<ResponseField name="primary_tag" type="string">
+  Primary news category or event tag assigned to the article.
+</ResponseField>
+
+<ResponseField name="original_language" type="string">
+  Original language code for the article. Example: `EN`.
+</ResponseField>
+
+<ResponseField name="secondary_tags" type="array of strings">
+  Additional categories or event tags assigned to the article.
+</ResponseField>
+
+<ResponseField name="newsworthiness_impact" type="string">
+  Estimated impact level of the article. Example: `Medium`.
+</ResponseField>
+
+<ResponseField name="primary_industry" type="string">
+  Primary industry classification associated with the article.
+</ResponseField>
+
+<ResponseField name="secondary_industry" type="array of strings">
+  Additional industry classifications associated with the article.
+</ResponseField>
+
+<ResponseField name="scraped_text" type="string">
+  Extracted article text.
+</ResponseField>
