@@ -60,8 +60,8 @@
     ],
     "primary": {
       "type": "button",
-      "label": "Dashboard",
-      "href": "https://dashboard.mintlify.com"
+      "label": "Playground",
+      "href": "https://playground.akta.pro/"
     }
   },
   "contextual": {
