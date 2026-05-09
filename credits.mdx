@@ -1,52 +1,84 @@
 ---
-title: "Credits"
+title: "Pricing"
 ---
 
-## Account balance
+## Summary
 
-Your remaining balance is displayed at the top of the billing page along with options to top up credits or add a payment method.
+Akta usage is charged in credits. Pricing depends on your plan, endpoint usage, and monthly credit tier.
 
-A payment method must be added via **Setup** before top-ups and recurring billing can be processed.
+| Plan | Price | Best for | Search | Rate limit | Support |
+| :-- | :-- | :-- | :-- | :-- | :-- |
+| Pay as you go | \$ | Getting started without commitment | \$ | 50 requests / minute | Email support |
+| Starter | \$ | Light developer and workflow usage | \$ | 100 requests / minute | Email support |
+| Pro | \$\$ | Production and higher-volume usage | \$ | 250 requests / minute | Priority support |
+| Enterprise | Custom | Custom endpoints, feeds, limits, and deployment needs | Custom | Custom | Dedicated Account Manager |
+
+<Info>
+  Search pricing is calculated using credits. Higher plans receive lower per-credit pricing and higher rate limits.
+</Info>
+
+## Credits
+
+Your remaining credit balance is displayed at the top of the billing page.
+
+You can top up credits or add a payment method from the billing page. A payment method must be added via **Setup** before top-ups or recurring billing can be processed.
+
+## Search API
+
+The Search endpoint is priced using a fixed credit cost per request plus a variable credit cost based on the number of results returned.
+
+| Component | Credit usage |
+| :-- | :-- |
+| Fixed request cost | 0.1 credits |
+| Per result returned | 0.01 credits |
+
+**Credit formula**
+
+$$
+\text{credits used} = 0.1 + (0.01 \times \text{number of results})
+$$
+
+<Note>
+  The listed Search prices are calculated for requests returning up to 10 results.
+</Note>
 
 ## Pay as you go pricing
 
-Akta usage is charged in credits. The cost per request depends on your plan's per-credit rate.
-
-| **Plan** | **Endpoint** | **Price** | **Calculation** |
+| Plan | Endpoint | Price | Calculation |
 | :-- | :-- | :-- | :-- |
-| Pay as you go | Search | \$8.00 / 1k requests\* | Calculated at \$0.04 / credit. |
-| Starter | Search | \$7.20 / 1k requests\* | Calculated at \$0.036 / credit. |
-| Pro | Search | \$6.40 / 1k requests\* | Calculated at \$0.032 / credit. |
-| Enterprise | Search | Custom | Custom pricing based on committed volume, credits, endpoints, and rate limits. |
+| Pay as you go | Search | \$8.00 / 1k requests\* | Calculated at \$0.04 / credit |
+| Starter | Search | \$7.20 / 1k requests\* | Calculated at \$0.036 / credit |
+| Pro | Search | \$6.40 / 1k requests\* | Calculated at \$0.032 / credit |
+| Enterprise | Search | Custom | Based on committed volume, credits, endpoints, and rate limits |
 
-<Info>
-  \*0.1 credits fixed \+ 0.01 credit for every result. Calculated for up to 10 results per request. 
-</Info>
+\*Calculated for requests returning up to 10 results.
 
-## Plans & Pricing
+## Plans
 
-Starter and Pro plans offer multiple credit tiers at the same per-credit rate. Pick the tier that matches your expected monthly volume — credits and monthly price scale together, while rate limits, support, and per-credit cost stay the same within a plan.
+Starter and Pro plans include multiple monthly credit tiers at the same per-credit rate. Credits and monthly price scale together, while rate limits, support level, and per-credit pricing remain consistent within each plan.
 
-|  | **Pay as you go** | **Starter** | **Pro** | **Enterprise** |
+|  | Pay as you go | Starter | Pro | Enterprise |
 | :-- | :-- | :-- | :-- | :-- |
-| **Best for** | Get started with minimum commitment | Ideal for light developer use-cases | Ideal for heavy production use-cases | Custom endpoints entirely to your specification |
-| **Monthly price** | No monthly subscription | \$18 / month onwards | \$128 / month onwards | Custom |
-| **Credits** & **cost** | Top-up balance as needed | 500 credits — \$18<br />1000 credits — \$36<br />2000 credits — \$72<br />2500 credits — \$90 | 4000 credits — \$128<br />6000 credits — \$192<br />8000 credits — \$256<br />10000 credits — \$320<br />12500 credits — \$400<br />15000 credits — \$480 | Custom credits |
-| **Per-credit cost** | \$0.04 / credit | \$0.036 / credit | \$0.032 / credit | Custom \$ / credit |
-| **Search price** | \$8.00 / 1k requests\* | \$7.20 / 1k requests\* | \$6.40 / 1k requests\* | Custom |
-| **Top-up credits** | Included | Included | Included | Custom |
-| **Rate limit** | 50 requests per minute | 100 requests per minute | 250 requests per minute | Custom rate limits |
-| **Support** | Email support | Email support | Priority support | Dedicated Account Manager |
-| **De-duplicated feeds** | Not included | Not included | Not included | Included |
-| **Custom endpoints** | Not included | Not included | Not included | Included |
+| Best for | Minimum commitment | Light developer usage | Heavy production usage | Custom enterprise needs |
+| Monthly price | No monthly subscription | From \$18 / month | From \$128 / month | Custom |
+| Included credits | Top up as needed | 500–2,500 credits | 4,000–15,000 credits | Custom |
+| Per-credit cost | \$0.04 / credit | \$0.036 / credit | \$0.032 / credit | Custom |
+| Search price | \$8.00 / 1k requests\* | \$7.20 / 1k requests\* | \$6.40 / 1k requests\* | Custom |
+| Top-up credits | Included | Included | Included | Custom |
+| Rate limit | 50 requests / minute | 100 requests / minute | 250 requests / minute | Custom |
+| Support | Email support | Email support | Priority support | Dedicated Account Manager |
+| De-duplicated feeds | Not included | Not included | Not included | Included |
+| Custom endpoints | Not included | Not included | Not included | Included |
 
-\*Calculated for up to 10 results per request.
+\*Calculated for requests returning up to 10 results.
 
-## Guidelines and Notes
+## Guidelines and notes
 
-- Top up your balance at any time using the **Top up balance** action.
+- You can top up your balance at any time using **Top up balance**.
 - A payment method must be added before top-ups can be processed.
-- Higher-tier plans offer discounted per-credit pricing and increased rate limits.
-- Within Starter and Pro, you can scale credits up or down at the next billing cycle.
-- Plan upgrades take effect immediately; remaining balance carries over.
-- For pricing discussions or custom plan adjustments, please contact [**sales@wokelo.ai**](mailto:sales@wokelo.ai).
+- Higher-tier plans receive discounted per-credit pricing and increased rate limits.
+- Starter and Pro customers can scale credit tiers up or down at the next billing cycle.
+- Plan upgrades take effect immediately, and remaining balance carries over.
+- Enterprise plans can include custom endpoints, de-duplicated feeds, custom limits, and dedicated account support.
+
+For pricing discussions or custom plan adjustments, contact [sales@wokelo.ai](mailto:sales@wokelo.ai).

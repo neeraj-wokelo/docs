@@ -52,19 +52,19 @@ Open **Company News** under **API Playground**.
 
 Paste your API key into the **API key** field.
 
-Then enter a company name or company URL.
+Then the company URL (must include https://) or a permalink (unique identifier for an entity).
 
-`tesla`
+`https://www.tesla.com/`
 
 or
 
-`https://www.tesla.com/`
+`tesla`
 
 You can optionally add filters:
 
 | Field | Parameter | Description |
 | --- | --- | --- |
-| Company | `company` | Company name or company URL to fetch news for. Example: `tesla` or `https://www.tesla.com/`. |
+| Company | `company` | Company URL or permalink to fetch news for. Example: `tesla` or `https://www.tesla.com/`. |
 | Start date | `start_date` | Start date for the news timeframe, formatted as `YYYY-MM-DD`. |
 | End date | `end_date` | End date for the news timeframe, formatted as `YYYY-MM-DD`. |
 | Results per page | `limit` | Maximum number of news articles to return in the response. |
@@ -148,11 +148,11 @@ You can also use your API key directly in your own code by passing it in the `x-
 ## Next steps
 
 <CardGroup cols={2}>
-  <Card title="Company News Monitoring" icon="newspaper" href="https://docs.akta.pro/company-news-monitoring">
-    Learn how to fetch structured company news with summaries, tags, sentiment, publisher metadata, and article text.
+  <Card title="Company News — API reference " icon="newspaper" href="https://docs.akta.pro/company-news-monitoring">
+    Explore endpoints, parameters, and response schemas.
   </Card>
 
   <Card title="Use the API Playground" icon="terminal" href="https://playground.akta.pro/">
-    Test Company News requests, adjust filters, and copy generated code examples.
+    Make live requests, adjust parameters, and export code instantly.
   </Card>
 </CardGroup>
