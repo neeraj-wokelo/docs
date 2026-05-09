@@ -20,7 +20,8 @@
             "group": "Overview",
             "pages": [
               "getting-started",
-              "credits"
+              "credits",
+              "rate-limits"
             ],
             "icon": "page"
           },

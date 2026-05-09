@@ -1,0 +1,39 @@
+---
+title: "Rate limits"
+description: "Default API rate limits for Akta plans and endpoints"
+---
+
+Akta rate limits depend on your active plan. Higher-tier plans include higher request throughput, while Enterprise plans can be configured with custom limits based on committed usage, endpoint requirements, and deployment needs.
+
+The following table shows the default rate limits by plan:
+
+| Plan | Default rate limit | Applies to |
+| :-- | :-- | :-- |
+| Pay as you go | 50 requests / minute | Search API requests |
+| Starter | 100 requests / minute | Search API requests |
+| Pro | 250 requests / minute | Search API requests |
+| Enterprise | Custom | Custom endpoints, feeds, and agreed usage limits |
+
+<Note>
+  Rate limits apply to API requests made against Akta endpoints. Enterprise customers can request custom limits based on expected volume, endpoint configuration, and production requirements.
+</Note>
+
+## What counts as a request?
+
+For the Search API, each request to the Search endpoint counts toward your plan's rate limit.
+
+| Endpoint | What counts as a request |
+| :-- | :-- |
+| Search | Each API request made to the Search endpoint |
+
+<Info>
+  Search usage is also charged in credits. Rate limits control request throughput; credit usage controls billing.
+</Info>
+
+## Pricing
+
+Rate limits are separate from pricing. For cost information, see [Pricing](/pricing).
+
+## Need higher limits?
+
+If you need higher throughput, custom endpoints, de-duplicated feeds, or committed-volume pricing, contact [sales@akta.pro](mailto:sales@wokelo.ai) with your expected usage volume and requirements
