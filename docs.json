@@ -21,7 +21,8 @@
             "pages": [
               "getting-started",
               "credits",
-              "rate-limits"
+              "rate-limits",
+              "error-codes"
             ],
             "icon": "page"
           },

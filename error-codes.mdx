@@ -1,0 +1,15 @@
+---
+title: "Error codes"
+---
+
+| **HTTP Code** | **Meaning** | **Retry?** | **Action** |
+| :-- | :-- | :-- | :-- |
+| `200` | Success (sync) | No | Parse response |
+| `202` | Accepted (async) | No | Poll with request\_id |
+| `400` | Bad Request | No | Fix request parameters |
+| `401` | Unauthorized | Once | Re-authenticate, then retry |
+| `403` | Forbidden | No | Check API access level |
+| `404` | Not Found | No | Verify endpoint URL and resource ID |
+| `429` | Rate Limited | Yes | Exponential backoff (start 1s, max 60s) |
+| `500` | Server Error | Yes | Retry with backoff (max 3 retries) |
+| `502/503` | Service Unavailable | Yes | Retry with backoff (max 5 retries) |
