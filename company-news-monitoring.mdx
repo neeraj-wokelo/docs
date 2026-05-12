@@ -1,7 +1,7 @@
 ---
 title: "Company News Monitoring"
 description: "Fetch recent company news articles enriched with AI summaries, event categories, publisher metadata, sentiment, industry tags, and article text."
-api: "GET /api/v1/company/news/"
+api: "GET /api/v1/company/news"
 ---
 
 ## Overview
@@ -13,7 +13,7 @@ Results are returned synchronously in the HTTP response.
 ## Endpoint Details
 
 - **Method:** `GET`
-- **Endpoint:** `/api/v1/company/news/`
+- **Endpoint:** `/api/v1/company/news`
 - **Base URL:** `https://api.akta.pro`
 
 ## Authentication requirements
@@ -26,42 +26,40 @@ Pass your API key in the `x-api-key` request header.
 
 ## Request
 
-### Request Parameters
-
 ### Header Parameters
 
-<ParamField header="x-api-key" type="string" required>
+<ParamField type="string" required>
   API key used to authenticate the request.
 </ParamField>
 
 ### Query Parameters
 
-<ParamField query="company" type="string" required>
+<ParamField type="string" required>
   Company permalink or valid company URL for which news articles should be fetched. Example: `tesla`.
 </ParamField>
 
-<ParamField query="start_date" type="string">
+<ParamField type="string">
   Start date for the news timeframe, formatted as `YYYY-MM-DD`.
 </ParamField>
 
-<ParamField query="end_date" type="string">
+<ParamField type="string">
   End date for the news timeframe, formatted as `YYYY-MM-DD`.
 </ParamField>
 
-<ParamField query="category" type="string">
+<ParamField type="string">
   Comma-separated list of news categories to include. Category names must be URL-encoded when sent in a raw query string.
 </ParamField>
 
-<ParamField query="limit" type="integer">
+<ParamField type="integer">
   Maximum number of news articles to return in the current response.
 </ParamField>
 
-<ParamField query="offset" type="integer">
+<ParamField type="integer">
   Number of records to skip before returning results. Use this with `limit` for pagination.
 </ParamField>
 
-<ParamField query="blacklisted" type="string">
-  Comma-separated list of publisher domains to exclude from results. Include the publisher domain only, for example `patch.com`, `observer.com` , `examiner.com` .
+<ParamField type="string">
+  Comma-separated list of publisher domains to exclude from results. Include the publisher domain only, for example `patch.com`, `observer.com`, `examiner.com`.
 </ParamField>
 
 ## Response
@@ -167,3 +165,6 @@ Returns a JSON object with the following structure:
 <ResponseField name="scraped_text" type="string">
   Extracted article text.
 </ResponseField>
+
+```text
+```
