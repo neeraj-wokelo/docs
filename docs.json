@@ -85,10 +85,12 @@
     }
   },
   "api": {
-    "baseUrl": "https://api.akta.pro",
+  "mdx": {
+    "server": "https://api.akta.pro",
     "auth": {
       "method": "key",
       "name": "x-api-key"
     }
   }
+}
 }
