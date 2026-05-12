@@ -83,5 +83,12 @@
     "gtm": {
       "tagId": "GTM-KHT7PDD3"
     }
+  },
+  "api": {
+    "baseUrl": "https://api.akta.pro",
+    "auth": {
+      "method": "key",
+      "name": "x-api-key"
+    }
   }
 }
