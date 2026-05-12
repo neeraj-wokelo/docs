@@ -6,7 +6,7 @@ api: "GET /api/v1/company/news/"
 
 ## Overview
 
-The Company News Monitoring API returns the latest news articles for a given company. Each result is enriched with an AI-generated summary, event classification, publisher metadata, sentiment, company mentions, geography, industry tags, and scraped article text
+The Company News Monitoring API returns the latest news articles for a given company. Each result is enriched with an AI-generated summary, event classification, publisher metadata, sentiment, company mentions, geography, industry tags, and scraped article text.
 
 Results are returned synchronously in the HTTP response.
 
@@ -16,7 +16,7 @@ Results are returned synchronously in the HTTP response.
 - **Endpoint:** `/api/v1/company/news/`
 - **Base URL:** `https://api.akta.pro`
 
-## Authentication requirements
+## Authentication
 
 Pass your API key in the `x-api-key` request header.
 
@@ -25,14 +25,6 @@ Pass your API key in the `x-api-key` request header.
 ```
 
 ## Request
-
-### Request Parameters
-
-### Header Parameters
-
-<ParamField header="x-api-key" type="string" required>
-  API key used to authenticate the request.
-</ParamField>
 
 ### Query Parameters
 
@@ -61,7 +53,7 @@ Pass your API key in the `x-api-key` request header.
 </ParamField>
 
 <ParamField query="blacklisted" type="string">
-  Comma-separated list of publisher domains to exclude from results. Include the publisher domain only, for example `patch.com`, `observer.com` , `examiner.com` .
+  Comma-separated list of publisher domains to exclude from results. Include the publisher domain only, for example `patch.com`, `observer.com`, `examiner.com`.
 </ParamField>
 
 ## Response
