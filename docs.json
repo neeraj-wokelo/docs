@@ -30,7 +30,7 @@
             "group": "API Products",
             "icon": "network-wired",
             "pages": [
-              "company-news-monitoring-doc"
+              "company-news-doc"
             ]
           },
           "playground",
