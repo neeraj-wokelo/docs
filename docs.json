@@ -18,7 +18,6 @@
         "pages": [
           {
             "group": "Overview",
-            "icon": "page",
             "pages": [
               "getting-started",
               "credits",
