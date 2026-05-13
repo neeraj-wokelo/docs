@@ -15,24 +15,25 @@
     "tabs": [
       {
         "tab": "Documentation",
-        "groups": [
+        "pages": [
+          "playground",
           {
             "group": "Overview",
+            "icon": "page",
             "pages": [
               "getting-started",
               "credits",
               "rate-limits",
               "error-codes"
-            ],
-            "icon": "page"
+            ]
           },
           {
             "group": "API Products",
+            "icon": "network-wired",
             "pages": [
               "company-news-monitoring-doc",
               "company-news-monitoring-document"
-            ],
-            "icon": "network-wired"
+            ]
           }
         ]
       },
