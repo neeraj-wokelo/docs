@@ -16,7 +16,6 @@
       {
         "tab": "Documentation",
         "pages": [
-          "discord",
           {
             "group": "Overview",
             "icon": "page",
@@ -34,7 +33,8 @@
               "company-news-monitoring-doc",
               "company-news-monitoring-document"
             ]
-          }
+          },
+          "discord"
         ]
       },
       {
