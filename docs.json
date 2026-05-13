@@ -17,6 +17,7 @@
         "tab": "Documentation",
         "pages": [
           "playground",
+          "discord",
           {
             "group": "Overview",
             "icon": "page",
