@@ -9,9 +9,9 @@ The following table shows the default rate limits by plan:
 
 | Plan | Default rate limit | Applies to |
 | :-- | :-- | :-- |
-| Pay as you go | 50 requests / minute | Search API requests |
-| Starter | 100 requests / minute | Search API requests |
-| Pro | 250 requests / minute | Search API requests |
+| Pay as you go | 50 requests / minute | All API requests |
+| Starter | 100 requests / minute | All API requests |
+| Pro | 250 requests / minute | All API requests |
 | Enterprise | Custom | Custom endpoints, feeds, and agreed usage limits |
 
 <Note>
@@ -20,14 +20,10 @@ The following table shows the default rate limits by plan:
 
 ## What counts as a request?
 
-For the Search API, each request to the Search endpoint counts toward your plan's rate limit.
-
-| Endpoint | What counts as a request |
-| :-- | :-- |
-| Search | Each API request made to the Search endpoint |
+Each request to the Company Search, Company News, Company Enrichment and Industry News endpoint counts toward your plan's rate limit.
 
 <Info>
-  Search usage is also charged in credits. Rate limits control request throughput; credit usage controls billing.
+  Usage for all endpoints is charged in credits. Rate limits control request throughput; credit usage controls billing.
 </Info>
 
 ## Pricing
