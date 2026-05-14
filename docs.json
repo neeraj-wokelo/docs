@@ -17,13 +17,14 @@
         "tab": "Documentation",
         "pages": [
           {
-            "group": "Overview",
+            "group": "Getting Started ",
             "pages": [
               "getting-started",
               "credits",
               "rate-limits",
               "error-codes"
-            ]
+            ],
+            "icon": "rocket"
           },
           {
             "group": "API Products",
