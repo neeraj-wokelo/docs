@@ -49,8 +49,8 @@
     ]
   },
   "logo": {
-    "light": "/images/akta.pro(light).svg",
-    "dark": "/images/akta.pro(dark).svg",
+    "light": "/images/akta.pro-1.svg",
+    "dark": "/images/akta.pro.svg",
     "href": "https://docs.akta.pro/"
   },
   "navbar": {
