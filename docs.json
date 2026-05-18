@@ -8,8 +8,8 @@
     "dark": "#1D7C6D"
   },
   "favicon": {
-    "light": "/images/SVG.svg",
-    "dark": "/images/SVG.svg"
+    "light": "/images/akta(light).svg",
+    "dark": "/images/akta(dark).svg"
   },
   "navigation": {
     "tabs": [
