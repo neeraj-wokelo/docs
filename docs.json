@@ -49,8 +49,8 @@
     ]
   },
   "logo": {
-    "light": "/images/Group2147256098(1).svg",
-    "dark": "/images/Group2147256098.svg",
+    "light": "/images/akta.pro(light).svg",
+    "dark": "/images/akta.pro(dark).svg",
     "href": "https://docs.akta.pro/"
   },
   "navbar": {
@@ -96,5 +96,8 @@
       "name": "x-api-key"
     }
   }
+},
+"appearance": {
+  "default": "dark"
 }
 }
