@@ -33,7 +33,9 @@
               "company-news-doc",
               "company-enrichment-doc",
               "industry-news-doc",
-              "company-search"
+              "company-search",
+              "company-enrichment",
+              "product-reviews"
             ]
           },
           "playground",
@@ -45,7 +47,9 @@
         "tab": "API Reference",
         "pages": [
           "company-news",
-          "company-search-1"
+          "company-search-1",
+          "company-enrichment-1",
+          "product-reviews-1"
         ]
       }
     ]
