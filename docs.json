@@ -35,7 +35,8 @@
               "industry-news-doc",
               "company-search",
               "company-enrichment",
-              "product-reviews"
+              "product-reviews",
+              "employee-reviews"
             ]
           },
           "playground",
@@ -49,7 +50,8 @@
           "company-news",
           "company-search-1",
           "company-enrichment-1",
-          "product-reviews-1"
+          "product-reviews-1",
+          "employee-reviews-1"
         ]
       }
     ]

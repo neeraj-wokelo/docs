@@ -1,0 +1,209 @@
+---
+title: "Employee Reviews"
+description: "Fetch employee review ratings for a company, including overall rating, CEO approval, business outlook, recommendation score, and workplace category ratings."
+api: "GET /v1/companies/employee-reviews"
+---
+
+# Employee Reviews
+
+> Fetch employee review ratings for a company, including overall rating, CEO approval, business outlook, recommendation score, and workplace category ratings.
+
+## Overview
+
+The Employee Reviews API returns employee review metrics for a given company. Pass a company website or company UUID in the `company` query parameter.
+
+Each result includes an `overview` object with overall employee rating, business outlook, CEO approval, recommendation score, compensation and benefits rating, culture and values rating, diversity and inclusion rating, senior management rating, and work-life balance rating.
+
+## Endpoint Details
+
+- **Method:** `GET`
+- **Endpoint:** `/v1/companies/employee-reviews`
+- **Base URL:** `https://api.akta.pro`
+
+## Authentication
+
+Pass your API key in the `x-api-key` request header.
+
+```bash
+-H "x-api-key: YOUR_API_KEY"
+```
+
+## Request
+
+### Query Parameters
+
+<ParamField query="company" type="string" required>
+  Company website or company UUID. Example: `canva.com` or `3fa85f64-5717-4562-b3fc-2c963f66afa6`. Company UUIDs can be obtained from the Company Search API.
+</ParamField>
+
+<ParamField query="limit" type="integer">
+  Maximum number of results to return. Default: `10`. Max: `100`.
+</ParamField>
+
+<ParamField query="offset" type="integer">
+  Number of results to skip. Default: `0`.
+</ParamField>
+
+## Response
+
+### Successful Response Fields
+
+Returns a JSON object with the following structure:
+
+<ResponseField name="status" type="string">
+  Request status. Returns `success` or `error`.
+</ResponseField>
+
+<ResponseField name="data" type="array">
+  Array of employee review objects.
+</ResponseField>
+
+<ResponseField name="pagination" type="object">
+  Pagination metadata for the returned result set.
+</ResponseField>
+
+## Employee Review Object Fields
+
+<ResponseField name="overview" type="object">
+  Employee review overview metrics.
+</ResponseField>
+
+## Overview Object Fields
+
+<ResponseField name="rating" type="float">
+  Overall employee rating on a 0-5 scale.
+</ResponseField>
+
+<ResponseField name="business_outlook_rating" type="float">
+  Percentage positive about business outlook on a 0-1 scale.
+</ResponseField>
+
+<ResponseField name="ceo_rating" type="float">
+  Percentage who approve of the CEO on a 0-1 scale.
+</ResponseField>
+
+<ResponseField name="recommend_to_friend_rating" type="float">
+  Percentage who would recommend the company on a 0-1 scale.
+</ResponseField>
+
+<ResponseField name="compensation_and_benefits_rating" type="float">
+  Compensation and benefits rating on a 0-5 scale.
+</ResponseField>
+
+<ResponseField name="culture_and_values_rating" type="float">
+  Culture and values rating on a 0-5 scale.
+</ResponseField>
+
+<ResponseField name="diversity_and_inclusion_rating" type="float">
+  Diversity and inclusion rating on a 0-5 scale.
+</ResponseField>
+
+<ResponseField name="senior_management_rating" type="float">
+  Senior management rating on a 0-5 scale.
+</ResponseField>
+
+<ResponseField name="work_life_balance_rating" type="float">
+  Work-life balance rating on a 0-5 scale.
+</ResponseField>
+
+## Pagination Object Fields
+
+<ResponseField name="total" type="integer">
+  Total number of matching results.
+</ResponseField>
+
+<ResponseField name="limit" type="integer">
+  Maximum number of results returned in the response.
+</ResponseField>
+
+<ResponseField name="offset" type="integer">
+  Number of results skipped before the current response.
+</ResponseField>
+
+## Rating Scale Notes
+
+<Note>
+  `business_outlook_rating`, `ceo_rating`, and `recommend_to_friend_rating` are returned on a 0-1 scale. All other ratings are returned on a 0-5 scale.
+</Note>
+
+## Example Response
+
+```json
+{
+  "status": "success",
+  "data": [
+    {
+      "overview": {
+        "rating": 4.1,
+        "business_outlook_rating": 0.71,
+        "ceo_rating": 0.82,
+        "recommend_to_friend_rating": 0.80,
+        "compensation_and_benefits_rating": 4.4,
+        "culture_and_values_rating": 4.0,
+        "diversity_and_inclusion_rating": 4.2,
+        "senior_management_rating": 3.6,
+        "work_life_balance_rating": 3.9
+      }
+    }
+  ],
+  "pagination": {
+    "total": 42,
+    "limit": 10,
+    "offset": 0
+  }
+}
+```
+
+## Error Responses
+
+### 401 Unauthorized
+
+Returned when the API key is missing or invalid.
+
+```json
+{
+  "status": "error",
+  "error": "UNAUTHORIZED",
+  "message": "Invalid or missing x-api-key."
+}
+```
+
+### 422 Unprocessable Entity
+
+Returned when the required company identifier is missing.
+
+```json
+{
+  "status": "error",
+  "error": "MISSING_PARAMETER",
+  "message": "The company field is required."
+}
+```
+
+### 404 Company Not Found
+
+Returned when no company matches the provided input.
+
+```json
+{
+  "status": "error",
+  "error": "COMPANY_NOT_FOUND",
+  "message": "No company found for the provided identifier."
+}
+```
+
+### 500 Internal Server Error
+
+Returned when an unexpected server error occurs.
+
+```json
+{
+  "status": "error",
+  "error": "SERVER_ERROR",
+  "message": "An unexpected error occurred. Please try again."
+}
+```
+
+---
+
+## title: "Employee Reviews"
