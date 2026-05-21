@@ -1,0 +1,143 @@
+---
+title: "Company Search"
+description: "Search for companies by name, website, or UUID and return matching company identifiers and core metadata."
+api: "GET /v1/companies/search"
+---
+
+# Company Search
+
+> Search for companies by name, website, or UUID and return matching company identifiers, websites, product categories, and public/private status.
+
+## Overview
+
+The Company Search API resolves a company input into one or more matching company records. You can pass a company name, website, or company UUID using the `company` query parameter.
+
+Use this endpoint before calling company enrichment APIs when you need to obtain a canonical Akta company identifier.
+
+## Endpoint Details
+
+- **Method:** `GET`
+- **Endpoint:** `/v1/companies/search`
+- **Base URL:** `https://api.akta.pro`
+
+## Authentication
+
+Pass your API key in the `x-api-key` request header.
+
+```bash
+-H "x-api-key: YOUR_API_KEY"
+```
+
+## Request
+
+### Query Parameters
+
+<ParamField query="company" type="string" required>
+  Company name, website, or company UUID to resolve. Example: `canva`, `canva.com`, or `3fa85f64-5717-4562-b3fc-2c963f66afa6`.
+</ParamField>
+
+## Response
+
+### Successful Response Fields
+
+Returns a JSON object with the following structure:
+
+<ResponseField name="data" type="array">
+  Array of matching company objects.
+</ResponseField>
+
+<ResponseField name="pagination" type="object">
+  Pagination metadata for the returned result set.
+</ResponseField>
+
+## Company Object Fields
+
+<ResponseField name="company_id" type="string">
+  Unique identifier for the company. UUID v4 format.
+</ResponseField>
+
+<ResponseField name="name" type="string">
+  Legal or registered company name.
+</ResponseField>
+
+<ResponseField name="website" type="string">
+  Primary website URL.
+</ResponseField>
+
+<ResponseField name="product_category" type="string">
+  Primary product or service category. Example: `SaaS`, `FinTech`, `Healthcare`.
+</ResponseField>
+
+<ResponseField name="ipo_status" type="string">
+  Public market status. Example values include `public`, `private`, `acquired`, `delisted`, and `unknown`.
+</ResponseField>
+
+## Pagination Object Fields
+
+<ResponseField name="total" type="integer">
+  Total number of matching companies.
+</ResponseField>
+
+<ResponseField name="limit" type="integer">
+  Maximum number of companies returned in the response.
+</ResponseField>
+
+<ResponseField name="offset" type="integer">
+  Number of companies skipped before the current response.
+</ResponseField>
+
+## Example Response
+
+```json
+{
+  "data": [
+    {
+      "company_id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+      "name": "Acme Corporation",
+      "website": "https://acme.com",
+      "product_category": "SaaS",
+      "ipo_status": "public"
+    }
+  ],
+  "pagination": {
+    "total": 42,
+    "limit": 10,
+    "offset": 0
+  }
+}
+```
+
+## Error Responses
+
+### 400 Bad Request
+
+Returned when the request contains invalid or conflicting input.
+
+```json
+{
+  "error": "INVALID_INPUT",
+  "message": "Invalid company search input."
+}
+```
+
+### 422 Unprocessable Entity
+
+Returned when the required `company` parameter is missing.
+
+```json
+{
+  "error": "MISSING_PARAMETER",
+  "message": "The company query parameter is required."
+}
+```
+
+### 500 Internal Server Error
+
+Returned when an unexpected server error occurs.
+
+```json
+{
+  "error": "SERVER_ERROR",
+  "message": "An unexpected error occurred. Please try again."
+}
+```
