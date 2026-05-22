@@ -34,8 +34,8 @@
               "company-enrichment-doc",
               "industry-news-doc",
               "company-search",
-              "company-enrichment",
               "product-reviews",
+              "company-enrichment",
               "employee-reviews"
             ]
           },
