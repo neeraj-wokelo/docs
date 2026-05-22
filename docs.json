@@ -7,10 +7,7 @@
     "light": "#41af97",
     "dark": "#1D7C6D"
   },
-  "favicon": {
-    "light": "/images/akta(light).svg",
-    "dark": "/images/akta(dark).svg"
-  },
+  "favicon": "/images/SVG(dark).png",
   "navigation": {
     "tabs": [
       {
