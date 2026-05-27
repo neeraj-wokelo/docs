@@ -42,7 +42,8 @@
         "pages": [
           "company-search",
           "news",
-          "company-enrichment"
+          "company-enrichment",
+          "company-search-supporting-api"
         ]
       }
     ]

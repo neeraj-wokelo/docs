@@ -1,16 +1,10 @@
----
-title: "Company Enrichment API"
-description: "Enriches a company with firmographics, business model, headcount, traffic, funding, financials, acquisitions and investment data."
-api: "POST /v1/company/enrichment"
----
-
 ## Overview
 
-The Company Enrichment API returns detailed company data across multiple sections — firmographics, go-to-market and business model, headcount, website traffic, funding, financials, acquisitions and investments. Callers can request all sections at once or scope the response to a specific subset using the `sections` field. Results are returned in the API response.
+The Company Enrichment API returns detailed company data across multiple sections — firmographics, go-to-market and business model, headcount, website traffic, funding, financials, acquisitions and investments. Callers can request all sections at once or scope the response to a specific subset using the `sections` parameter. Results are returned in the API response.
 
 ## Endpoint Details
 
-- **Method:** POST
+- **Method:** GET
 - **Endpoint:** `/v1/company/enrichment`
 
 ## Authentication requirements
@@ -27,27 +21,25 @@ The Company Enrichment API returns detailed company data across multiple section
   Your API key.
 </ParamField>
 
-## Body Parameters
+## URL Parameters
 
-<ParamField body="company" type="string" required>
+<ParamField query="company" type="string" required>
   Company website (e.g. `canva.com`) or a company UUID (e.g. `3fa85f64-5717-4562-b3fc-2c963f66afa6`). The UUID can be obtained from the Company Search API.
 </ParamField>
 
-<ParamField body="sections" type="array of strings">
-  Sections to return. If omitted, all available sections are returned.
+<ParamField query="sections" type="string">
+  Comma-separated list of sections to return. If omitted, all available sections are returned.
 
   Available values: `firmographics`, `gtm_and_business_model`, `headcount`, `website_traffic`, `funding`, `public_company_financials`, `uk_private_company_financials`, `acquisitions`, `investments`.
 
   `acquisitions` and `investments` are available on the Enterprise tier only.
 </ParamField>
 
-#### Example Request Body
+#### Example Request
 
-```json
-{
-  "company": "https://www.canva.com",
-  "sections": ["firmographics", "funding"]
-}
+```text
+GET /v1/company/enrichment?company=canva.com&sections=firmographics,funding
+x-api-key: <your_api_key>
 ```
 
 ## Response
