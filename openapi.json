@@ -1,0 +1,735 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Akta.pro API",
+    "description": "Akta provides APIs for company intelligence and news monitoring:\n\n1. **News** – Enriched news articles with AI summaries, sentiment, event tags, industry classifications, and company mention resolution.\n2. **Company Enrichment** – Structured company data including firmographics, funding, headcount, and financials.\n3. **Company Search** – Free endpoint to resolve company names, domains, or UUIDs.\n4. **Product Reviews** – G2 product reviews with ratings and review content.\n5. **Employee Reviews** – Employee sentiment data with workplace ratings.\n\n**Authentication:** All endpoints require an API key in the `x-api-key` HTTP header.\n",
+    "version": "1.0.0",
+    "contact": {
+      "url": "https://akta.pro"
+    }
+  },
+  "externalDocs": {
+    "description": "Official Akta.pro API Documentation",
+    "url": "https://docs.akta.pro"
+  },
+  "servers": [
+    {
+      "url": "https://api.akta.pro",
+      "description": "Production server"
+    }
+  ],
+  "components": {
+    "securitySchemes": {
+      "xApiKeyAuth": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "x-api-key",
+        "description": "API key obtained from your Akta account."
+      }
+    },
+    "schemas": {
+      "NewsArticle": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Unique identifier for the article."
+          },
+          "title": {
+            "type": "string",
+            "description": "Headline of the article."
+          },
+          "url": {
+            "type": "string",
+            "format": "uri",
+            "description": "Canonical URL of the original article."
+          },
+          "publisher": {
+            "type": "string",
+            "description": "Name of the publishing outlet."
+          },
+          "published_date": {
+            "type": "string",
+            "description": "Publication date in YYYY-MM-DD format."
+          },
+          "author": {
+            "type": "string",
+            "description": "Article author name."
+          },
+          "original_language": {
+            "type": "string",
+            "description": "ISO 639-1 language code."
+          },
+          "source": {
+            "type": "string",
+            "description": "Source identifier or domain."
+          },
+          "ai_summary": {
+            "type": "string",
+            "description": "AI-generated summary of the article."
+          },
+          "full_text": {
+            "type": "string",
+            "description": "Complete body text of the article."
+          },
+          "sentiment": {
+            "type": "string",
+            "enum": ["positive", "negative", "neutral"],
+            "description": "Article-level sentiment."
+          },
+          "news_score": {
+            "type": "number",
+            "format": "float",
+            "minimum": 0,
+            "maximum": 1,
+            "description": "Relevance and quality score between 0.0 and 1.0."
+          },
+          "type": {
+            "type": "string",
+            "description": "Primary event type of the article."
+          },
+          "countries": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Array of ISO 3166-1 alpha-2 country codes."
+          },
+          "industries": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Industry"
+            }
+          },
+          "tags": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Tag"
+            }
+          },
+          "company_names": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CompanyMention"
+            }
+          }
+        }
+      },
+      "Industry": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Industry name."
+          },
+          "code": {
+            "type": "string",
+            "description": "Machine-readable industry code."
+          },
+          "is_primary": {
+            "type": "boolean",
+            "description": "True if this is the primary industry classification."
+          }
+        }
+      },
+      "Tag": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Human-readable tag label."
+          },
+          "code": {
+            "type": "string",
+            "description": "Machine-readable tag code."
+          },
+          "is_primary": {
+            "type": "boolean",
+            "description": "True if this is the primary event tag."
+          }
+        }
+      },
+      "CompanyMention": {
+        "type": "object",
+        "properties": {
+          "company_id": {
+            "type": "string",
+            "format": "uuid",
+            "description": "Akta UUID for the company."
+          },
+          "name": {
+            "type": "string",
+            "description": "Company display name."
+          },
+          "website": {
+            "type": "string",
+            "format": "uri",
+            "description": "Company website URL."
+          },
+          "is_primary": {
+            "type": "boolean",
+            "description": "True if this is the main company the article is about."
+          }
+        }
+      },
+      "CompanySearchResult": {
+        "type": "object",
+        "properties": {
+          "uuid": {
+            "type": "string",
+            "format": "uuid",
+            "description": "Unique Akta identifier for the company."
+          },
+          "name": {
+            "type": "string",
+            "description": "Legal or registered company name."
+          },
+          "website": {
+            "type": "string",
+            "format": "uri",
+            "description": "Primary website URL."
+          },
+          "product_category": {
+            "type": "string",
+            "description": "Primary product or service category."
+          },
+          "company_status": {
+            "type": "string",
+            "enum": ["public", "private", "acquired", "delisted", "unknown"],
+            "description": "Public market status."
+          }
+        }
+      },
+      "ProductReview": {
+        "type": "object",
+        "properties": {
+          "product_name": {
+            "type": "string",
+            "description": "Name of the product."
+          },
+          "rating": {
+            "type": "number",
+            "description": "Average rating."
+          },
+          "star_distribution": {
+            "type": "object",
+            "properties": {
+              "5": {"type": "integer"},
+              "4": {"type": "integer"},
+              "3": {"type": "integer"},
+              "2": {"type": "integer"},
+              "1": {"type": "integer"}
+            }
+          },
+          "reviews": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "review_id": {"type": "string"},
+                "review_title": {"type": "string"},
+                "rating": {"type": "integer"},
+                "review_body": {"type": "string"},
+                "reviewer_name": {"type": "string"},
+                "review_date": {"type": "string"}
+              }
+            }
+          }
+        }
+      },
+      "EmployeeReview": {
+        "type": "object",
+        "properties": {
+          "company_name": {
+            "type": "string"
+          },
+          "overview": {
+            "type": "object",
+            "properties": {
+              "rating": {"type": "number"},
+              "business_outlook_rating": {"type": "number"},
+              "ceo_rating": {"type": "number"},
+              "recommend_to_friend_rating": {"type": "string"},
+              "compensation_and_benefits_rating": {"type": "number"},
+              "culture_and_values_rating": {"type": "number"},
+              "diversity_and_inclusion_rating": {"type": "number"},
+              "senior_management_rating": {"type": "number"},
+              "work_life_balance_rating": {"type": "number"}
+            }
+          }
+        }
+      }
+    }
+  },
+  "tags": [
+    {
+      "name": "News",
+      "description": "Enriched news articles with AI summaries, sentiment, and company mentions"
+    },
+    {
+      "name": "Company",
+      "description": "Company data enrichment and search"
+    },
+    {
+      "name": "Reviews",
+      "description": "Product and employee reviews from external sources"
+    }
+  ],
+  "paths": {
+    "/v1/news": {
+      "get": {
+        "tags": ["News"],
+        "operationId": "getNews",
+        "summary": "News",
+        "description": "Fetch enriched news articles for a company or industry. Each article includes AI-generated summary, full text, sentiment, event tags, industry classifications, and resolved company mentions.\nResults are returned synchronously — no polling required.\n",
+        "security": [{"xApiKeyAuth": []}],
+        "parameters": [
+          {
+            "name": "company",
+            "in": "query",
+            "required": false,
+            "schema": {"type": "string"},
+            "description": "Website domain (e.g., 'canva.com') or company UUID to scope results to news about this company."
+          },
+          {
+            "name": "industry",
+            "in": "query",
+            "required": false,
+            "schema": {"type": "string"},
+            "description": "Industry name to scope results (e.g., 'Software', 'Healthcare'). Can be used alone or with company."
+          },
+          {
+            "name": "start_date",
+            "in": "query",
+            "required": false,
+            "schema": {"type": "string", "format": "date"},
+            "description": "Start of date range (YYYY-MM-DD). Non-enterprise plans capped at 6-month lookback."
+          },
+          {
+            "name": "end_date",
+            "in": "query",
+            "required": false,
+            "schema": {"type": "string", "format": "date"},
+            "description": "End of date range (YYYY-MM-DD). Defaults to today."
+          },
+          {
+            "name": "sentiment",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": ["positive", "negative", "neutral", "all"],
+              "default": "all"
+            },
+            "description": "Filter by article sentiment."
+          },
+          {
+            "name": "type",
+            "in": "query",
+            "required": false,
+            "schema": {"type": "string"},
+            "description": "Filter by article event type (e.g., 'Equity Fund-Raising', 'Secondary Transactions')."
+          },
+          {
+            "name": "news_score",
+            "in": "query",
+            "required": false,
+            "schema": {"type": "string"},
+            "description": "Filter by news score tier."
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {"type": "integer", "default": 10, "maximum": 100},
+            "description": "Maximum number of articles to return."
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "required": false,
+            "schema": {"type": "integer", "default": 0},
+            "description": "Number of articles to skip for pagination."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "News articles returned",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {"type": "string", "example": "success"},
+                    "total": {"type": "integer", "description": "Total matching articles available."},
+                    "limit": {"type": "integer"},
+                    "offset": {"type": "integer"},
+                    "credits_consumed": {"type": "number", "format": "float"},
+                    "data": {
+                      "type": "array",
+                      "items": {"$ref": "#/components/schemas/NewsArticle"}
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "204": {
+            "description": "No content — no articles matched the query."
+          },
+          "400": {
+            "description": "Bad request — invalid parameters."
+          },
+          "401": {
+            "description": "Unauthorized — missing or invalid API key."
+          }
+        }
+      }
+    },
+    "/v1/company/search": {
+      "get": {
+        "tags": ["Company"],
+        "operationId": "companySearch",
+        "summary": "Company Search",
+        "description": "Resolve a company name, website domain, or UUID into a structured company record.\nThis is a free endpoint — it does not consume API credits.\n",
+        "security": [{"xApiKeyAuth": []}],
+        "parameters": [
+          {
+            "name": "name",
+            "in": "query",
+            "required": true,
+            "schema": {"type": "string"},
+            "description": "Company name (e.g., 'Canva'), website domain ('canva.com'), or UUID. The API automatically identifies the input type."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Search results returned",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {"$ref": "#/components/schemas/CompanySearchResult"}
+                    },
+                    "credits_consumed": {"type": "number", "format": "float", "example": 0}
+                  }
+                }
+              }
+            }
+          },
+          "204": {
+            "description": "No content — no companies matched the query."
+          },
+          "400": {
+            "description": "Bad request — missing or malformed name parameter."
+          },
+          "401": {
+            "description": "Unauthorized — missing or invalid API key."
+          }
+        }
+      }
+    },
+    "/v1/company/enrichment": {
+      "post": {
+        "tags": ["Company"],
+        "operationId": "companyEnrichment",
+        "summary": "Company Enrichment",
+        "description": "Retrieve structured company data — firmographics, funding, headcount, web traffic, business model, and financials.\nSpecify which sections you need; only requested sections are returned.\n",
+        "security": [{"xApiKeyAuth": []}],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["company"],
+                "properties": {
+                  "company": {
+                    "type": "string",
+                    "description": "Company website domain (e.g., 'canva.com') or UUID from Company Search API.",
+                    "example": "canva.com"
+                  },
+                  "sections": {
+                    "type": "array",
+                    "description": "Array of section names to include. Returns all sections if omitted.",
+                    "items": {
+                      "type": "string",
+                      "enum": [
+                        "firmographics",
+                        "funding",
+                        "headcount",
+                        "website_traffic",
+                        "gtm_and_business_model",
+                        "public_company_financials",
+                        "uk_private_company_financials",
+                        "acquisitions",
+                        "investments"
+                      ]
+                    },
+                    "example": ["firmographics", "funding"]
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Enrichment data returned",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {"type": "string", "example": "success"},
+                    "data": {
+                      "type": "object",
+                      "description": "Enriched company data keyed by section name."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request — invalid company identifier."
+          },
+          "401": {
+            "description": "Unauthorized — missing or invalid API key."
+          },
+          "403": {
+            "description": "Forbidden — insufficient access for requested section."
+          }
+        }
+      }
+    },
+    "/v1/company/news/": {
+      "get": {
+        "tags": ["News"],
+        "operationId": "companyNews",
+        "summary": "Company News",
+        "description": "Fetch recent news articles for a given company, enriched with AI summaries, event categories, publisher metadata, sentiment, industry tags, and article text.\nResults are returned synchronously.\n",
+        "security": [{"xApiKeyAuth": []}],
+        "parameters": [
+          {
+            "name": "company",
+            "in": "query",
+            "required": true,
+            "schema": {"type": "string"},
+            "description": "Company permalink or URL (e.g., 'tesla').",
+            "example": "tesla"
+          },
+          {
+            "name": "start_date",
+            "in": "query",
+            "required": false,
+            "schema": {"type": "string", "format": "date"},
+            "description": "Start date for news timeframe (YYYY-MM-DD)."
+          },
+          {
+            "name": "end_date",
+            "in": "query",
+            "required": false,
+            "schema": {"type": "string", "format": "date"},
+            "description": "End date for news timeframe (YYYY-MM-DD)."
+          },
+          {
+            "name": "category",
+            "in": "query",
+            "required": false,
+            "schema": {"type": "string"},
+            "description": "Comma-separated list of news categories to filter by."
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {"type": "integer", "default": 100, "maximum": 1000},
+            "description": "Maximum number of news articles to return."
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "required": false,
+            "schema": {"type": "integer", "default": 0},
+            "description": "Number of records to skip for pagination."
+          },
+          {
+            "name": "blacklisted",
+            "in": "query",
+            "required": false,
+            "schema": {"type": "string"},
+            "description": "Comma-separated list of publisher domains to exclude."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "News articles returned",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {"type": "string"},
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "ai_summary": {"type": "string"},
+                          "type": {"type": "string"},
+                          "url": {"type": "string"},
+                          "title": {"type": "string"},
+                          "company_name": {"type": "string"},
+                          "publisher": {"type": "string"},
+                          "published_date": {"type": "string"},
+                          "author": {"type": "string"},
+                          "countries": {"type": "array", "items": {"type": "string"}},
+                          "sentiment": {"type": "string"},
+                          "company_names": {"type": "array", "items": {"type": "object"}},
+                          "primary_tag": {"type": "string"},
+                          "original_language": {"type": "string"},
+                          "secondary_tags": {"type": "array", "items": {"type": "string"}},
+                          "newsworthiness_impact": {"type": "string"},
+                          "primary_industry": {"type": "string"},
+                          "secondary_industry": {"type": "array", "items": {"type": "string"}},
+                          "scraped_text": {"type": "string"}
+                        }
+                      }
+                    },
+                    "count": {"type": "integer"},
+                    "total": {"type": "integer"},
+                    "limit": {"type": "integer"},
+                    "offset": {"type": "integer"}
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized — missing or invalid API key."
+          }
+        }
+      }
+    },
+    "/v1/companies/reviews": {
+      "get": {
+        "tags": ["Reviews"],
+        "operationId": "getProductReviews",
+        "summary": "Product Reviews",
+        "description": "Fetch G2 product reviews for a given company, including ratings, star distributions, and individual review content.",
+        "security": [{"xApiKeyAuth": []}],
+        "parameters": [
+          {
+            "name": "company",
+            "in": "query",
+            "required": true,
+            "schema": {"type": "string"},
+            "description": "Company website domain or UUID."
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {"type": "integer", "default": 100},
+            "description": "Maximum number of reviews to return."
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "required": false,
+            "schema": {"type": "integer", "default": 0},
+            "description": "Number of records to skip for pagination."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Product reviews returned",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {"type": "string"},
+                    "data": {
+                      "type": "array",
+                      "items": {"$ref": "#/components/schemas/ProductReview"}
+                    },
+                    "count": {"type": "integer"},
+                    "total": {"type": "integer"},
+                    "limit": {"type": "integer"},
+                    "offset": {"type": "integer"}
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized — missing or invalid API key."
+          }
+        }
+      }
+    },
+    "/v1/companies/employee-reviews": {
+      "get": {
+        "tags": ["Reviews"],
+        "operationId": "getEmployeeReviews",
+        "summary": "Employee Reviews",
+        "description": "Fetch Glassdoor employee reviews for a company, including overall rating, CEO approval, business outlook, and workplace category ratings.",
+        "security": [{"xApiKeyAuth": []}],
+        "parameters": [
+          {
+            "name": "company",
+            "in": "query",
+            "required": true,
+            "schema": {"type": "string"},
+            "description": "Company website domain or UUID."
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {"type": "integer", "default": 100},
+            "description": "Maximum number of reviews to return."
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "required": false,
+            "schema": {"type": "integer", "default": 0},
+            "description": "Number of records to skip for pagination."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Employee reviews returned",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {"type": "string"},
+                    "data": {
+                      "type": "array",
+                      "items": {"$ref": "#/components/schemas/EmployeeReview"}
+                    },
+                    "count": {"type": "integer"},
+                    "total": {"type": "integer"},
+                    "limit": {"type": "integer"},
+                    "offset": {"type": "integer"}
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized — missing or invalid API key."
+          }
+        }
+      }
+    }
+  }
+}
