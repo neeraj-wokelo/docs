@@ -1,0 +1,727 @@
+---
+title: "News"
+description: "Fetch enriched, AI-summarised news articles for any company or industry — filtered by sentiment, news type, date range, and relevance score — returned synchronously with full article text, structured tags, industry classifications, and company mention resolution."
+---
+
+<Note>
+  Fetch the complete documentation index at: [https://docs.akta.ai/llms.txt](https://docs.akta.ai/llms.txt)
+</Note>
+
+## 1. Overview
+
+The Akta News API fetches enriched news articles for a given company or industry. Each article is returned with an AI-generated summary, full body text, structured event tags, industry classifications, sentiment signal, relevance score, and a resolved list of all companies mentioned — making it ready for direct consumption in LLM pipelines, monitoring workflows, and investment research tools.
+
+This is a **synchronous GET API** — pass your filters as URL query parameters and receive a paginated array of enriched articles immediately in the response.
+
+Results can be scoped to a **specific company** (by website domain or UUID), a **specific industry**, or both. All filter parameters are optional — omitting them returns the latest articles across Akta's full news index.
+
+Each article in the response includes:
+
+- **AI summary** — a concise, machine-generated synopsis of the article's key facts
+- **Full text** — the complete article body for downstream LLM processing, embedding, or RAG
+- **Sentiment** — `positive`, `negative`, or `neutral` classification at the article level
+- **News score** — a float relevance and quality score for signal triage
+- **Event tags** — structured primary and secondary tags (e.g. `"Equity Fund-Raising"`, `"Layoffs"`, `"IPO"`)
+- **Industry classifications** — structured industry objects with primary/secondary flags
+- **Company mentions** — resolved array of all companies named in the article, each with UUID, name, and website
+
+**Common use cases:**
+
+- **Company monitoring** — pass a company's website domain to track all coverage for a specific business, filtered by sentiment or event type
+- **Industry intelligence** — pass an industry name to monitor deal flow, regulatory activity, or innovation signals across an entire sector
+- **LLM pipeline enrichment** — use `full_text` as input to summarisation, classification, or embedding models, pre-filtered by `type` and `sentiment`
+- **Signal triage** — use `news_score` to rank articles by relevance before processing, reducing noise in high-volume feeds
+- **Company mention mapping** — use `company_names` to identify all entities referenced in an article without parsing the text
+
+<Info>
+  This API is synchronous. Results are returned directly in the HTTP response — no job submission or polling required.
+</Info>
+
+---
+
+## 2. Quick Start
+
+**Step 1 — Make a simple request**
+
+<CodeGroup>
+
+```bash cURL
+curl --location 'https://api.akta.ai/v1/news?company=canva.com&limit=10' \
+  --header 'x-api-key: <YOUR_API_KEY>' \
+  --header 'Content-Type: application/json'
+```
+
+```python Python
+import requests
+
+response = requests.get(
+    "https://api.akta.ai/v1/news",
+    headers={"x-api-key": "<YOUR_API_KEY>"},
+    params={
+        "company": "canva.com",
+        "limit":   10
+    }
+)
+data = response.json()
+print(f"Returned {len(data['data'])} of {data['total']} articles")
+```
+
+</CodeGroup>
+
+**Step 2 — Filter by sentiment and date range**
+
+```python
+response = requests.get(
+    "https://api.akta.ai/v1/news",
+    headers={"x-api-key": "<YOUR_API_KEY>"},
+    params={
+        "company":    "canva.com",
+        "sentiment":  "positive",
+        "start_date": "2024-01-01",
+        "end_date":   "2024-12-31",
+        "limit":      25
+    }
+)
+articles = response.json()["data"]
+```
+
+**Step 3 — Work with the articles**
+
+```python
+for article in articles:
+    primary_tag = next(
+        (t["name"] for t in article.get("tags", []) if t.get("is_primary")),
+        "—"
+    )
+    print(f"[{article['sentiment']}] [{primary_tag}] {article['title']}")
+    print(f"  {article['publisher']} | {article['published_date']}")
+    print(f"  Score: {article['news_score']:.2f}")
+    print(f"  {article['ai_summary'][:150]}...")
+    print()
+```
+
+---
+
+## 3. Authentication
+
+All requests must include an **API key** in the `x-api-key` HTTP header.
+
+```text
+x-api-key: <YOUR_API_KEY>
+```
+
+API keys are issued from your Akta account. Contact [support@akta.ai](mailto:support@akta.ai) if you do not yet have API access or need to rotate a key.
+
+<Warning>
+  Never expose your API key in client-side code, browser requests, or public repositories. A missing or invalid key returns `401 Unauthorized`.
+</Warning>
+
+---
+
+## 4. Request Reference
+
+**Endpoint**
+
+```text
+GET https://api.akta.ai/v1/news
+```
+
+All parameters are passed as URL query parameters. All parameters are optional.
+
+| Parameter | Type | Default | Description |
+| --- | --- | --- | --- |
+| `company` | string | — | Website domain (e.g. `"canva.com"`) or company UUID from the [Company Search API](#). Scopes results to news about this company. |
+| `industry` | string | — | Industry name to scope results to (e.g. `"Software"`, `"Healthcare"`). Can be used alone or combined with `company`. |
+| `start_date` | string | 6 months ago | Start of the date range for articles (`YYYY-MM-DD`). Inclusive. Non-enterprise plans are capped at a 6-month lookback window. |
+| `end_date` | string | Today | End of the date range for articles (`YYYY-MM-DD`). Inclusive. Defaults to today if omitted. |
+| `sentiment` | string | `"all"` | Filter by article sentiment. Accepted values: `"positive"`, `"negative"`, `"neutral"`, `"all"`. |
+| `type` | string | `"all"` | Filter by article event type (e.g. `"Equity Fund-Raising"`, `"Secondary Transactions"`). Default returns all types. |
+| `news_score` | string | `"all"` | Filter by news score tier. Default returns all. |
+| `limit` | integer | `10` | Maximum number of articles to return. Max `100`. |
+| `offset` | integer | `0` | Number of articles to skip before returning results. Use with `limit` for pagination. |
+
+**Full request example:**
+
+<CodeGroup>
+
+```bash cURL
+curl --location 'https://api.akta.ai/v1/news?company=canva.com&sentiment=positive&start_date=2024-01-01&end_date=2024-12-31&limit=10&offset=0' \
+  --header 'x-api-key: <YOUR_API_KEY>' \
+  --header 'Content-Type: application/json'
+```
+
+```python Python
+import requests
+
+response = requests.get(
+    "https://api.akta.ai/v1/news",
+    headers={
+        "x-api-key":    "<YOUR_API_KEY>",
+        "Content-Type": "application/json"
+    },
+    params={
+        "company":    "canva.com",
+        "sentiment":  "positive",
+        "start_date": "2024-01-01",
+        "end_date":   "2024-12-31",
+        "limit":      10,
+        "offset":     0
+    }
+)
+print(response.json())
+```
+
+</CodeGroup>
+
+---
+
+## 5. Response
+
+### Response envelope
+
+```json
+{
+  "status": "success",
+  "total": 100,
+  "limit": 10,
+  "offset": 0,
+  "credits_consumed": 0.05,
+  "data": [ ...article objects... ]
+}
+```
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `status` | string | `"success"` when the request was processed successfully. |
+| `total` | integer | Total number of matching articles available across all pages. |
+| `limit` | integer | The `limit` value applied to this response. |
+| `offset` | integer | The `offset` value applied to this response. |
+| `credits_consumed` | float | API credits consumed by this request. |
+| `data` | object\[\] | Array of enriched article objects. Empty array `[]` when no results match. |
+
+### Article object
+
+Each object in the `data` array contains the following fields:
+
+**Article identity**
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `id` | string | Unique identifier for the article (e.g. `"news_abc123"`). |
+| `title` | string | Headline of the article. |
+| `url` | string | Canonical URL of the original article. |
+| `publisher` | string | Name of the publishing outlet (e.g. `"TechCrunch"`, `"Bloomberg"`). |
+| `published_date` | string | Publication date in `YYYY-MM-DD` format. |
+| `author` | string | Article author name. Empty string when not available. |
+| `original_language` | string | ISO 639-1 language code of the original article (e.g. `"en"`, `"fr"`). |
+| `source` | string | Source identifier or domain. |
+
+**AI enrichment**
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `ai_summary` | string | AI-generated 2–4 sentence summary of the article's key facts. |
+| `full_text` | string | Complete body text of the article. Use this for LLM processing, embeddings, or detailed analysis. |
+
+**Signals**
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `sentiment` | string | Article-level sentiment: `"positive"`, `"negative"`, or `"neutral"`. |
+| `news_score` | float | Relevance and quality score between `0.0` and `1.0`. Higher values indicate greater relevance to the queried company or industry. Use for triage and ranking. |
+| `type` | string | Primary event type of the article (e.g. `"Equity Fund-Raising"`, `"Secondary Transactions"`, `"Layoffs"`). |
+
+**Geography and classification**
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `countries` | string\[\] | Array of ISO 3166-1 alpha-2 country codes relevant to the article (e.g. `["AU", "US"]`). Empty array when not detected. |
+| `industries` | object\[\] | Industries associated with the article. See **Industry object** below. |
+| `tags` | object\[\] | Structured event tags. See **Tag object** below. |
+| `company_names` | object\[\] | All companies mentioned in the article, each resolved with a UUID and website. See **Company object** below. |
+
+### Industry object
+
+Each object in the `industries` array:
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `name` | string | Industry name (e.g. `"Software"`, `"Design Tools"`). |
+| `code` | string | Machine-readable industry code (e.g. `"software"`, `"design-tools"`). |
+| `is_primary` | boolean | `true` if this is the primary industry classification for the article. Exactly one industry object will have `is_primary: true`. |
+
+### Tag object
+
+Each object in the `tags` array:
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `name` | string | Human-readable tag label (e.g. `"Funding"`, `"IPO"`, `"Layoffs"`). |
+| `code` | string | Machine-readable tag code (e.g. `"funding"`, `"ipo"`, `"layoffs"`). |
+| `is_primary` | boolean | `true` if this is the primary event tag for the article. Exactly one tag will have `is_primary: true`. |
+
+### Company object
+
+Each object in the `company_names` array:
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `company_id` | string (UUID) | Akta UUID for this company. Use with the Company Search API for further enrichment. |
+| `name` | string | Company display name. |
+| `website` | string | Company website URL. |
+| `is_primary` | boolean | `true` if this is the main company the article is about. Exactly one company will have `is_primary: true` when the article has a clear primary subject. |
+
+### Empty results
+
+When no articles match the query, the API returns `204 No Content` with an empty envelope:
+
+```json
+{
+  "total": 0,
+  "limit": 10,
+  "offset": 0,
+  "data": []
+}
+```
+
+---
+
+## 6. Examples
+
+### Company news — positive funding and deal activity
+
+Fetch all positive news about a company over a date range, filtered to funding and M&A event types.
+
+<CodeGroup>
+
+```bash cURL
+curl --location 'https://api.akta.ai/v1/news?company=canva.com&sentiment=positive&start_date=2024-01-01&limit=25' \
+  --header 'x-api-key: <YOUR_API_KEY>'
+```
+
+```python Python
+import requests
+
+HEADERS = {"x-api-key": "<YOUR_API_KEY>"}
+
+response = requests.get(
+    "https://api.akta.ai/v1/news",
+    headers=HEADERS,
+    params={
+        "company":    "canva.com",
+        "sentiment":  "positive",
+        "start_date": "2024-01-01",
+        "limit":      25
+    }
+)
+
+data     = response.json()
+articles = data["data"]
+
+print(f"Found {data['total']} articles (showing {len(articles)})\n")
+
+for article in articles:
+    primary_tag = next(
+        (t["name"] for t in article.get("tags", []) if t.get("is_primary")),
+        "—"
+    )
+    print(f"[{article['published_date']}] [{primary_tag}]")
+    print(f"  {article['title']}")
+    print(f"  {article['publisher']} | Score: {article['news_score']:.2f}")
+    print(f"  {article['ai_summary'][:180]}...")
+    print()
+```
+
+</CodeGroup>
+
+**Sample response:**
+
+```json
+{
+  "status": "success",
+  "total": 100,
+  "limit": 10,
+  "offset": 0,
+  "credits_consumed": 0.05,
+  "data": [
+    {
+      "id": "news_abc123",
+      "title": "Canva raises $1B at a $26B valuation",
+      "url": "https://techcrunch.com/canva-raises-1b",
+      "publisher": "TechCrunch",
+      "published_date": "2024-09-15",
+      "sentiment": "positive",
+      "news_score": 0.94,
+      "type": "Equity Fund-Raising",
+      "ai_summary": "Canva announced a $1B funding round, bringing its valuation to $26B.",
+      "full_text": "Canva, the Australian design platform...",
+      "original_language": "en",
+      "author": "Jane Doe",
+      "source": "techcrunch.com",
+      "countries": ["AU", "US"],
+      "industries": [
+        { "name": "Software", "code": "software", "is_primary": true },
+        { "name": "Design Tools", "code": "design-tools", "is_primary": false }
+      ],
+      "tags": [
+        { "name": "Funding", "code": "funding", "is_primary": true },
+        { "name": "Valuation", "code": "valuation", "is_primary": false }
+      ],
+      "company_names": [
+        {
+          "company_id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+          "name": "Canva",
+          "website": "https://canva.com",
+          "is_primary": true
+        }
+      ]
+    }
+  ]
+}
+```
+
+### Industry news monitoring
+
+Monitor all news across an industry, sorted by relevance score.
+
+```python
+import requests
+
+HEADERS = {"x-api-key": "<YOUR_API_KEY>"}
+
+response = requests.get(
+    "https://api.akta.ai/v1/news",
+    headers=HEADERS,
+    params={
+        "industry":   "Fintech",
+        "start_date": "2024-06-01",
+        "limit":      50
+    }
+)
+
+articles = response.json()["data"]
+
+# Sort by news_score descending for triage
+articles.sort(key=lambda x: x.get("news_score", 0), reverse=True)
+
+print(f"Top articles by relevance score:\n")
+for article in articles[:10]:
+    print(f"  [{article['news_score']:.2f}] {article['title']}")
+    print(f"    {article['publisher']} | {article['published_date']} | {article['sentiment']}")
+```
+
+### Adverse signal monitoring — negative news for a watchlist
+
+Pull negative sentiment news across a set of companies to surface early warning signals.
+
+```python
+import requests, concurrent.futures
+
+HEADERS   = {"x-api-key": "<YOUR_API_KEY>"}
+WATCHLIST = ["stripe.com", "brex.com", "ramp.com", "mercury.com"]
+
+def get_negative_news(domain):
+    r = requests.get(
+        "https://api.akta.ai/v1/news",
+        headers=HEADERS,
+        params={
+            "company":    domain,
+            "sentiment":  "negative",
+            "start_date": "2024-01-01",
+            "limit":      10
+        }
+    )
+    articles = r.json().get("data", [])
+    return domain, articles
+
+# Fetch all in parallel
+with concurrent.futures.ThreadPoolExecutor(max_workers=4) as pool:
+    results = dict(pool.map(lambda d: get_negative_news(d), WATCHLIST))
+
+for domain, articles in results.items():
+    if not articles:
+        continue
+    print(f"\n{domain} — {len(articles)} adverse signals")
+    for article in articles[:3]:
+        primary_tag = next(
+            (t["name"] for t in article.get("tags", []) if t.get("is_primary")), "—"
+        )
+        print(f"  [{article['published_date']}] [{primary_tag}] {article['title']}")
+        print(f"    Score: {article['news_score']:.2f} | {article['ai_summary'][:120]}...")
+```
+
+### Extracting full article text for LLM processing
+
+Use `full_text` to feed complete article content into a summarisation or classification pipeline.
+
+```python
+import requests
+
+HEADERS = {"x-api-key": "<YOUR_API_KEY>"}
+
+response = requests.get(
+    "https://api.akta.ai/v1/news",
+    headers=HEADERS,
+    params={
+        "company": "openai.com",
+        "type":    "Equity Fund-Raising",
+        "limit":   20
+    }
+)
+
+articles = response.json()["data"]
+
+# Filter to articles with full text available
+with_text = [a for a in articles if a.get("full_text", "").strip()]
+print(f"{len(with_text)} of {len(articles)} articles have full text\n")
+
+for article in with_text[:3]:
+    word_count = len(article["full_text"].split())
+    print(f"Title:     {article['title']}")
+    print(f"Publisher: {article['publisher']} | Words: {word_count}")
+    print(f"Summary:   {article['ai_summary']}")
+    print()
+    # Pass article["full_text"] to your LLM pipeline here
+```
+
+### Paginating through large result sets
+
+When `total` exceeds `limit`, paginate using `offset`.
+
+```python
+import requests
+
+HEADERS = {"x-api-key": "<YOUR_API_KEY>"}
+PARAMS  = {
+    "company":    "apple.com",
+    "start_date": "2024-01-01",
+    "limit":      100,
+    "offset":     0
+}
+
+all_articles = []
+
+while True:
+    response = requests.get(
+        "https://api.akta.ai/v1/news",
+        headers=HEADERS,
+        params=PARAMS
+    )
+    data  = response.json()
+    batch = data.get("data", [])
+    all_articles.extend(batch)
+
+    print(f"Fetched {len(all_articles)} / {data['total']} articles")
+
+    if len(all_articles) >= data["total"] or not batch:
+        break
+
+    PARAMS["offset"] += PARAMS["limit"]
+
+print(f"\nTotal retrieved: {len(all_articles)}")
+```
+
+### Resolving company mentions across an industry feed
+
+Use `company_names` to map all entities referenced in articles without parsing article text.
+
+```python
+import requests
+from collections import Counter
+
+HEADERS = {"x-api-key": "<YOUR_API_KEY>"}
+
+response = requests.get(
+    "https://api.akta.ai/v1/news",
+    headers=HEADERS,
+    params={
+        "industry":   "Artificial Intelligence",
+        "start_date": "2024-09-01",
+        "limit":      100
+    }
+)
+
+articles = response.json()["data"]
+
+# Count non-primary company mentions (i.e. companies mentioned in context)
+mention_counter = Counter()
+for article in articles:
+    for co in article.get("company_names", []):
+        if not co.get("is_primary"):
+            mention_counter[co["name"]] += 1
+
+print("Most-mentioned companies in AI news (non-primary):")
+for name, count in mention_counter.most_common(10):
+    print(f"  {name}: {count} mentions")
+```
+
+### JavaScript / Node.js
+
+```javascript
+const fetch = require("node-fetch");
+
+async function getNews(params = {}) {
+  const query = new URLSearchParams({
+    limit:  params.limit  || 10,
+    offset: params.offset || 0,
+    ...(params.company   && { company:   params.company }),
+    ...(params.industry  && { industry:  params.industry }),
+    ...(params.sentiment && { sentiment: params.sentiment }),
+    ...(params.startDate && { start_date: params.startDate }),
+    ...(params.endDate   && { end_date:   params.endDate }),
+    ...(params.type      && { type:       params.type })
+  });
+
+  const response = await fetch(
+    `https://api.akta.ai/v1/news?${query}`,
+    {
+      headers: {
+        "x-api-key":    process.env.AKTA_API_KEY,
+        "Content-Type": "application/json"
+      }
+    }
+  );
+
+  if (!response.ok) {
+    throw new Error(`API error: ${response.status} ${response.statusText}`);
+  }
+
+  return response.json();
+}
+
+// Example: positive funding news for Canva
+getNews({
+  company:   "canva.com",
+  sentiment: "positive",
+  startDate: "2024-01-01",
+  limit:     10
+}).then(data => {
+  console.log(`Found ${data.total} articles`);
+  data.data.forEach(a => {
+    console.log(`[${a.news_score.toFixed(2)}] ${a.title}`);
+    console.log(`  ${a.publisher} | ${a.published_date}`);
+  });
+});
+```
+
+---
+
+## 7. Error Handling
+
+The API uses standard HTTP status codes. All error responses include a JSON body with `status`, `error`, and `message` fields.
+
+| Status | Error Code | Cause & Resolution |
+| --- | --- | --- |
+| `200 OK` | — | Articles returned successfully. |
+| `204 No Content` | — | Request was valid but no articles matched the query. Returns an empty `data` array. |
+| `400 Bad Request` | `INVALID_DATE_RANGE` | `start_date` is after `end_date`. Check that your date range is valid. |
+| `400 Bad Request` | `INVALID_COMPANY` | The `company` value could not be resolved. Verify the domain or UUID using the Company Search API. |
+| `400 Bad Request` | `INVALID_SENTIMENT` | The `sentiment` value is not one of `positive`, `negative`, `neutral`, `all`. |
+| `400 Bad Request` | `INVALID_TAG` | The `type` value is not a recognised event type. |
+| `401 Unauthorized` | `UNAUTHORIZED` | Missing or invalid `x-api-key` header. Verify your API key. |
+| `500 Internal Server Error` | `SERVER_ERROR` | Unexpected server error. Retry after a brief delay. If the issue persists, contact [support@akta.ai](mailto:support@akta.ai). |
+
+**Error response example:**
+
+```json
+{
+  "status": "error",
+  "error": "INVALID_DATE_RANGE",
+  "message": "start_date cannot be after end_date."
+}
+```
+
+**Retry logic with exponential back-off:**
+
+```python
+import time, requests
+
+def fetch_news_with_retry(params, api_key, max_retries=3):
+    headers = {
+        "x-api-key":    api_key,
+        "Content-Type": "application/json"
+    }
+    for attempt in range(max_retries):
+        try:
+            r = requests.get(
+                "https://api.akta.ai/v1/news",
+                headers=headers,
+                params=params,
+                timeout=30
+            )
+            if r.status_code == 429:
+                time.sleep(2 ** attempt)
+                continue
+            r.raise_for_status()
+            return r.json()
+        except requests.exceptions.Timeout:
+            if attempt == max_retries - 1:
+                raise
+            time.sleep(1)
+    raise Exception(f"Failed after {max_retries} attempts")
+```
+
+---
+
+## 8. Best Practices
+
+**Pass a domain, not a company name**
+
+The `company` parameter accepts a website domain (e.g. `"canva.com"`) or a UUID from the Company Search API — not a display name like `"Canva"`. Passing a display name will not resolve correctly. If you only have a company name, use the Company Search API to look up its domain or UUID first.
+
+**Use `news_score` to triage before processing full text**
+
+The `news_score` float (0.0–1.0) measures article relevance and quality relative to your query. For high-volume feeds, sort by `news_score` descending and process only the top articles before expanding to lower-scored results:
+
+```python
+articles.sort(key=lambda x: x.get("news_score", 0), reverse=True)
+high_signal = [a for a in articles if a.get("news_score", 0) >= 0.7]
+```
+
+**Set `start_date` explicitly — the default lookback is capped**
+
+Non-enterprise plans are limited to a 6-month lookback window. Without a `start_date`, the API defaults to 6 months ago. For longer historical pulls on enterprise plans, always set `start_date` explicitly to avoid unintentional truncation:
+
+```python
+from datetime import datetime, timedelta
+
+start_date = (datetime.today() - timedelta(days=365)).strftime("%Y-%m-%d")
+params["start_date"] = start_date
+```
+
+**Combine `company` and `industry` for more focused results**
+
+Passing both parameters scopes results to articles about the specified company that are also classified under the specified industry. This is useful when a company operates across multiple sectors and you want to isolate coverage of a specific business line:
+
+```python
+params = {
+    "company":  "alphabet.com",
+    "industry": "Artificial Intelligence",
+    "limit":    50
+}
+```
+
+**Use `is_primary` flags on tags and industries for fast classification**
+
+Each `tags` and `industries` array contains exactly one object with `is_primary: true` — the dominant classification for that article. When you only need the top-level category, extract the primary item directly rather than iterating the full array:
+
+```python
+primary_tag = next((t["name"] for t in article["tags"] if t["is_primary"]), None)
+primary_industry = next((i["name"] for i in article["industries"] if i["is_primary"]), None)
+```
+
+**Use `full_text` for LLM pipelines — fall back to `ai_summary` when empty**
+
+`full_text` provides the complete article body and is ideal for embedding, RAG, or detailed analysis. Some articles may have an empty `full_text` due to paywalls or scraping restrictions. Always fall back to `ai_summary`:
+
+```python
+content = article.get("full_text", "").strip()
+if not content:
+    content = article.get("ai_summary", "")
+```
+
+**Paginate correctly — `total` reflects the full matching set**
+
+The `total` field reflects the complete number of matching articles before pagination. Always compare `len(all_articles)` against `total` to determine whether further pages exist. Stop paginating when the returned `data` array is empty or when `len(all_articles) >= total`.
+
+---
