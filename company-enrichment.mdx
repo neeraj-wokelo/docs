@@ -1,28 +1,21 @@
 ---
-title: "company-enrichment"
+title: "Company Enrichment API"
+description: "Enrich a company with firmographics, business model, headcount, traffic, funding, financials, acquisitions, and investments data."
 ---
 
-## Quick start
+## Overview
 
-The Company Enrichment API returns structured company intelligence for a given company. Pass a company website or company UUID in the `company` field.
-
-Use the optional `sections` field to control which enrichment sections are returned. If `sections` is omitted, all available sections are returned.
+The Company Enrichment API returns detailed company data across multiple sections — firmographics, go-to-market and business model, headcount, website traffic, funding, financials, acquisitions, and investments. Callers can request all sections at once or scope the response to a specific subset using the `sections` field.
 
 Results are returned synchronously in the HTTP response.
 
-<Note>
-  Company UUIDs can be obtained from the Company Search API. Use the UUID when you want the most precise company match.
-</Note>
+## Endpoint Details
 
-## Endpoint
-
-Method: POST
-
-`/v1/companies/enrich`
-
-## Base URL
-
-`https://api.akta.pro`
+- **Method:** `POST`
+- **Endpoint:** `/v1/company/enrichment`
+- **Base URL:** `https://api.akta.pro`
+- **Version:** v1
+- **Content-Type:** `application/json`
 
 ## Authentication
 
@@ -32,242 +25,125 @@ Pass your API key in the `x-api-key` request header.
 -H "x-api-key: YOUR_API_KEY"
 ```
 
-<Warning>
-  Do not expose production API keys in client-side code, public repositories, screenshots, or shared documentation. The examples below use a placeholder key.
-</Warning>
+## Request
 
-## Sample request
+### Body Parameters
 
-<CodeGroup>
+<ParamField body="company" type="string" required>
+  Either a company website (e.g. `canva.com`) or a company UUID (e.g. `3fa85f64-5717-4562-b3fc-2c963f66afa6`). The UUID can be obtained from the Company Search API.
+</ParamField>
 
-```bash cURL
-curl "https://api.akta.pro/v1/companies/enrich" \
-  -X POST \
-  -H "x-api-key: YOUR_API_KEY" \
-  -H "Content-Type: application/json" \
-  -d '{
-    "company": "https://www.canva.com",
-    "sections": ["firmographics", "funding"]
-  }'
-```
+<ParamField body="sections" type="array of strings">
+  Sections to return. If omitted, all available sections are returned. See available values below.
+</ParamField>
 
-```python Python
-import requests
+### Available Sections
 
-url = "https://api.akta.pro/v1/companies/enrich"
-headers = {
-    "x-api-key": "YOUR_API_KEY",
-    "Content-Type": "application/json",
-}
-payload = {
-    "company": "https://www.canva.com",
-    "sections": ["firmographics", "funding"],
-}
+<ResponseField name="firmographics" type="section">
+  Name, location, founded year, company type, operating status, ticker.
+</ResponseField>
 
-response = requests.post(url, headers=headers, json=payload)
-response.raise_for_status()
+<ResponseField name="gtm_and_business_model" type="section">
+  Go-to-market strategy and business model details.
+</ResponseField>
 
-payload = response.json()
+<ResponseField name="headcount" type="section">
+  Employee count data.
+</ResponseField>
 
-firmographics = payload["data"].get("firmographics")
-funding = payload["data"].get("funding")
+<ResponseField name="website_traffic" type="section">
+  Web traffic metrics.
+</ResponseField>
 
-if firmographics:
-    print(firmographics["name"])
-    print(firmographics["website"])
-    print(firmographics["location"])
-    print(firmographics["founded"])
-    print(firmographics["type"])
-    print(firmographics["operating_status"])
-    print(firmographics["ticker"])
+<ResponseField name="funding" type="section">
+  Funding stage, total raised, last round date, number of rounds.
+</ResponseField>
 
-if funding:
-    overall = funding["overall"]
-    print(overall["funding_stage"])
-    print(overall["total_funding"])
-    print(overall["last_funding_date"])
-    print(overall["num_funding_rounds"])
-```
+<ResponseField name="public_company_financials" type="section">
+  Financials for publicly listed companies.
+</ResponseField>
 
-```javascript JavaScript
-const response = await fetch("https://api.akta.pro/v1/companies/enrich", {
-  method: "POST",
-  headers: {
-    "x-api-key": "YOUR_API_KEY",
-    "Content-Type": "application/json",
-  },
-  body: JSON.stringify({
-    company: "https://www.canva.com",
-    sections: ["firmographics", "funding"],
-  }),
-});
+<ResponseField name="uk_private_company_financials" type="section">
+  Financials for UK private companies.
+</ResponseField>
 
-if (!response.ok) {
-  throw new Error(`Request failed with status ${response.status}`);
-}
+<ResponseField name="acquisitions" type="section">
+  Acquisition activity. Available on the Enterprise tier only.
+</ResponseField>
 
-const payload = await response.json();
+<ResponseField name="investments" type="section">
+  Investment activity. Available on the Enterprise tier only.
+</ResponseField>
 
-const firmographics = payload.data.firmographics;
-const funding = payload.data.funding;
+### Example Request
 
-if (firmographics) {
-  console.log(firmographics.name);
-  console.log(firmographics.website);
-  console.log(firmographics.location);
-  console.log(firmographics.founded);
-  console.log(firmographics.type);
-  console.log(firmographics.operating_status);
-  console.log(firmographics.ticker);
-}
-
-if (funding) {
-  console.log(funding.overall.funding_stage);
-  console.log(funding.overall.total_funding);
-  console.log(funding.overall.last_funding_date);
-  console.log(funding.overall.num_funding_rounds);
+```json
+{
+  "company": "https://www.canva.com",
+  "sections": ["firmographics", "funding"]
 }
 ```
-
-</CodeGroup>
-
-## Request reference
-
-### Body parameters
-
-| Field | Type | Required | Description |
-| --- | --- | --- | --- |
-| `company` | string | Yes | Company website or company UUID. Example: `https://www.canva.com` or `3fa85f64-5717-4562-b3fc-2c963f66afa6`. |
-| `sections` | array of strings | No | Sections to return. If omitted, all available sections are returned. |
-
-## Available sections
-
-| Value | Description |
-| --- | --- |
-| `firmographics` | Name, location, founded year, company type, operating status, and ticker. |
-| `gtm_and_business_model` | Go-to-market strategy and business model details. |
-| `headcount` | Employee count data. |
-| `website_traffic` | Website traffic metrics. |
-| `funding` | Funding stage, total raised, last round date, and number of funding rounds. |
-| `public_company_financials` | Financial data for public companies. |
-| `uk_private_company_financials` | Financial data for UK private companies. |
-| `acquisitions` | Company acquisition activity. |
-| `investments` | Company investment activity. Available on enterprise tier. |
 
 ## Response
 
-A successful response returns a status and a `data` object. The keys inside `data` match the requested sections. Only requested sections are present.
+### Successful Response Fields
 
-```json
-{
-  "status": "success",
-  "data": {
-    "firmographics": {
-      "name": "Canva",
-      "website": "http://www.canva.com",
-      "location": "Sydney, Australia",
-      "founded": 2013,
-      "type": "private",
-      "operating_status": "Operating",
-      "ticker": null
-    },
-    "funding": {
-      "overall": {
-        "funding_stage": "Secondary Market",
-        "total_funding": 2508450682.0,
-        "last_funding_date": "2025-08-20",
-        "num_funding_rounds": "21"
-      }
-    }
-  }
-}
-```
+Returns a JSON object with the following structure:
 
-### Top-level response fields
+<ResponseField name="status" type="string">
+  Request status. Returns `success` or `error`.
+</ResponseField>
 
-| Field | Type | Description |
-| --- | --- | --- |
-| `status` | string | Request status. Returns `success` or `error`. |
-| `data` | object | Object containing the requested enrichment sections. |
+<ResponseField name="data" type="object">
+  Object whose keys match the requested sections. Only requested sections are present in the response.
+</ResponseField>
 
-### Firmographics fields
+## Section Schemas
 
-| Field | Type | Description |
-| --- | --- | --- |
-| `name` | string | Company name. |
-| `website` | string | Primary company website. |
-| `location` | string | Company location. Example: `Sydney, Australia`. |
-| `founded` | integer | Year the company was founded. |
-| `type` | string | Company type. Example: `public`, `private`, `acquired`, `unknown`. |
-| `operating_status` | string | Operating status. Example: `Operating`, `Closed`. |
-| `ticker` | string or null | Stock ticker. Returns `null` if the company is private. |
+### Firmographics
 
-### Funding fields
+<ResponseField name="name" type="string">
+  Company name.
+</ResponseField>
 
-| Field | Type | Description |
-| --- | --- | --- |
-| `overall.funding_stage` | string | Latest funding stage. Example: `Series B`, `Secondary Market`. |
-| `overall.total_funding` | float | Total funding raised in USD. |
-| `overall.last_funding_date` | string | ISO 8601 date of the latest funding round. |
-| `overall.num_funding_rounds` | string | Total number of funding rounds. |
+<ResponseField name="website" type="string">
+  Primary website URL.
+</ResponseField>
 
-## Error responses
+<ResponseField name="location" type="string">
+  Company location in `City, Country` format.
+</ResponseField>
 
-### 400 Bad Request
+<ResponseField name="founded" type="integer">
+  Year the company was founded.
+</ResponseField>
 
-Returned when the request contains invalid input.
+<ResponseField name="company_status" type="string">
+  Public market status. Allowed values: `public`, `private`, `acquired`, `unknown`.
+</ResponseField>
 
-```json
-{
-  "status": "error",
-  "error": "INVALID_INPUT",
-  "message": "Invalid company enrichment input."
-}
-```
+<ResponseField name="operating_status" type="string">
+  Current operating status. Example: `Operating`, `Closed`.
+</ResponseField>
 
-### 422 Unprocessable Entity
+<ResponseField name="ticker" type="string">
+  Stock ticker symbol. Returns `null` for private companies.
+</ResponseField>
 
-Returned when the required company identifier is missing.
+### Funding
 
-```json
-{
-  "status": "error",
-  "error": "MISSING_PARAMETER",
-  "message": "The company field is required."
-}
-```
+<ResponseField name="overall.funding_stage" type="string">
+  Latest funding stage. Example: `Series B`, `Secondary Market`.
+</ResponseField>
 
-### 404 Company Not Found
+<ResponseField name="overall.total_funding" type="float">
+  Total amount raised in USD.
+</ResponseField>
 
-Returned when no company matches the provided input.
+<ResponseField name="overall.last_funding_date" type="string">
+  Date of the most recent funding round in ISO 8601 format `YYYY-MM-DD`.
+</ResponseField>
 
-```json
-{
-  "status": "error",
-  "error": "COMPANY_NOT_FOUND",
-  "message": "No company found for the provided identifier."
-}
-```
-
-### 500 Internal Server Error
-
-Returned when an unexpected server error occurs.
-
-```json
-{
-  "status": "error",
-  "error": "SERVER_ERROR",
-  "message": "An unexpected error occurred. Please try again."
-}
-```
-
-## Implementation notes
-
-- Use the Company Search API first when you need to resolve a company name into a canonical company UUID.
-- Pass a website or company UUID in the `company` field.
-- Use `sections` to request only the enrichment sections needed for your workflow.
-- Omit `sections` when you want all available sections.
-- Use `firmographics` for company identity and basic profile data.
-- Use `funding` for investment research, market mapping, and private-company intelligence workflows.
-- The `investments` section is available only on enterprise tier.
-- Store only the sections required by your downstream workflow to reduce payload size and simplify processing.
+<ResponseField name="overall.num_funding_rounds" type="string">
+  Total number of funding rounds.
+</ResponseField>

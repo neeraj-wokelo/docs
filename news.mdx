@@ -1,0 +1,209 @@
+---
+title: "News API"
+description: "Fetch news articles enriched with AI summaries, event types, publisher metadata, sentiment, industry tags, company mentions, and full article text."
+---
+
+## Overview
+
+The News API returns news articles filtered by company, industry, date range, sentiment, type, and news score. Each result is enriched with an AI-generated summary, event classification, publisher metadata, sentiment, company mentions, geography, industry tags, and the full article text.
+
+Results are returned synchronously in the HTTP response.
+
+## Endpoint Details
+
+- **Method:** `GET`
+- **Endpoint:** `/v1/news`
+- **Base URL:** `https://api.akta.pro`
+- **Version:** v1
+- **Content-Type:** `application/json`
+
+## Authentication
+
+Pass your API key in the `x-api-key` request header.
+
+```bash
+-H "x-api-key: YOUR_API_KEY"
+```
+
+## Request
+
+### Query Parameters
+
+All parameters are optional.
+
+<ParamField query="company" type="string">
+  Website (e.g. `canva.com`) or company UUID from the Company Search API.
+</ParamField>
+
+<ParamField query="industry" type="string">
+  Industry name to filter articles by.
+</ParamField>
+
+<ParamField query="start_date" type="string">
+  Start of the date range, formatted as `YYYY-MM-DD`. Non-enterprise plans are limited to a 6-month lookback.
+</ParamField>
+
+<ParamField query="end_date" default="today" type="string">
+  End of the date range, formatted as `YYYY-MM-DD`. Defaults to today.
+</ParamField>
+
+<ParamField query="limit" default="10" type="integer">
+  Maximum number of news articles to return. Maximum: `100`.
+</ParamField>
+
+<ParamField query="offset" default="0" type="integer">
+  Number of records to skip before returning results. Use with `limit` for pagination.
+</ParamField>
+
+<ParamField query="news_score" default="all" type="string">
+  Filter by news score tier. Defaults to returning all tiers.
+</ParamField>
+
+<ParamField query="type" default="all" type="string">
+  Filter by news type. Defaults to returning all types.
+</ParamField>
+
+<ParamField query="sentiment" default="all" type="string">
+  Filter by sentiment. Accepted values: `positive`, `negative`, `neutral`, `all`.
+</ParamField>
+
+### Example Request
+
+```bash
+GET /v1/news?company=canva.com&sentiment=positive&start_date=2024-01-01&limit=10&offset=0
+x-api-key: <your_api_key>
+```
+
+## Response
+
+### Successful Response Fields
+
+Returns a JSON object with the following structure:
+
+<ResponseField name="status" type="string">
+  Request status. Returns `success` or `error`.
+</ResponseField>
+
+<ResponseField name="limit" type="integer">
+  Limit applied to the request.
+</ResponseField>
+
+<ResponseField name="offset" type="integer">
+  Offset applied to the request.
+</ResponseField>
+
+<ResponseField name="data" type="array">
+  List of news article objects.
+</ResponseField>
+
+## Article Object Fields
+
+<ResponseField name="title" type="string">
+  Headline of the article.
+</ResponseField>
+
+<ResponseField name="url" type="string">
+  Link to the original article.
+</ResponseField>
+
+<ResponseField name="publisher" type="string">
+  Name of the publishing outlet.
+</ResponseField>
+
+<ResponseField name="published_date" type="string">
+  Publication date in ISO 8601 format `YYYY-MM-DD`.
+</ResponseField>
+
+<ResponseField name="type" type="string">
+  Article type. Example: `Secondary Transactions`, `Equity Fund-Raising`.
+</ResponseField>
+
+<ResponseField name="sentiment" type="string">
+  Sentiment of the article: `positive`, `negative`, or `neutral`.
+</ResponseField>
+
+<ResponseField name="news_score" type="float">
+  Relevance and quality score of the article.
+</ResponseField>
+
+<ResponseField name="ai_summary" type="string">
+  AI-generated summary of the article.
+</ResponseField>
+
+<ResponseField name="full_text" type="string">
+  Full body text of the article.
+</ResponseField>
+
+<ResponseField name="original_language" type="string">
+  Original language code for the article. Example: `en`, `fr`.
+</ResponseField>
+
+<ResponseField name="author" type="string">
+  Author of the article, when available.
+</ResponseField>
+
+<ResponseField name="source" type="string">
+  Source identifier or domain.
+</ResponseField>
+
+<ResponseField name="countries" type="array of strings">
+  List of country codes mentioned in the article.
+</ResponseField>
+
+<ResponseField name="industries" type="array of objects">
+  Industries associated with the article. See **Industry Object** below.
+</ResponseField>
+
+<ResponseField name="tags" type="array of objects">
+  Tags associated with the article. See **Tag Object** below.
+</ResponseField>
+
+<ResponseField name="company_names" type="array of objects">
+  Companies mentioned in the article. See **Company Object** below.
+</ResponseField>
+
+## Industry Object Fields
+
+<ResponseField name="name" type="string">
+  Industry name. Example: `Software`.
+</ResponseField>
+
+<ResponseField name="code" type="string">
+  Industry code. Example: `software`.
+</ResponseField>
+
+<ResponseField name="is_primary" type="boolean">
+  `true` if this is the primary industry of the article.
+</ResponseField>
+
+## Tag Object Fields
+
+<ResponseField name="name" type="string">
+  Tag label. Example: `IPO`, `Layoffs`.
+</ResponseField>
+
+<ResponseField name="code" type="string">
+  Tag code. Example: `ipo`, `layoffs`.
+</ResponseField>
+
+<ResponseField name="is_primary" type="boolean">
+  `true` if this is the primary tag of the article.
+</ResponseField>
+
+## Company Object Fields
+
+<ResponseField name="company_id" type="string">
+  Company UUID.
+</ResponseField>
+
+<ResponseField name="name" type="string">
+  Company name.
+</ResponseField>
+
+<ResponseField name="website" type="string">
+  Company website URL.
+</ResponseField>
+
+<ResponseField name="is_primary" type="boolean">
+  `true` if this is the main company the article is about.
+</ResponseField>
