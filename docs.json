@@ -27,13 +27,9 @@
             "group": "API Products",
             "icon": "network-wired",
             "pages": [
-              "company-news-doc",
+              "news-doc",
               "company-enrichment-doc",
-              "industry-news-doc",
-              "company-search",
-              "product-reviews",
-              "company-enrichment",
-              "employee-reviews"
+              "company-search-doc"
             ]
           },
           "playground",
@@ -44,11 +40,9 @@
       {
         "tab": "API Reference",
         "pages": [
-          "company-news",
-          "company-search-1",
-          "company-enrichment-1",
-          "product-reviews-1",
-          "employee-reviews-1"
+          "company-search",
+          "news",
+          "company-enrichment"
         ]
       }
     ]

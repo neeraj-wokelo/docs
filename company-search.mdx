@@ -1,257 +1,172 @@
 ---
 title: "Company Search"
-description: "Search for companies by name, website, or UUID and return matching company identifiers and core metadata."
+description: "Look up any company by name, website, or UUID to retrieve its Akta UUID and core identity fields — used to resolve company identifiers before calling the Enrichment and News APIs."
 hidden: true
 ---
 
-## Quick start
+## 1. Overview
 
-The Company Search API helps you resolve a company input into one or more matching company records. You can pass a company name, website, or company UUID using the `company` query parameter.
+The Company Search API resolves a company name, website domain, or UUID into a structured company record. Its primary purpose is to look up the `uuid` needed by the [Company Enrichment](/akta-company-enrichment-doc) and [News](/akta-news-api-doc) APIs when you only have a company name to start with.
 
-Each result includes the company identifier, company name, website, product category, and IPO status. Use the returned `company_id` when calling downstream company data APIs such as Company Enrichment.
+This is a **free endpoint** — it does not consume API credits.
 
-Results are returned synchronously in the HTTP response.
+**Endpoint**
 
-<Note>
-  This is a synchronous API. The results are returned directly in the HTTP response.
-</Note>
+```text
+GET https://api.akta.ai/v1/company/search
+```
 
-## Endpoint
+Pass a single `name` query parameter. The backend automatically detects whether the input is a company name, website domain, or UUID and resolves it accordingly.
 
-Method: GET
+---
 
-`/v1/companies/search`
+## 2. Authentication
 
-## Base URL
+All requests must include an **API key** in the `x-api-key` HTTP header.
 
-`https://api.akta.pro`
-
-## Authentication
-
-Pass your API key in the `x-api-key` request header.
-
-`-H "x-api-key: YOUR_API_KEY"`
+```text
+x-api-key: <YOUR_API_KEY>
+```
 
 <Warning>
-  Do not expose production API keys in client-side code, public repositories, screenshots, or shared documentation. The examples below use a placeholder key.
+  Never expose your API key in client-side code, browser requests, or public repositories. A missing or invalid key returns `401 Unauthorized`.
 </Warning>
 
-## Sample request
+---
+
+## 3. Request Reference
+
+| Parameter | Type | Required | Description |
+| --- | --- | --- | --- |
+| `name` | string | **Required** | Company name (e.g. `"Canva"`), website domain (e.g. `"canva.com"`), or UUID (e.g. `"3fa85f64-..."`). The API automatically identifies the input type and resolves it. |
+
+**Example requests:**
 
 <CodeGroup>
 
-```bash cURL
-curl -G "https://api.akta.pro/v1/companies/search" \
-  -H "x-api-key: YOUR_API_KEY" \
-  --data-urlencode "company=canva"
+```bash cURL — by company name
+curl --location 'https://api.akta.ai/v1/company/search?name=Canva' \
+  --header 'x-api-key: <YOUR_API_KEY>'
+```
+
+```bash cURL — by website
+curl --location 'https://api.akta.ai/v1/company/search?name=canva.com' \
+  --header 'x-api-key: <YOUR_API_KEY>'
 ```
 
 ```python Python
 import requests
 
-url = "https://api.akta.pro/v1/companies/search"
-headers = {"x-api-key": "YOUR_API_KEY"}
-params = {
-    "company": "canva",
-}
+response = requests.get(
+    "https://api.akta.ai/v1/company/search",
+    headers={"x-api-key": "<YOUR_API_KEY>"},
+    params={"name": "Canva"}
+)
 
-response = requests.get(url, headers=headers, params=params)
-response.raise_for_status()
-
-payload = response.json()
-
-for company in payload["data"]:
-    print(company["company_id"])
-    print(company["name"])
-    print(company["website"])
-    print(company["product_category"])
-    print(company["ipo_status"])
-    print()
-```
-
-```javascript JavaScript
-const params = new URLSearchParams({
-  company: "canva",
-});
-
-const response = await fetch(
-  `https://api.akta.pro/v1/companies/search?${params}`,
-  { headers: { "x-api-key": "YOUR_API_KEY" } }
-);
-
-if (!response.ok) {
-  throw new Error(`Request failed with status ${response.status}`);
-}
-
-const payload = await response.json();
-
-for (const company of payload.data) {
-  console.log(company.company_id);
-  console.log(company.name);
-  console.log(company.website);
-  console.log(company.product_category);
-  console.log(company.ipo_status);
-}
+results = response.json()["data"]
+if results:
+    company = results[0]
+    print(f"UUID:    {company['uuid']}")
+    print(f"Name:    {company['name']}")
+    print(f"Website: {company['website']}")
+    print(f"Status:  {company['company_status']}")
 ```
 
 </CodeGroup>
 
-## Request reference
+---
 
-### Query parameters
+## 4. Response
 
-| Parameter | Type | Required | Description |
-| --- | --- | --- | --- |
-| `company` | string | Yes | Company name, website, or company UUID to resolve. Example: `canva.com`. |
-
-## Response
-
-A successful response returns a list of matching companies and pagination metadata.
+### Response envelope
 
 ```json
 {
   "data": [
     {
-      "company_id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-      "name": "Acme Corporation",
-      "website": "https://acme.com",
+      "uuid": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+      "name": "Canva",
+      "website": "https://canva.com",
       "product_category": "SaaS",
-      "ipo_status": "public"
+      "company_status": "private"
     }
   ],
-  "pagination": {
-    "total": 42,
-    "limit": 10,
-    "offset": 0
-  }
+  "credits_consumed": 0.00
 }
 ```
 
-### Top-level response fields
+| Field | Type | Description |
+| --- | --- | --- |
+| `data` | object\[\] | Array of matching company objects. Empty array `[]` when no results are found. |
+| `credits_consumed` | float | Always `0.00` — this is a free endpoint. |
+
+### Company object
 
 | Field | Type | Description |
 | --- | --- | --- |
-| `data` | array | Array of matching company objects. |
-| `pagination` | object | Pagination metadata for the returned result set. |
-
-### Company object fields
-
-| Field | Type | Description |
-| --- | --- | --- |
-| `company_id` | string | Unique identifier for the company. UUID v4 format. |
+| `uuid` | string (UUID) | Unique Akta identifier for the company. Pass this as the `company` parameter in the Enrichment and News APIs. |
 | `name` | string | Legal or registered company name. |
-| `website` | string | Primary website URL. |
-| `product_category` | string | Primary product or service category. Example: `SaaS`, `FinTech`. |
-| `ipo_status` | string | Public market status. Example: `public`, `private`, `acquired`, `unknown`. |
+| `website` | string | Primary website URL, normalised with no trailing slash. |
+| `product_category` | string | Primary product or service category (e.g. `"SaaS"`, `"FinTech"`, `"Healthcare"`). |
+| `company_status` | string | Public market status: `"public"`, `"private"`, `"acquired"`, `"delisted"`, or `"unknown"`. |
 
-### Pagination object fields
+When no companies match the query, the API returns `204 No Content` with an empty `data` array.
 
-| Field | Type | Description |
+---
+
+## 5. Using the UUID in other APIs
+
+Once you have the `uuid`, pass it as the `company` field in downstream API calls:
+
+```python
+import requests
+
+HEADERS = {"x-api-key": "<YOUR_API_KEY>"}
+
+# Step 1: Search for the company
+search = requests.get(
+    "https://api.akta.ai/v1/company/search",
+    headers=HEADERS,
+    params={"name": "Canva"}
+)
+uuid = search.json()["data"][0]["uuid"]
+
+# Step 2: Use the UUID in Company Enrichment
+enrich = requests.post(
+    "https://api.akta.ai/v1/company/enrichment",
+    headers={**HEADERS, "Content-Type": "application/json"},
+    json={"company": uuid, "sections": ["firmographics", "funding"]}
+)
+print(enrich.json()["data"]["firmographics"]["name"])
+
+# Or use it in the News API
+news = requests.get(
+    "https://api.akta.ai/v1/news",
+    headers=HEADERS,
+    params={"company": uuid, "limit": 10}
+)
+print(f"Found {news.json()['total']} articles")
+```
+
+---
+
+## 6. Error Handling
+
+| Status | Error Code | Cause & Resolution |
 | --- | --- | --- |
-| `total` | integer | Total number of matching companies. |
-| `limit` | integer | Maximum number of companies returned in the response. |
-| `offset` | integer | Number of companies skipped before the current response. |
+| `200 OK` | — | Results returned in `data` array. |
+| `204 No Content` | — | No companies matched the query. Try a different name or domain. |
+| `400 Bad Request` | `INVALID_INPUT` | Missing or malformed `name` parameter. |
+| `401 Unauthorized` | `UNAUTHORIZED` | Missing or invalid `x-api-key`. |
+| `500 Internal Server Error` | `SERVER_ERROR` | Unexpected server error. Retry after a brief delay. |
 
-## Error responses
-
-### 400 Bad Request
-
-Returned when the request contains invalid or conflicting input.
+**Error response example:**
 
 ```json
 {
   "error": "INVALID_INPUT",
-  "message": "Invalid company search input."
+  "message": "The name parameter is required."
 }
 ```
 
-### 422 Unprocessable Entity
-
-Returned when the required `company` parameter is missing.
-
-```json
-{
-  "error": "MISSING_PARAMETER",
-  "message": "The company query parameter is required."
-}
-```
-
-### 500 Internal Server Error
-
-Returned when an unexpected server error occurs.
-
-```json
-{
-  "error": "SERVER_ERROR",
-  "message": "An unexpected error occurred. Please try again."
-}
-```
-
-## Implementation notes
-
-- Use the `company` parameter to pass a company name, website, or company UUID.
-- Use the returned `company_id` as the preferred identifier for downstream APIs.
-- Store `company_id`, `name`, `website`, `product_category`, and `ipo_status` when building company lookup or enrichment workflows.
-- If multiple companies are returned, use `website` and `name` to confirm the correct match before enriching the company.
-- Do not expose API keys in browser code or public client-side applications.
-
-## Use your API key directly
-
-You can also use your API key directly in your own code by passing it in the `x-api-key` request header.
-
-<Tabs>
-  <Tab title="cURL">
-    ```bash
-    curl -G "https://api.akta.pro/v1/companies/search" \
-      -H "x-api-key: YOUR_API_KEY" \
-      --data-urlencode "company=canva"
-    ```
-  </Tab>
-  <Tab title="Python">
-    ```python
-    import requests
-    
-    url = "https://api.akta.pro/v1/companies/search"
-    headers = {"x-api-key": "YOUR_API_KEY"}
-    params = {"company": "canva"}
-    
-    response = requests.get(url, headers=headers, params=params)
-    response.raise_for_status()
-    
-    data = response.json()
-    
-    for company in data["data"]:
-        print(company["company_id"])
-        print(company["name"])
-        print(company["website"])
-    ```
-  </Tab>
-  <Tab title="JavaScript">
-    ```javascript
-    const params = new URLSearchParams({
-      company: "canva",
-    });
-    
-    const response = await fetch(
-      `https://api.akta.pro/v1/companies/search?${params}`,
-      {
-        headers: {
-          "x-api-key": "YOUR_API_KEY",
-        },
-      }
-    );
-    
-    if (!response.ok) {
-      throw new Error(`Request failed with status ${response.status}`);
-    }
-    
-    const data = await response.json();
-    
-    for (const company of data.data) {
-      console.log(company.company_id);
-      console.log(company.name);
-      console.log(company.website);
-    }
-    ```
-  </Tab>
-</Tabs>
+---
