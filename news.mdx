@@ -269,3 +269,149 @@ Returns a JSON object with the following structure:
 ```
 
 </ResponseExample>
+
+- **Method:** GET
+- **Endpoint:** `/v1/news`
+
+## Authentication requirements
+
+- Include a valid API key in the `x-api-key` request header.
+
+### Request Parameters
+
+#### Header Parameters
+
+<ParamField header="x-api-key" type="string" required>
+  Your API key.
+</ParamField>
+
+## URL Parameters
+
+<ParamField query="company" type="string">
+  Website (e.g. `canva.com`) or company UUID returned by the Company Search API.
+</ParamField>
+
+<ParamField query="end_date" type="string">
+  End of the date range, formatted as `YYYY-MM-DD`.
+
+  Default = today
+</ParamField>
+
+<ParamField query="limit" type="integer">
+  Maximum number of news articles to return.
+
+  Default = 10
+
+  Max value = 100
+</ParamField>
+
+<ParamField query="offset" type="integer">
+  Number of results to skip before returning records. Use with `limit` for pagination.
+
+  Default = 0
+</ParamField>
+
+<ParamField query="news_score" type="string">
+  Filter by news score tier.
+
+  Default = `all`
+</ParamField>
+
+<ParamField query="type" type="string">
+  Filter by news type.
+
+  Default = `all`
+</ParamField>
+
+<ParamField query="sentiment" type="string">
+  Filter by sentiment. Accepted values: `positive`, `negative`, `neutral`, `all`.
+
+  Default = `all`
+</ParamField>
+
+#### Successful Response Fields
+
+<ResponseField name="status" type="string">
+  `"success"` if the request was processed successfully.
+</ResponseField>
+
+<ResponseField name="data" type="array">
+  List of news article objects. See **Article Object Fields** below.
+</ResponseField>
+
+#### Article Object Fields
+
+<ResponseField name="original_language" type="string">
+  Language code of the original article. Example: `en`, `fr`.
+</ResponseField>
+
+<ResponseField name="author" type="string">
+  Author of the article.
+</ResponseField>
+
+<ResponseField name="countries" type="array of strings">
+  Country codes mentioned in the article.
+</ResponseField>
+
+#### Industry Object
+
+#### Tag Object
+
+#### Company Object
+
+<ResponseExample>
+
+```json 200 expandable wrap
+{
+    "status": "success",
+    "limit": 10,
+    "offset": 0,
+    "data": [
+        {
+            "title": "Canva Raises $1.5B in Secondary Transaction at $32B Valuation",
+            "url": "https://example.com/canva-secondary-2024",
+            "publisher": "TechCrunch",
+            "published_date": "2024-03-12",
+            "type": "Secondary Transactions",
+            "sentiment": "positive",
+            "news_score": 0.92,
+            "ai_summary": "Canva completed a $1.5 billion secondary share sale led by ICONIQ Capital, valuing the design software company at $32 billion. The transaction provides liquidity to existing employees and early investors while the company continues to grow ARR past $2 billion.",
+            "full_text": "Canva, the Australian design software platform, announced today the completion of a $1.5 billion secondary share sale...",
+            "original_language": "en",
+            "author": "Jane Doe",
+            "source": "techcrunch.com",
+            "countries": ["AUS", "USA"],
+            "industries": [
+                {
+                    "name": "Software",
+                    "code": "software",
+                    "is_primary": true
+                }
+            ],
+            "tags": [
+                {
+                    "name": "Secondary Sale",
+                    "code": "secondary_sale",
+                    "is_primary": true
+                }
+            ],
+            "company_names": [
+                {
+                    "company_id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+                    "name": "Canva",
+                    "website": "https://canva.com",
+                    "is_primary": true
+                },
+                {
+                    "company_id": "9c2e1d4a-1234-4567-89ab-cdef01234567",
+                    "name": "ICONIQ Capital",
+                    "website": "https://iconiqcapital.com",
+                    "is_primary": false
+                }
+            ]
+        }
+    ]
+}
+```
+
+</ResponseExample>
