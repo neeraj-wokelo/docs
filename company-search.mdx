@@ -1,64 +1,54 @@
 ---
 title: "Company Search API"
-description: "Resolve a company by name, website, or UUID and retrieve core identity and classification fields."
+description: "Resolves a company by name, website or UUID and returns core identity and classification fields."
 hidden: true
+api: "GET /v1/company/search"
 ---
 
 ## Overview
 
-The Company Search API resolves a company from a single input — a name, website, or UUID — and returns core identity and classification fields. The backend automatically detects the input type, so callers don't need to specify whether they're passing a name, domain, or identifier.
-
-This is a free endpoint and does not consume credits.
-
-Results are returned synchronously in the HTTP response.
+The Company Search API resolves a company from a single input — a name, website or UUID — and returns core identity and classification fields. The backend automatically detects the input type, so callers don't need to specify whether they're passing a name, domain or identifier. This is a free endpoint and does not consume credits. Results are returned in the API response.
 
 ## Endpoint Details
 
-- **Method:** `GET`
+- **Method:** GET
 - **Endpoint:** `/v1/company/search`
-- **Base URL:** `https://api.akta.pro`
-- **Service:** Akta Company Search
-- **Version:** v1
-- **Content-Type:** `application/json`
 
-## Authentication
+## Authentication requirements
 
-Pass your API key in the `x-api-key` request header.
-
-```bash
--H "x-api-key: YOUR_API_KEY"
-```
+- Include a valid API key in the `x-api-key` request header.
 
 ## Request
 
-### Query Parameters
+### Request Parameters
 
-<ParamField query="name" type="string" required>
-  A company name, website, or UUID. The backend automatically resolves the input type. Examples: `Canva`, `canva.com`, `3fa85f64-5717-4562-b3fc-2c963f66afa6`.
+#### Header Parameters
+
+<ParamField header="x-api-key" type="string" required>
+  Your API key.
 </ParamField>
 
-### Example Request
+## URL Parameters
 
-```bash
-GET /v1/company/search?name=canva.com
-x-api-key: <your_api_key>
-```
+<ParamField query="name" type="string" required>
+  A company name, website or UUID. The backend automatically resolves the input type. Examples: `Canva`, `canva.com`, `3fa85f64-5717-4562-b3fc-2c963f66afa6`.
+</ParamField>
 
 ## Response
 
-### Successful Response Fields
+#### Successful Response Fields
 
 Returns a JSON object with the following structure:
 
 <ResponseField name="data" type="array">
-  List of matching company objects. Returns an empty array when no matches are found.
+  List of matching company objects. Returns an empty array when no matches are found. See **Company Object Fields** below.
 </ResponseField>
 
 <ResponseField name="credits_consumed" type="float">
   Credits consumed by the request. This endpoint is free and always returns `0.00`.
 </ResponseField>
 
-## Company Object Fields
+#### Company Object Fields
 
 <ResponseField name="uuid" type="string">
   Unique identifier for the company in UUID format.
@@ -80,19 +70,21 @@ Returns a JSON object with the following structure:
   Public market status. Allowed values: `public`, `private`, `acquired`, `delisted`, `unknown`.
 </ResponseField>
 
-### Example Response
+<ResponseExample>
 
-```json
+```json 200 expandable wrap
 {
-  "data": [
-    {
-      "uuid": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-      "name": "Acme Corporation",
-      "website": "https://acme.com",
-      "product_category": "SaaS",
-      "company_status": "public"
-    }
-  ],
-  "credits_consumed": 0.00
+    "data": [
+        {
+            "uuid": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+            "name": "Acme Corporation",
+            "website": "https://acme.com",
+            "product_category": "SaaS",
+            "company_status": "public"
+        }
+    ],
+    "credits_consumed": 0.00
 }
 ```
+
+</ResponseExample>

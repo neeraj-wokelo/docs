@@ -1,81 +1,47 @@
 ---
 title: "Company Enrichment API"
-description: "Enrich a company with firmographics, business model, headcount, traffic, funding, financials, acquisitions, and investments data."
+description: "Enriches a company with firmographics, business model, headcount, traffic, funding, financials, acquisitions and investment data."
+api: "POST /v1/company/enrichment"
 ---
 
 ## Overview
 
-The Company Enrichment API returns detailed company data across multiple sections — firmographics, go-to-market and business model, headcount, website traffic, funding, financials, acquisitions, and investments. Callers can request all sections at once or scope the response to a specific subset using the `sections` field.
-
-Results are returned synchronously in the HTTP response.
+The Company Enrichment API returns detailed company data across multiple sections — firmographics, go-to-market and business model, headcount, website traffic, funding, financials, acquisitions and investments. Callers can request all sections at once or scope the response to a specific subset using the `sections` field. Results are returned in the API response.
 
 ## Endpoint Details
 
-- **Method:** `POST`
+- **Method:** POST
 - **Endpoint:** `/v1/company/enrichment`
-- **Base URL:** `https://api.akta.pro`
-- **Version:** v1
-- **Content-Type:** `application/json`
 
-## Authentication
+## Authentication requirements
 
-Pass your API key in the `x-api-key` request header.
-
-```bash
--H "x-api-key: YOUR_API_KEY"
-```
+- Include a valid API key in the `x-api-key` request header.
 
 ## Request
 
-### Body Parameters
+### Request Parameters
+
+#### Header Parameters
+
+<ParamField header="x-api-key" type="string" required>
+  Your API key.
+</ParamField>
+
+## Body Parameters
 
 <ParamField body="company" type="string" required>
-  Either a company website (e.g. `canva.com`) or a company UUID (e.g. `3fa85f64-5717-4562-b3fc-2c963f66afa6`). The UUID can be obtained from the Company Search API.
+  Company website (e.g. `canva.com`) or a company UUID (e.g. `3fa85f64-5717-4562-b3fc-2c963f66afa6`). The UUID can be obtained from the Company Search API.
 </ParamField>
 
 <ParamField body="sections" type="array of strings">
-  Sections to return. If omitted, all available sections are returned. See available values below.
+  Sections to return. If omitted, all available sections are returned.
+
+  Available values: `firmographics`, `gtm_and_business_model`, `headcount`, `website_traffic`, `funding`, `public_company_financials`, `uk_private_company_financials`, `acquisitions`, `investments`.
+
+  `acquisitions` and `investments` are available on the Enterprise tier only.
 </ParamField>
 
-### Available Sections
-
-<ResponseField name="firmographics" type="section">
-  Name, location, founded year, company type, operating status, ticker.
-</ResponseField>
-
-<ResponseField name="gtm_and_business_model" type="section">
-  Go-to-market strategy and business model details.
-</ResponseField>
-
-<ResponseField name="headcount" type="section">
-  Employee count data.
-</ResponseField>
-
-<ResponseField name="website_traffic" type="section">
-  Web traffic metrics.
-</ResponseField>
-
-<ResponseField name="funding" type="section">
-  Funding stage, total raised, last round date, number of rounds.
-</ResponseField>
-
-<ResponseField name="public_company_financials" type="section">
-  Financials for publicly listed companies.
-</ResponseField>
-
-<ResponseField name="uk_private_company_financials" type="section">
-  Financials for UK private companies.
-</ResponseField>
-
-<ResponseField name="acquisitions" type="section">
-  Acquisition activity. Available on the Enterprise tier only.
-</ResponseField>
-
-<ResponseField name="investments" type="section">
-  Investment activity. Available on the Enterprise tier only.
-</ResponseField>
-
-### Example Request
+#### Example Request Body
 
 ```json
 {
@@ -86,21 +52,21 @@ Pass your API key in the `x-api-key` request header.
 
 ## Response
 
-### Successful Response Fields
+#### Successful Response Fields
 
 Returns a JSON object with the following structure:
 
 <ResponseField name="status" type="string">
-  Request status. Returns `success` or `error`.
+  `"success"` if the request was processed successfully.
 </ResponseField>
 
 <ResponseField name="data" type="object">
   Object whose keys match the requested sections. Only requested sections are present in the response.
 </ResponseField>
 
-## Section Schemas
+### Section Schemas
 
-### Firmographics
+#### `firmographics`
 
 <ResponseField name="name" type="string">
   Company name.
@@ -130,7 +96,7 @@ Returns a JSON object with the following structure:
   Stock ticker symbol. Returns `null` for private companies.
 </ResponseField>
 
-### Funding
+#### `funding`
 
 <ResponseField name="overall.funding_stage" type="string">
   Latest funding stage. Example: `Series B`, `Secondary Market`.
@@ -147,3 +113,32 @@ Returns a JSON object with the following structure:
 <ResponseField name="overall.num_funding_rounds" type="string">
   Total number of funding rounds.
 </ResponseField>
+
+<ResponseExample>
+
+```json 200 expandable wrap
+{
+    "status": "success",
+    "data": {
+        "firmographics": {
+            "name": "Canva",
+            "website": "https://canva.com",
+            "location": "Sydney, Australia",
+            "founded": 2013,
+            "company_status": "private",
+            "operating_status": "Operating",
+            "ticker": null
+        },
+        "funding": {
+            "overall": {
+                "funding_stage": "Secondary Market",
+                "total_funding": 580000000.00,
+                "last_funding_date": "2024-03-12",
+                "num_funding_rounds": "12"
+            }
+        }
+    }
+}
+```
+
+</ResponseExample>
