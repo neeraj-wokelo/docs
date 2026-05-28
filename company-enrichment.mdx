@@ -33,18 +33,16 @@ The Company Enrichment API returns detailed company data across multiple section
   Company website (e.g. `canva.com`) or a company UUID (e.g. `3fa85f64-5717-4562-b3fc-2c963f66afa6`). The UUID can be obtained from the Company Search API.
 </ParamField>
 
-<ParamField query="sections" type="string">
+<ParamField query="sections" type="string[]">
   Comma-separated list of sections to return. If omitted, all available sections are returned.
 
-  Available values: `firmographics`, `gtm_and_business_model`, `headcount`, `website_traffic`, `funding`, `public_company_financials`, `uk_private_company_financials`, `acquisitions`, `investments`.
-
-  `acquisitions` and `investments` are available on the Enterprise tier only.
+  Available values: `firmographics`, `gtm_and_business_model`, `headcount`, `website_traffic`, `funding` Note: `acquisitions` and `investments` are available on the Enterprise tier only.
 </ParamField>
 
 #### Example Request
 
 ```text
-GET /v1/company/enrichment?company=canva.com&sections=firmographics,funding
+GET /v1/company/enrichment?company=https://canva.com&sections=firmographics,funding
 x-api-key: <your_api_key>
 ```
 
@@ -54,69 +52,22 @@ x-api-key: <your_api_key>
 
 Returns a JSON object with the following structure:
 
-<ResponseField name="status" type="string">
-  `"success"` if the request was processed successfully.
+<ResponseField name="credits_consumed" type="float">
+  Number of credits consumed
 </ResponseField>
 
 <ResponseField name="data" type="object">
   Object whose keys match the requested sections. Only requested sections are present in the response.
 </ResponseField>
 
-### Section Schemas
-
-#### `firmographics`
-
-<ResponseField name="name" type="string">
-  Company name.
-</ResponseField>
-
-<ResponseField name="website" type="string">
-  Primary website URL.
-</ResponseField>
-
-<ResponseField name="location" type="string">
-  Company location in `City, Country` format.
-</ResponseField>
-
-<ResponseField name="founded" type="integer">
-  Year the company was founded.
-</ResponseField>
-
-<ResponseField name="company_status" type="string">
-  Public market status. Allowed values: `public`, `private`, `acquired`, `unknown`.
-</ResponseField>
-
-<ResponseField name="operating_status" type="string">
-  Current operating status. Example: `Operating`, `Closed`.
-</ResponseField>
-
-<ResponseField name="ticker" type="string">
-  Stock ticker symbol. Returns `null` for private companies.
-</ResponseField>
-
-#### `funding`
-
-<ResponseField name="overall.funding_stage" type="string">
-  Latest funding stage. Example: `Series B`, `Secondary Market`.
-</ResponseField>
-
-<ResponseField name="overall.total_funding" type="float">
-  Total amount raised in USD.
-</ResponseField>
-
-<ResponseField name="overall.last_funding_date" type="string">
-  Date of the most recent funding round in ISO 8601 format `YYYY-MM-DD`.
-</ResponseField>
-
-<ResponseField name="overall.num_funding_rounds" type="string">
-  Total number of funding rounds.
+<ResponseField name="count" type="integer">
+  Number of sections returned
 </ResponseField>
 
 <ResponseExample>
 
 ```json 200 expandable wrap
 {
-    "status": "success",
     "data": {
         "firmographics": {
             "name": "Canva",
@@ -135,7 +86,9 @@ Returns a JSON object with the following structure:
                 "num_funding_rounds": "12"
             }
         }
-    }
+    },
+  "credits_consumed": 0.05,
+  "count": 2
 }
 ```
 
