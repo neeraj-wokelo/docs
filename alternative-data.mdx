@@ -1,0 +1,595 @@
+---
+title: "Alternative Data- Product Reviews"
+description: "Fetch a company's full product catalog and, optionally, detailed per-product reviews — including ratings, star distributions, pros and cons, pricing, and structured individual review content sourced from G2 and other review providers."
+---
+
+## 1. Overview
+
+The Product Reviews API returns a company's product catalog and, optionally, detailed reviews for one or more of those products. The API is designed to be called in two steps:
+
+1. **Fetch the product list** — call without the `products` parameter to retrieve all products belonging to a company and their IDs. This call is free and returns no review data.
+2. **Fetch reviews for specific products** — call again with one or more `product_id` values in the `products` parameter to retrieve ratings, star distributions, pros, cons, pricing, and individual review records for those products.
+
+This is a **synchronous GET API** — results are returned directly in the HTTP response.
+
+<Info>
+  Fetching the product list only (without `products`) consumes **zero credits**. Credits are only consumed when reviews are returned.
+</Info>
+
+---
+
+## 2. Quick Start
+
+**Step 1 — Fetch the product catalog**
+
+<CodeGroup>
+
+```bash cURL
+curl --location 'https://api.akta.pro/v1/company/product-reviews?company=tesla.com' \
+  --header 'x-api-key: <YOUR_API_KEY>'
+```
+
+```python Python
+import requests
+
+response = requests.get(
+    "https://api.akta.pro/v1/company/product-reviews",
+    headers={"x-api-key": "<YOUR_API_KEY>"},
+    params={"company": "tesla.com"}
+)
+
+data     = response.json()
+products = data["data"]["product_reviews"]
+
+print(f"Found {len(products)} products (credits consumed: {data['credits_consumed']})\n")
+for product in products:
+    print(f"  ID: {product['id']}  |  {product['product_name']}  ({product['main_category']})")
+```
+
+</CodeGroup>
+
+**Step 2 — Fetch reviews for one or more products**
+
+Use the `id` values from Step 1 to request reviews. Pass the `products` parameter once per product ID:
+
+```python
+import requests
+
+response = requests.get(
+    "https://api.akta.pro/v1/company/product-reviews",
+    headers={"x-api-key": "<YOUR_API_KEY>"},
+    params=[
+        ("company",  "tesla.com"),
+        ("products", "177388"),
+        ("products", "112516"),
+        ("limit",    10),
+        ("offset",   0)
+    ]
+)
+
+data     = response.json()
+products = data["data"]["product_reviews"]
+
+for product in products:
+    if "reviews" not in product:
+        continue
+    rating = product["rating"].get("g2", "—")
+    total  = product["reviews"]["total"]
+    print(f"\n{product['product_name']}  |  G2 rating: {rating}  |  {total} reviews")
+
+    for review in product["reviews"]["data"][:2]:
+        print(f"  [{review['review_rating']}★] {review['review_title']}")
+        print(f"   {review['review_content'][:120]}...")
+```
+
+---
+
+## 3. Authentication
+
+All requests must include an **API key** in the `x-api-key` HTTP header.
+
+```text
+x-api-key: <YOUR_API_KEY>
+```
+
+<Warning>
+  Never expose your API key in client-side code, browser requests, or public repositories. A missing or invalid key returns `401 Unauthorized`.
+</Warning>
+
+---
+
+## 4. Request Reference
+
+**Endpoint**
+
+```text
+GET https://api.akta.pro/v1/company/product-reviews
+```
+
+All parameters are passed as URL query parameters.
+
+| Parameter | Type | Required | Description |
+| --- | --- | --- | --- |
+| `company` | string | **Required** | Company website domain (e.g. `"tesla.com"`) or company UUID (e.g. `"3fa85f64-..."`). UUIDs are returned by the [Company Search API](/akta-company-search-doc). |
+| `products` | string\[\] | Optional | Product ID to fetch reviews for. Pass this parameter **once per product** to request multiple products simultaneously (e.g. `products=177388&products=112516`). Product IDs are returned by this same endpoint when called without `products`. When omitted, only the product list is returned — no reviews. |
+| `limit` | integer | Optional | Maximum number of reviews to return per product. Default `0`, max `50`. Only applies when `products` is provided. |
+| `offset` | integer | Optional | Number of reviews to skip before returning results. Default `0`. Use with `limit` for pagination. |
+
+<Info>
+  The `products` parameter must be repeated for each product ID — not passed as a comma-separated list or JSON array. In Python's `requests` library, use a list of tuples in the `params` argument to repeat a parameter: `params=[("products", "177388"), ("products", "112516")]`.
+</Info>
+
+**Full request examples:**
+
+<CodeGroup>
+
+```bash cURL — product list only
+curl --location 'https://api.akta.pro/v1/company/product-reviews?company=tesla.com' \
+  --header 'x-api-key: <YOUR_API_KEY>'
+```
+
+```bash cURL — with reviews
+curl --location 'https://api.akta.pro/v1/company/product-reviews?company=tesla.com&products=177388&products=112516&limit=10&offset=0' \
+  --header 'x-api-key: <YOUR_API_KEY>'
+```
+
+```python Python
+import requests
+
+HEADERS = {"x-api-key": "<YOUR_API_KEY>"}
+
+# Product list only
+response = requests.get(
+    "https://api.akta.pro/v1/company/product-reviews",
+    headers=HEADERS,
+    params={"company": "tesla.com"}
+)
+
+# With reviews for specific products
+response = requests.get(
+    "https://api.akta.pro/v1/company/product-reviews",
+    headers=HEADERS,
+    params=[
+        ("company",  "tesla.com"),
+        ("products", "177388"),
+        ("products", "112516"),
+        ("limit",    10),
+        ("offset",   0)
+    ]
+)
+```
+
+</CodeGroup>
+
+---
+
+## 5. Response
+
+### Response envelope
+
+```json
+{
+  "data": {
+    "uuid": "000031n-tesla",
+    "product_reviews": [ ...product objects... ]
+  },
+  "limit": 10,
+  "offset": 0,
+  "credits_consumed": 0.0
+}
+```
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `data` | object | Container object with the company `uuid` and a `product_reviews` array. |
+| `data.uuid` | string | Akta UUID for the queried company. |
+| `data.product_reviews` | object\[\] | Array of product objects. See the product object schema below. |
+| `limit` | integer | The `limit` value applied to this response. |
+| `offset` | integer | The `offset` value applied to this response. |
+| `credits_consumed` | float | Credits consumed. `0.0` for product-list-only calls; non-zero when reviews are returned. |
+
+### Product object
+
+Every product object contains these fields regardless of whether reviews were requested:
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `id` | string | Unique product identifier. Use this value in the `products` query parameter to fetch reviews. |
+| `product_name` | string | Display name of the product. |
+| `main_category` | string | Primary category of the product (e.g. `"Battery Storage Systems Providers"`). |
+| `categories` | string\[\] | All categories the product belongs to. |
+| `description` | string | Description of the product. |
+
+The following fields are **only present when reviews are requested** (i.e. `products` parameter was supplied):
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `rating` | object | Average rating per review provider. Keys are provider identifiers (e.g. `"g2"`), values are floats (e.g. `{"g2": 3.8}`). |
+| `star_distribution` | object | Star rating distribution per provider. Keys are provider identifiers; values are objects keyed by star value (`"1"` through `"5"`, as strings) with integer counts (e.g. `{"g2": {"1": 0, "2": 0, "3": 1, "4": 0, "5": 1}}`). |
+| `pros_list` | array | Aggregated pros mentioned across reviews. |
+| `cons_list` | array | Aggregated cons mentioned across reviews. |
+| `pricing` | array | Pricing information for the product. |
+| `reviews` | object | Reviews container. See the reviews object schema below. |
+
+### Reviews object
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `data` | object\[\] | Array of individual review records. See the review object schema below. |
+| `total` | integer | Total number of reviews available for this product across all providers. |
+| `total_by_provider` | object | Review count broken down by provider (e.g. `{"g2": 2}`). |
+
+### Review object
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `review_id` | integer | Unique identifier for the review. |
+| `review_title` | string | Title of the review as submitted by the reviewer. |
+| `review_content` | string | Full review text — the reviewer's answers to all standard questions concatenated into a single string. |
+| `review_question_answers` | object\[\] | Structured Q&A pairs from the review. Each object contains `question` (string) and `answer` (string). Use this for structured processing instead of parsing `review_content`. |
+| `review_rating` | float | Star rating given by the reviewer (e.g. `4.5`). |
+| `publish_date` | string | Publication date of the review in ISO 8601 format (e.g. `"2023-09-01T00:00:00"`). |
+| `reviewer_company_size` | string | Reviewer's company size band (e.g. `"Small-Business(50 or fewer emp.)"`). |
+| `review_link` | string | Direct URL to the original review on the provider's site. |
+| `provider` | string | Review provider identifier (e.g. `"g2"`). |
+
+<Info>
+  The `star_distribution` star-value keys are **strings** (`"1"` through `"5"`), not integers. When sorting or computing a weighted average, cast to int: `sorted(dist.keys(), key=int)`.
+</Info>
+
+---
+
+## 6. Examples
+
+### Full two-step workflow — list products then fetch reviews
+
+<CodeGroup>
+
+```bash cURL — Step 1: list products
+curl --location 'https://api.akta.pro/v1/company/product-reviews?company=tesla.com' \
+  --header 'x-api-key: <YOUR_API_KEY>'
+```
+
+```python Python
+import requests
+
+HEADERS = {"x-api-key": "<YOUR_API_KEY>"}
+
+# ── Step 1: Get the product catalog ──────────────────────────
+list_response = requests.get(
+    "https://api.akta.pro/v1/company/product-reviews",
+    headers=HEADERS,
+    params={"company": "tesla.com"}
+)
+
+products = list_response.json()["data"]["product_reviews"]
+print(f"Products found: {len(products)}")
+for p in products:
+    print(f"  {p['id']:>10}  {p['product_name']}  —  {p['main_category']}")
+
+# ── Step 2: Fetch reviews for selected product IDs ───────────
+product_ids = [p["id"] for p in products[:2]]   # take first two
+
+review_response = requests.get(
+    "https://api.akta.pro/v1/company/product-reviews",
+    headers=HEADERS,
+    params=[("company", "tesla.com")]
+           + [("products", pid) for pid in product_ids]
+           + [("limit", 10), ("offset", 0)]
+)
+
+data = review_response.json()
+print(f"\nCredits consumed: {data['credits_consumed']}")
+
+for product in data["data"]["product_reviews"]:
+    if "reviews" not in product:
+        continue
+    rating = product["rating"].get("g2")
+    total  = product["reviews"]["total"]
+    dist   = product["star_distribution"].get("g2", {})
+    total_dist = sum(dist.values())
+
+    print(f"\n{'='*55}")
+    print(f"  {product['product_name']}")
+    print(f"  Rating: {rating}/5.0  |  {total} reviews total")
+
+    if total_dist > 0:
+        for star in sorted(dist.keys(), key=int, reverse=True):
+            pct = round(dist[star] / total_dist * 100)
+            bar = "█" * (pct // 5)
+            print(f"  {star}★  {bar:<20}  {pct}%  ({dist[star]})")
+
+    print(f"\n  Most recent reviews:")
+    for review in product["reviews"]["data"][:3]:
+        print(f"  [{review['review_rating']}★]  {review['review_title']}")
+        print(f"    {review['publish_date'][:10]}  |  {review['reviewer_company_size']}")
+        print(f"    {review['review_content'][:150].strip()}...")
+```
+
+</CodeGroup>
+
+**Sample response — product list only:**
+
+```json
+{
+  "data": {
+    "uuid": "000031n-tesla",
+    "product_reviews": [
+      {
+        "id": "177388",
+        "product_name": "Powerpack",
+        "main_category": "Battery Storage Systems Providers",
+        "categories": ["Battery Storage Systems"],
+        "description": "Powerpack supports a host of applications..."
+      },
+      {
+        "id": "112516",
+        "product_name": "Powerwall",
+        "main_category": "Battery Storage Systems Providers",
+        "categories": ["Battery Storage Systems"],
+        "description": "Powerwall integrates with solar to store excess energy..."
+      }
+    ]
+  },
+  "limit": 10,
+  "offset": 0,
+  "credits_consumed": 0.0
+}
+```
+
+**Sample response — with reviews:**
+
+```json
+{
+  "data": {
+    "uuid": "000031n-tesla",
+    "product_reviews": [
+      {
+        "id": "177388",
+        "product_name": "Powerpack",
+        "main_category": "Battery Storage Systems Providers",
+        "categories": ["Battery Storage Systems"],
+        "description": "Powerpack supports a host of applications...",
+        "rating": { "g2": 3.8 },
+        "star_distribution": {
+          "g2": { "1": 0, "2": 0, "3": 1, "4": 0, "5": 1 }
+        },
+        "pros_list": [],
+        "cons_list": [],
+        "pricing": [],
+        "reviews": {
+          "data": [
+            {
+              "review_id": 8555613,
+              "review_title": "very easy and convenient",
+              "review_content": "What do you like best about Powerpack?\nhaving a stationary energy powerpack...",
+              "review_question_answers": [
+                {
+                  "question": "What do you like best about Powerpack?",
+                  "answer": "having a stationary energy powerpack for yourself is better than easy"
+                }
+              ],
+              "review_rating": 4.5,
+              "publish_date": "2023-09-01T00:00:00",
+              "reviewer_company_size": "Small-Business(50 or fewer emp.)",
+              "review_link": "https://www.g2.com/products/powerpack/reviews/powerpack-review-8555613",
+              "provider": "g2"
+            }
+          ],
+          "total": 2,
+          "total_by_provider": { "g2": 2 }
+        }
+      }
+    ]
+  },
+  "limit": 10,
+  "offset": 0,
+  "credits_consumed": 1.5
+}
+```
+
+### Paginating through reviews for a high-volume product
+
+```python
+import requests
+
+HEADERS = {"x-api-key": "<YOUR_API_KEY>"}
+PRODUCT_ID  = "177388"
+COMPANY     = "tesla.com"
+PAGE_SIZE   = 50
+
+all_reviews = []
+offset      = 0
+
+while True:
+    r = requests.get(
+        "https://api.akta.pro/v1/company/product-reviews",
+        headers=HEADERS,
+        params=[
+            ("company",  COMPANY),
+            ("products", PRODUCT_ID),
+            ("limit",    PAGE_SIZE),
+            ("offset",   offset)
+        ]
+    )
+    data    = r.json()
+    product = data["data"]["product_reviews"][0]
+    batch   = product["reviews"]["data"]
+
+    if not batch:
+        break
+
+    all_reviews.extend(batch)
+    total = product["reviews"]["total"]
+    print(f"Fetched {len(all_reviews)} / {total} reviews...")
+
+    if len(all_reviews) >= total:
+        break
+
+    offset += PAGE_SIZE
+
+print(f"\nTotal reviews retrieved: {len(all_reviews)}")
+```
+
+### Using `review_question_answers` for structured processing
+
+Use `review_question_answers` for clean structured extraction rather than parsing the concatenated `review_content` string.
+
+```python
+for review in product["reviews"]["data"]:
+    print(f"\n[{review['review_rating']}★] {review['review_title']}")
+    for qa in review["review_question_answers"]:
+        print(f"  Q: {qa['question']}")
+        print(f"  A: {qa['answer'][:200]}")
+```
+
+### JavaScript / Node.js
+
+```javascript
+const fetch = require("node-fetch");
+
+const API_KEY = process.env.AKTA_API_KEY;
+const BASE    = "https://api.akta.pro/v1/company/product-reviews";
+
+async function getProductList(company) {
+  const res = await fetch(`${BASE}?company=${company}`, {
+    headers: { "x-api-key": API_KEY }
+  });
+  if (!res.ok) throw new Error(`API error: ${res.status}`);
+  return (await res.json()).data.product_reviews;
+}
+
+async function getProductReviews(company, productIds, limit = 10, offset = 0) {
+  const params = new URLSearchParams({ company, limit, offset });
+  productIds.forEach(id => params.append("products", id));
+
+  const res = await fetch(`${BASE}?${params}`, {
+    headers: { "x-api-key": API_KEY }
+  });
+  if (!res.ok) throw new Error(`API error: ${res.status}`);
+  return (await res.json());
+}
+
+// Step 1: list products
+getProductList("tesla.com").then(products => {
+  console.log(`Products: ${products.length}`);
+  products.forEach(p => console.log(`  ${p.id}  ${p.product_name}`));
+
+  // Step 2: fetch reviews for first product
+  const ids = products.slice(0, 1).map(p => p.id);
+  return getProductReviews("tesla.com", ids, 5);
+
+}).then(data => {
+  const product = data.data.product_reviews[0];
+  const rating  = product.rating?.g2;
+  const total   = product.reviews?.total;
+  console.log(`\n${product.product_name}: ${rating}/5.0 (${total} reviews)`);
+  product.reviews.data.forEach(r => {
+    console.log(`  [${r.review_rating}★] ${r.review_title}`);
+  });
+});
+```
+
+---
+
+## 7. Error Handling
+
+| Status | Meaning | Cause & Resolution |
+| --- | --- | --- |
+| `200 OK` | Success | Data returned successfully. |
+| `400 Bad Request` | Invalid parameters | Missing `company` parameter, invalid `product_id`, or malformed request. Check the `message` field. |
+| `401 Unauthorized` | Auth failed | Missing or invalid `x-api-key` header. Verify your API key. |
+| `403 Forbidden` | Insufficient access | Your plan does not include access to this endpoint. Contact [support@akta.pro](mailto:support@akta.pro). |
+| `404 Not Found` | Company not found | The `company` value could not be resolved. Verify the domain or UUID using the [Company Search API](/akta-company-search-doc). |
+| `429 Too Many Requests` | Rate limit exceeded | Implement exponential back-off. The response includes a `Retry-After` header. |
+| `500 Internal Server Error` | Server error | Retry after a brief delay. If the issue persists, contact [support@akta.pro](mailto:support@akta.pro). |
+
+**Retry with exponential back-off:**
+
+```python
+import time, requests
+
+def fetch_with_retry(params, api_key, max_retries=3):
+    headers = {"x-api-key": api_key}
+    for attempt in range(max_retries):
+        try:
+            r = requests.get(
+                "https://api.akta.pro/v1/company/product-reviews",
+                headers=headers,
+                params=params,
+                timeout=30
+            )
+            if r.status_code == 429:
+                time.sleep(2 ** attempt)
+                continue
+            r.raise_for_status()
+            return r.json()
+        except requests.exceptions.Timeout:
+            if attempt == max_retries - 1:
+                raise
+            time.sleep(1)
+    raise Exception(f"Failed after {max_retries} attempts")
+```
+
+---
+
+## 8. Best Practices
+
+**Always call without `products` first — it's free and gives you the IDs you need**
+
+The product list call costs zero credits and returns all the `id` values required for subsequent review calls. Never hardcode product IDs — always fetch them dynamically so your integration remains correct if a company's product catalog changes:
+
+```python
+# Step 1: free — get product catalog and IDs
+products = get_product_list("canva.com")
+product_ids = [p["id"] for p in products]
+
+# Step 2: paid — fetch reviews for selected products
+reviews = get_product_reviews("canva.com", product_ids[:2], limit=10)
+```
+
+**Pass `products` as repeated parameters, not as a list**
+
+The `products` parameter must be repeated once per product ID in the query string. In Python's `requests` library, use a list of tuples to repeat a key; do not pass a Python list directly as the value:
+
+```python
+# ❌ Wrong — passes a serialised list, not repeated params
+params = {"company": "tesla.com", "products": ["177388", "112516"]}
+
+# ✅ Correct — repeated params using list of tuples
+params = [
+    ("company",  "tesla.com"),
+    ("products", "177388"),
+    ("products", "112516"),
+    ("limit",    10)
+]
+```
+
+**Use `review_question_answers` for structured extraction — not `review_content`**
+
+`review_content` is the reviewer's answers concatenated into a single string with question headings inline. `review_question_answers` provides the same data as clean Q&A pairs — use it for any structured processing, embedding, or LLM input to avoid having to parse the concatenated format.
+
+**`star_distribution` keys are strings — cast to int when sorting or computing averages**
+
+The keys `"1"` through `"5"` are strings. Always cast to int for sorting or weighted average calculations:
+
+```python
+dist = product["star_distribution"].get("g2", {})
+total = sum(dist.values())
+weighted_avg = sum(int(star) * count for star, count in dist.items()) / total if total > 0 else 0
+```
+
+**`rating` and `star_distribution` are keyed by provider**
+
+Both fields are dicts keyed by review provider (currently `"g2"`). Always access them by provider key rather than assuming a flat structure, as additional providers may be added in future:
+
+```python
+g2_rating = product["rating"].get("g2")
+g2_dist   = product["star_distribution"].get("g2", {})
+```
+
+**Check `reviews.total` before paginating**
+
+`reviews.total` is the complete count of available reviews for a product across all providers. Compare it against the number of reviews already fetched to determine whether further pages exist, and stop paginating when the returned `reviews.data` array is empty.
+
+---

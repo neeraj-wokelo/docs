@@ -29,7 +29,9 @@
             "pages": [
               "news-doc",
               "company-enrichment-doc",
-              "company-search-doc"
+              "company-search-doc",
+              "alternative-data",
+              "alternative-data-employee-reviews"
             ]
           },
           "playground",
