@@ -40,7 +40,6 @@
       {
         "tab": "API Reference",
         "pages": [
-          "company-search",
           "news",
           "company-enrichment",
           "company-search-supporting-api"
