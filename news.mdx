@@ -62,7 +62,7 @@ The News API fetches news articles filtered by company, industry, date range, se
 </ParamField>
 
 <ParamField query="news_score_list" type="string[]">
-  Filter by news score tier.
+  Filter by news score tier. Accepted values: `High`, `Medium`, `Low` , `all`
 
   Default = `all`
 </ParamField>
@@ -127,10 +127,6 @@ Returns a JSON object with the following structure:
   Publication date in ISO 8601 format `YYYY-MM-DD`.
 </ResponseField>
 
-<ResponseField name="type" type="string">
-  Article type. Example: `Secondary Transactions`, `Equity Fund-Raising`.
-</ResponseField>
-
 <ResponseField name="sentiment" type="string">
   Sentiment of the article: `positive`, `negative`, or `neutral`.
 </ResponseField>
@@ -163,8 +159,8 @@ Returns a JSON object with the following structure:
   Industries associated with the article. See **Industry Object** below.
 </ResponseField>
 
-<ResponseField name="tags" type="array of objects">
-  Tags associated with the article. See **Tag Object** below.
+<ResponseField name="types" type="array of objects">
+  News types associated with the article. See **Type Object** below.
 </ResponseField>
 
 <ResponseField name="company_mentions" type="array of objects">
@@ -181,7 +177,7 @@ Returns a JSON object with the following structure:
   `true` if this is the primary industry of the article.
 </ResponseField>
 
-#### Tag Object
+#### Type Object
 
 <ResponseField name="name" type="string">
   Tag label. Example: `IPO`, `Layoffs`.
@@ -192,7 +188,7 @@ Returns a JSON object with the following structure:
 </ResponseField>
 
 <ResponseField name="is_primary" type="boolean">
-  `true` if this is the primary tag of the article.
+  `true` if this is the primary type of the article.
 </ResponseField>
 
 #### Company Object

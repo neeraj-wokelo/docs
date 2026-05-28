@@ -1,7 +1,7 @@
 ---
 title: "Company Enrichment API"
 description: "Enriches a company with firmographics, business model, headcount, traffic, funding, financials, acquisitions and investment data."
-openapi: "POST /v1/company/enrichment"
+openapi: "GET /v1/company/enrichment"
 ---
 
 ## Overview
@@ -30,7 +30,7 @@ The Company Enrichment API returns detailed company data across multiple section
 ## URL Parameters
 
 <ParamField query="company" type="string" required>
-  Company website (e.g. `canva.com`) or a company UUID (e.g. `3fa85f64-5717-4562-b3fc-2c963f66afa6`). The UUID can be obtained from the Company Search API.
+  Company website (e.g. `https://canva.com`) or a company UUID (e.g. `00031n-tesla` ). The UUID can be obtained from the Company Search API.
 </ParamField>
 
 <ParamField query="sections" type="string[]">
