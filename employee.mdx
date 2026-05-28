@@ -1,0 +1,344 @@
+---
+title: "Employee Reviews API"
+description: "Fetches a company's employee review data including overall ratings, dimension-level ratings (culture, work-life balance, senior management and more) and individual employee reviews."
+openapi: "GET /v1/company/employee-reviews"
+---
+
+## Overview
+
+The Employee Reviews API returns a company's aggregated employee review signals along with individual reviews sourced from review providers such as Glassdoor. The response includes the overall rating, dimension-level ratings (culture, work-life balance, compensation, senior management, diversity and inclusion, business outlook, CEO approval, recommendation rate), and a paginated list of individual reviews with pros, cons, ratings, reviewer metadata and a link to the original review. Results are returned in the API response.
+
+## Endpoint Details
+
+- **Method:** GET
+- **Endpoint:** `/v1/company/employee-reviews`
+
+## Authentication requirements
+
+- Include a valid API key in the `x-api-key` request header.
+
+## Request
+
+### Request Parameters
+
+#### Header Parameters
+
+<ParamField header="x-api-key" type="string" required>
+  Your API key.
+</ParamField>
+
+## URL Parameters
+
+<ParamField query="company" type="string" required>
+  Company website (e.g. `canva.com`) or a company UUID (e.g. `3fa85f64-5717-4562-b3fc-2c963f66afa6`). The UUID can be obtained from the Company Search API.
+</ParamField>
+
+<ParamField query="limit" type="integer">
+  Maximum number of reviews to return.
+
+  Default = 10
+
+  Max value = 100
+</ParamField>
+
+<ParamField query="offset" type="integer">
+  Number of reviews to skip before returning records. Use with `limit` for pagination.
+
+  Default = 0
+</ParamField>
+
+#### Example Request
+
+```text
+GET /v1/company/employee-reviews?company=canva.com&limit=10&offset=0
+x-api-key: <your_api_key>
+```
+
+```text
+GET /v1/company/employee-reviews?company=3fa85f64-5717-4562-b3fc-2c963f66afa6
+x-api-key: <your_api_key>
+```
+
+## Response
+
+#### Successful Response Fields
+
+Returns a JSON object with the following structure:
+
+<ResponseField name="data" type="object">
+  Container object holding the company's employee review data.
+</ResponseField>
+
+<ResponseField name="limit" type="integer">
+  Limit applied to the request.
+</ResponseField>
+
+<ResponseField name="offset" type="integer">
+  Offset applied to the request.
+</ResponseField>
+
+<ResponseField name="credits_consumed" type="float">
+  Credits consumed by the request.
+</ResponseField>
+
+#### Employee Reviews Object Fields
+
+<ResponseField name="overall_rating" type="object">
+  Overall company rating per review provider. Keys are provider identifiers (e.g. `glassdoor`), values are floats.
+</ResponseField>
+
+<ResponseField name="other_ratings" type="array of objects">
+  Dimension-level ratings broken out per provider. See **Other Rating Object** below.
+</ResponseField>
+
+<ResponseField name="reviews" type="object">
+  Reviews container. See **Reviews Object Fields** below.
+</ResponseField>
+
+#### Other Rating Object
+
+<ResponseField name="type" type="string">
+  Rating dimension. Example values: `business_outlook`, `ceo`, `recommend_to_friend`, `compensation_and_benefits`, `culture_and_values`, `diversity_and_inclusion`, `senior_management`, `work_life_balance`.
+</ResponseField>
+
+<ResponseField name="provider" type="string">
+  Review provider identifier. Example: `glassdoor`.
+</ResponseField>
+
+<ResponseField name="value" type="float">
+  Rating value. Sentiment-style dimensions (e.g. `business_outlook`, `ceo`, `recommend_to_friend`) are returned as a `0` to `1` percentage; other dimensions are returned on a `0` to `5` scale.
+</ResponseField>
+
+#### Reviews Object Fields
+
+<ResponseField name="data" type="array of objects">
+  List of individual review objects. See **Review Object Fields** below.
+</ResponseField>
+
+<ResponseField name="total" type="integer">
+  Total number of reviews available for the company across all providers.
+</ResponseField>
+
+<ResponseField name="total_by_provider" type="object">
+  Total review count broken down by provider. Keys are provider identifiers (e.g. `glassdoor`), values are integer counts.
+</ResponseField>
+
+#### Review Object Fields
+
+<ResponseField name="id" type="integer">
+  Unique identifier for the review.
+</ResponseField>
+
+<ResponseField name="summary" type="string">
+  Review headline or summary.
+</ResponseField>
+
+<ResponseField name="pros" type="string">
+  Pros described by the reviewer.
+</ResponseField>
+
+<ResponseField name="cons" type="string">
+  Cons described by the reviewer.
+</ResponseField>
+
+<ResponseField name="rating" type="integer">
+  Overall star rating given by the reviewer.
+</ResponseField>
+
+<ResponseField name="review_link" type="string">
+  Link to the original review on the provider's site.
+</ResponseField>
+
+<ResponseField name="job_title" type="string">
+  Job title of the reviewer. May be an empty string when not disclosed.
+</ResponseField>
+
+<ResponseField name="review_date" type="string">
+  Publication date of the review. May be an empty string when not provided.
+</ResponseField>
+
+<ResponseField name="employment_status" type="string">
+  Employment type of the reviewer. Example values: `REGULAR`, `CONTRACT`.
+</ResponseField>
+
+<ResponseField name="is_current_employee" type="boolean">
+  `true` if the reviewer was a current employee at the time of writing.
+</ResponseField>
+
+<ResponseField name="years_of_employment" type="integer">
+  Reviewer's tenure at the company in years.
+</ResponseField>
+
+<ResponseField name="location" type="string">
+  Location of the reviewer. May be an empty string when not disclosed.
+</ResponseField>
+
+<ResponseField name="country_code" type="string">
+  Country code of the reviewer's location. May be an empty string when not disclosed.
+</ResponseField>
+
+<ResponseField name="helpful_count" type="integer">
+  Number of users who marked the review as helpful.
+</ResponseField>
+
+<ResponseField name="not_helpful_count" type="integer">
+  Number of users who marked the review as not helpful.
+</ResponseField>
+
+<ResponseField name="career_opportunities_rating" type="integer">
+  Reviewer's rating for career opportunities. `null` when not provided.
+</ResponseField>
+
+<ResponseField name="ceo_rating" type="string">
+  Reviewer's CEO sentiment. Example values: `APPROVE`, `DISAPPROVE`. `null` when not provided.
+</ResponseField>
+
+<ResponseField name="compensation_and_benefits_rating" type="integer">
+  Reviewer's rating for compensation and benefits. `null` when not provided.
+</ResponseField>
+
+<ResponseField name="culture_and_values_rating" type="integer">
+  Reviewer's rating for culture and values. `null` when not provided.
+</ResponseField>
+
+<ResponseField name="diversity_and_inclusion_rating" type="integer">
+  Reviewer's rating for diversity and inclusion. `null` when not provided.
+</ResponseField>
+
+<ResponseField name="senior_management_rating" type="integer">
+  Reviewer's rating for senior management. `null` when not provided.
+</ResponseField>
+
+<ResponseField name="work_life_balance_rating" type="integer">
+  Reviewer's rating for work-life balance. `null` when not provided.
+</ResponseField>
+
+<ResponseField name="language" type="string">
+  Language code of the review. Example: `eng`.
+</ResponseField>
+
+<ResponseField name="provider" type="string">
+  Review provider identifier. Example: `glassdoor`.
+</ResponseField>
+
+<ResponseExample>
+
+```json 200 expandable wrap
+{
+    "data": {
+        "uuid": "00000jw-canva",
+        "employee_reviews": {
+            "overall_rating": {
+                "glassdoor": 3.9
+            },
+            "other_ratings": [
+                {
+                    "type": "business_outlook",
+                    "provider": "glassdoor",
+                    "value": 0.7
+                },
+                {
+                    "type": "ceo",
+                    "provider": "glassdoor",
+                    "value": 0.84
+                },
+                {
+                    "type": "recommend_to_friend",
+                    "provider": "glassdoor",
+                    "value": 0.69
+                },
+                {
+                    "type": "compensation_and_benefits",
+                    "provider": "glassdoor",
+                    "value": 3.9
+                },
+                {
+                    "type": "culture_and_values",
+                    "provider": "glassdoor",
+                    "value": 3.7
+                },
+                {
+                    "type": "diversity_and_inclusion",
+                    "provider": "glassdoor",
+                    "value": 4
+                },
+                {
+                    "type": "senior_management",
+                    "provider": "glassdoor",
+                    "value": 3.1
+                },
+                {
+                    "type": "work_life_balance",
+                    "provider": "glassdoor",
+                    "value": 3.7
+                }
+            ],
+            "reviews": {
+                "data": [
+                    {
+                        "id": 104118495,
+                        "summary": "Decent pay amid constant changes",
+                        "pros": "Pay is still somewhat decent",
+                        "cons": "Things are changing too drastically.",
+                        "rating": 2,
+                        "review_link": "https://www.glassdoor.com/Reviews/Employee-Review--RVW104118495.htm",
+                        "job_title": "Customer Service Representative",
+                        "review_date": "",
+                        "employment_status": "REGULAR",
+                        "is_current_employee": true,
+                        "years_of_employment": 6,
+                        "location": "Austin, TX",
+                        "country_code": "",
+                        "helpful_count": 0,
+                        "not_helpful_count": 0,
+                        "career_opportunities_rating": 2,
+                        "ceo_rating": "APPROVE",
+                        "compensation_and_benefits_rating": 2,
+                        "culture_and_values_rating": 1,
+                        "diversity_and_inclusion_rating": 4,
+                        "senior_management_rating": 1,
+                        "work_life_balance_rating": 2,
+                        "language": "eng",
+                        "provider": "glassdoor"
+                    },
+                    {
+                        "id": 104093537,
+                        "summary": "Great benefits and work-life balance, but slow career growth",
+                        "pros": "Great benefits. Employer friendly. Great work life balance",
+                        "cons": "Career progression is very hard",
+                        "rating": 4,
+                        "review_link": "https://www.glassdoor.com/Reviews/Employee-Review--RVW104093537.htm",
+                        "job_title": "Technical Lead",
+                        "review_date": "",
+                        "employment_status": "REGULAR",
+                        "is_current_employee": true,
+                        "years_of_employment": 0,
+                        "location": "Melbourne",
+                        "country_code": "",
+                        "helpful_count": 0,
+                        "not_helpful_count": 0,
+                        "career_opportunities_rating": 3,
+                        "ceo_rating": null,
+                        "compensation_and_benefits_rating": 4,
+                        "culture_and_values_rating": 4,
+                        "diversity_and_inclusion_rating": 4,
+                        "senior_management_rating": 3,
+                        "work_life_balance_rating": 4,
+                        "language": "eng",
+                        "provider": "glassdoor"
+                    }
+                ],
+                "total": 1068,
+                "total_by_provider": {
+                    "glassdoor": 1068
+                }
+            }
+        }
+    },
+    "limit": 10,
+    "offset": 0,
+    "credits_consumed": 1.5
+}
+```
+
+</ResponseExample>

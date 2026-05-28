@@ -42,7 +42,9 @@
         "pages": [
           "news",
           "company-enrichment",
-          "company-search-supporting-api"
+          "company-search-supporting-api",
+          "product-review",
+          "employee"
         ]
       }
     ]
