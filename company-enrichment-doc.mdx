@@ -7,7 +7,7 @@ description: "Retrieve structured company data — firmographics, funding histor
 
 The Akta Company Enrichment API returns structured data for any company from Akta's native database. Pass a company website domain or UUID and specify which sections you need — only the requested sections are returned, keeping responses lean and processing fast.
 
-This is a **synchronous GET API** — submit a JSON body and receive enriched company data immediately in the HTTP response. No polling required.
+This is a **synchronous GET API** — pass parameters in the URL and receive enriched company data immediately in the HTTP response. No polling required.
 
 **The available sections:**
 
@@ -20,7 +20,7 @@ This is a **synchronous GET API** — submit a JSON body and receive enriched co
 | `gtm_and_business_model` | Go-to-market strategy and business model details |
 | `public_company_financials` | Revenue, margins, and valuation data — public companies only |
 | `uk_private_company_financials` | Income statement and balance sheet data for UK-registered private companies |
-| `acquisitions` | M&A history — companies acquired and deal details |
+| `acquisitions` | M&A history — companies acquired and deal details _(enterprise tier only)_ |
 | `investments` | Portfolio investments made by the company _(enterprise tier only)_ |
 
 **Common use cases:**
@@ -44,27 +44,19 @@ This is a **synchronous GET API** — submit a JSON body and receive enriched co
 <CodeGroup>
 
 ```bash cURL
-curl --location 'https://api.akta.ai/v1/company/enrichment' \
-  --header 'x-api-key: <YOUR_API_KEY>' \
-  --header 'Content-Type: application/json' \
-  --data '{
-    "company": "canva.com",
-    "sections": ["firmographics", "funding"]
-  }'
+curl --location 'https://api.akta.pro/api/v1/company/enrichment?company=canva.com&sections=firmographics,funding' \
+  --header 'x-api-key: <YOUR_API_KEY>'
 ```
 
 ```python Python
 import requests
 
-response = requests.post(
-    "https://api.akta.ai/v1/company/enrichment",
-    headers={
-        "x-api-key":    "<YOUR_API_KEY>",
-        "Content-Type": "application/json"
-    },
-    json={
+response = requests.get(
+    "https://api.akta.pro/api/v1/company/enrichment",
+    headers={"x-api-key": "<YOUR_API_KEY>"},
+    params={
         "company":  "canva.com",
-        "sections": ["firmographics", "funding"]
+        "sections": "firmographics,funding"
     }
 )
 data = response.json()["data"]
@@ -77,12 +69,12 @@ print(f"Total funding: ${data['funding']['overall']['total_funding'] / 1e9:.1f}B
 **Step 2 — Request additional sections as needed**
 
 ```python
-response = requests.post(
-    "https://api.akta.ai/v1/company/enrichment",
+response = requests.get(
+    "https://api.akta.pro/api/v1/company/enrichment",
     headers={"x-api-key": "<YOUR_API_KEY>"},
-    json={
+    params={
         "company":  "canva.com",
-        "sections": ["firmographics", "funding", "headcount", "website_traffic"]
+        "sections": "firmographics,funding,headcount,website_traffic"
     }
 )
 data = response.json()["data"]
@@ -126,15 +118,15 @@ API keys are issued from your Akta account. Contact [support@akta.ai](mailto:sup
 **Endpoint**
 
 ```text
-POST https://api.akta.ai/v1/company/enrichment
+GET https://api.akta.pro/api/v1/company/enrichment
 ```
 
-All parameters are passed as JSON in the request body.
+All parameters are passed as **URL query parameters**.
 
 | Parameter | Type | Required | Description |
 | --- | --- | --- | --- |
-| `company` | string | **Required** | Company identifier. Accepts either a **website domain** (e.g. `"canva.com"` or `"https://www.canva.com"`) or a **company UUID** (e.g. `"3fa85f64-5717-4562-b3fc-2c963f66afa6"`). UUIDs are returned by the [Company Search API](#). |
-| `sections` | string\[\] | Optional | Array of section names to include in the response. Returns all available sections if omitted. Request only what you need — each additional section adds to response size and processing time. See the available sections table in Section 1. |
+| `company` | string | **Required** | Company identifier. Accepts either a **website domain** (e.g. `canva.com` or `https://www.canva.com`) or a **company UUID** (e.g. `00031n-tesla`). UUIDs are returned by the [Company Search API](#). |
+| `sections` | string | Optional | Comma-separated list of section names to include in the response. Returns all available sections if omitted. Request only what you need — each additional section adds to response size and processing time. See the available sections table in Section 1. |
 
 <Info>
   `sections` defaults to all available sections when omitted. For time-sensitive integrations, always specify the sections you need rather than relying on the default — this reduces response size significantly and avoids receiving large sections like `acquisitions` when only `firmographics` is needed.
@@ -145,37 +137,19 @@ All parameters are passed as JSON in the request body.
 <CodeGroup>
 
 ```bash cURL
-curl --location 'https://api.akta.ai/v1/company/enrichment' \
-  --header 'x-api-key: <YOUR_API_KEY>' \
-  --header 'Content-Type: application/json' \
-  --data '{
-    "company": "https://www.canva.com",
-    "sections": [
-      "firmographics",
-      "funding",
-      "headcount",
-      "website_traffic"
-    ]
-  }'
+curl --location 'https://api.akta.pro/api/v1/company/enrichment?company=https://www.canva.com&sections=firmographics,funding,headcount,website_traffic' \
+  --header 'x-api-key: <YOUR_API_KEY>'
 ```
 
 ```python Python
 import requests
 
-response = requests.post(
-    "https://api.akta.ai/v1/company/enrichment",
-    headers={
-        "x-api-key":    "<YOUR_API_KEY>",
-        "Content-Type": "application/json"
-    },
-    json={
+response = requests.get(
+    "https://api.akta.pro/api/v1/company/enrichment",
+    headers={"x-api-key": "<YOUR_API_KEY>"},
+    params={
         "company":  "https://www.canva.com",
-        "sections": [
-            "firmographics",
-            "funding",
-            "headcount",
-            "website_traffic"
-        ]
+        "sections": "firmographics,funding,headcount,website_traffic"
     }
 )
 print(response.json())
@@ -191,18 +165,20 @@ print(response.json())
 
 ```json
 {
-  "status": "success",
   "data": {
     "firmographics": { ... },
     "funding": { ... }
-  }
+  },
+  "credits_consumed": 0.05,
+  "count": 2
 }
 ```
 
 | Field | Type | Description |
 | --- | --- | --- |
-| `status` | string | `"success"` when data was returned successfully. |
 | `data` | object | Dict keyed by section name. Only the sections you requested are present. |
+| `credits_consumed` | float | Number of credits consumed by the request. |
+| `count` | integer | Number of sections returned. |
 
 ### Section schemas
 
@@ -261,7 +237,7 @@ The `funding` section contains an `overall` object with aggregate funding summar
 These sections follow the same envelope pattern — each section key maps to a structured object with relevant fields. Refer to the [full schema reference](#) for complete field-level documentation on all sections.
 
 <Info>
-  `public_company_financials` is populated only for publicly listed companies. `uk_private_company_financials` is populated only for UK-registered private entities. `investments` is available on enterprise tier only. All other sections are available on all plans.
+  `public_company_financials` is populated only for publicly listed companies. `uk_private_company_financials` is populated only for UK-registered private entities. `acquisitions` and `investments` are available on the enterprise tier only. All other sections are available on all plans.
 </Info>
 
 ---
@@ -273,29 +249,21 @@ These sections follow the same envelope pattern — each section key maps to a s
 <CodeGroup>
 
 ```bash cURL
-curl --location 'https://api.akta.ai/v1/company/enrichment' \
-  --header 'x-api-key: <YOUR_API_KEY>' \
-  --header 'Content-Type: application/json' \
-  --data '{
-    "company": "canva.com",
-    "sections": ["firmographics", "funding", "acquisitions"]
-  }'
+curl --location 'https://api.akta.pro/api/v1/company/enrichment?company=canva.com&sections=firmographics,funding,acquisitions' \
+  --header 'x-api-key: <YOUR_API_KEY>'
 ```
 
 ```python Python
 import requests
 
-HEADERS = {
-    "x-api-key":    "<YOUR_API_KEY>",
-    "Content-Type": "application/json"
-}
+HEADERS = {"x-api-key": "<YOUR_API_KEY>"}
 
-response = requests.post(
-    "https://api.akta.ai/v1/company/enrichment",
+response = requests.get(
+    "https://api.akta.pro/api/v1/company/enrichment",
     headers=HEADERS,
-    json={
+    params={
         "company":  "canva.com",
-        "sections": ["firmographics", "funding", "acquisitions"]
+        "sections": "firmographics,funding,acquisitions"
     }
 )
 
@@ -328,7 +296,6 @@ for acq in acqs[:5]:
 
 ```json
 {
-  "status": "success",
   "data": {
     "firmographics": {
       "name": "Canva",
@@ -347,7 +314,9 @@ for acq in acqs[:5]:
         "num_funding_rounds": "21"
       }
     }
-  }
+  },
+  "credits_consumed": 0.05,
+  "count": 2
 }
 ```
 
@@ -358,20 +327,17 @@ When you have a company UUID from the Company Search API, pass it directly.
 ```python
 import requests
 
-HEADERS = {
-    "x-api-key":    "<YOUR_API_KEY>",
-    "Content-Type": "application/json"
-}
+HEADERS = {"x-api-key": "<YOUR_API_KEY>"}
 
 # UUID obtained from Company Search API
-company_uuid = "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+company_uuid = "00031n-tesla"
 
-response = requests.post(
-    "https://api.akta.ai/v1/company/enrichment",
+response = requests.get(
+    "https://api.akta.pro/api/v1/company/enrichment",
     headers=HEADERS,
-    json={
+    params={
         "company":  company_uuid,
-        "sections": ["firmographics", "funding"]
+        "sections": "firmographics,funding"
     }
 )
 data = response.json()["data"]
@@ -385,29 +351,26 @@ Resolve a company name via Company Search, then enrich synchronously for a CRM r
 ```python
 import requests
 
-HEADERS = {
-    "x-api-key":    "<YOUR_API_KEY>",
-    "Content-Type": "application/json"
-}
+HEADERS = {"x-api-key": "<YOUR_API_KEY>"}
 
 def enrich_by_name(company_name, sections):
     # Step 1: resolve to UUID via Company Search
     search = requests.get(
-        "https://api.akta.ai/v1/company/search",
-        headers={"x-api-key": "<YOUR_API_KEY>"},
-        params={"query": company_name}
+        "https://api.akta.pro/api/v1/company/search",
+        headers=HEADERS,
+        params={"name": company_name}
     )
     results = search.json().get("data", [])
     if not results:
         raise ValueError(f"Company not found: {company_name}")
 
-    company_id = results[0]["company_id"]
+    company_uuid = results[0]["uuid"]
 
     # Step 2: enrich using the UUID
-    enrich = requests.post(
-        "https://api.akta.ai/v1/company/enrichment",
+    enrich = requests.get(
+        "https://api.akta.pro/api/v1/company/enrichment",
         headers=HEADERS,
-        json={"company": company_id, "sections": sections}
+        params={"company": company_uuid, "sections": ",".join(sections)}
     )
     return enrich.json()["data"]
 
@@ -423,19 +386,16 @@ Enrich multiple companies concurrently by running parallel requests.
 ```python
 import requests, concurrent.futures
 
-HEADERS = {
-    "x-api-key":    "<YOUR_API_KEY>",
-    "Content-Type": "application/json"
-}
+HEADERS = {"x-api-key": "<YOUR_API_KEY>"}
 
 WATCHLIST = ["stripe.com", "figma.com", "notion.so", "loom.com", "miro.com"]
-SECTIONS  = ["firmographics", "funding", "headcount"]
+SECTIONS  = "firmographics,funding,headcount"
 
 def enrich_company(domain):
-    r = requests.post(
-        "https://api.akta.ai/v1/company/enrichment",
+    r = requests.get(
+        "https://api.akta.pro/api/v1/company/enrichment",
         headers=HEADERS,
-        json={"company": domain, "sections": SECTIONS}
+        params={"company": domain, "sections": SECTIONS}
     )
     return domain, r.json().get("data", {})
 
@@ -462,10 +422,10 @@ for domain, data in results.items():
 Omit `sections` to return everything available for a company.
 
 ```python
-response = requests.post(
-    "https://api.akta.ai/v1/company/enrichment",
+response = requests.get(
+    "https://api.akta.pro/api/v1/company/enrichment",
     headers=HEADERS,
-    json={"company": "canva.com"}   # sections omitted — returns all
+    params={"company": "canva.com"}   # sections omitted — returns all
 )
 data = response.json()["data"]
 print(f"Sections returned: {list(data.keys())}")
@@ -477,15 +437,12 @@ print(f"Sections returned: {list(data.keys())}")
 const fetch = require("node-fetch");
 
 async function enrichCompany(company, sections) {
+  const params = new URLSearchParams({ company, sections: sections.join(",") });
   const response = await fetch(
-    "https://api.akta.ai/v1/company/enrichment",
+    `https://api.akta.pro/api/v1/company/enrichment?${params}`,
     {
-      method: "POST",
-      headers: {
-        "x-api-key":    process.env.AKTA_API_KEY,
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({ company, sections })
+      method: "GET",
+      headers: { "x-api-key": process.env.AKTA_API_KEY }
     }
   );
 
@@ -537,17 +494,14 @@ The API uses standard HTTP status codes. All errors are returned synchronously.
 ```python
 import time, requests
 
-def enrich_with_retry(body, api_key, max_retries=3):
-    headers = {
-        "x-api-key":    api_key,
-        "Content-Type": "application/json"
-    }
+def enrich_with_retry(params, api_key, max_retries=3):
+    headers = {"x-api-key": api_key}
     for attempt in range(max_retries):
         try:
-            r = requests.post(
-                "https://api.akta.ai/v1/company/enrichment",
+            r = requests.get(
+                "https://api.akta.pro/api/v1/company/enrichment",
                 headers=headers,
-                json=body,
+                params=params,
                 timeout=30
             )
             if r.status_code == 429:
@@ -572,21 +526,21 @@ When `sections` is omitted, all available sections are returned. For large secti
 
 ```python
 # ❌ Returns everything — slow and large
-json={"company": "canva.com"}
+params={"company": "canva.com"}
 
 # ✅ Returns only what you need
-json={"company": "canva.com", "sections": ["firmographics", "funding"]}
+params={"company": "canva.com", "sections": "firmographics,funding"}
 ```
 
 **Accept both domain and full URL formats**
 
-The `company` field accepts both bare domains (`"canva.com"`) and full URLs (`"https://www.canva.com"`). Either format works — use whichever is more natural for your pipeline. If you have a UUID from Company Search, prefer that for the most reliable resolution:
+The `company` parameter accepts both bare domains (`canva.com`) and full URLs (`https://www.canva.com`). Either format works — use whichever is more natural for your pipeline. If you have a UUID from Company Search, prefer that for the most reliable resolution:
 
 ```python
 # All three are valid
-json={"company": "canva.com"}
-json={"company": "https://www.canva.com"}
-json={"company": "3fa85f64-5717-4562-b3fc-2c963f66afa6"}
+params={"company": "canva.com"}
+params={"company": "https://www.canva.com"}
+params={"company": "00031n-tesla"}
 ```
 
 **`num_funding_rounds` is a string — parse before arithmetic**
@@ -609,15 +563,15 @@ label = f"${total_b:.1f}B" if total_b >= 1 else f"${total_m:.0f}M"
 
 **Use Company Search to resolve names to UUIDs before enriching**
 
-If your input is a company name (not a domain), resolve it to a UUID via the Company Search API first. Passing a display name like `"Canva"` directly as the `company` field will not resolve. Use the domain or UUID returned by Company Search:
+If your input is a company name (not a domain), resolve it to a UUID via the Company Search API first. Passing a display name like `"Canva"` directly as the `company` parameter may not resolve. Use the domain or UUID returned by Company Search:
 
 ```python
 search = requests.get(
-    "https://api.akta.ai/v1/company/search",
+    "https://api.akta.pro/api/v1/company/search",
     headers={"x-api-key": API_KEY},
-    params={"query": "Canva"}
+    params={"name": "Canva"}
 )
-company_id = search.json()["data"][0]["company_id"]
+company_uuid = search.json()["data"][0]["uuid"]
 ```
 
 **Check `company_status` before requesting financial sections**
@@ -635,15 +589,15 @@ elif firm["location"].endswith("United Kingdom"):
     pass
 ```
 
-**`investments` requires enterprise tier — handle `403` gracefully**
+**`acquisitions` and `investments` require enterprise tier — handle `403` gracefully**
 
-The `investments` section is gated to enterprise plans. If your plan does not include it, requesting it returns a `403 Forbidden`. Handle this in your section selection logic rather than letting it surface as an uncaught error:
+The `acquisitions` and `investments` sections are gated to enterprise plans. If your plan does not include them, requesting them returns a `403 Forbidden`. Handle this in your section selection logic rather than letting it surface as an uncaught error:
 
 ```python
 try:
-    data = enrich_company("canva.com", ["firmographics", "investments"])
+    data = enrich_company("canva.com", "firmographics,investments")
 except requests.HTTPError as e:
     if e.response.status_code == 403:
         # Re-request without the gated section
-        data = enrich_company("canva.com", ["firmographics"])
+        data = enrich_company("canva.com", "firmographics")
 ```

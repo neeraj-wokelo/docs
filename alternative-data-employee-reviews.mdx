@@ -22,7 +22,7 @@ This is a **synchronous GET API** — pass a company identifier and optional pag
 <CodeGroup>
 
 ```bash cURL
-curl --location 'https://api.akta.pro/v1/company/employee-reviews?company=canva.com&limit=10&offset=0' \
+curl --location 'https://api.akta.pro/api/v1/company/employee-reviews?company=canva.com&limit=10&offset=0' \
   --header 'x-api-key: <YOUR_API_KEY>'
 ```
 
@@ -30,7 +30,7 @@ curl --location 'https://api.akta.pro/v1/company/employee-reviews?company=canva.
 import requests
 
 response = requests.get(
-    "https://api.akta.pro/v1/company/employee-reviews",
+    "https://api.akta.pro/api/v1/company/employee-reviews",
     headers={"x-api-key": "<YOUR_API_KEY>"},
     params={
         "company": "canva.com",
@@ -95,7 +95,7 @@ x-api-key: <YOUR_API_KEY>
 **Endpoint**
 
 ```text
-GET https://api.akta.pro/v1/company/employee-reviews
+GET https://api.akta.pro/api/v1/company/employee-reviews
 ```
 
 All parameters are passed as URL query parameters.
@@ -111,12 +111,12 @@ All parameters are passed as URL query parameters.
 <CodeGroup>
 
 ```bash cURL — by domain
-curl --location 'https://api.akta.pro/v1/company/employee-reviews?company=canva.com&limit=10&offset=0' \
+curl --location 'https://api.akta.pro/api/v1/company/employee-reviews?company=canva.com&limit=10&offset=0' \
   --header 'x-api-key: <YOUR_API_KEY>'
 ```
 
 ```bash cURL — by UUID
-curl --location 'https://api.akta.pro/v1/company/employee-reviews?company=3fa85f64-5717-4562-b3fc-2c963f66afa6' \
+curl --location 'https://api.akta.pro/api/v1/company/employee-reviews?company=3fa85f64-5717-4562-b3fc-2c963f66afa6' \
   --header 'x-api-key: <YOUR_API_KEY>'
 ```
 
@@ -124,7 +124,7 @@ curl --location 'https://api.akta.pro/v1/company/employee-reviews?company=3fa85f
 import requests
 
 response = requests.get(
-    "https://api.akta.pro/v1/company/employee-reviews",
+    "https://api.akta.pro/api/v1/company/employee-reviews",
     headers={"x-api-key": "<YOUR_API_KEY>"},
     params={
         "company": "canva.com",
@@ -286,7 +286,7 @@ Fetch the overview ratings for a company and display them correctly by scale.
 <CodeGroup>
 
 ```bash cURL
-curl --location 'https://api.akta.pro/v1/company/employee-reviews?company=canva.com&limit=1' \
+curl --location 'https://api.akta.pro/api/v1/company/employee-reviews?company=canva.com&limit=1' \
   --header 'x-api-key: <YOUR_API_KEY>'
 ```
 
@@ -296,7 +296,7 @@ import requests
 HEADERS = {"x-api-key": "<YOUR_API_KEY>"}
 
 response = requests.get(
-    "https://api.akta.pro/v1/company/employee-reviews",
+    "https://api.akta.pro/api/v1/company/employee-reviews",
     headers=HEADERS,
     params={"company": "canva.com", "limit": 1}
 )
@@ -366,7 +366,7 @@ import requests
 HEADERS = {"x-api-key": "<YOUR_API_KEY>"}
 
 response = requests.get(
-    "https://api.akta.pro/v1/company/employee-reviews",
+    "https://api.akta.pro/api/v1/company/employee-reviews",
     headers=HEADERS,
     params={"company": "canva.com", "limit": 10}
 )
@@ -421,7 +421,7 @@ RATIO_DIMS = {"business_outlook", "ceo", "recommend_to_friend"}
 
 def get_overview(company):
     r = requests.get(
-        "https://api.akta.pro/v1/company/employee-reviews",
+        "https://api.akta.pro/api/v1/company/employee-reviews",
         headers=HEADERS,
         params={"company": company, "limit": 0}
     )
@@ -471,7 +471,7 @@ offset      = 0
 
 while True:
     r = requests.get(
-        "https://api.akta.pro/v1/company/employee-reviews",
+        "https://api.akta.pro/api/v1/company/employee-reviews",
         headers=HEADERS,
         params={"company": COMPANY, "limit": PAGE_SIZE, "offset": offset}
     )
@@ -530,7 +530,7 @@ const API_KEY = process.env.AKTA_API_KEY;
 async function getEmployeeReviews(company, limit = 10, offset = 0) {
   const params = new URLSearchParams({ company, limit, offset });
   const res = await fetch(
-    `https://api.akta.pro/v1/company/employee-reviews?${params}`,
+    `https://api.akta.pro/api/v1/company/employee-reviews?${params}`,
     { headers: { "x-api-key": API_KEY } }
   );
   if (!res.ok) throw new Error(`API error: ${res.status}`);
@@ -584,7 +584,7 @@ def fetch_with_retry(params, api_key, max_retries=3):
     for attempt in range(max_retries):
         try:
             r = requests.get(
-                "https://api.akta.pro/v1/company/employee-reviews",
+                "https://api.akta.pro/api/v1/company/employee-reviews",
                 headers=headers,
                 params=params,
                 timeout=30

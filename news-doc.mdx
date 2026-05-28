@@ -42,7 +42,7 @@ Each article in the response includes:
 <CodeGroup>
 
 ```bash cURL
-curl --location 'https://api.akta.ai/v1/news?company=canva.com&limit=10' \
+curl --location 'https://api.akta.pro/api/v1/news?company=canva.com&limit=10' \
   --header 'x-api-key: <YOUR_API_KEY>' \
   --header 'Content-Type: application/json'
 ```
@@ -51,7 +51,7 @@ curl --location 'https://api.akta.ai/v1/news?company=canva.com&limit=10' \
 import requests
 
 response = requests.get(
-    "https://api.akta.ai/v1/news",
+    "https://api.akta.pro/api/v1/news",
     headers={"x-api-key": "<YOUR_API_KEY>"},
     params={
         "company": "canva.com",
@@ -68,7 +68,7 @@ print(f"Returned {len(data['data'])} of {data['total']} articles")
 
 ```python
 response = requests.get(
-    "https://api.akta.ai/v1/news",
+    "https://api.akta.pro/api/v1/news",
     headers={"x-api-key": "<YOUR_API_KEY>"},
     params={
         "company":    "canva.com",
@@ -119,7 +119,7 @@ API keys are issued from your Akta account. Contact [support@akta.ai](mailto:sup
 **Endpoint**
 
 ```text
-GET https://api.akta.ai/v1/news
+GET https://api.akta.pro/api/v1/news
 ```
 
 All parameters are passed as URL query parameters. All parameters are optional.
@@ -141,7 +141,7 @@ All parameters are passed as URL query parameters. All parameters are optional.
 <CodeGroup>
 
 ```bash cURL
-curl --location 'https://api.akta.ai/v1/news?company=canva.com&sentiment=positive&start_date=2024-01-01&end_date=2024-12-31&limit=10&offset=0' \
+curl --location 'https://api.akta.pro/api/v1/news?company=canva.com&sentiment=positive&start_date=2024-01-01&end_date=2024-12-31&limit=10&offset=0' \
   --header 'x-api-key: <YOUR_API_KEY>' \
   --header 'Content-Type: application/json'
 ```
@@ -150,7 +150,7 @@ curl --location 'https://api.akta.ai/v1/news?company=canva.com&sentiment=positiv
 import requests
 
 response = requests.get(
-    "https://api.akta.ai/v1/news",
+    "https://api.akta.pro/api/v1/news",
     headers={
         "x-api-key":    "<YOUR_API_KEY>",
         "Content-Type": "application/json"
@@ -291,7 +291,7 @@ Fetch all positive news about a company over a date range, filtered to funding a
 <CodeGroup>
 
 ```bash cURL
-curl --location 'https://api.akta.ai/v1/news?company=canva.com&sentiment=positive&start_date=2024-01-01&limit=25' \
+curl --location 'https://api.akta.pro/api/v1/news?company=canva.com&sentiment=positive&start_date=2024-01-01&limit=25' \
   --header 'x-api-key: <YOUR_API_KEY>'
 ```
 
@@ -301,7 +301,7 @@ import requests
 HEADERS = {"x-api-key": "<YOUR_API_KEY>"}
 
 response = requests.get(
-    "https://api.akta.ai/v1/news",
+    "https://api.akta.pro/api/v1/news",
     headers=HEADERS,
     params={
         "company":    "canva.com",
@@ -386,7 +386,7 @@ import requests
 HEADERS = {"x-api-key": "<YOUR_API_KEY>"}
 
 response = requests.get(
-    "https://api.akta.ai/v1/news",
+    "https://api.akta.pro/api/v1/news",
     headers=HEADERS,
     params={
         "industry":   "Fintech",
@@ -418,7 +418,7 @@ WATCHLIST = ["stripe.com", "brex.com", "ramp.com", "mercury.com"]
 
 def get_negative_news(domain):
     r = requests.get(
-        "https://api.akta.ai/v1/news",
+        "https://api.akta.pro/api/v1/news",
         headers=HEADERS,
         params={
             "company":    domain,
@@ -456,7 +456,7 @@ import requests
 HEADERS = {"x-api-key": "<YOUR_API_KEY>"}
 
 response = requests.get(
-    "https://api.akta.ai/v1/news",
+    "https://api.akta.pro/api/v1/news",
     headers=HEADERS,
     params={
         "company": "openai.com",
@@ -499,7 +499,7 @@ all_articles = []
 
 while True:
     response = requests.get(
-        "https://api.akta.ai/v1/news",
+        "https://api.akta.pro/api/v1/news",
         headers=HEADERS,
         params=PARAMS
     )
@@ -528,7 +528,7 @@ from collections import Counter
 HEADERS = {"x-api-key": "<YOUR_API_KEY>"}
 
 response = requests.get(
-    "https://api.akta.ai/v1/news",
+    "https://api.akta.pro/api/v1/news",
     headers=HEADERS,
     params={
         "industry":   "Artificial Intelligence",
@@ -569,7 +569,7 @@ async function getNews(params = {}) {
   });
 
   const response = await fetch(
-    `https://api.akta.ai/v1/news?${query}`,
+    `https://api.akta.pro/api/v1/news?${query}`,
     {
       headers: {
         "x-api-key":    process.env.AKTA_API_KEY,
@@ -640,7 +640,7 @@ def fetch_news_with_retry(params, api_key, max_retries=3):
     for attempt in range(max_retries):
         try:
             r = requests.get(
-                "https://api.akta.ai/v1/news",
+                "https://api.akta.pro/api/v1/news",
                 headers=headers,
                 params=params,
                 timeout=30

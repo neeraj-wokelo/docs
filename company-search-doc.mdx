@@ -12,7 +12,7 @@ This is a **free endpoint** — it does not consume API credits.
 **Endpoint**
 
 ```text
-GET https://api.akta.ai/v1/company/search
+GET https://api.akta.pro/api/v1/company/search
 ```
 
 Pass a single `name` query parameter. The backend automatically detects whether the input is a company name, website domain, or UUID and resolves it accordingly.
@@ -44,12 +44,12 @@ x-api-key: <YOUR_API_KEY>
 <CodeGroup>
 
 ```bash cURL — by company name
-curl --location 'https://api.akta.ai/v1/company/search?name=Canva' \
+curl --location 'https://api.akta.pro/api/v1/company/search?name=Canva' \
   --header 'x-api-key: <YOUR_API_KEY>'
 ```
 
 ```bash cURL — by website
-curl --location 'https://api.akta.ai/v1/company/search?name=canva.com' \
+curl --location 'https://api.akta.pro/api/v1/company/search?name=canva.com' \
   --header 'x-api-key: <YOUR_API_KEY>'
 ```
 
@@ -57,7 +57,7 @@ curl --location 'https://api.akta.ai/v1/company/search?name=canva.com' \
 import requests
 
 response = requests.get(
-    "https://api.akta.ai/v1/company/search",
+    "https://api.akta.pro/api/v1/company/search",
     headers={"x-api-key": "<YOUR_API_KEY>"},
     params={"name": "Canva"}
 )
@@ -124,7 +124,7 @@ HEADERS = {"x-api-key": "<YOUR_API_KEY>"}
 
 # Step 1: Search for the company
 search = requests.get(
-    "https://api.akta.ai/v1/company/search",
+    "https://api.akta.pro/api/v1/company/search",
     headers=HEADERS,
     params={"name": "Canva"}
 )
@@ -132,7 +132,7 @@ uuid = search.json()["data"][0]["uuid"]
 
 # Step 2: Use the UUID in Company Enrichment
 enrich = requests.post(
-    "https://api.akta.ai/v1/company/enrichment",
+    "https://api.akta.pro/api/v1/company/enrichment",
     headers={**HEADERS, "Content-Type": "application/json"},
     json={"company": uuid, "sections": ["firmographics", "funding"]}
 )
@@ -140,7 +140,7 @@ print(enrich.json()["data"]["firmographics"]["name"])
 
 # Or use it in the News API
 news = requests.get(
-    "https://api.akta.ai/v1/news",
+    "https://api.akta.pro/api/v1/news",
     headers=HEADERS,
     params={"company": uuid, "limit": 10}
 )

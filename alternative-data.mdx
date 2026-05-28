@@ -25,7 +25,7 @@ This is a **synchronous GET API** — results are returned directly in the HTTP 
 <CodeGroup>
 
 ```bash cURL
-curl --location 'https://api.akta.pro/v1/company/product-reviews?company=tesla.com' \
+curl --location 'https://api.akta.pro/api/v1/company/product-reviews?company=tesla.com' \
   --header 'x-api-key: <YOUR_API_KEY>'
 ```
 
@@ -33,7 +33,7 @@ curl --location 'https://api.akta.pro/v1/company/product-reviews?company=tesla.c
 import requests
 
 response = requests.get(
-    "https://api.akta.pro/v1/company/product-reviews",
+    "https://api.akta.pro/api/v1/company/product-reviews",
     headers={"x-api-key": "<YOUR_API_KEY>"},
     params={"company": "tesla.com"}
 )
@@ -56,7 +56,7 @@ Use the `id` values from Step 1 to request reviews. Pass the `products` paramete
 import requests
 
 response = requests.get(
-    "https://api.akta.pro/v1/company/product-reviews",
+    "https://api.akta.pro/api/v1/company/product-reviews",
     headers={"x-api-key": "<YOUR_API_KEY>"},
     params=[
         ("company",  "tesla.com"),
@@ -103,7 +103,7 @@ x-api-key: <YOUR_API_KEY>
 **Endpoint**
 
 ```text
-GET https://api.akta.pro/v1/company/product-reviews
+GET https://api.akta.pro/api/v1/company/product-reviews
 ```
 
 All parameters are passed as URL query parameters.
@@ -124,12 +124,12 @@ All parameters are passed as URL query parameters.
 <CodeGroup>
 
 ```bash cURL — product list only
-curl --location 'https://api.akta.pro/v1/company/product-reviews?company=tesla.com' \
+curl --location 'https://api.akta.pro/api/v1/company/product-reviews?company=tesla.com' \
   --header 'x-api-key: <YOUR_API_KEY>'
 ```
 
 ```bash cURL — with reviews
-curl --location 'https://api.akta.pro/v1/company/product-reviews?company=tesla.com&products=177388&products=112516&limit=10&offset=0' \
+curl --location 'https://api.akta.pro/api/v1/company/product-reviews?company=tesla.com&products=177388&products=112516&limit=10&offset=0' \
   --header 'x-api-key: <YOUR_API_KEY>'
 ```
 
@@ -140,14 +140,14 @@ HEADERS = {"x-api-key": "<YOUR_API_KEY>"}
 
 # Product list only
 response = requests.get(
-    "https://api.akta.pro/v1/company/product-reviews",
+    "https://api.akta.pro/api/v1/company/product-reviews",
     headers=HEADERS,
     params={"company": "tesla.com"}
 )
 
 # With reviews for specific products
 response = requests.get(
-    "https://api.akta.pro/v1/company/product-reviews",
+    "https://api.akta.pro/api/v1/company/product-reviews",
     headers=HEADERS,
     params=[
         ("company",  "tesla.com"),
@@ -246,7 +246,7 @@ The following fields are **only present when reviews are requested** (i.e. `prod
 <CodeGroup>
 
 ```bash cURL — Step 1: list products
-curl --location 'https://api.akta.pro/v1/company/product-reviews?company=tesla.com' \
+curl --location 'https://api.akta.pro/api/v1/company/product-reviews?company=tesla.com' \
   --header 'x-api-key: <YOUR_API_KEY>'
 ```
 
@@ -257,7 +257,7 @@ HEADERS = {"x-api-key": "<YOUR_API_KEY>"}
 
 # ── Step 1: Get the product catalog ──────────────────────────
 list_response = requests.get(
-    "https://api.akta.pro/v1/company/product-reviews",
+    "https://api.akta.pro/api/v1/company/product-reviews",
     headers=HEADERS,
     params={"company": "tesla.com"}
 )
@@ -271,7 +271,7 @@ for p in products:
 product_ids = [p["id"] for p in products[:2]]   # take first two
 
 review_response = requests.get(
-    "https://api.akta.pro/v1/company/product-reviews",
+    "https://api.akta.pro/api/v1/company/product-reviews",
     headers=HEADERS,
     params=[("company", "tesla.com")]
            + [("products", pid) for pid in product_ids]
@@ -403,7 +403,7 @@ offset      = 0
 
 while True:
     r = requests.get(
-        "https://api.akta.pro/v1/company/product-reviews",
+        "https://api.akta.pro/api/v1/company/product-reviews",
         headers=HEADERS,
         params=[
             ("company",  COMPANY),
@@ -449,7 +449,7 @@ for review in product["reviews"]["data"]:
 const fetch = require("node-fetch");
 
 const API_KEY = process.env.AKTA_API_KEY;
-const BASE    = "https://api.akta.pro/v1/company/product-reviews";
+const BASE    = "https://api.akta.pro/api/v1/company/product-reviews";
 
 async function getProductList(company) {
   const res = await fetch(`${BASE}?company=${company}`, {
@@ -514,7 +514,7 @@ def fetch_with_retry(params, api_key, max_retries=3):
     for attempt in range(max_retries):
         try:
             r = requests.get(
-                "https://api.akta.pro/v1/company/product-reviews",
+                "https://api.akta.pro/api/v1/company/product-reviews",
                 headers=headers,
                 params=params,
                 timeout=30
