@@ -1,11 +1,11 @@
 ---
 title: "Company Search"
-description: "Look up any company by name, website, or UUID to retrieve its Akta UUID and core identity fields — used to resolve company identifiers before calling the Enrichment and News APIs."
+description: "Look up any company by name, website or UUID to retrieve its Akta UUID and core identity fields — used to resolve company identifiers before calling the Enrichment and News APIs."
 ---
 
 ## 1. Overview
 
-The Company Search API resolves a company name, website domain, or UUID into a structured company record. Its primary purpose is to look up the `uuid` needed by the [Company Enrichment](/akta-company-enrichment-doc) and [News](/akta-news-api-doc) APIs when you only have a company name to start with.
+The Company Search API resolves a company name, website domain, or UUID into a structured company record. Its primary purpose is to look up the `uuid` needed by the other APIs when you only have a company name to start with.
 
 This is a **free endpoint** — it does not consume API credits.
 
@@ -15,7 +15,7 @@ This is a **free endpoint** — it does not consume API credits.
 GET https://api.akta.pro/api/v1/company/search
 ```
 
-Pass a single `name` query parameter. The backend automatically detects whether the input is a company name, website domain, or UUID and resolves it accordingly.
+Pass a single `name` query parameter. The backend automatically detects whether the input is a company name, website domain or UUID and resolves it accordingly.
 
 ---
 
