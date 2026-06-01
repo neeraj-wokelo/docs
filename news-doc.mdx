@@ -130,9 +130,9 @@ All parameters are passed as URL query parameters. All parameters are optional.
 | `industry` | string | — | Industry name to scope results to (e.g. `"Software"`, `"Healthcare"`). Can be used alone or combined with `company`. |
 | `start_date` | string | 6 months ago | Start of the date range for articles (`YYYY-MM-DD`). Inclusive. Non-enterprise plans are capped at a 6-month lookback window. |
 | `end_date` | string | Today | End of the date range for articles (`YYYY-MM-DD`). Inclusive. Defaults to today if omitted. |
-| `sentiment` | string | `"all"` | Filter by article sentiment. Accepted values: `"positive"`, `"negative"`, `"neutral"`, `"all"`. |
-| `type` | string | `"all"` | Filter by article event type (e.g. `"Equity Fund-Raising"`, `"Secondary Transactions"`). Default returns all types. |
-| `news_score` | string | `"all"` | Filter by news score tier. Default returns all. |
+| `sentiment_list` | string\[\] | `"all"` | Filter by article sentiment. Accepted values: `"positive"`, `"negative"`, `"neutral"`, `"all"`. |
+| `type_list` | string\[\] | `"all"` | Filter by article event type (e.g. `"Equity Fund-Raising"`, `"Secondary Transactions"`). Default returns all types. |
+| `news_score_list` | string\[\] | `"all"` | Filter by news score tier. Default returns all. |
 | `limit` | integer | `10` | Maximum number of articles to return. Max `100`. |
 | `offset` | integer | `0` | Number of articles to skip before returning results. Use with `limit` for pagination. |
 
