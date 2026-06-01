@@ -29,7 +29,6 @@
             "pages": [
               "news-doc",
               "company-enrichment-doc",
-              "alternative-data-employee-reviews",
               "company-search-doc",
               {
                 "group": "Alternative Data",
@@ -38,6 +37,12 @@
                     "group": "Product Reviews",
                     "pages": [
                       "alternative-data-product-reviews"
+                    ]
+                  },
+                  {
+                    "group": "Employee Reviews",
+                    "pages": [
+                      "alternative-data-employee-reviews"
                     ]
                   }
                 ]
