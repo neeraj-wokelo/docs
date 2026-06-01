@@ -2,32 +2,24 @@
 title: "Pricing"
 ---
 
-Akta's APIs are priced in credits. Cost depends on your plan, endpoint, and monthly credit tier.
+Akta's APIs are priced in credits. Table below shows the credits consumed for each API.
 
-| Plan | Cost per credit | Best for |
-| :-- | :-- | :-- |
-| Pay as you go | \$\$\$ | Getting started without commitment |
-| Starter | \$\$ | Light developer and workflow usage |
-| Pro | \$ | Production and higher-volume usage |
-| Enterprise | Custom | Custom endpoints, feeds, limits, and deployment needs |
-
-<Info>
-  Higher plans get lower per-credit pricing and higher rate limits.
-</Info>
+| API | Section | Credits Consumed |
+| --- | --- | --- |
+| News | — | 0.1 per API call, 0.01 per news article |
+| Employee Reviews | — | 1.5 credits for 50 reviews |
+| Product Reviews | — | 1.5 credits for 50 reviews |
+| Company Enrichment | Firmographics | 1.0 |
+| Company Enrichment | GTM and Business Model | 0.5 |
+| Company Enrichment | Headcount | 2.5 |
+| Company Enrichment | Funding | 2.5 |
+| Company Enrichment | Acquisitions | 2.5 |
+| Company Enrichment | Investments | 2.5 |
+| Company Enrichment | Website Traffic | 1.5 |
 
 ## Credits
 
 Your credit balance is displayed at the top of the billing page. Add credits or subscribe to a plan from the billing page.
-
-## Company News API
-
-The Company News endpoint uses a fixed credit cost per request plus a variable cost based on results returned.
-
-**Credit formula:**
-
-$$
-\text{credits used} = 0.1 + (0.01 \times \text{number of results})
-$$
 
 | Plan | Price (\$) | Calculation |
 | :-- | :-- | :-- |
