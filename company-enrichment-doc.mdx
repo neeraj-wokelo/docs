@@ -18,8 +18,6 @@ This is a **synchronous GET API** — pass parameters in the URL and receive enr
 | `headcount` | Employee count and headcount data |
 | `website_traffic` | Web traffic metrics and visitor estimates |
 | `gtm_and_business_model` | Go-to-market strategy and business model details |
-| `public_company_financials` | Revenue, margins, and valuation data — public companies only |
-| `uk_private_company_financials` | Income statement and balance sheet data for UK-registered private companies |
 | `acquisitions` | M&A history — companies acquired and deal details _(enterprise tier only)_ |
 | `investments` | Portfolio investments made by the company _(enterprise tier only)_ |
 
@@ -29,7 +27,6 @@ This is a **synchronous GET API** — pass parameters in the URL and receive enr
 - **Deal screening data pull** — request `firmographics` \+ `funding` \+ `acquisitions` for a shortlist of targets to build a fast pre-IC data pack
 - **Funding intelligence** — pull `funding` for a set of companies to map raise history, identify stage, and track total capital deployed
 - **Traffic and growth signals** — combine `headcount` and `website_traffic` to proxy revenue trajectory and hiring velocity for private companies
-- **UK private company financials** — use `uk_private_company_financials` to pull Companies House data for UK-based private targets where Crunchbase data is thin
 
 <Info>
   This API is synchronous. Enriched data is returned directly in the HTTP response — no job submission or polling required.
@@ -232,13 +229,9 @@ The `funding` section contains an `overall` object with aggregate funding summar
 | `overall.last_funding_date` | string | Date of the most recent funding event in `YYYY-MM-DD` format. |
 | `overall.num_funding_rounds` | string | Total number of funding rounds as a string (e.g. `"21"`). Parse with `int()` before arithmetic. |
 
-**`headcount`, `website_traffic`, `gtm_and_business_model`, `public_company_financials`, `uk_private_company_financials`, `acquisitions`, `investments`**
+**`headcount`, `website_traffic`, `gtm_and_business_model`,  `acquisitions`, `investments`**
 
 These sections follow the same envelope pattern — each section key maps to a structured object with relevant fields. Refer to the [full schema reference](#) for complete field-level documentation on all sections.
-
-<Info>
-  `public_company_financials` is populated only for publicly listed companies. `uk_private_company_financials` is populated only for UK-registered private entities. `acquisitions` and `investments` are available on the enterprise tier only. All other sections are available on all plans.
-</Info>
 
 ---
 

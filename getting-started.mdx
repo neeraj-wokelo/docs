@@ -33,7 +33,6 @@ This guide shows you how to create an Akta API key and start making requests in 
   </Step>
   <Step title="Copy and store your API key">
     - The API key is shown once — copy it immediately and store it somewhere safe. If it's lost, a new one will need to be created.
-
     - Your key will look similar to this: `wk_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx`
 
     <Warning>
@@ -50,18 +49,22 @@ This guide shows you how to create an Akta API key and start making requests in 
 
 <Columns cols={3}>
   <Column>
-    <Card title="Company News" icon="business-time" href="/company-news-doc">
+    <Card title="News" icon="business-time" href="/news-doc">
       Entity resolved, de-duped, categorized, impact, sentiment
     </Card>
-  </Column>
-  <Column>
-    <Card title="Company Enrichment" icon="database">
-      (coming soon)
+
+    <Card title="Employee Reviews" icon="industry" href="/alternative-data-employee-reviews">
+      Workplace sentiment scores and reviews
     </Card>
   </Column>
   <Column>
-    <Card title="Industry News" icon="industry">
-      (coming soon)
+    <Card title="Company Enrichment" icon="database" href="/news-doc">
+      Structured firmographics, funding, and business model details
+    </Card>
+  </Column>
+  <Column>
+    <Card title="Product Reviews" icon="industry" href="/alternative-data-product-reviews">
+      Ratings, pros, cons, and reviews by product
     </Card>
   </Column>
 </Columns>
@@ -95,8 +98,6 @@ This guide shows you how to create an Akta API key and start making requests in 
       --data-urlencode "end_date=2026-05-05" \
       --data-urlencode "limit=10"
     ```
-
-    ## 
   </Tab>
   <Tab title="Company Enrichment">
     Coming soon
