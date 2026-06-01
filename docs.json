@@ -29,9 +29,19 @@
             "pages": [
               "news-doc",
               "company-enrichment-doc",
-              "alternative-data-product-reviews",
               "alternative-data-employee-reviews",
-              "company-search-doc"
+              "company-search-doc",
+              {
+                "group": "Alternative Data",
+                "pages": [
+                  {
+                    "group": "Product Reviews",
+                    "pages": [
+                      "alternative-data-product-reviews"
+                    ]
+                  }
+                ]
+              }
             ]
           },
           "playground",
