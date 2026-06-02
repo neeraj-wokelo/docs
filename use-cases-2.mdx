@@ -1,3 +1,254 @@
 ---
 title: "Use cases"
 ---
+
+### Full two-step workflow — list products then fetch reviews
+
+<CodeGroup>
+
+```bash cURL — Step 1: list products
+curl --location 'https://api.akta.pro/api/v1/company/product-reviews?company=tesla.com' \
+  --header 'x-api-key: <YOUR_API_KEY>'
+```
+
+```python Python
+import requests
+
+HEADERS = {"x-api-key": "<YOUR_API_KEY>"}
+
+# ── Step 1: Get the product catalog ──────────────────────────
+list_response = requests.get(
+    "https://api.akta.pro/api/v1/company/product-reviews",
+    headers=HEADERS,
+    params={"company": "tesla.com"}
+)
+
+products = list_response.json()["data"]["product_reviews"]
+print(f"Products found: {len(products)}")
+for p in products:
+    print(f"  {p['id']:>10}  {p['product_name']}  —  {p['main_category']}")
+
+# ── Step 2: Fetch reviews for selected product IDs ───────────
+product_ids = [p["id"] for p in products[:2]]   # take first two
+
+review_response = requests.get(
+    "https://api.akta.pro/api/v1/company/product-reviews",
+    headers=HEADERS,
+    params=[("company", "tesla.com")]
+           + [("products", pid) for pid in product_ids]
+           + [("limit", 10), ("offset", 0)]
+)
+
+data = review_response.json()
+print(f"\nCredits consumed: {data['credits_consumed']}")
+
+for product in data["data"]["product_reviews"]:
+    if "reviews" not in product:
+        continue
+    rating = product["rating"].get("g2")
+    total  = product["reviews"]["total"]
+    dist   = product["star_distribution"].get("g2", {})
+    total_dist = sum(dist.values())
+
+    print(f"\n{'='*55}")
+    print(f"  {product['product_name']}")
+    print(f"  Rating: {rating}/5.0  |  {total} reviews total")
+
+    if total_dist > 0:
+        for star in sorted(dist.keys(), key=int, reverse=True):
+            pct = round(dist[star] / total_dist * 100)
+            bar = "█" * (pct // 5)
+            print(f"  {star}★  {bar:<20}  {pct}%  ({dist[star]})")
+
+    print(f"\n  Most recent reviews:")
+    for review in product["reviews"]["data"][:3]:
+        print(f"  [{review['review_rating']}★]  {review['review_title']}")
+        print(f"    {review['publish_date'][:10]}  |  {review['reviewer_company_size']}")
+        print(f"    {review['review_content'][:150].strip()}...")
+```
+
+</CodeGroup>
+
+**Sample response — product list only:**
+
+```json
+{
+  "data": {
+    "uuid": "000031n-tesla",
+    "product_reviews": [
+      {
+        "id": "177388",
+        "product_name": "Powerpack",
+        "main_category": "Battery Storage Systems Providers",
+        "categories": ["Battery Storage Systems"],
+        "description": "Powerpack supports a host of applications..."
+      },
+      {
+        "id": "112516",
+        "product_name": "Powerwall",
+        "main_category": "Battery Storage Systems Providers",
+        "categories": ["Battery Storage Systems"],
+        "description": "Powerwall integrates with solar to store excess energy..."
+      }
+    ]
+  },
+  "limit": 10,
+  "offset": 0,
+  "credits_consumed": 0.0
+}
+```
+
+**Sample response — with reviews:**
+
+```json
+{
+  "data": {
+    "uuid": "000031n-tesla",
+    "product_reviews": [
+      {
+        "id": "177388",
+        "product_name": "Powerpack",
+        "main_category": "Battery Storage Systems Providers",
+        "categories": ["Battery Storage Systems"],
+        "description": "Powerpack supports a host of applications...",
+        "rating": { "g2": 3.8 },
+        "star_distribution": {
+          "g2": { "1": 0, "2": 0, "3": 1, "4": 0, "5": 1 }
+        },
+        "pros_list": [],
+        "cons_list": [],
+        "pricing": [],
+        "reviews": {
+          "data": [
+            {
+              "review_id": 8555613,
+              "review_title": "very easy and convenient",
+              "review_content": "What do you like best about Powerpack?\nhaving a stationary energy powerpack...",
+              "review_question_answers": [
+                {
+                  "question": "What do you like best about Powerpack?",
+                  "answer": "having a stationary energy powerpack for yourself is better than easy"
+                }
+              ],
+              "review_rating": 4.5,
+              "publish_date": "2023-09-01T00:00:00",
+              "reviewer_company_size": "Small-Business(50 or fewer emp.)",
+              "review_link": "https://www.g2.com/products/powerpack/reviews/powerpack-review-8555613",
+              "provider": "g2"
+            }
+          ],
+          "total": 2,
+          "total_by_provider": { "g2": 2 }
+        }
+      }
+    ]
+  },
+  "limit": 10,
+  "offset": 0,
+  "credits_consumed": 1.5
+}
+```
+
+### Paginating through reviews for a high-volume product
+
+```python
+import requests
+
+HEADERS = {"x-api-key": "<YOUR_API_KEY>"}
+PRODUCT_ID  = "177388"
+COMPANY     = "tesla.com"
+PAGE_SIZE   = 50
+
+all_reviews = []
+offset      = 0
+
+while True:
+    r = requests.get(
+        "https://api.akta.pro/api/v1/company/product-reviews",
+        headers=HEADERS,
+        params=[
+            ("company",  COMPANY),
+            ("products", PRODUCT_ID),
+            ("limit",    PAGE_SIZE),
+            ("offset",   offset)
+        ]
+    )
+    data    = r.json()
+    product = data["data"]["product_reviews"][0]
+    batch   = product["reviews"]["data"]
+
+    if not batch:
+        break
+
+    all_reviews.extend(batch)
+    total = product["reviews"]["total"]
+    print(f"Fetched {len(all_reviews)} / {total} reviews...")
+
+    if len(all_reviews) >= total:
+        break
+
+    offset += PAGE_SIZE
+
+print(f"\nTotal reviews retrieved: {len(all_reviews)}")
+```
+
+### Using `review_question_answers` for structured processing
+
+Use `review_question_answers` for clean structured extraction rather than parsing the concatenated `review_content` string.
+
+```python
+for review in product["reviews"]["data"]:
+    print(f"\n[{review['review_rating']}★] {review['review_title']}")
+    for qa in review["review_question_answers"]:
+        print(f"  Q: {qa['question']}")
+        print(f"  A: {qa['answer'][:200]}")
+```
+
+### JavaScript / Node.js
+
+```javascript
+const fetch = require("node-fetch");
+
+const API_KEY = process.env.AKTA_API_KEY;
+const BASE    = "https://api.akta.pro/api/v1/company/product-reviews";
+
+async function getProductList(company) {
+  const res = await fetch(`${BASE}?company=${company}`, {
+    headers: { "x-api-key": API_KEY }
+  });
+  if (!res.ok) throw new Error(`API error: ${res.status}`);
+  return (await res.json()).data.product_reviews;
+}
+
+async function getProductReviews(company, productIds, limit = 10, offset = 0) {
+  const params = new URLSearchParams({ company, limit, offset });
+  productIds.forEach(id => params.append("products", id));
+
+  const res = await fetch(`${BASE}?${params}`, {
+    headers: { "x-api-key": API_KEY }
+  });
+  if (!res.ok) throw new Error(`API error: ${res.status}`);
+  return (await res.json());
+}
+
+// Step 1: list products
+getProductList("tesla.com").then(products => {
+  console.log(`Products: ${products.length}`);
+  products.forEach(p => console.log(`  ${p.id}  ${p.product_name}`));
+
+  // Step 2: fetch reviews for first product
+  const ids = products.slice(0, 1).map(p => p.id);
+  return getProductReviews("tesla.com", ids, 5);
+
+}).then(data => {
+  const product = data.data.product_reviews[0];
+  const rating  = product.rating?.g2;
+  const total   = product.reviews?.total;
+  console.log(`\n${product.product_name}: ${rating}/5.0 (${total} reviews)`);
+  product.reviews.data.forEach(r => {
+    console.log(`  [${r.review_rating}★] ${r.review_title}`);
+  });
+});
+```
+
+---

@@ -1,3 +1,69 @@
 ---
 title: "Quick Start"
 ---
+
+## Authentication
+
+All requests must include an **API key** in the `x-api-key` HTTP header.
+
+```text
+x-api-key: <YOUR_API_KEY>
+```
+
+API keys are issued from your Akta account. Contact [support@akta.ai](mailto:support@akta.ai) if you do not yet have API access or need to rotate a key.
+
+<Warning>
+  Never expose your API key in client-side code, browser requests, or public repositories. A missing or invalid key returns `401 Unauthorized`.
+</Warning>
+
+## Execute your first request
+
+<CodeGroup>
+
+```bash cURL
+curl --location 'https://api.akta.pro/api/v1/company/enrichment?company=canva.com&sections=firmographics' \
+  --header 'x-api-key: <YOUR_API_KEY>'
+```
+
+```python Python
+import requests
+
+response = requests.get(
+    "https://api.akta.pro/api/v1/company/enrichment",
+    headers={"x-api-key": "<YOUR_API_KEY>"},
+    params={
+        "company":  "canva.com",
+        "sections": "firmographics"
+    }
+)
+data = response.json()["data"]
+print(f"{data['firmographics']['name']} — {data['firmographics']['company_status']}")
+print(f"Total funding: ${data['funding']['overall']['total_funding'] / 1e9:.1f}B")
+```
+
+</CodeGroup>
+
+**Sample Response**
+
+```python
+{
+    "data": {
+        "uuid": "00000jw-canva",
+        "firmographics": {
+            "name": "Canva",
+            "website": "http://www.canva.com",
+            "location": "Sydney, Australia",
+            "founded_year": 2013,
+            "type": "private",
+            "operating_status": "Operating",
+            "ticker": "",
+            "region": "Oceania",
+            "country_code": "Australia",
+            "product_category": "",
+            "core_offering": "",
+            "product_catalog": []
+        }
+    },
+    "credits_consumed": 1.0
+}
+```

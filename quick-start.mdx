@@ -15,3 +15,625 @@ API keys are issued from your Akta account. Contact [support@akta.pro](mailto:su
 <Warning>
   Never expose your API key in client-side code, browser requests, or public repositories. A missing or invalid key returns `401 Unauthorized`.
 </Warning>
+
+## Execute your first request
+
+<CodeGroup>
+
+```python cURL
+curl --location 'https://api.akta.pro/api/v1/news?company=https://canva.com&limit=10' \
+  --header 'x-api-key: <YOUR_API_KEY>'
+```
+
+```python Python
+import requests
+ 
+response = requests.get(
+    "https://api.akta.pro/api/v1/news",
+    headers={"x-api-key": "<YOUR_API_KEY>"},
+    params={
+        "company": "https://canva.com",
+        "limit":   10
+    }
+)
+data = response.json()
+print(f"Returned {data['count']} of {data['total']} articles")
+```
+
+</CodeGroup>
+
+**Sample response**
+
+```python expandable
+{
+    "total": 65,
+    "limit": 10,
+    "offset": 0,
+    "count": 10,
+    "data": [
+        {
+            "id": 11278671,
+            "title": "Intuit Mailchimp Launches Analytics AI and Expanded Data Integrations to Give Brands Conversational, Actionable Intelligence",
+            "url": "https://financialpost.com/pmn/business-wire-news-releases-pmn/intuit-mailchimp-launches-analytics-ai-and-expanded-data-integrations-to-give-brands-conversational-actionable-intelligence",
+            "publisher": "financialpost",
+            "published_date": "2026-05-28T13:07:34+00:00",
+            "sentiment": "Positive",
+            "news_score": "Medium",
+            "ai_summary": "Intuit Mailchimp announced the launch of Analytics AI, a native conversational analytics agent within Mailchimp that connects campaign performance, audience data, and revenue metrics to provide actionable insights through plain-language queries. The platform also unveiled expanded integrations with Anthropic's Claude, Wix, and WooCommerce to unify ecommerce data and bring AI-powered marketing capabilities directly into merchant workflows. These enhancements are designed to help ecommerce brands and small-to-mid-sized businesses automate marketing analysis, streamline campaign creation, and scale operations using AI-powered tools.",
+            "full_text": "Business Wire Article content New conversational analytics agent eliminates manual reporting and turns real-time customer data into clear, actionable next steps THIS CONTENT IS RESERVED FOR SUBSCRIBERS ONLY Subscribe now to read the latest news in your city and across Canada. Exclusive articles from Barbara Shecter, Joe O'Connor, Gabriel Friedman, and others.\n\nDaily content from Financial Times, the world's leading global business publication.\n\nUnlimited online access to read articles from Financial Post, National Post and 15 news sites across Canada with one account.\n\nNational Post ePaper, an electronic replica of the print edition to view on any device, share and comment on.\n\nDaily puzzles, including the New York Times Crossword. SUBSCRIBE TO UNLOCK MORE ARTICLES Subscribe now to read the latest news in your city and across Canada. Exclusive articles from Barbara Shecter, Joe O'Connor, Gabriel Friedman and others.\n\nDaily content from Financial Times, the world's leading global business publication.\n\nUnlimited online access to read articles from Financial Post, National Post and 15 news sites across Canada with one account.\n\nNational Post ePaper, an electronic replica of the print edition to view on any device, share and comment on.\n\nDaily puzzles, including the New York Times Crossword. REGISTER / SIGN IN TO UNLOCK MORE ARTICLES Create an account or sign in to continue with your reading experience. Access articles from across Canada with one account.\n\nShare your thoughts and join the conversation in the comments.\n\nEnjoy additional articles per month.\n\nGet email updates from your favourite authors. THIS ARTICLE IS FREE TO READ REGISTER TO UNLOCK. Create an account or sign in to continue with your reading experience. Access articles from across Canada with one account\n\nShare your thoughts and join the conversation in the comments\n\nEnjoy additional articles per month\n\nGet email updates from your favourite authors Sign In or Create an Account or View more offers Article content New integrations with Claude, Wix, and WooCommerce unify ecommerce data for smarter campaigns Article content We apologize, but this video has failed to load.\n\ntap here to see other videos from our team. Try refreshing your browser, or Back to video Article content MOUNTAIN VIEW, Calif. — Intuit Inc. (Nasdaq: INTU), the global financial technology platform that makes Intuit TurboTax, Credit Karma, QuickBooks, Mailchimp, and Intuit Enterprise Suite, today announced Analytics AI*, a native conversational analytics agent in Mailchimp that connects performance across campaigns, audiences, and revenue to tell businesses what changed, why, and what to do next. Mailchimp also announced expanded integrations with Claude, Wix, and WooCommerce that unify ecommerce data and bring AI-powered marketing capabilities directly into the platforms merchants already use. The enhancements are designed to help ecommerce brands and small and mid-sized businesses scale with confidence using Mailchimp, the #1 AI-powered email marketing and automation platform.** Article content Article content With Analytics AI, Mailchimp puts a marketing data analyst to work with every marketer, bringing conversational intelligence to marketing performance so brands can ask questions, get answers, and act on what’s working in real time. Article content Unlike traditional dashboards that require manual analysis and exporting, Analytics AI allows marketers to simply ask questions in plain language and receive instant, strategic recommendations, much like the conversational AI experiences they already use. Purpose-built for omnichannel campaign performance and audience analytics in Mailchimp, the agent is designed to give brands data intelligence that drives decisions and revenue, without complexity. Article content Top Stories Get the latest headlines, breaking news and columns. By signing up you consent to receive the above newsletter from Postmedia Network Inc. Thanks for signing up! A welcome email is on its way. If you don't see it, please check your junk folder. The next issue of Top Stories will soon be in your inbox. We encountered an issue signing you up. Please try again Article content “Ecommerce brands tell us they have too much data but are starving for actionable insights,” said Diana Williams, VP of Product at Intuit Mailchimp. “Analytics AI starts by eliminating the gap between data and decision. Ask a question, get a strategic answer, and act on it instantly. But we’re not stopping there. Analytics AI lays the foundation for a fully agentic experience where Mailchimp plans, builds, and executes campaigns autonomously based on what’s working for your business.” Article content New AI-powered capabilities in Mailchimp deliver proactive intelligence so brands can scale with confidence Article content Mailchimp is launching a suite of AI-powered features that automate analysis, enable conversational insights, and expand compliance options for regulated industries: Article content Analytics AI delivers conversational intelligence: Analytics AI delivers automatic analysis across campaign performance, audience behavior, and revenue outcomes without requiring marketers to build dashboards or export reports. Using AI to analyze each customer’s own connected ecommerce data from platforms like Shopify, WooCommerce, and Wix alongside their Mailchimp campaign history, the agent identifies patterns, surfaces opportunities, and provides specific next-step recommendations that connect marketing activity directly to revenue impact.\n\nAnalytics AI delivers automatic analysis across campaign performance, audience behavior, and revenue outcomes without requiring marketers to build dashboards or export reports. Using AI to analyze each customer’s own connected ecommerce data from platforms like Shopify, WooCommerce, and Wix alongside their Mailchimp campaign history, the agent identifies patterns, surfaces opportunities, and provides specific next-step recommendations that connect marketing activity directly to revenue impact. AI Segment Builder (beta): Marketers can describe their ideal audience in plain language, and AI automatically builds the segment using behavioral, demographic, and engagement data. Article content Brands are turning data overload into revenue growth Article content For customers like contemporary art gallery Playground Detroit, Analytics AI is already transforming how they turn their brand’s unique data into faster, more actionable marketing decisions following its private beta. Article content “Mailchimp’s Analytics AI makes it easy to see what’s working by turning our historical data into something we can act on,” said Paulina Petkoski, Founder and Director of Playground Detroit. “Instead of spending over an hour manually processing reports, we can instantly access what we need through an intuitive, interactive search to help us make smarter decisions, refine our strategy, and increase subscriber engagement and ecommerce growth.” Article content Article content With Analytics AI, Mailchimp puts a marketing data analyst to work with every marketer, bringing conversational intelligence to marketing performance so brands can ask questions, get answers, and act on what’s working in real time. Article content Mailchimp brings AI-powered campaign creation directly into ChatGPT and Claude Article content Marketers can now build complete campaigns without leaving their AI workflow. The Mailchimp app in ChatGPT and Claude allows users to draft and refine personalized omnichannel campaigns using conversational prompts, pulling directly from their customer data and campaign history in Mailchimp. Once finalized, campaigns will be available within Mailchimp for brands to launch in a single action, eliminating hours of manual setup and context-switching between platforms. This integration streamlines the creative process by letting marketers ideate, iterate, and execute all within the AI tools they already use daily, turning campaign strategy into a collaborative conversation rather than a multi-step technical process. Article content Enhanced partner integrations and new features extend marketing intelligence across platforms Article content Mailchimp’s expanded partner ecosystem brings marketing capabilities directly into the tools brands already use: Article content One-click data activation for WooCommerce and Wi x: Following its launch in Shopify, one-click activation of the Mailchimp Site Tracking Pixel is now available for WooCommerce and Wix. This makes it frictionless for merchants to capture site actions, like product views or cart additions, and transform them into real-time automation triggers for smarter personalization.\n\nFollowing its launch in Shopify, one-click activation of the Mailchimp Site Tracking Pixel is now available for WooCommerce and Wix. This makes it frictionless for merchants to capture site actions, like product views or cart additions, and transform them into real-time automation triggers for smarter personalization. Seamless design-to-launch workflows with Canva : With deeper integration with Canva, marketers can now automatically import HTML and share select Canva designs into Mailchimp as full emails, ready to send without the manual lift.\n\nWith deeper integration with Canva, marketers can now automatically import HTML and share select Canva designs into Mailchimp as full emails, ready to send without the manual lift. Expanded sign-up methods for regulated industries: New age-gating on SMS signup forms allows brands that sell alcohol to collect and message SMS contacts in Mailchimp. Article content Coming Soon: Conversational and Agentic AI Across Mailchimp Article content Analytics AI marks a major advancement in Mailchimp’s AI-powered marketing platform, setting the foundation for a fully connected marketing AI experience where brands describe what they want to accomplish, and AI plans the strategy, builds the audience, drafts the campaigns, and learns from every result. Powered by secure first-party data and informed by industry context and business goals, the native agents will help businesses act fast so they can spend less time piecing together campaigns and more time generating revenue.",
+            "original_language": "EN",
+            "author": "Business Wire",
+            "countries": [
+                "USA"
+            ],
+            "industries": [
+                {
+                    "name": "Business Intelligence, Reporting & Visualization Services",
+                    "is_primary": true
+                },
+                {
+                    "name": "Webhooks, Eventing & Message Streaming",
+                    "is_primary": false
+                }
+            ],
+            "tags": [
+                {
+                    "name": "Product Launches & Enhancements",
+                    "code": "SD01",
+                    "is_primary": true
+                },
+                {
+                    "name": "Partnerships & Alliances",
+                    "code": "SD02",
+                    "is_primary": false
+                }
+            ],
+            "company_mentions": [
+                {
+                    "uuid": "0002cvh-woocommerce",
+                    "name": "WooCommerce",
+                    "website": "https://woocommerce.com/"
+                },
+                {
+                    "uuid": "0000002-anthropic",
+                    "name": "Anthropic",
+                    "website": "https://www.anthropic.com"
+                },
+                {
+                    "uuid": "00000jw-canva",
+                    "name": "Canva",
+                    "website": "http://www.canva.com"
+                },
+                {
+                    "uuid": "00009yz-wix",
+                    "name": "Wix",
+                    "website": "http://www.wix.com/"
+                },
+                {
+                    "uuid": "0000mpr-shopify",
+                    "name": "Shopify",
+                    "website": "https://www.shopify.com"
+                },
+                {
+                    "uuid": "00005xe-intuit",
+                    "name": "Intuit",
+                    "website": "https://www.intuit.com"
+                }
+            ]
+        },
+        {
+            "id": 11277726,
+            "title": "LinkedIn",
+            "url": "https://www.linkedin.com/company/canva",
+            "publisher": "linkedin",
+            "published_date": "2026-05-28T12:00:25+00:00",
+            "sentiment": "Neutral",
+            "news_score": "Low",
+            "ai_summary": "The article describes Canva as a private software development company founded in 2012, specializing in design and web applications, with headquarters in Surry Hills, New South Wales. It emphasizes Canva's mission to democratize design and its commitment to social good. ",
+            "full_text": "About us\n\nWe're a global online visual communications platform on a mission to empower the world to design. Featuring a simple drag-and-drop user interface and a vast range of templates ranging from presentations, documents, websites, social media graphics, posters, apparel to videos, plus a huge library of fonts, stock photography, illustrations, video footage, and audio clips, anyone can take an idea and create something beautiful on Canva on any device, from anywhere in the world. Since our launch in 2013, we’ve had the crazy big goal of making design accessible to everyone. We were founded on the belief that people shouldn't need to understand complex software to unlock their creativity. We’re leveling the playing field and democratizing access to design and visual communication by empowering 100% of the world to communicate in a way that was once limited to the 1%. We've always had a deeper mission surrounding Canva — which we talk about as our 'simple' two-step plan: to build one of the world’s most valuable companies, and to do the most good we possibly can. We're committed to our core value of Being a Force for Good, so as the value of our company grows, so too does our ability to have a positive impact on the world. Website http://www.canva.com External link for Canva Industry Software Development Company size 1,001-5,000 employees Headquarters Surry Hills, New South Wales Type Privately Held Founded 2012 Specialties Design, Graphic Design, Web app, Software engineering, Startup, Technology, Innovation, Publishing, and product design",
+            "original_language": "EN",
+            "author": "",
+            "countries": [
+                "AUS"
+            ],
+            "industries": [
+                {
+                    "name": "Graphic Design & Visual Content Production",
+                    "is_primary": true
+                },
+                {
+                    "name": "Short-Form Video Creation, Editing & Templates Apps",
+                    "is_primary": false
+                },
+                {
+                    "name": "Short-Form Video Publishing, Scheduling & Cross-Posting Tools",
+                    "is_primary": false
+                }
+            ],
+            "tags": [],
+            "company_mentions": [
+                {
+                    "uuid": "00000jw-canva",
+                    "name": "Canva",
+                    "website": "http://www.canva.com"
+                }
+            ]
+        },
+        {
+            "id": 11240566,
+            "title": "4 great tools to produce your own PDF bookazine",
+            "url": "https://www.techradar.com/pro/4-great-tools-to-produce-your-own-pdf-bookazine",
+            "publisher": "techradar",
+            "published_date": "2026-05-26T19:04:25+00:00",
+            "sentiment": "Neutral",
+            "news_score": "Low",
+            "ai_summary": "TechRadar Pro tested four AI tools (Lovable, Canva, FlipHTML5, and Gamma) to determine whether they can effectively convert existing web content into professionally designed PDF bookazines. None of the platforms could completely replace a professional designer, but they significantly reduced the time required to transform content into polished publications. Each tool offered different strengths: Lovable excelled at automation and brand matching, Canva provided the most customization flexibility, FlipHTML5 worked best for functional documents, and Gamma produced strong visual presentations.",
+            "full_text": "A lot of work goes into producing the content for your website, so it’s important to find ways to make sure it repays some of that hard work and gives your audience what they’re looking for.\n\nOne way to do this is by repurposing existing articles into new formats such as bookazines: one-off PDF publications that offer readers a deep dive on a single topic. Bookazines look smart, help to build your brand authority, and can even be used as a lead-generation tool.\n\nBest of all, there are a number of different AI tools out there that can all but automate the process, taking your content and serving it up in a glossy bookazine format. Depending on the final output you’re hoping for, different tools offer a range of strengths and weaknesses, with the tradeoff typically sitting between ease-of-use and creative control.\n\nLatest Videos From ExplAIned- Apple Intelligence Vs Galaxy AI Press shift question mark to access a list of keyboard shortcuts Keyboard Shortcuts Enabled Disabled Shortcuts Open/Close / or ? Play/Pause SPACE Increase Volume ↑ Decrease Volume ↓ Seek Forward → Seek Backward ← Captions On/Off c Fullscreen/Exit Fullscreen f Mute/Unmute m Decrease Caption Size - Increase Caption Size + or = Seek % 0-9 facebook x reddit Link https://cdn.jwplayer.com/previews/LeUD1WM0 Copied 00:00 01:27 01:27 ExplAIned- Apple Intelligence Vs Galaxy AI\n\nHere’s how you can create different types of Bookazine publications using a range of free AI tools.\n\nOverview\n\nLovable AI-powered app builder. Overpowered for our needs but packed with functionality and more than capable of creating an attractive PDF booklet. Lovable is great if you’re willing to spend a little time refining your prompt and want minimal human input – however it’s less effective for those who would like to retain some creative control.\n\nCanva digital design software. Canva is already the trusted favourite design platform for many, thanks to its ease of use and wide-ranging functionality. The AI design assistant didn’t disappoint, creating a basic but effective template that could be easily edited and embellished by anyone familiar with the platform.\n\nFlipHTML5 digital publishing platform. FlipHTML5 did exactly what it said on the tin, creating a straightforward flip booklet with little in the way of added extras. While the output was simple, that isn’t always a bad thing, and we could see this working for people dealing with technical information. The range of preset templates covering topics such as training manuals and employee handbooks, makes it clear where this platform does its best work.\n\nGamma.app presentation platform. Gamma.app is designed to do one thing and do it well: convert pre-existing content into an engaging presentation deck. If you want your bookazine to offer an easily scannable overview rather than an in-depth exploration of the topic, the strong visuals and user-friendly layouts offered by Gamma may well draw you in.\n\nGetting started\n\nThe start of the process will be the same whichever tool you go for: select your content and write your prompt. We chose the ‘How to choose an office chair’ how-to guide as our test content. While some tools will pull the content directly from a web URL, many struggle, so we also copied the text from the article into a blank document and saved the images, ensuring that all the content was available in a simple format.\n\nAny regular AI users will know that output is only ever as good as the prompt you provide. We wanted something simple but specific, which gave clear instructions about content and design requirements. When tailoring the prompt to suit your own needs, think about who your audience is and how you want the final product to look and feel.\n\nThe prompt\n\nThis is the AI prompt we used to get the best results from each of the tools we tested.\n\nAre you a pro? Subscribe to our newsletter Sign up to the TechRadar Pro newsletter to get all the top news, opinion, features and guidance your business needs to succeed!\n\nObjective\n\nCreate a professionally designed PDF booklet (8–10 pages) using only the content from this article: https://www.techradar.com/how-to/how-to-choose-an-office-chair\n\nThe output should be a clean, modern, and user-friendly brochure suitable for a business or marketing audience. Think like a professional editorial designer creating a branded B2B brochure for a tech publication.\n\nContent Rules\n\nUse only the content from the source article — do not invent, expand, or add new information.\n\nYou may summarize, restructure, and condense for clarity and layout.\n\nPreserve the original meaning, tone, and key advice, such as:\n\nImportance of ergonomics, adjustability, and lumbar support\n\nConsideration of sitting duration and chair types\n\nMaterial choices like mesh vs leather\n\nValue vs price when selecting a chair\n\nDesign & Branding\n\nFollow TechRadar Pro visual style and branding: TechRadar Pro | Expert buying advice and guides for small business\n\nClean, tech-focused aesthetic\n\nModern sans-serif typography\n\nInclude:\n\nSection headers\n\nPull quotes or highlight boxes\n\nIcons or simple visual cues (e.g. for ergonomics, comfort, budget)\n\nMaintain consistent spacing and hierarchy\n\nOutput Requirements\n\nFormat content as a ready-to-export PDF layout\n\nCreating a polished PDF brochure with Lovable\n\n(Image credit: Lovable // Future)\n\nOut of all the tools tested, Lovable did the best job of taking the existing content and reformatting it as a Bookazine. It took the brand colours from the TechRadar Pro website without any additional prompting, used the images that we provided and didn’t rewrite the content – in short, it followed the prompt to the letter without any handholding from its human supervisor.\n\nThe output was not as flashy as some of our other tested platforms, but with minimal input and only around 15 minutes of thinking time, it produced a very solid document.\n\nTo use Lovable, you’ll need to start by signing up for a free account. You can also choose to upgrade to a paid version, which will allow you to get things done a little quicker, and also provide additional team collaboration features. We were able to get everything we needed from the free version.\n\nOnce you’re in, you’ll see a familiar chat interface reminiscent of most popular AI chatbots. Simply paste your prompt in and it will get straight to work with building you a first draft. Lovable was one of the tools that managed to pull content directly from the website, so you shouldn’t even need to upload your text and images separately. In our experience, this is the time to go and refill your coffee – but after around 10-20 minutes, you should have something to review.\n\nWe were pleasantly surprised to find that the immediate output was very strong, matching the TechRadar Pro branding and using the content we’d provided without any unwelcome embellishments. The formatting wasn’t perfect, and we felt the document could be made a little more interesting and attention grabbing.\n\nThese little tweaks are where Lovable excels, as the chatbot format means you can simply start to have a conversation with it about what changes you would like to see, and it will get to work making the refinements. In the free plan, you are limited to five message credits per day – if you need more but don’t wish to upgrade, try and offer multiple changes in one message, or expect to come back over several days.\n\nIn total, we only went through three small sets of changes before getting a Bookazine that we were happy with. The PDF can then be downloaded directly from the site.\n\nVerdict\n\n(Image credit: Lovable // Future)\n\nLovable is the closest we came to a full automated bookazine creator. It excelled at following our prompt, understanding the TechRadar Pro brand and giving us tools to refine the output. However, limited free message credits could get frustrating, and you won’t get much creative control compared to traditional design software.\n\nIt’s worth mentioning that Lovable’s is first and foremost a no-code app development tool, so its uses extend far beyond what we’ve outlined in the steps above. Read our review of Lovable to find out more about what it offers.\n\nDeveloping a highly customizable template with Canva\n\n(Image credit: Canva // Future)\n\nCanva’s attempt at following the same prompt was not as immediately polished as Lovable, but what it lacks in design-eye, it makes up for in ease of customization. With Canva, you can quickly create the skeleton of your document and then fill in the finer details to make sure it’s on brand and engaging for your audience.\n\nMuch like the other tools we’ve tested, you don’t need a paid Canva account to access its AI features – although a pro plan will give you more tokens, allowing you to engage with the AI system for longer and refine your document more effectively. Either way, the process is the same: select the Canva AI icon in the left-hand menu and paste your prompt into the large chat box. We did find that for Canva it was necessary to upload the text as a document, and give Canva some specific information about branding colours and style, as it wasn’t able to pull information directly from the website.\n\nThe system will think for a few minutes, and then start generating your document. One thing we liked about Canva compared to the other tools we used was that you could see its work in progress: each section appeared bit by bit on the screen, allowing you to track what it was doing. As with Lovable, you get a chat menu at the side that not only lets you refine the design by giving Canva’s AI new instructions but also gives a Canva a space to explain its work.\n\nWe weren’t overwhelmed by the initial layout created: it was clean and easy to read, but lacked images and played it safe with the style. A more specific prompt may elicit funkier design work – or, for those who want to have a little more control over the final product, this is an opportunity to take over and finish the bookazine yourself.\n\nAnyone familiar with Canvas tools will love the next part. The design that’s created using Canva AI can be modified and manipulated with ease using all of Canva’s usual functionality, meaning you’re free to add photos and graphics, change the layout or swap colours and fonts until you’re satisfied.\n\nThis is why we think that Canva AI is best placed for putting together a customizable template, rather than a polished final version. By giving you a draft to work from, it has the potential to save hours of time. More excitingly, with Canva’s renewed focus on AI and the Canva 2.0 upgrade currently being rolled out, it’s a safe bet that this will become even more powerful in the near future.\n\nVerdict\n\n(Image credit: Canva // Future)\n\nCanva is the best option for teams that still want hands-on design control. The familiar interface will be a plus for existing Canva users, as will the strong manual editing tools. However, we found that the initial AI layout was quite generic – making this better as a starting point than a final product. Check out our Canva review for more features.\n\nProducing a simple, interactive booklet using FlipHTML5\n\n(Image credit: FlipHTML5 // Future)\n\nIf the objective is to create a no-frills, browsable online booklet then you might want to turn to FlipHTML5, a platform that takes your content and puts it into a very user-friendly flipbook format. Unlike Lovable, it offers little on the design front, however it still presents a good option for information such as a manual or technical guide – anything where the objective is to convey information rather than to present a strong brand.\n\nAs before, you’ll need to start by setting yourself up with a free account. On FlipHTML5, pulling content from a URL source is a pro feature, so you’ll need to choose the upload option, and upload the content as a document. You can include the text and images together in one doc.\n\nIn just a few minutes, your information will be converted into an interactive HTML brochure, with a dedicated URL that you can direct people to. Not quite a PDF booklet, but extremely user-friendly and accessible. There are options to make small tweaks to the heading and formatting and, if you choose to upgrade to a pro account, you can also add additional design options such as company branding.\n\nOverall, this is a no-bells-and-whistles approach – but it does have its strengths. We were very impressed with how clearly the information was displayed and could see this working well for documents such as product manuals or employee training guides. The final product took just a few minutes to produce, so if you’re not happy with the outcome then very little time will be wasted.\n\nFor those who do find FlipHTML5 suitable for their needs, there are two paid plans available that may be worth considering. Although the free version offers everything you need to create a booklet, there are some helpful enhanced features bundled into the Pro, Platinum and Enterprise plans including analytics to help you track performance, custom domains and the opportunity to include ad banners or connect with Google AdSense.\n\nVerdict\n\n(Image credit: FlipHTML5 // Future)\n\nFlipHTML5 works best for functional documents rather than brand storytelling, but that still means there’s a place for it in the corporate world. We liked the extremely fast turnaround, interactive format, and very simple workflow. However, the lack of creative flexibility and lack of customization options for free users means that this will only work for limited use cases.\n\nRepurposing your article into a PDF presentation with Gamma\n\n(Image credit: Gamma // Future)\n\nGamma.app is primarily a tool for creating AI-powered presentations, but it can also work with existing content and create downloadable documents for you to share with your readers.\n\nThis cuts the text down to just the most important key points and presents them as a series of easily digested cards. It’s a great way to get information across rapidly and would be well suited for creating snappy primer documents that give readers an overview of a topic before they decide whether they want to dive in and read a longer article.\n\nAs with the previous tools, getting started with Gamma was remarkably simple. After setting up a free account, hit the Create New [AI] button and choose the ‘paste in text’ option. This will open up the prompt window, so you can copy and paste your prompt in directly – no need to upload anything. There are a few additional options you can play around with here to further customize your results, although we found that the default settings worked well.\n\nGamma will then produce a series of cards that cut your content down into bitesize, digestible chunks. If you want to change the overall look and feel of the deck then you can select a new theme or, alternatively, each card can be edited individually. The software didn’t manage to pull images from our article, however the photos it selected instead could be easily changed. It also added its own graphics and diagrams, which worked well to break up the content and offer a more visual presentation style.\n\nOnce completed, the Gamma can be shared directly as a slideshow presentation or exported to use as a PDF document.\n\nVerdict\n\n(Image credit: Gamma // Future)\n\nGamma sits somewhere between a slide deck creator and lightweight publishing platform. It offered an excellent visual presentation style, strong summarization skills and a good use of graphics and diagrams. However, some may find that it oversimplifies long-form content, making it less suitable for detailed editorial publications.\n\nSo, can AI turn your content into a reader-ready bookazine?\n\nSo, can AI turn your content into a reader-ready bookazine? Well, after hours of testing various different - including other tools like Google Gemini's Storybook and Figma (neither of which delivered the goods) the answer is...\n\nYes and no.\n\nNone of the platforms we tested - even the best ones above - could completely replace a professional designer or editor, but they did dramatically reduce the amount of time needed to turn existing web content into something more polished and usable.\n\nThe best choice will ultimately depend on what you’re trying to create and how much time you can dedicate to it, but if you’re willing to experiment then you should be happy with the final results.\n\nThe testing process was fairly straightforward. First, we created a shortlist of potential platforms, focusing on tools that specifically offered AI-powered document, presentation, or publication design features.\n\nWe looked for services that could either generate layouts automatically from prompts or import long-form content and restructure it into a magazine-style format. Accessibility was also important, so we prioritized tools with free tiers or trials that anyone could realistically test for themselves.\n\nOnce we had our shortlist, we created free accounts for each platform and ran a shorter version of what would become the final prompt to test their overall functionality, ease of use, and output quality. This initial stage helped us identify which tools could successfully interpret our instructions, preserve formatting, and generate visually coherent layouts without extensive manual intervention.\n\nAfter narrowing down the list, we used the full prompt and source article across each platform to compare results more consistently. We assessed each tool on several key areas: how accurately it followed the brief, how well it handled long-form content, the quality of the visual layout, branding consistency, image placement, font choices, and the amount of editing required after generation.\n\nWe also paid close attention to practical considerations such as export options, page limits and watermarking on free plans. Some platforms excelled at speed and automation but offered limited creative control, while others required more manual input but delivered more polished and flexible results.\n\nWhile no tool produced a completely publication-ready bookazine without some level of editing, several came surprisingly close, particularly when given clear prompts and well-structured source content.\n\nWe put over 70 of the best AI tools to the test",
+            "original_language": "EN",
+            "author": "Cleo Chalk",
+            "countries": [],
+            "industries": [
+                {
+                    "name": "On-Set/Remote DIT & Cloud Dailies Ingest (camera-to-cloud, proxy generation)",
+                    "is_primary": true
+                },
+                {
+                    "name": "Prompt Engineering, Orchestration & LLMOps Tooling",
+                    "is_primary": false
+                },
+                {
+                    "name": "LLMOps & Generative AI Platforms (Prompt/Agent Orchestration, RAG)",
+                    "is_primary": false
+                }
+            ],
+            "tags": [],
+            "company_mentions": [
+                {
+                    "uuid": "0003vy7-fliphtml5",
+                    "name": "FlipHTML5",
+                    "website": "https://fliphtml5.com"
+                },
+                {
+                    "uuid": "00000jw-canva",
+                    "name": "Canva",
+                    "website": "http://www.canva.com"
+                },
+                {
+                    "uuid": "0002agv-gamma",
+                    "name": "Gamma",
+                    "website": "https://gamma.app"
+                },
+                {
+                    "uuid": "000003e-lovable",
+                    "name": "Lovable",
+                    "website": "https://lovable.dev"
+                }
+            ]
+        },
+        {
+            "id": 11156439,
+            "title": "From Prompt to Finished PPT in Under 5 Minutes: A Hands-On Speed Test of 6 AI Tools",
+            "url": "https://aijourn.com/from-prompt-to-finished-ppt-in-under-5-minutes-a-hands-on-speed-test-of-6-ai-tools/",
+            "publisher": "aijourn",
+            "published_date": "2026-05-22T22:28:11+00:00",
+            "sentiment": "Positive",
+            "news_score": "Low",
+            "ai_summary": "A hands-on speed test conducted in May 2026 compared six AI presentation tools using an identical prompt to create a 10-slide quarterly business review deck. Pi (Presentation Intelligence) produced a board-ready PowerPoint in 72 seconds with zero post-generation edits, while three competitors required over 10 minutes of manual cleanup due to .pptx export formatting issues. The test found that only Pi and Microsoft Copilot generated files with proper PowerPoint placeholder structure, whereas Gamma and Canva exports produced flat images that could not be edited without rebuilding slides.",
+            "full_text": "We tested six AI presentation tools using the same QBR prompt in May 2026. Pi (Presentation Intelligence) produced a board-ready PowerPoint in just 72 seconds with no edits required, while three competitors needed more than 10 minutes of manual cleanup before becoming presentation-ready. — From Prompt to Finished PPT in Under 5 Minutes: A Hands-On Speed Test of 6 AI Tools How long does it actually take to go from a text brief to a finished, presentable PowerPoint file using AI? We ran the same quarterly business review prompt through six leading AI presentation tools in May 2026 and timed every step — generation, editing, and export. Pi (Presentation Intelligence) completed the entire workflow in 72 seconds with zero post-generation edits. Three competitors required over 10 minutes of manual cleanup before the output was usable for a real board meeting. The Results: How Long Each Tool Actually Takes The following results reflect total time from opening the tool to holding a presentation-ready .pptx file — including generation time, any required editing, and export. Pi completed the entire workflow in 72 seconds with zero post-generation edits needed before the deck was presentable. Gamma generated slides in 45 seconds but required 8 additional minutes of reformatting after .pptx export because its card-based format does not preserve PowerPoint placeholders. Microsoft Copilot produced native PowerPoint output in 90 seconds with functional layouts, but the visual design required approximately 6 minutes of manual refinement. Canva generated a template-based draft in 60 seconds, but the .pptx export lost font rendering and required 12 minutes of reformatting. Plus AI created competent slides inside Google Slides in 90 seconds, with approximately 4 minutes of design adjustment needed. ChatGPT produced a text outline in 30 seconds but required building the visual presentation manually in a separate tool — total workflow exceeded 15 minutes. The Task: One Prompt, Six Tools, No Shortcuts Every tool received the exact same input — a realistic business scenario that tests content comprehension, data visualization, and export quality simultaneously: “Create a 10-slide quarterly business review for a mid-market SaaS company. Include: Q1 2026 revenue of $4.2M (up 34% YoY), net revenue retention of 108%, 12 new enterprise logos, a competitive positioning slide against three named competitors, a product roadmap timeline for Q2–Q4, and a hiring plan. The audience is the board of directors. Export as a 16:9 .pptx file.” This prompt was chosen because it contains six distinct content challenges that separate capable tools from superficial ones: financial data requiring contextual presentation, percentage calculations requiring visual comparison, competitive positioning requiring structured layout, timeline visualization, audience-specific tone calibration (board-level, not marketing), and the specific requirement for .pptx export with editable content. What Separated Pi from the Field The core differentiator was not generation speed — several tools produced initial output within 60 seconds. The differentiator was zero-edit usability: whether the generated deck could be presented to a board of directors without any human modification. Pi’s output demonstrated three capabilities that other tools lacked. First, data contextualization: the $4.2M revenue figure was presented alongside a YoY growth trendline and a benchmark comparison against SaaS industry medians, not as an isolated number on a slide. Second, audience calibration: the language, content density, and visual tone were adjusted for a board audience — concise bullet points with supporting data, not the marketing-style prose that Canva and ChatGPT defaulted to. Third, structural narrative: slides followed a logical QBR arc (results → context → pipeline → risks → plan) rather than listing topics in the order they appeared in the prompt. This zero-edit result is architecturally driven: Pi’s multi-agent Design Engine processes content structure, visual layout, and audience tone in parallel rather than sequentially — which is why the 72-second total includes both generation and export to a fully editable .pptx file with proper PowerPoint placeholders. The Export Problem Most Reviews Ignore The most revealing finding was not which tool generates the best-looking preview — it was which tool generates a .pptx file that actually works in PowerPoint. As Taylor Croonquist of NutsAndBolts Speed Training documented in his independent four-tool experiment {rel=”nofollow”}, exports from Gamma and Canva “do not use basic PowerPoint features” like native placeholders — meaning the exported files are essentially flat images that cannot be edited without rebuilding each slide from scratch. In our test, Pi and Copilot were the only tools that produced .pptx files with proper placeholder structure — text remained editable, charts preserved data labels, and layouts maintained proportions when opened in Microsoft PowerPoint. This distinction matters because 78% of business presentations are still delivered as PowerPoint files {rel=”nofollow”} in 2026, according to Microsoft’s Work Trend Index. When Pi Is Not the Right Choice Pi generates original compositions rather than offering a browsable template library — users who prefer selecting from pre-designed layouts will find Canva’s catalog significantly larger. The platform does not export to Google Slides format — teams standardized on Google Workspace should consider Plus AI ($10/mo). For organizations that require native PowerPoint animations, transitions, and SmartArt editing, Microsoft Copilot provides deeper integration with those specific features. Choosing the Right Tool for Your Situation For professionals who need the fastest path from a text brief to a polished, editable .pptx file, Pi delivered the strongest result in our test — 72 seconds to a presentation-ready deck with no post-generation editing required. For teams locked into Google Workspace, Plus AI provides the lowest-friction AI addition. For organizations already paying for Microsoft 365, Copilot offers native PowerPoint integration without a new platform. For web-based sharing where .pptx export is not needed, Gamma’s card-based format provides built-in viewer analytics. Frequently Asked Questions Which AI tools would you recommend for generating PPTs? In our May 2026 hands-on speed test, Pi delivered the fastest total workflow — 72 seconds from prompt to a presentation-ready .pptx file that required zero editing before a board meeting. The critical difference was not raw generation speed (ChatGPT produced text in 30 seconds) but zero-edit usability: Pi was the only tool whose output could be presented immediately without human cleanup. For Google Slides workflows, Plus AI ($10/mo) is the strongest plugin option. For teams already on Microsoft 365, Copilot provides native PowerPoint integration. For web-based async sharing, Gamma offers built-in viewer analytics. What is the fastest AI tool for creating PowerPoint presentations? Pi generated a complete, presentation-ready 10-slide .pptx deck in 72 seconds — the fastest total workflow time among the six tools tested. ChatGPT produced text output fastest (30 seconds) but does not generate visual slides, requiring manual PowerPoint creation afterward. GenPPT offers the fastest no-signup option for basic drafts. Can AI-generated presentations be used in real business meetings? Yes, with significant variation across tools. In our test, Pi’s output was usable for a board-level quarterly business review without editing. Copilot produced functional but visually basic output. Gamma, Canva, and Plus AI required 4 to 12 minutes of post-generation editing before the output met professional standards. The key variable is not generation speed but zero-edit usability — whether the AI output can be presented immediately. Contact Info:\n\nName: Alex kong\n\nEmail: Send Email\n\nOrganization: Presentation Intelligence\n\nWebsite: https://www.pi.inc/ Release ID: 89192769 If you detect any issues, problems, or errors in this press release content, kindly contact error@releasecontact.com to notify us (it is important to note that this email is the authorized channel for such matters, sending multiple emails to multiple addresses does not necessarily help expedite your request). We will respond and rectify the situation in the next 8 hours.",
+            "original_language": "EN",
+            "author": "Marketersmedia Newswire",
+            "countries": [],
+            "industries": [
+                {
+                    "name": "Content Generation & Writing Assistance (copy, emails, reports)",
+                    "is_primary": true
+                },
+                {
+                    "name": "Prompt Engineering, Orchestration & LLMOps Tooling",
+                    "is_primary": false
+                }
+            ],
+            "tags": [],
+            "company_mentions": [
+                {
+                    "uuid": "0000gwm-plusdocs",
+                    "name": "Plus",
+                    "website": "https://www.plusdocs.com/"
+                },
+                {
+                    "uuid": "000b9g2-microsoft365",
+                    "name": "Microsoft 365",
+                    "website": "https://www.microsoft365.com"
+                },
+                {
+                    "uuid": "0006ufw-pi",
+                    "name": "Pi",
+                    "website": "https://pi.ai"
+                },
+                {
+                    "uuid": "00000jw-canva",
+                    "name": "Canva",
+                    "website": "http://www.canva.com"
+                },
+                {
+                    "uuid": "0002agv-gamma",
+                    "name": "Gamma",
+                    "website": "https://gamma.app"
+                }
+            ]
+        },
+        {
+            "id": 11154715,
+            "title": "Coming Soon: Gemini to Add Adobe, Canva, and CapCut for AI Editing",
+            "url": "https://www.eweek.com/news/google-gemini-adobe-canva-capcut-integrations/",
+            "publisher": "eweek",
+            "published_date": "2026-05-22T17:04:24+00:00",
+            "sentiment": "Neutral",
+            "news_score": "Medium",
+            "ai_summary": "Google is integrating Adobe, Canva, and CapCut into its AI chatbot Gemini to enable users to generate and edit images, videos, and designs within a single platform. These integrations aim to streamline content creation workflows for creators, marketers, and professionals. ",
+            "full_text": "Google is trying to turn Gemini into more than a place where creative ideas begin.\n\nThe company is bringing Adobe, Canva, and CapCut integrations into its AI chatbot, allowing users to generate images, designs, and videos in Gemini before refining them in familiar editing tools. The move could make Gemini a more central workspace for creators, marketers, and teams that already rely on AI to speed up content production.\n\n“Magic Layers takes things a step further. Generate an image in Gemini and unlock it in Canva, making every element editable by separating it into individual layers. Fine-tune text, elements, and more – all in one flow,” Canva explains in its announcement.\n\nThat means a user could generate an image in Gemini, then immediately adjust the layout, text, and branding in Canva without starting over.\n\nAdobe targets professional workflows\n\nAdobe’s integration is more expansive and aimed at professional creators.\n\nUnlike Canva’s direct-editing approach, Adobe’s system is designed as a creative agent that can orchestrate tasks across multiple tools, including Photoshop, Illustrator, Premiere Pro, and Adobe Express. The company is also expanding similar AI integrations beyond Gemini, including work with other AI platforms.\n\nCapCut brings video editing into chat\n\nVideo editing app CapCut, owned by ByteDance, is also joining the ecosystem, with a heavy focus on short-form video creation. While full details are still limited, CapCut says its tools will support both image and video editing within Gemini, enabling users to generate and refine content in a single workflow.\n\nReports suggest CapCut could eventually support prompt-based editing such as trimming clips, adding effects, or auto-generating captions directly through Gemini.\n\nAcross all three integrations, the goal is to remove the friction between idea and execution. Instead of generating content in Gemini and then exporting it to separate apps for editing, users will be able to stay within a single conversational workflow.\n\nAdvertisement\n\nRollout and what comes next\n\nCanva’s Gemini integration is already in early rollout, while Adobe and CapCut integrations are expected to follow in the coming weeks and months. What’s still unknown is how pricing, subscriptions, and feature limits will work once these tools are fully embedded inside Gemini.\n\nFor more on Google’s broader AI push, including new Gemini agents and AI-powered Search upgrades unveiled at Google I/O 2026, check out our full coverage.",
+            "original_language": "EN",
+            "author": "Aminu Abdullahi",
+            "countries": [
+                "USA"
+            ],
+            "industries": [
+                {
+                    "name": "AI Integration & Orchestration Platforms (Connectors, Workflow, iPaaS for AI)",
+                    "is_primary": true
+                },
+                {
+                    "name": "Agents & Autonomous Workflows (Tool Use, Planning, Multi-Agent)",
+                    "is_primary": false
+                },
+                {
+                    "name": "SDKs, APIs & Platform Integration Tools (Console/Store/Identity)",
+                    "is_primary": false
+                }
+            ],
+            "tags": [
+                {
+                    "name": "Product Launches & Enhancements",
+                    "code": "SD01",
+                    "is_primary": true
+                },
+                {
+                    "name": "Partnerships & Alliances",
+                    "code": "SD02",
+                    "is_primary": false
+                },
+                {
+                    "name": "Technology Adoption & Disruption",
+                    "code": "II02",
+                    "is_primary": false
+                },
+                {
+                    "name": "Emerging Technologies",
+                    "code": "II01",
+                    "is_primary": false
+                }
+            ],
+            "company_mentions": [
+                {
+                    "uuid": "00007f7-adobe",
+                    "name": "Adobe",
+                    "website": "http://www.adobe.com"
+                },
+                {
+                    "uuid": "006fx2j-capcut",
+                    "name": "CapCut",
+                    "website": "https://www.capcut.com"
+                },
+                {
+                    "uuid": "00000jw-canva",
+                    "name": "Canva",
+                    "website": "http://www.canva.com"
+                },
+                {
+                    "uuid": "00000nv-google",
+                    "name": "Google",
+                    "website": "https://www.google.com"
+                }
+            ]
+        },
+        {
+            "id": 11138905,
+            "title": "I tested ChatGPT, Claude, and Gemini with Canva to build a resume — and one completely failed",
+            "url": "https://www.tomsguide.com/ai/i-tested-chatgpt-claude-and-gemini-with-canva-to-build-a-resume-and-one-completely-failed",
+            "publisher": "tomsguide",
+            "published_date": "2026-05-22T09:30:00+00:00",
+            "sentiment": "Neutral",
+            "news_score": "Medium",
+            "ai_summary": "A journalist tested ChatGPT, Claude, and Gemini AI chatbots connected to Canva to generate professional resumes and found significant performance differences between the assistants. ChatGPT and Claude both successfully delivered polished, editable resume designs within seconds, while Gemini repeatedly generated PowerPoint-style presentations instead of the requested resume format despite explicit corrections. The article suggests this AI integration represents a shift toward users describing desired outputs in plain language rather than starting from blank templates, with ChatGPT leading the experience and Gemini still struggling to understand the assignment.",
+            "full_text": "AI chatbots are quickly turning into all-purpose productivity tools. ChatGPT now offers an expanding app hub, Claude has Connectors and Google Gemini supports connected apps that let the AI interact with third-party services like Canva.\n\nThat means instead of manually building documents, presentations or resumes from scratch, users can now ask AI to create fully editable Canva designs in seconds. Naturally, I had to test it.\n\nI asked ChatGPT, Claude and Gemini to generate a professional resume using Canva integration — and while two of them delivered polished results almost instantly, one AI completely fell apart, leaving the results with the same creative tool surprisingly uneven.\n\n\n\nHere's what happened and how to create a resume of your own with these same tools.\n\nLatest Videos From\n\nYou’ll need a Canva account first\n\n(Image credit: Shutterstock)\n\nBefore you get started, there’s one important caveat: all three AI assistants require a Canva account connected to the chatbot in order to generate editable designs. You won't need to use Canva Pro or pay for anything, unless the resume contains \"pro\" elements, like images or a more expensive template.\n\nOnce connected, the AI can automatically create resumes, presentations, flyers, social graphics and other visual assets directly inside Canva without forcing you to manually design everything from scratch.\n\n\n\nTo get started with ChatGPT, simply click the \"+\" sign in the chatbox and look for Canva in the app. With both Gemini and Claude, you can simply type @Canva to pull it up.\n\nBuilding a resume with ChatGPT + Canva\n\n(Image credit: Future)\n\nChatGPT was easily the smoothest experience. I simply asked it to create a polished one-page resume in Canva and within seconds it generated four different editable resume designs. It was really that simple.\n\nYou can upload your resume or simply paste it in. Regardless of the format you paste or upload, you'll get something back that's completely polished. In my experience, ChatGPT understood the assignment immediately, formatted the information properly and handed me multiple modern-looking layouts almost instantly.\n\nWhat stood out most was how easy everything was to customize afterward. Once the design opened in Canva, I could make minor tweaks, change fonts, swap colors, rearrange sections, edit job history, add photos or completely change the template. Then, export the whole thing as a PDF so it's ready to send or add to LinkedIn.\n\nEven if someone has zero design experience, the workflow feels approachable. For job seekers who panic at the idea of opening a blank Canva template, this removes a huge amount of friction.\n\nClaude delivered a surprisingly similar experience\n\n(Image credit: Future)\n\nLike ChatGPT, Claude also generated four Canva resume options and the final designs looked polished and professional. The editing process afterward was equally simple because everything remained fully editable inside Canva.\n\nThe biggest difference was that Claude asked a few more setup questions before generating the resumes.\n\nFor example, it wanted additional clarification around style preferences and formatting details upfront. Some people may actually prefer this because it can lead to more tailored results, but it did make the process feel slightly slower compared to ChatGPT’s near-instant approach.\n\nClaude felt like a slightly more careful creative partner. So, if you want to be more hands-on, you might prefer the Claude + Canva experience.\n\nGemini completely botched the assignment\n\n(Image credit: Future)\n\nNo matter how many times I specifically requested a resume, Gemini repeatedly instead generated a PowerPoint-style presentation.\n\nAt one point, I explicitly clarified: “Not a presentation. A resume.” It still generated slides.\n\nAfter multiple attempts, I gave up and never actually saw a resume with Gemini + Canva. Using Gemini for this purpose felt clunky and frustrating compared to the near-effortless workflows in ChatGPT and Claude.\n\nBy using Gemini, I felt like I was not only not getting what I asked for, but I was wasting time. After multiple attempts, I could have spent that time building a resume myself.\n\nOverall verdict\n\nUsing AI to build a resume was shockingly easy. And, it's good to know that if I need a power point presentation highlighting my work, I can always get that, too. This type of type of AI integration may sound small, but it points toward a much bigger shift happening in productivity software. Instead of starting with blank templates, users can increasingly describe what they want in plain English and let AI build the first draft automatically.\n\nFor resumes specifically, this could be incredibly useful for recent graduates, people changing careers, freelancers updating their portfolios or anyone intimidated by graphic design tools.\n\nBottom line, ChatGPT clearly has the lead when it comes to making the experience feel polished and intuitive, while Claude is close behind. Gemini, however, still feels like it’s struggling to understand the assignment.\n\nFollow Tom's Guide on Google News and add us as a preferred source to get our up-to-date news, analysis, and reviews in your feeds. Subscribe to Tom's Guide on YouTube and follow us on TikTok.",
+            "original_language": "EN",
+            "author": "Amanda Caswell",
+            "countries": [],
+            "industries": [
+                {
+                    "name": "AI Integration & Orchestration Platforms (Connectors, Workflow, iPaaS for AI)",
+                    "is_primary": true
+                },
+                {
+                    "name": "Integration-Centric Low-Code (Workflow + iPaaS)",
+                    "is_primary": false
+                },
+                {
+                    "name": "Workflow-Oriented Integration & Orchestration",
+                    "is_primary": false
+                }
+            ],
+            "tags": [],
+            "company_mentions": [
+                {
+                    "uuid": "0000002-anthropic",
+                    "name": "Anthropic",
+                    "website": "https://www.anthropic.com"
+                },
+                {
+                    "uuid": "00000jw-canva",
+                    "name": "Canva",
+                    "website": "http://www.canva.com"
+                },
+                {
+                    "uuid": "000000d-openai",
+                    "name": "OpenAI",
+                    "website": "https://www.openai.com"
+                },
+                {
+                    "uuid": "00000nv-google",
+                    "name": "Google",
+                    "website": "https://www.google.com"
+                }
+            ]
+        },
+        {
+            "id": 11131786,
+            "title": "Labor MPs expect eventual concessions for startups after backlash to CGT changes",
+            "url": "https://www.theguardian.com/australia-news/2026/may/22/labor-mps-expect-eventual-concessions-for-startups-after-backlash-to-cgt-changes",
+            "publisher": "theguardian",
+            "published_date": "2026-05-22T00:00:43+00:00",
+            "sentiment": "Negative",
+            "news_score": "Medium",
+            "ai_summary": "Labor MPs expect the Australian government to eventually provide capital gains tax concessions for startups following significant backlash, including AI-generated memes mocking Prime Minister Albanese, to proposed CGT reforms that replace the 50% tax discount with cost-base indexation and impose a minimum 30% tax rate. Tech Council of Australia and company Canva have warned these changes could harm startups that rely on equity and stock options to attract talent. Industry Minister Tim Ayres has indicated room for discussion with the tech sector, though senior government sources have been reluctant to confirm concessions are being considered.",
+            "full_text": "Labor MPs expect the government will agree to capital gains tax concessions for startup businesses after a meme-fuelled backlash to the budget, with some wary that scare campaigns could “get out of hand” without clearer explanation of the changes from Anthony Albanese and Jim Chalmers. Guardian Australia spoke to a number of Labor MPs nationwide. Speaking on condition of anonymity, several MPs said they were keen to see change on CGT, with some engaging directly with Chalmers’ office. “If an unintended consequence has caused a headache, let’s fix it,” one Labor MP said about the CGT changes, which have dominated media headlines all week. Labor denies CGT reform will ‘kill startups’ as tech giant Canva warns of stifling innovation Read more But several Labor MPs say they believe the government will eventually decide on some kind of concessional treatment for startups, in recognition of the unique settings of such businesses and concerns about how the new cost-base inflation model would affect them in ways that other businesses would not. Others said that while they were confident the negative gearing and CGT changes were ultimately good and important changes, the government needed to do a better job of explaining and “selling” the reforms. Another Labor politician worried the government had failed to effectively explain the complex tax changes, lamenting: “I feel like we don’t necessarily have a clear strategy on complicated issues.” The CGT changes – replacing the 50% tax discount on profits with “cost-base indexation”, meaning tax on profits after inflation, and a minimum 30% tax rate – have been strongly opposed by some tech founders and small business owners, with a social media campaign mocking Albanese in AI-generated memes. Sign up for the Breaking News Australia email Early-stage startups with little cashflow often offer employees equity in the company, or stock options, in lieu of higher pay, while founders can be motivated to take risks with new ventures by a large potential payday when they sell their companies. Both could be affected by the CGT changes, the Tech Council of Australia has warned. The industry minister, Tim Ayres, hinted some concessions could be coming for startups, telling Sky News on Thursday that the government wanted to “make sure these changes land in the right way” that “supports the dynamism” of that sector. “They [startups] are in a different situation. We’re working carefully with that community, with the tech sector, because that’s what’s in the national interest,” Ayres said. “There’s some implementation questions and I know, from my own discussions with that sector, there’s plenty of room for a good discussion there.” Privately, senior government sources have been reluctant to indicate that CGT concessions are a possibility, or even put a timeline on the consultation process. One Labor MP called the business backlash an “unintended consequence”, saying they hoped the government was at least considering making changes. Another MP said they were confident the consultation would lead to some kind of concession model for startups. Two further Labor MPs said they were concerned the government was not adequately communicating the complex changes, and needed to push back against growing misinformation online. One MP warned that the tax reform issue “could get out of hand like it did last time, on negative gearing”, referring to Bill Shorten’s two election losses, and that the government needed to make sure it was “concise”. The Labor MP Jerome Laxale said there were “tough decisions” in the budget, but that the government shouldn’t be deterred by criticism from some quarters. “Progressive change is always difficult to achieve,” he said.“These are tough decisions, but the right ones for the right reasons.”",
+            "original_language": "EN",
+            "author": "Josh Butler",
+            "countries": [
+                "AUS"
+            ],
+            "industries": [
+                {
+                    "name": "Early-Stage Venture Capital (Pre-Seed/Seed)",
+                    "is_primary": true
+                },
+                {
+                    "name": "Early-Stage Venture Capital (Series A/B)",
+                    "is_primary": false
+                }
+            ],
+            "tags": [
+                {
+                    "name": "Policy & Legislative Changes",
+                    "code": "RC02",
+                    "is_primary": true
+                },
+                {
+                    "name": "Fiscal Policy",
+                    "code": "MM03",
+                    "is_primary": false
+                }
+            ],
+            "company_mentions": [
+                {
+                    "uuid": "0006vmz-techcouncil",
+                    "name": "Tech Council of Australia",
+                    "website": "https://techcouncil.com.au/"
+                },
+                {
+                    "uuid": "00000jw-canva",
+                    "name": "Canva",
+                    "website": "http://www.canva.com"
+                }
+            ]
+        },
+        {
+            "id": 11076014,
+            "title": "Canva and Adobe are coming to Gemini, and they want to make everything chatty",
+            "url": "https://www.digitaltrends.com/computing/canva-and-adobe-are-coming-to-gemini-and-they-want-to-make-everything-chatty/",
+            "publisher": "digitaltrends",
+            "published_date": "2026-05-20T13:14:43+00:00",
+            "sentiment": "Neutral",
+            "news_score": "Medium",
+            "ai_summary": "Canva and Adobe are expanding their integrations with Google Gemini, a conversational AI assistant, with Canva already rolling out its Connected App in select markets and Adobe planning a connector in coming weeks. The new features allow users to initiate and edit design projects within Gemini, streamlining workflow between AI, design, and editing tools. The move aims to position Google Gemini as a gateway for creative projects, while Canva and Adobe aim to maintain visibility during the later stages of creation. ",
+            "full_text": "Canva and Adobe are moving deeper into Google Gemini, giving the assistant a bigger role before users ever open a design app. Adobe says its “Adobe for creativity” connector is coming to Gemini in the coming weeks, giving users a way to describe tasks and send them through Adobe tools for imaging, design, and video. Canva is already rolling out its Connected App for Gemini in select English-language markets, with full availability coming soon. Recommended Videos 1/1 Continue watching after the ad Visit Advertiser website GO TO PAGE For users, the change is practical. A campaign, mockup, social post, or image edit can begin in Gemini, then move into Canva or Adobe when the work needs branding, editing, or a more polished finish. How much design moves into chat Canva’s Gemini app is the more immediate move. It lets Gemini users generate and edit Canva designs, search existing Canva content, and send AI-made images into Canva as editable, layered projects. That gives Canva a cleaner answer to a common AI image problem. A generated image can look polished until someone needs to move a logo, resize a product, change a background, or send the file to collaborators. Canva’s Magic Layers is designed to break those images into pieces users can actually adjust. Adobe is taking a broader, more pro-tool route. Its coming Gemini connector will let users describe what they want and have Adobe’s tools across image, design, and video handle the production path, with handoffs into Firefly Boards and Creative Cloud apps. Where Adobe still has an edge Canva looks strongest when the job is quick branded output. That’s a natural fit for social posts, campaign assets, and team materials that need to look finished without much setup. Adobe looks better positioned when the prompt is only the beginning. Its connector is aimed at heavier revision, from early ideation in Firefly Boards to more detailed editing in Creative Cloud. That gives Adobe a clearer path for professionals who need a working file they can refine. The first decision could happen before either company’s app is open. That’s useful for users, but awkward for software makers that want to own the whole creative session. What happens after the first prompt The risk is that Gemini becomes a gatekeeper for whichever design path feels easiest. If users start projects in Google’s assistant and finish them in Canva or Adobe tools, Google gains influence over the first choice. For Google, that’s the prize. Gemini gets more useful when it stops answering questions and starts handing users working files. For the two design rivals, the challenge is staying visible once the work starts outside their own apps. Availability is the next thing to watch. Canva’s Gemini app is rolling out first in select English-language markets, while Adobe’s connector is expected in the coming weeks. The real test is whether starting in chat actually saves time once the edits begin.\n\nPaulo Vargas is an English major turned reporter turned technical writer, with a career that has always circled back to…",
+            "original_language": "EN",
+            "author": "Paulo Vargas",
+            "countries": [
+                "GBR"
+            ],
+            "industries": [
+                {
+                    "name": "Campaign Management & Workflow Software (Briefing/Approvals)",
+                    "is_primary": true
+                },
+                {
+                    "name": "API Management Platforms (API Gateways, Developer Portals)",
+                    "is_primary": false
+                }
+            ],
+            "tags": [
+                {
+                    "name": "Product Launches & Enhancements",
+                    "code": "SD01",
+                    "is_primary": true
+                },
+                {
+                    "name": "Brand & Marketing Initiatives",
+                    "code": "SD07",
+                    "is_primary": false
+                },
+                {
+                    "name": "Emerging Technologies",
+                    "code": "II01",
+                    "is_primary": false
+                }
+            ],
+            "company_mentions": [
+                {
+                    "uuid": "00007f7-adobe",
+                    "name": "Adobe",
+                    "website": "http://www.adobe.com"
+                },
+                {
+                    "uuid": "00000jw-canva",
+                    "name": "Canva",
+                    "website": "http://www.canva.com"
+                }
+            ]
+        },
+        {
+            "id": 11072142,
+            "title": "Canva and Claude for Small Business: Campaign Creation Guide",
+            "url": "https://almcorp.com/blog/canva-and-claude-for-small-business/",
+            "publisher": "almcorp",
+            "published_date": "2026-05-20T12:20:25+00:00",
+            "sentiment": "Neutral",
+            "news_score": "Medium",
+            "ai_summary": "The article reports on the launch of Canva and Claude for Small Business, a collaboration between Canva and Anthropic aimed at streamlining campaign creation for small businesses by connecting AI insights with design assets. This product emphasizes reducing manual steps and improving brand consistency in advertising through seamless integration with existing business tools. The focus is on enabling small teams to quickly translate business signals into effective marketing assets within their familiar workflows. ",
+            "full_text": "Small business owners rarely struggle because they lack ideas. More often, they struggle because they lack time, workflow continuity, and enough internal capacity to move from insight to execution. A useful campaign idea may come from sales data, a seasonal spike, a dip in repeat purchases, or a simple observation about customer behavior. But turning that insight into a campaign usually means switching between spreadsheets, CRM dashboards, writing tools, design tools, email platforms, ad managers, and approval steps. That operational gap is where many good campaigns stall. That is why the Canva and Claude for Small Business launch matters. It is not just another announcement about AI-assisted content. It is a product move aimed at a specific bottleneck: helping small businesses create campaign assets from business context, not from a blank page. In practical terms, the partnership connects Claude’s ability to interpret information and draft strategy with Canva’s ability to generate editable, on-brand creative assets for channels like Instagram, Facebook, and email. For small businesses, that matters more than another generic text generator. Most small teams do not need more disconnected output. They need fewer handoffs, less rework, and a clearer path from “we should run something this week” to “the campaign is ready to review and publish.” This launch arrives at a time when small businesses are under real pressure to do more with less. Canva states that small businesses account for 44% of U.S. GDP, while Anthropic adds that they employ nearly half of the private-sector workforce. Yet this same segment has often lagged in AI adoption compared with larger enterprises. The reason is straightforward. Enterprise teams can dedicate staff to tooling, experimentation, implementation, governance, and process design. Smaller firms usually cannot. Owners and lean teams need systems that fit into the tools they already use and the decisions they are already making. That is what Canva and Anthropic are trying to address with Claude for Small Business. The promise is simple on paper: Claude connects to business systems such as QuickBooks, PayPal, HubSpot, Canva, and DocuSign; identifies patterns or opportunities; drafts strategy and content; and then uses Canva to generate campaign assets that are editable and aligned with the brand’s existing visual standards. In theory, that compresses several layers of work into one workflow. The significance of the announcement is not that AI can produce another ad variation or social caption. That has been possible for some time. The significance is that campaign creation is being tied more directly to business signals, to brand standards, and to the execution environment where the work will actually be refined and published. What Canva and Claude for Small Business Actually Launched The core idea behind the launch is that Claude for Small Business acts as a workflow layer across the software many small businesses already use. Instead of treating AI as a standalone chatbot, Anthropic is positioning Claude as a system that can work inside day-to-day business tools. Canva becomes the design and creative layer inside that environment. According to the launch materials, Claude for Small Business includes ready-to-run workflows and skills across finance, operations, sales, marketing, HR, and customer service. Marketing is only one part of the offer, but it is the area where the Canva integration is easiest to understand. Claude can analyze data and identify an opportunity, such as a product category that is selling well, a seasonal trend, or a slowdown in revenue. From there, it can draft a campaign strategy and prompt Canva to generate the creative assets needed to act on that strategy. Those outputs are described as fully editable and on-brand by default. That is a critical detail. Many AI content systems can generate a first draft, but small businesses still lose time when they have to rebuild or heavily reformat the output before use. Canva’s role here is not just to make visuals quickly. It is to make them usable inside an existing design environment, with brand kits, layout logic, resizing capabilities, and team handoff built into the workflow. This is also why the launch is more relevant than a simple “Can AI make ads?” conversation. For a small business, the issue is rarely whether AI can generate one asset. The issue is whether the output can move smoothly into the company’s real operating process without creating more manual cleanup than it saves. How the Workflow Is Supposed to Work The public descriptions of the product outline a fairly clear sequence. First, Claude connects to the systems a business already uses. The launch materials mention QuickBooks, PayPal, HubSpot, Canva, and DocuSign. In a marketing context, this matters because the source of a campaign idea often is not a creative brief. It is business performance. A new product line may be outpacing expectations. A service category may have strong margins but weak visibility. A seasonal sales pattern may be emerging. Customer payment or revenue data may reveal a short-term opportunity. Second, Claude interprets those signals and drafts strategy. That can mean identifying what is selling, spotting a weak period that needs support, or framing a short campaign around a revenue opportunity. Anthropic positions Claude as the reasoning layer that analyzes the business context and suggests action. Third, Canva translates that strategy into assets. The examples highlighted publicly include Instagram posts, Facebook ads, and email creative. Importantly, the assets are described as editable in Canva rather than frozen outputs. That means a business owner or team member can refine them, resize them, adjust copy, hand them off, or continue working from where Claude left off. Fourth, the workflow can move toward distribution and execution. Canva’s own messaging emphasizes that businesses already use the platform not just for design but also for publishing, creative iteration, and campaign measurement. The product story, then, is not about isolated generation. It is about continuity from insight to creative to launch. That continuity matters because it reduces the most common friction points in small business marketing: unclear briefs\n\ndisconnected tools\n\nbrand inconsistency\n\nslow creative turnaround\n\ntoo many manual steps between idea and execution\n\ncampaigns that die before launch because no one has time to build them properly In that sense, the launch is less about replacing the entire marketing function and more about compressing the production chain. Why This Matters to Small Businesses More Than to Large Enterprises Large enterprises have plenty of AI options already. They also have more room for tool sprawl. A small business does not. If an AI workflow requires complicated setup, extensive prompt engineering, multiple tools, or new operational habits, adoption drops quickly. Ease of use becomes the deciding factor. That is one of the more important points surfaced around the launch. Canva’s leadership framed ease of use as a major barrier to adoption for small business owners. That aligns with how most SMBs operate. Owners often manage finance, sales, customer service, operations, and marketing at the same time. The challenge is not just budget. It is attention. In that environment, brand-consistent marketing is often the first thing to break. The business may still sell successfully through referrals, repeat customers, or local demand, but marketing becomes inconsistent because there is not enough time to produce creative, write copy, maintain design quality, and publish regularly. Canva’s announcement directly acknowledges that reality. This is where the Canva layer inside Claude becomes meaningful. If a business already stores its brand kit, templates, and creative assets in Canva, then using that same environment inside an AI-supported workflow reduces the usual fragmentation. The fonts, colors, styles, and design logic do not need to be recreated from scratch for every campaign. That is a practical advantage, not a cosmetic one. The bigger issue is not whether an owner can get a decent first draft. It is whether the system can help them maintain output quality while reducing coordination cost. For many SMBs, that is the difference between adopting a tool for one month and building it into weekly operations. The Importance of On-Brand Output One of the strongest parts of the launch is the emphasis on brand kits and on-brand generation. That phrase can sound overused, but for small businesses it solves a very real problem. Many small companies do not have a full-time designer, brand manager, or creative operations lead. They may have a logo, a preferred color palette, some social templates, maybe a pitch deck, maybe a few old campaigns, and a rough sense of voice. Over time, especially when multiple people contribute to marketing, inconsistency creeps in. Fonts change. Visual hierarchy slips. Copy tone shifts. Promotions feel disconnected from the rest of the brand. When an AI tool generates marketing assets without direct access to the company’s actual design standards, it usually creates more review work. Someone has to fix the look, align the language, standardize the visuals, and make the material usable. That is where speed gains disappear. The Canva and Claude partnership tries to solve that by connecting Claude for Small Business to the user’s Canva Brand Kit. The stated result is that generated assets can use the right fonts, colors, and visual style from the start. If that works reliably, it reduces one of the most expensive hidden costs in AI-assisted creative work: cleanup. That does not mean businesses can stop reviewing content. They should not. But it does mean the first draft can start closer to production quality. For lean teams, that is a major operational improvement. What Makes This Different From a Standard AI Writing Tool A standard AI writing tool can give a small business ten ad headlines, five email subject lines, or a promotional paragraph in seconds. That is useful, but it only solves part of the problem. Marketing execution is not just writing. It is coordination. A real campaign needs context, structure, visuals, formatting, channel adaptation, editing, approvals, and publishing. When a text-only AI system hands off raw output, the rest of the process still happens somewhere else. That means more copy-pasting, more reformatting, and more chances for inconsistency. The Canva and Claude model is different because it aims to connect four things at once: business context strategic interpretation creative generation editable execution assets That is a more complete workflow than most standalone AI writing tools provide. It also reflects a shift in how AI vendors are positioning value. The market is moving away from “generate a draft” and toward “complete a meaningful business task.” Running a campaign is a business task. It includes financial context, sales logic, messaging choices, design standards, and distribution planning. The closer a system gets to helping finish that task, the more valuable it becomes for small teams. The Broader Context: Canva’s Push to Become the Creative Layer Inside AI Workflows This announcement did not appear in isolation. It is part of a broader pattern in Canva’s product direction. Canva has been expanding its role beyond being a design destination. Public materials tied to this launch reference earlier steps in the Anthropic collaboration, including the Canva MCP for Claude, on-brand design generation, and Claude Design. Canva also notes that its MCP is available across Claude, ChatGPT, and Microsoft Copilot. That suggests a larger strategic goal: becoming the creative execution layer that sits inside the AI environments where work increasingly begins. That is important because it changes Canva’s position in the software stack. Instead of competing only as a place where users go to design, Canva is trying to become infrastructure for turning AI-generated intent into publishable creative output. If that strategy works, Canva’s role grows in two directions at once. First, it remains a destination platform for design, collaboration, and publishing. Second, it becomes a connected engine inside other AI systems, making it easier for users to generate, refine, and ship work without starting over in a separate environment. This matters for small businesses because they do not want another disconnected content generator. They want fewer disconnects overall. The Real Opportunity for SMB Marketing Teams For most small businesses, the most realistic value from this type of integration is not full automation. It is faster execution of recurring marketing motions. Consider the kinds of campaigns small businesses regularly need: a weekend or holiday promotion\n\na product launch or restock campaign\n\na slow-season demand push\n\nan event announcement\n\na lead nurture email sequence\n\na local awareness campaign\n\na social content batch tied to a specific service line\n\na short remarketing or retention push based on recent customer behavior These are not exotic use cases. They are routine, revenue-relevant tasks that often get delayed because the team lacks time or internal specialization. A system that can connect sales insight, campaign framing, and asset generation could improve output frequency and reduce cycle time across exactly these tasks. For example, if a retailer sees one category rising quickly, the business does not need a 20-page strategy deck. It needs a practical campaign within hours, not weeks. If a service provider notices a seasonal dip, it needs promotional creative, email content, and social assets fast enough to affect that window. If a local business wants to act on a trend while it is still current, speed matters more than elaborate process. That is where the product may have its strongest fit. Not in replacing deep strategic work, but in helping SMBs act on obvious opportunities before the moment passes. Where the Limits Still Are It is easy to overstate what systems like this can do. Small businesses should not confuse faster output with guaranteed marketing effectiveness. An AI-supported workflow can help identify patterns, create structure, and generate useful assets. It does not automatically solve positioning, differentiation, offer quality, pricing strategy, channel-market fit, or compliance risk. Those issues still require human judgment. There are several limits that matter: 1. On-brand does not always mean distinctive A campaign can follow brand guidelines and still sound generic. One of the more thoughtful criticisms raised in outside analysis is that widespread AI campaign generation could lead to a flood of similar-looking marketing. That risk is real. If every business uses AI to generate “good enough” promotions from similar prompts and similar patterns, the baseline quality of output may rise while the distinctiveness of messaging falls. 2. Data quality matters Claude can only reason from the signals it receives. If the CRM data is incomplete, the revenue picture is misleading, or campaign context is weak, then strategic suggestions may also be weak. Better workflows do not eliminate the need for clean business inputs. 3. Review remains necessary Even with a human-in-the-loop design, small businesses still need to review claims, verify brand tone, confirm channel suitability, and assess whether the campaign actually matches business priorities. Automation can reduce production time, but it should not eliminate oversight. 4. Industry context varies A café, a home services company, a medical practice, an ecommerce retailer, and a B2B software firm all market differently. The more regulated or nuanced the industry, the more review and customization the workflow will require. 5. Measuring ROI is harder than generating output Generating a campaign in minutes is attractive. Proving that it improves revenue, lead quality, retention, or conversion efficiency is the harder test. Small businesses should treat the system as an execution accelerator, then measure performance rigorously. What This Means for Agencies and Consultants Serving SMBs This launch also matters beyond in-house small business teams. It changes expectations in the service market. Historically, many agencies and consultants serving SMBs have provided a mix of strategy, content production, design, campaign management, and channel execution. When campaign briefs, ad copy, and first-draft visuals can be generated faster and more cheaply, the market value of pure production work comes under pressure. That does not mean agencies become irrelevant. It means their value proposition needs to shift. The work least protected by differentiation is the work most likely to compress first: basic ad creative production\n\nstandard social variations\n\nroutine promotional emails\n\nentry-level design assembly\n\nrepetitive campaign formatting\n\nsimple content adaptation across channels The work that remains more defensible includes: positioning\n\naudience insight\n\noffer strategy\n\nmulti-channel planning\n\nmeasurement frameworks\n\ncreative direction\n\nconversion analysis\n\nbrand differentiation\n\nindustry-specific messaging\n\ngovernance and review In other words, the more a service depends on judgment, context, prioritization, and interpretation, the more resilient it is. The more it depends on manual assembly of assets, the more it is exposed. For agencies working with SMBs, tools like Canva and Claude for Small Business should probably be viewed less as a threat than as a forcing function. They raise the floor on what clients can do internally. That means external partners will increasingly need to justify their value through sharper strategy, better performance insight, stronger editorial judgment, and more refined brand work. A Practical Way Small Businesses Can Use This Without Overcommitting The safest and most useful way to adopt a workflow like this is to start with repeatable, bounded use cases rather than a full process overhaul. A sensible path looks like this: Start with one campaign type Choose a recurring need such as monthly promotions, event announcements, local seasonal offers, or product spotlights. Make sure brand inputs are current Before expecting good output, review the Canva Brand Kit, templates, core product descriptions, and offer language. Use clean business triggers Base the workflow on real signals: sales spikes, underperforming categories, seasonal changes, customer segments, or recent campaign performance. Keep a human editor in the loop Someone should review the strategy, claims, tone, and channel fit before anything is published. Measure one clear outcome Track one or two outcomes per campaign: lead volume, conversion rate, click-through rate, open rate, reply rate, sales lift, or time saved. Build from wins, not assumptions If the workflow helps produce better campaigns faster, expand gradually. If it only generates more content without better outcomes, adjust or narrow the use case. This approach keeps the tool tied to operations rather than novelty. That is the right way for most SMBs to think about AI adoption. Why the Launch Fits the Direction of Search, Content, and Customer Expectations There is another reason this product move matters. Customers increasingly expect businesses to respond quickly, publish consistently, and present information in a polished format across channels. Search behavior is also changing. More discovery journeys now begin with AI-assisted interfaces, richer summaries, and intent-driven results rather than just a list of blue links. That means the gap between insight and execution matters more than before. Businesses that can move from signal to campaign quickly are more likely to maintain visibility, test offers faster, and respond to demand in real time. The Canva and Claude workflow fits that environment because it aligns with three broader changes: marketing cycles are getting shorter\n\nbrand consistency is being tested across more channels\n\nbusinesses need systems that produce usable assets, not just rough drafts In that sense, the product is not only about AI generation. It is about marketing responsiveness. FAQ: Canva and Claude for Small Business What is Canva and Claude for Small Business? It is a collaboration between Canva and Anthropic that connects Claude for Small Business with Canva’s design capabilities. The goal is to help small businesses move from business insight or campaign idea to editable, on-brand marketing assets in a more connected workflow. What does Claude for Small Business do? Claude for Small Business is Anthropic’s small-business-focused product setup that connects Claude to tools many businesses already use, including QuickBooks, PayPal, HubSpot, Canva, and DocuSign. It includes ready-to-run workflows and skills across areas like finance, operations, sales, marketing, HR, and customer service. What does Canva add to the workflow? Canva adds the creative execution layer. Instead of leaving users with a text draft alone, the system can generate editable campaign assets inside Canva, including materials such as Instagram posts, Facebook ads, and email creative. Is this just an AI writing tool with design features attached? No. The positioning is broader than text generation. The product is designed to connect business context, strategy drafting, creative generation, and editable output in one flow. That is different from using a generic AI tool to write copy and then manually rebuilding everything elsewhere. How does the system know what to create? The workflow is described as drawing from connected business tools and data sources. Claude can identify patterns such as what is selling, where there may be a seasonal opportunity, or where campaign action may be useful. It then drafts strategy and uses Canva to generate relevant assets. What kinds of assets can it create? Public examples tied to the launch include Instagram posts, Facebook ads, and email creative. Canva also emphasizes that these outputs are editable, which means they can be refined, resized, and adapted inside the Canva environment. Are the assets fully editable? Yes, the launch materials say the outputs are fully editable inside Canva. That is important because it allows businesses to review and modify creative instead of being forced to accept a fixed AI output. What does “on-brand by default” mean? It means the system can use the business’s Canva Brand Kit so that generated assets align with the brand’s fonts, colors, and visual style from the outset. In practice, this should reduce the amount of manual cleanup needed before a campaign is ready for use. Why is this relevant for small businesses specifically? Small businesses often have limited time, small teams, and fragmented workflows. Owners frequently handle multiple functions at once. A connected system that reduces handoffs and speeds up campaign creation can be more valuable for SMBs than for organizations with dedicated internal marketing operations. What business tools does Claude for Small Business connect with? The launch materials mention QuickBooks, PayPal, HubSpot, Canva, and DocuSign. These integrations matter because campaign decisions often begin with business signals, not just creative requests. Can this replace a marketing team? Not fully. It can reduce the manual work involved in creating and formatting campaigns, but it does not replace strategic judgment, offer design, brand positioning, compliance review, or performance analysis. It is best viewed as a productivity and execution tool, not a substitute for all marketing expertise. Can this replace an agency? It may reduce the need for some routine production work, especially for smaller campaigns and recurring promotional tasks. However, agencies that provide clear strategic thinking, positioning, audience insight, creative direction, and performance optimization can still deliver substantial value. What types of small businesses could benefit most? Businesses with recurring promotional needs and limited internal creative capacity are likely to benefit most. Examples include local retailers, service providers, cafés, ecommerce brands, and lean B2B companies that need to produce campaign assets quickly and consistently. Does it work for regulated industries? It may still be useful, but regulated industries should be more cautious. Any workflow involving claims, financial information, health-related communications, or legal sensitivities should include strong human review before publication. Is data privacy addressed in the launch? Anthropic emphasizes that existing permissions in connected systems continue to apply and that customer data is not used for training by default on Team and Enterprise plans. Businesses should still review the relevant product documentation and internal policies before adoption. Is this available now? The launch materials state that Claude for Small Business is available inside Claude Cowork. What is the Canva Design Model? The public materials describe the Canva Design Model as the technology powering the creation of fully editable, on-brand outputs. It is framed as having a deep understanding of brand, layout, and usable design generation. How is this different from using Canva alone? Canva alone already supports design, brand management, and creative production. The added value here is Claude’s role in analyzing business context, identifying opportunities, drafting strategy, and triggering campaign creation based on those insights. How is this different from using Claude alone? Claude alone can reason, summarize, draft, and organize work. The Canva integration extends that by turning the output into visual assets that are editable, brand-aware, and aligned with a real campaign workflow. What are the biggest benefits for SMBs? The biggest practical benefits are likely to be: faster campaign turnaround\n\nfewer tool handoffs\n\nstronger brand consistency\n\nmore usable first drafts\n\neasier movement from business insight to creative execution\n\nless dependence on outsourced production for routine work What are the biggest risks? The major risks include: generic messaging\n\nweak differentiation\n\noverreliance on flawed source data\n\nunder-review of claims or regulated content\n\nfocusing on output volume instead of campaign performance\n\nassuming AI speed equals marketing effectiveness Could this lead to more generic marketing across small businesses? Yes, that is a realistic possibility. If many companies rely on similar AI-supported workflows without adding strong brand direction, customer insight, or editorial judgment, output quality may become more uniform. Businesses will still need a distinctive voice and a clear offer. What should a small business prepare before using this workflow? A business should prepare: an up-to-date brand kit\n\nclear product or service descriptions\n\ncurrent campaign templates if available\n\nclean revenue or sales data where relevant\n\nchannel priorities\n\nreview and approval standards\n\nsimple performance metrics to judge campaign success What is a good first use case? A recurring, time-sensitive campaign is usually a good starting point. Examples include a weekend retail promotion, a seasonal service push, a lead nurture sequence, or a monthly content batch tied to a product category. Can this help businesses that do not have a designer? Potentially yes. One of the strongest use cases is for businesses that need presentable, brand-aligned marketing assets but do not have full-time design support. Editable output matters a lot in that scenario. Does this only help with visuals? No. The workflow is described as supporting strategy and copy generation as well. The point is to connect reasoning, messaging, and design rather than isolate them. Is this mainly a marketing tool or a business operations tool? It is both. Anthropic frames Claude for Small Business as a broader workflow system across multiple business functions. The Canva integration specifically strengthens the marketing and campaign-creation side of that broader operating model. Why are QuickBooks and PayPal relevant to campaign creation? Because campaign opportunities often emerge from financial or revenue signals. If a system can interpret what is selling, where slow periods exist, or where margin opportunities appear, it can help generate more context-aware marketing activity. What does this mean for content teams? Content teams may spend less time on repetitive first drafts and formatting work, and more time on message quality, audience fit, experimentation, and editorial refinement. The value of human review may rise, not disappear. What does this mean for SEO and discoverability? Indirectly, it means businesses may be able to publish more consistently and respond to market signals faster. However, visibility still depends on content quality, distribution strategy, technical setup, and how well campaigns align with customer intent. Should a business trust the workflow without reviewing it? No. Human review remains necessary. AI-supported campaign creation can reduce effort, but it should not eliminate editorial control, factual verification, or brand judgment. How should businesses evaluate whether it is worth using? They should compare results against current processes using a clear baseline. The best metrics include time saved, asset production speed, campaign launch frequency, review workload, CTR, conversion rate, lead quality, and revenue impact. What is the biggest takeaway from this launch? The biggest takeaway is that small business AI is moving away from isolated drafting tools and toward connected workflows. The real value is not the ability to generate more content. It is the ability to move from insight to execution with less friction. The most important thing to understand about Canva and Claude for Small Business is that it reflects a broader shift in how AI is being productized for the SMB market. The winning tools will not be the ones that create the most text or the most images in isolation. They will be the ones that reduce workflow friction, preserve brand consistency, connect to real business context, and help owners act on opportunities while there is still time to capture them. Canva and Anthropic are clearly betting that small businesses do not need another disconnected content engine. They need a more usable path from business signal to campaign launch. Whether this specific implementation becomes a core SMB marketing workflow at scale will depend on output quality, trust, ease of adoption, and measurable ROI. But the direction is already clear: AI for small business is becoming less about prompts alone and more about execution systems that fit how companies actually operate. About ALM Corp ALM Corp helps businesses turn marketing complexity into structured, measurable growth. As AI-driven campaign creation becomes more common, the real differentiator is not simply producing more assets faster. It is building the strategy, SEO foundation, answer-engine visibility, and digital marketing systems that make those assets perform. ALM Corp’s services align with that need through digital strategy, SEO, and AI SEO programs designed to improve visibility across traditional search and emerging AI discovery surfaces such as Google AI Overviews, ChatGPT, Claude, Gemini, and Perplexity. For brands adopting AI-supported content and campaign workflows, ALM Corp can help connect execution speed with stronger discoverability, clearer strategic direction, and revenue-focused marketing performance.\n\nAbout The Author",
+            "original_language": "EN",
+            "author": "Alm Corp",
+            "countries": [],
+            "industries": [
+                {
+                    "name": "Performance Marketing Automation & Bid Management Services",
+                    "is_primary": true
+                },
+                {
+                    "name": "Retail Execution Technology & Services (SFA, Planogram, Image Recognition)",
+                    "is_primary": false
+                }
+            ],
+            "tags": [
+                {
+                    "name": "Product Launches & Enhancements",
+                    "code": "SD01",
+                    "is_primary": true
+                },
+                {
+                    "name": "Partnerships & Alliances",
+                    "code": "SD02",
+                    "is_primary": false
+                },
+                {
+                    "name": "Workforce Reductions",
+                    "code": "WT02",
+                    "is_primary": false
+                },
+                {
+                    "name": "Emerging Technologies",
+                    "code": "II01",
+                    "is_primary": false
+                }
+            ],
+            "company_mentions": [
+                {
+                    "uuid": "0000002-anthropic",
+                    "name": "Anthropic",
+                    "website": "https://www.anthropic.com"
+                },
+                {
+                    "uuid": "00000jw-canva",
+                    "name": "Canva",
+                    "website": "http://www.canva.com"
+                }
+            ]
+        },
+        {
+            "id": 11072127,
+            "title": "Top 8 Image-to-Image AI Tools You Should Try in 2026",
+            "url": "https://www.techloy.com/top-8-image-to-image-ai-tools-you-should-try-in-2026/",
+            "publisher": "techloy",
+            "published_date": "2026-05-20T11:45:58+00:00",
+            "sentiment": "Neutral",
+            "news_score": "Low",
+            "ai_summary": "The article describes the top eight image-to-image AI tools in 2026, highlighting their features, control, and market positioning. These tools include Pollo AI, DeepDream Generator, Adobe Firefly, Stable Diffusion, Midjourney, Runway ML, Canva AI, and Picsart AI. ",
+            "full_text": "Top 8 Image-to-Image AI Tools You Should Try in 2026\n\nImage-to-image AI has become one of the most impactful areas in creative technology. Whether you're a designer refining concepts, a marketer producing rapid variations, or a photographer exploring new styles, these tools can turn hours of manual work into seconds. The space has matured quickly, and 2026 is when it truly goes mainstream. Here are ten of the best image-to-image AI tools you should be using right now. 1. Pollo AI Credit: As Supplied by Client Pollo AI is a versatile AI creative platform, with image to image tool as one of its core strengths. It lets users upload a reference image and modify it using text prompts, style presets, or structural guidance—offering strong control without technical complexity. What sets it apart is its all-in-one approach. Beyond image transformation, it includes text-to-image generation, AI video creation, and access to multiple leading models, allowing users to move from concept to final asset within a single platform. The output quality is consistently reliable: style transfers feel natural, edits remain coherent, and it handles everything from photos to illustrations smoothly. Combined with a clean, beginner-friendly interface and a 4.4 Trustpilot score, Pollo AI stands out as a solid choice for AI-assisted creative workflows. 2. DeepDream Generator Credit: As Supplied by Client Deep Dream Generator has built lasting credibility and remains one of the more distinctive image-to-image tools in 2026. Inspired by Google’s DeepDream research, it has evolved into a full-featured style transfer platform. Its core function is simple: upload a content image, choose or add a style reference, and blend the two. You get solid control over intensity and composition, with results ranging from subtle to highly stylized. It also includes text-to-image generation and a large library of styles, plus an active community gallery for inspiration. With a straightforward interface, reasonable processing speed, and a usable free tier, it’s still a strong choice for creators who want proven results and a unique visual style. 3. Adobe Firefly Credit: As Supplied by Client Adobe Firefly has become a core part of many professional creative workflows, with some of the most refined image-to-image capabilities available. Integrated into the Adobe Creative Cloud ecosystem, it enables transformations through generative fill, style matching, and structure-guided generation—working seamlessly with tools like Adobe Photoshop. Its biggest advantage is its training data. Backed by Adobe’s focus on licensed, commercially safe content, Firefly is one of the few AI image tools suitable for client work without IP concerns. The results are consistently clean, detailed, and coherent, making it feel like a natural extension of existing Adobe workflows rather than a separate tool. 4. Stable Diffusion Credit: As Supplied by Client Stable Diffusion remains the go-to choice for users who want maximum control over image-to-image transformations. As an open-source model, it can run locally or through web interfaces, using an img2img pipeline where a reference image and text prompt are combined, with a denoising parameter controlling how closely the output follows the original. The downside is a steeper learning curve and the need for solid hardware or cloud setup. But for technically inclined creators who want full control and flexibility, Stable Diffusion is still the most powerful option available. 5. Midjourney Midjourney has built a reputation for producing the most aesthetically striking AI imagery, and its image-to-image function lives up to that standard. Users can upload a reference image and combine it with a text prompt, with the platform blending the visual composition of the reference with the stylistic direction of the prompt. The results lean toward the artistic and painterly, which suits certain creative applications extremely well — concept art, editorial illustration, mood boarding, and brand identity exploration all benefit from Midjourney's distinctive visual sensibility. The platform has also introduced more granular controls in recent versions, including the ability to weight how strongly the reference image influences the output. 6. Runway ML Runway ML has positioned itself as a professional-grade creative AI platform, and its image-to-image tools reflect that positioning. The platform offers a range of transformation features including style transfer, generative image editing, and structure-guided generation, all wrapped in an interface designed to fit into professional post-production and content creation workflows. What sets Runway apart is the depth of its overall ecosystem. Image-to-image tools sit alongside video generation, motion brush, inpainting, and a growing suite of creative AI features that make it a comprehensive production environment rather than a single-purpose tool. 7. Canva AI Canva's Magic Studio has brought powerful image-to-image AI capabilities to one of the world's most widely used design platforms, and the result is a tool that democratizes sophisticated image transformation for non-technical users at scale. Users can upload images and modify them using natural language instructions within Canva's familiar drag-and-drop environment. The integration with Canva's broader design ecosystem is the platform's strongest selling point. Transformed images can be immediately dropped into templates, presentations, social media posts, and marketing materials without any export or format conversion friction. For businesses and marketing teams already using Canva, Magic Studio's image-to-image tools are a natural and highly practical upgrade. 8. Picsart AI Picsart has evolved from a photo editing app into a full-featured AI creative platform, and its image-to-image tools have grown impressively. The platform offers style transfer, AI background replacement, image editing, and a range of artistic filters and transformations that go well beyond what traditional editing apps provide. The mobile-first experience is where Picsart genuinely shines — the app makes sophisticated image-to-image AI accessible on a smartphone. The web platform has also matured significantly, offering more control and higher resolution outputs for users who need them. Final Thoughts The image-to-image AI space in 2026 offers something meaningful for every type of creator. Whether you're looking for the broadest all-in-one platform, the deepest technical customization, the most artistically distinctive outputs, or the most practical everyday utility, the tools on this list represent the genuine best of what's currently available. The technology is powerful, the access has never been easier, and the creative possibilities are genuinely exciting.",
+            "original_language": "EN",
+            "author": "Partner Content",
+            "countries": [],
+            "industries": [
+                {
+                    "name": "Image Classification & Tagging",
+                    "is_primary": true
+                },
+                {
+                    "name": "Data Strategy & Governance Services",
+                    "is_primary": false
+                }
+            ],
+            "tags": [
+                {
+                    "name": "Technology Adoption & Disruption",
+                    "code": "II02",
+                    "is_primary": true
+                },
+                {
+                    "name": "Product Launches & Enhancements",
+                    "code": "SD01",
+                    "is_primary": false
+                },
+                {
+                    "name": "Emerging Technologies",
+                    "code": "II01",
+                    "is_primary": false
+                }
+            ],
+            "company_mentions": [
+                {
+                    "uuid": "000007f-runwayml",
+                    "name": "Runway",
+                    "website": "https://runwayml.com"
+                },
+                {
+                    "uuid": "00007f7-adobe",
+                    "name": "Adobe",
+                    "website": "http://www.adobe.com"
+                },
+                {
+                    "uuid": "02lr8yu-deepdreamgenerator",
+                    "name": "DeepDream Generator",
+                    "website": "https://deepdreamgenerator.com"
+                },
+                {
+                    "uuid": "000054y-midjourney",
+                    "name": "Midjourney",
+                    "website": "https://midjourney.com"
+                },
+                {
+                    "uuid": "0007j73-stablediffusion",
+                    "name": "Stable Diffusion",
+                    "website": "https://stablediffusion.fr"
+                },
+                {
+                    "uuid": "00000jw-canva",
+                    "name": "Canva",
+                    "website": "http://www.canva.com"
+                },
+                {
+                    "uuid": "0002g17-pollo",
+                    "name": "Pollo AI",
+                    "website": "https://pollo.ai/"
+                },
+                {
+                    "uuid": "0000sfj-picsart",
+                    "name": "Picsart",
+                    "website": "http://picsart.com/"
+                }
+            ]
+        }
+    ],
+    "credits_consumed": 0.2
+}
+```

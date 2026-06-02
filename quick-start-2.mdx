@@ -1,3 +1,201 @@
 ---
 title: "Quick Start"
 ---
+
+## Authentication
+
+All requests must include an **API key** in the `x-api-key` HTTP header.
+
+```text
+x-api-key: <YOUR_API_KEY>
+```
+
+<Warning>
+  Never expose your API key in client-side code, browser requests, or public repositories. A missing or invalid key returns `401 Unauthorized`.
+</Warning>
+
+---
+
+## Execute your first request
+
+**Fetch Product IDs first**
+
+<CodeGroup>
+
+```bash cURL
+curl --location 'https://api.akta.pro/api/v1/company/product-reviews?company=tesla.com' \
+  --header 'x-api-key: <YOUR_API_KEY>'
+```
+
+```python Python
+import requests
+
+response = requests.get(
+    "https://api.akta.pro/api/v1/company/product-reviews",
+    headers={"x-api-key": "<YOUR_API_KEY>"},
+    params={"company": "tesla.com"}
+)
+
+data     = response.json()
+products = data["data"]["product_reviews"]
+
+print(f"Found {len(products)} products (credits consumed: {data['credits_consumed']})\n")
+for product in products:
+    print(f"  ID: {product['id']}  |  {product['product_name']}  ({product['main_category']})")
+```
+
+</CodeGroup>
+
+**Sample Response**
+
+```text expandable
+{
+    "data": {
+        "uuid": "000031n-tesla",
+        "product_reviews": [
+            {
+                "id": "177388",
+                "product_name": "Powerpack",
+                "main_category": "Battery Storage Systems Providers",
+                "categories": [
+                    "Battery Storage Systems"
+                ],
+                "description": "Powerpack supports a host of applications that offer commercial consumers and energy providers greater control, efficiency and reliability across the electric grid."
+            },
+            {
+                "id": "112516",
+                "product_name": "Powerwall",
+                "main_category": "Battery Storage Systems Providers",
+                "categories": [
+                    "Battery Storage Systems"
+                ],
+                "description": "Powerwall integrates with solar to store excess energy generated during the day and makes it available when needed, minimizing reliance on utility."
+            }
+        ]
+    },
+    "limit": 10,
+    "offset": 0,
+    "credits_consumed": 0.0
+}
+```
+
+Use the `id` values from the previous step to request reviews. Use the same endpoint and pass the `products` parameter 
+
+<CodeGroup>
+
+```text cURL
+curl --location 'https://api.akta.pro/api/v1/company/product-reviews?company=https%3A%2F%2Ftesla.com&products=177388' \
+--header 'x-api-key: Your API Key'
+```
+
+```text Python
+import requests
+
+url = "https://api.akta.pro/api/v1/company/product-reviews?company=https://tesla.com&products=177388"
+
+payload = {}
+headers = {
+  'x-api-key': 'your API Key'
+}
+
+response = requests.request("GET", url, headers=headers, data=payload)
+
+print(response.text)
+```
+
+</CodeGroup>
+
+**Sample Response**
+
+```text expandable
+{
+    "data": {
+        "uuid": "000031n-tesla",
+        "product_reviews": [
+            {
+                "id": "177388",
+                "product_name": "Powerpack",
+                "main_category": "Battery Storage Systems Providers",
+                "categories": [
+                    "Battery Storage Systems"
+                ],
+                "description": "Powerpack supports a host of applications that offer commercial consumers and energy providers greater control, efficiency and reliability across the electric grid.",
+                "rating": {
+                    "g2": 3.8
+                },
+                "star_distribution": {
+                    "g2": {
+                        "1": 0,
+                        "2": 0,
+                        "3": 1,
+                        "4": 0,
+                        "5": 1
+                    }
+                },
+                "pros_list": [],
+                "cons_list": [],
+                "pricing": [],
+                "reviews": {
+                    "data": [
+                        {
+                            "review_id": 8555613,
+                            "review_title": "very easy and covinient",
+                            "review_content": "What do you like best about Powerpack?\nhaving a stationaty energy powerpack for yourslef is better than easy\n\nWhat do you dislike about Powerpack?\nnothing i think its one of the most easy things to use\n\nWhat problems is Powerpack solving and how is that benefiting you?\npower pack makes charging your vehicle very easy and convienient",
+                            "review_question_answers": [
+                                {
+                                    "question": "What do you like best about Powerpack?",
+                                    "answer": "having a stationaty energy powerpack for yourslef is better than easy"
+                                },
+                                {
+                                    "question": "What do you dislike about Powerpack?",
+                                    "answer": "nothing i think its one of the most easy things to use"
+                                },
+                                {
+                                    "question": "What problems is Powerpack solving and how is that benefiting you?",
+                                    "answer": "power pack makes charging your vehicle very easy and convienient"
+                                }
+                            ],
+                            "review_rating": 4.5,
+                            "publish_date": "2023-09-01T00:00:00",
+                            "reviewer_company_size": "Small-Business(50 or fewer emp.)",
+                            "review_link": "https://www.g2.com/products/powerpack/reviews/powerpack-review-8555613",
+                            "provider": "g2"
+                        },
+                        {
+                            "review_id": 1100483,
+                            "review_title": "my ever favorite vehicle",
+                            "review_content": "What do you like best about Powerpack?\nthe best thing is all computerized and easy to operate and less fuel consumption\n\nWhat do you dislike about Powerpack?\nnothing for dislike ... except its all electronic so need extra care while service\n\nWhat problems is Powerpack solving and how is that benefiting you?\npower pack is complete paperless desk and its easy to use and sharing with others.",
+                            "review_question_answers": [
+                                {
+                                    "question": "What do you like best about Powerpack?",
+                                    "answer": "the best thing is all computerized and easy to operate and less fuel consumption"
+                                },
+                                {
+                                    "question": "What do you dislike about Powerpack?",
+                                    "answer": "nothing for dislike ... except its all electronic so need extra care while service"
+                                },
+                                {
+                                    "question": "What problems is Powerpack solving and how is that benefiting you?",
+                                    "answer": "power pack is complete paperless desk and its easy to use and sharing with others."
+                                }
+                            ],
+                            "review_rating": 3.0,
+                            "publish_date": "2018-11-03T00:00:00",
+                            "reviewer_company_size": "Small-Business(50 or fewer emp.)",
+                            "review_link": "https://www.g2.com/products/powerpack/reviews/powerpack-review-1100483",
+                            "provider": "g2"
+                        }
+                    ],
+                    "total": 2,
+                    "total_by_provider": {
+                        "g2": 2
+                    }
+                }
+            }
+        ]
+    },
+    "limit": 10,
+    "offset": 0,
+    "credits_consumed": 1.5
+}
+```

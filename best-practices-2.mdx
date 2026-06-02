@@ -1,3 +1,47 @@
 ---
 title: "Best Practices"
 ---
+
+**Always call without `products` first — it's free and gives you the IDs you need**
+
+The product list call costs zero credits and returns all the `id` values required for subsequent review calls. Never hardcode product IDs — always fetch them dynamically so your integration remains correct if a company's product catalog changes:
+
+```python
+# Step 1: free — get product catalog and IDs
+products = get_product_list("canva.com")
+product_ids = [p["id"] for p in products]
+
+# Step 2: paid — fetch reviews for selected products
+reviews = get_product_reviews("canva.com", product_ids[:2], limit=10)
+```
+
+**Pass `products` as a comma-separated string of product IDs** The `products` parameter should contain comma separated list of product Ids whose reviews need to be fetched.
+
+**Use `review_question_answers` for structured extraction — not `review_content`**
+
+`review_content` is the reviewer's answers concatenated into a single string with question headings inline. `review_question_answers` provides the same data as clean Q&A pairs — use it for any structured processing, embedding, or LLM input to avoid having to parse the concatenated format.
+
+**`star_distribution` keys are strings — cast to int when sorting or computing averages**
+
+The keys `"1"` through `"5"` are strings. Always cast to int for sorting or weighted average calculations:
+
+```python
+dist = product["star_distribution"].get("g2", {})
+total = sum(dist.values())
+weighted_avg = sum(int(star) * count for star, count in dist.items()) / total if total > 0 else 0
+```
+
+**`rating` and `star_distribution` are keyed by provider**
+
+Both fields are dicts keyed by review provider (currently `"g2"`). Always access them by provider key rather than assuming a flat structure, as additional providers may be added in future:
+
+```python
+g2_rating = product["rating"].get("g2")
+g2_dist   = product["star_distribution"].get("g2", {})
+```
+
+**Check `reviews.total` before paginating**
+
+`reviews.total` is the complete count of available reviews for a product across all providers. Compare it against the number of reviews already fetched to determine whether further pages exist, and stop paginating when the returned `reviews.data` array is empty.
+
+---

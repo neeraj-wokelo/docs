@@ -2,54 +2,79 @@
 title: "Best Practices"
 ---
 
-**Pass a domain, not a company name**
+**Always pass a full website URL for `company` — not a bare domain or display name**
 
-The `company` parameter accepts a website domain (e.g. `"canva.com"`) or a UUID from the Company Search API — not a display name like `"Canva"`. Passing a display name will not resolve correctly. If you only have a company name, use the Company Search API to look up its domain or UUID first.
-
-**Set `start_date` explicitly — the default lookback is capped**
-
-Non-enterprise plans are limited to a 6-month lookback window. Without a `start_date`, the API defaults to 6 months ago. For longer historical pulls on enterprise plans, always set `start_date` explicitly to avoid unintentional truncation:
+The `company` parameter expects a full website URL (e.g. `"https://canva.com"`). A bare  display name (`"Canva"`) will not resolve correctly. If you only have a company name, use the [Company Search API](/akta-company-search-doc) to look up the website URL or UUID first:
 
 ```python
-from datetime import datetime, timedelta
-
-start_date = (datetime.today() - timedelta(days=365)).strftime("%Y-%m-%d")
-params["start_date"] = start_date
+search = requests.get(
+    "https://api.akta.pro/api/v1/company/search",
+    headers={"x-api-key": API_KEY},
+    params={"name": "Canva"}
+)
+website = search.json()["data"][0]["website"]   # "https://canva.com"
 ```
 
-**Combine `company` and `industry` for more focused results**
+**Use `sentiment_list`, `type_list`, and `news_score_list` — not the singular forms**
 
-Passing both parameters scopes results to articles about the specified company that are also classified under the specified industry. This is useful when a company operates across multiple sectors and you want to isolate coverage of a specific business line:
+All three filter parameters use the `_list` suffix. The forms `sentiment`, `type`, and `news_score` are not valid parameters and are silently ignored if passed. This is the most common integration mistake.
 
 ```python
+# ❌ Silently ignored — no filtering applied
+params = {"company": "https://canva.com", "sentiment": "positive"}
+
+# ✅ Correct parameter names
+params = {"company": "https://canva.com", "sentiment_list": "positive"}
+```
+
+**Understand what each filter does and combine them deliberately**
+
+The three filter parameters work independently and additively — all active filters must match for an article to be returned:
+
+- `sentiment_list` — filters by the AI-assigned article sentiment (`positive`, `negative`, `neutral`)
+- `type_list` — filters by the event type tag (e.g. `Equity Fund-Raising`, `Layoffs`). [Download the full list of type codes](https://playground.akta.pro/news-tags.csv) to see all accepted values
+- `news_score_list` — filters by relevance tier (`High`, `Medium`, `Low`). Use `High` for daily monitoring briefings where signal density matters; use `all` for research pulls where recall is more important than precision
+
+Combining them narrows the result set aggressively. For example, `sentiment_list=negative` \+ `news_score_list=High` returns only high-relevance adverse articles — useful for portfolio risk monitoring but may miss lower-profile negative signals if used for comprehensive diligence:
+
+```python
+# Portfolio monitoring — high-signal adverse articles only
 params = {
-    "company":  "alphabet.com",
-    "industry": "Artificial Intelligence",
+    "company":        "https://stripe.com",
+    "sentiment_list": "negative",
+    "news_score_list": "High",
+    "start_date":     "2024-01-01"
+}
+
+# Comprehensive diligence — all adverse articles, no score filter
+params = {
+    "company":        "https://stripe.com",
+    "sentiment_list": "negative",
+    "start_date":     "2024-01-01"
+}
+```
+
+**Set `start_date` explicitly — the default lookback is capped at 6 months**
+
+Without a `start_date`, the API defaults to 6 months ago for non-enterprise plans. For research and historical analysis on enterprise plans, always set the date range explicitly so the window is predictable and reproducible:
+
+**Combine `company` and `industry` to scope multi-sector companies**
+
+For companies that operate across multiple sectors (e.g. Amazon in retail, cloud, and logistics), passing `industry` alongside `company` narrows results to articles classified under that specific sector. This reduces noise from unrelated coverage:
+
+```python
+# Amazon cloud coverage only — exclude retail, logistics, and media noise
+params = {
+    "company":  "https://amazon.com",
+    "industry": "Cloud Computing",
     "limit":    50
 }
 ```
 
-**Use `is_primary` flags on tags and industries for fast classification**
-
-Each `tags` and `industries` array contains exactly one object with `is_primary: true` — the dominant classification for that article. When you only need the top-level category, extract the primary item directly rather than iterating the full array:
-
-```python
-primary_tag = next((t["name"] for t in article["tags"] if t["is_primary"]), None)
-primary_industry = next((i["name"] for i in article["industries"] if i["is_primary"]), None)
-```
-
 **Use `full_text` for LLM pipelines — fall back to `ai_summary` when empty**
 
-`full_text` provides the complete article body and is ideal for embedding, RAG, or detailed analysis. Some articles may have an empty `full_text` due to paywalls or scraping restrictions. Always fall back to `ai_summary`:
+`full_text` contains the complete article body and is the right input for embedding, RAG, and summarisation pipelines. For paywalled or restricted articles it may be empty — always fall back to `ai_summary` so your pipeline never receives blank content:
 
 ```python
-content = article.get("full_text", "").strip()
-if not content:
-    content = article.get("ai_summary", "")
+content = article.get("full_text", "").strip() or article.get("ai_summary", "")
 ```
-
-**Paginate correctly — `total` reflects the full matching set**
-
-The `total` field reflects the complete number of matching articles before pagination. Always compare `len(all_articles)` against `total` to determine whether further pages exist. Stop paginating when the returned `data` array is empty or when `len(all_articles) >= total`.
-
----

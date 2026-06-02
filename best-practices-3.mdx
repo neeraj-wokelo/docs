@@ -1,3 +1,89 @@
 ---
 title: "Best Practices"
 ---
+
+**`other_ratings` uses two scales — always check the dimension type before displaying**
+
+Three dimensions (`business_outlook`, `ceo`, `recommend_to_friend`) are approval ratios between 0.0 and 1.0. The remaining five are scores on a 0–5 scale. Build a lookup dict and apply the correct formatting for each type:
+
+```python
+RATIO_DIMS = {"business_outlook", "ceo", "recommend_to_friend"}
+
+dim_lookup = {r["type"]: r["value"] for r in emp["other_ratings"]}
+
+for dim, value in dim_lookup.items():
+    if dim in RATIO_DIMS:
+        display = f"{value * 100:.0f}%"        # ratio → percentage
+    else:
+        display = f"{value:.1f} / 5.0"         # score → star scale
+    print(f"  {dim}: {display}")
+```
+
+**`ceo_rating` on individual reviews is a string enum, not a float**
+
+The aggregate `ceo` entry in `other_ratings` is a 0–1 float. The `ceo_rating` field on each individual review object is a string (`"APPROVE"`, `"DISAPPROVE"`, or `null`). These fields measure the same concept but have completely different types — never compare or mix them:
+
+```python
+# Aggregate — float ratio
+ceo_approval_pct = dim_lookup.get("ceo", 0) * 100         # e.g. 84.0%
+
+# Per-review — string enum
+ceo_sentiment = review.get("ceo_rating")                   # "APPROVE", "DISAPPROVE", or None
+```
+
+**Guard all per-dimension review ratings against `null`**
+
+All seven per-review dimension fields (`career_opportunities_rating`, `ceo_rating`, `compensation_and_benefits_rating`, etc.) can be `null` when the reviewer did not provide a score. Always check before accessing:
+
+```python
+# ❌ TypeError when rating is null
+avg = sum(r["culture_and_values_rating"] for r in reviews) / len(reviews)
+
+# ✅ Filter nulls first
+rated = [r["culture_and_values_rating"] for r in reviews if r.get("culture_and_values_rating") is not None]
+avg   = sum(rated) / len(rated) if rated else None
+```
+
+**`review_date` and `location` can be empty strings — not null**
+
+Unlike most APIs where absent values are `null`, these fields return an empty string `""` when not provided. Use truthiness checks rather than `is not None`:
+
+```python
+# ❌ Won't catch empty strings
+if review["review_date"] is not None:
+    ...
+
+# ✅ Correct — empty string is falsy
+if review.get("review_date"):
+    ...
+```
+
+**Use `limit=0` or `limit=1` when you only need aggregate scores**
+
+The `overall_rating` and `other_ratings` aggregate fields are always returned regardless of `limit`. When you only need the overview scores for a benchmark or monitoring check, set `limit=1` to minimise response size and credit consumption:
+
+```python
+# Aggregate scores only — minimal reviews payload
+r = requests.get(url, headers=HEADERS, params={"company": "canva.com", "limit": 1})
+emp = r.json()["data"]["employee_reviews"]
+# overall_rating and other_ratings are always present
+```
+
+**Use `is_current_employee` and `years_of_employment` to segment reviews**
+
+Separating current from former employees, or filtering by tenure, can surface significantly different sentiment patterns — particularly useful when assessing post-acquisition or post-layoff cultural impact:
+
+```python
+current_reviews = [r for r in reviews if r["is_current_employee"]]
+veteran_reviews = [r for r in reviews if r["years_of_employment"] >= 3]
+```
+
+**Use `helpful_count` to surface the most credible reviews**
+
+Reviews with a higher `helpful_count` have been up-voted by the community and tend to be more detailed and representative. Sort by `helpful_count` descending for qualitative diligence or executive briefings:
+
+```python
+top_reviews = sorted(reviews, key=lambda r: r.get("helpful_count", 0), reverse=True)
+```
+
+---

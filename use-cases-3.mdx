@@ -1,3 +1,284 @@
 ---
 title: "Use cases"
 ---
+
+### Aggregate sentiment snapshot
+
+Fetch the overview ratings for a company and display them correctly by scale.
+
+<CodeGroup>
+
+```bash cURL
+curl --location 'https://api.akta.pro/api/v1/company/employee-reviews?company=canva.com&limit=1' \
+  --header 'x-api-key: <YOUR_API_KEY>'
+```
+
+```python Python
+import requests
+
+HEADERS = {"x-api-key": "<YOUR_API_KEY>"}
+
+response = requests.get(
+    "https://api.akta.pro/api/v1/company/employee-reviews",
+    headers=HEADERS,
+    params={"company": "canva.com", "limit": 1}
+)
+
+data = response.json()
+emp  = data["data"]["employee_reviews"]
+
+# Overall rating
+overall = emp["overall_rating"].get("glassdoor")
+total   = emp["reviews"]["total"]
+print(f"Overall: {overall}/5.0  ({total:,} reviews)\n")
+
+# Dimension scores — two scales
+RATIO_DIMS = {"business_outlook", "ceo", "recommend_to_friend"}
+
+# Build lookup for easy access
+dim_lookup = {r["type"]: r["value"] for r in emp["other_ratings"]}
+
+print("Dimension Scores:")
+for dim, value in dim_lookup.items():
+    if dim in RATIO_DIMS:
+        print(f"  {dim:<30}  {value * 100:.0f}%")
+    else:
+        print(f"  {dim:<30}  {value:.1f} / 5.0")
+```
+
+</CodeGroup>
+
+**Sample response:**
+
+```json
+{
+  "data": {
+    "uuid": "00000jw-canva",
+    "employee_reviews": {
+      "overall_rating": { "glassdoor": 3.9 },
+      "other_ratings": [
+        { "type": "business_outlook",         "provider": "glassdoor", "value": 0.7  },
+        { "type": "ceo",                      "provider": "glassdoor", "value": 0.84 },
+        { "type": "recommend_to_friend",      "provider": "glassdoor", "value": 0.69 },
+        { "type": "compensation_and_benefits","provider": "glassdoor", "value": 3.9  },
+        { "type": "culture_and_values",       "provider": "glassdoor", "value": 3.7  },
+        { "type": "diversity_and_inclusion",  "provider": "glassdoor", "value": 4.0  },
+        { "type": "senior_management",        "provider": "glassdoor", "value": 3.1  },
+        { "type": "work_life_balance",        "provider": "glassdoor", "value": 3.7  }
+      ],
+      "reviews": {
+        "data": [ { "..." : "..." } ],
+        "total": 1068,
+        "total_by_provider": { "glassdoor": 1068 }
+      }
+    }
+  },
+  "limit": 1,
+  "offset": 0,
+  "credits_consumed": 1.5
+}
+```
+
+### Reading individual reviews
+
+Extract review details including reviewer context and per-dimension ratings.
+
+```python
+import requests
+
+HEADERS = {"x-api-key": "<YOUR_API_KEY>"}
+
+response = requests.get(
+    "https://api.akta.pro/api/v1/company/employee-reviews",
+    headers=HEADERS,
+    params={"company": "canva.com", "limit": 10}
+)
+
+reviews = response.json()["data"]["employee_reviews"]["reviews"]["data"]
+
+for review in reviews:
+    status = "Current" if review["is_current_employee"] else "Former"
+    tenure = review["years_of_employment"]
+    title  = review.get("job_title") or "—"
+    loc    = review.get("location")  or "—"
+
+    print(f"\n[{review['rating']}★] {review['summary']}")
+    print(f"  {title} | {status} employee | {tenure} yr(s) | {loc}")
+    print(f"  Pros: {review['pros'][:150]}")
+    print(f"  Cons: {review['cons'][:150]}")
+
+    # Per-dimension ratings (can be null)
+    dims = {
+        "Culture":    review.get("culture_and_values_rating"),
+        "WLB":        review.get("work_life_balance_rating"),
+        "Mgmt":       review.get("senior_management_rating"),
+        "Comp":       review.get("compensation_and_benefits_rating"),
+        "Career":     review.get("career_opportunities_rating"),
+        "D&I":        review.get("diversity_and_inclusion_rating")
+    }
+    scores = "  |  ".join(
+        f"{k}: {v}" for k, v in dims.items() if v is not None
+    )
+    if scores:
+        print(f"  {scores}")
+
+    # CEO sentiment (string enum on individual reviews)
+    ceo = review.get("ceo_rating")
+    if ceo:
+        print(f"  CEO: {ceo}")
+
+    print(f"  {review['review_link']}")
+```
+
+### Competitive benchmark across multiple companies
+
+Fetch aggregate scores for a set of companies and compare side by side.
+
+```python
+import requests
+
+HEADERS   = {"x-api-key": "<YOUR_API_KEY>"}
+COMPANIES = ["canva.com", "figma.com", "notion.so", "miro.com"]
+
+RATIO_DIMS = {"business_outlook", "ceo", "recommend_to_friend"}
+
+def get_overview(company):
+    r = requests.get(
+        "https://api.akta.pro/api/v1/company/employee-reviews",
+        headers=HEADERS,
+        params={"company": company, "limit": 0}
+    )
+    emp = r.json()["data"]["employee_reviews"]
+    lookup = {d["type"]: d["value"] for d in emp["other_ratings"]}
+    return {
+        "company":         company,
+        "overall":         emp["overall_rating"].get("glassdoor", 0),
+        "culture":         lookup.get("culture_and_values", 0),
+        "wlb":             lookup.get("work_life_balance", 0),
+        "senior_mgmt":     lookup.get("senior_management", 0),
+        "ceo_approval":    lookup.get("ceo", 0),
+        "recommend":       lookup.get("recommend_to_friend", 0),
+        "total_reviews":   emp["reviews"]["total"]
+    }
+
+results = [get_overview(c) for c in COMPANIES]
+results.sort(key=lambda x: x["overall"], reverse=True)
+
+print(f"{'Company':<15} {'Overall':<9} {'Culture':<9} {'WLB':<9} {'Sr Mgmt':<9} {'CEO%':<8} {'Recommend%'}")
+print("-" * 80)
+for r in results:
+    print(
+        f"{r['company']:<15} "
+        f"{r['overall']:<9.1f} "
+        f"{r['culture']:<9.1f} "
+        f"{r['wlb']:<9.1f} "
+        f"{r['senior_mgmt']:<9.1f} "
+        f"{round(r['ceo_approval'] * 100):<8} "
+        f"{round(r['recommend'] * 100)}"
+    )
+```
+
+### Paginating through all reviews
+
+Retrieve the full review corpus for downstream analysis.
+
+```python
+import requests
+
+HEADERS  = {"x-api-key": "<YOUR_API_KEY>"}
+COMPANY  = "canva.com"
+PAGE_SIZE = 100
+
+all_reviews = []
+offset      = 0
+
+while True:
+    r = requests.get(
+        "https://api.akta.pro/api/v1/company/employee-reviews",
+        headers=HEADERS,
+        params={"company": COMPANY, "limit": PAGE_SIZE, "offset": offset}
+    )
+    data    = r.json()
+    emp     = data["data"]["employee_reviews"]
+    batch   = emp["reviews"]["data"]
+    total   = emp["reviews"]["total"]
+
+    if not batch:
+        break
+
+    all_reviews.extend(batch)
+    print(f"Fetched {len(all_reviews)} / {total} reviews...")
+
+    if len(all_reviews) >= total:
+        break
+
+    offset += PAGE_SIZE
+
+print(f"\nTotal reviews retrieved: {len(all_reviews)}")
+
+# Separate current vs former employees
+current = [r for r in all_reviews if r["is_current_employee"]]
+former  = [r for r in all_reviews if not r["is_current_employee"]]
+print(f"Current employees: {len(current)}  |  Former: {len(former)}")
+```
+
+### Filtering reviews by dimension score
+
+Find reviews where a specific dimension score is below a threshold — useful for surfacing recurring concerns.
+
+```python
+reviews = response.json()["data"]["employee_reviews"]["reviews"]["data"]
+
+# Reviews where senior management rated 2 or below
+low_mgmt = [
+    r for r in reviews
+    if r.get("senior_management_rating") is not None
+    and r["senior_management_rating"] <= 2
+]
+
+print(f"Reviews with senior management ≤ 2: {len(low_mgmt)}\n")
+for r in low_mgmt[:5]:
+    print(f"[{r['senior_management_rating']}★ mgmt] {r['summary']}")
+    print(f"  Cons: {r['cons'][:200]}")
+    print()
+```
+
+### JavaScript / Node.js
+
+```javascript
+const fetch = require("node-fetch");
+
+const API_KEY = process.env.AKTA_API_KEY;
+
+async function getEmployeeReviews(company, limit = 10, offset = 0) {
+  const params = new URLSearchParams({ company, limit, offset });
+  const res = await fetch(
+    `https://api.akta.pro/api/v1/company/employee-reviews?${params}`,
+    { headers: { "x-api-key": API_KEY } }
+  );
+  if (!res.ok) throw new Error(`API error: ${res.status}`);
+  return (await res.json()).data.employee_reviews;
+}
+
+const RATIO_DIMS = new Set(["business_outlook", "ceo", "recommend_to_friend"]);
+
+getEmployeeReviews("canva.com", 5).then(emp => {
+  const overall = emp.overall_rating.glassdoor;
+  const total   = emp.reviews.total;
+  console.log(`Overall: ${overall}/5.0 (${total.toLocaleString()} reviews)\n`);
+
+  emp.other_ratings.forEach(({ type, value }) => {
+    const display = RATIO_DIMS.has(type)
+      ? `${Math.round(value * 100)}%`
+      : `${value.toFixed(1)}/5.0`;
+    console.log(`  ${type.padEnd(30)} ${display}`);
+  });
+
+  console.log("\nLatest reviews:");
+  emp.reviews.data.forEach(r => {
+    const status = r.is_current_employee ? "Current" : "Former";
+    console.log(`  [${r.rating}★] ${r.summary}`);
+    console.log(`    ${r.job_title || "—"} | ${status} | ${r.years_of_employment} yr(s)`);
+  });
+});
+```

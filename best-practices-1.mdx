@@ -1,3 +1,52 @@
 ---
 title: "Best Practices"
 ---
+
+**Always specify `sections` — never rely on the default**
+
+When `sections` is omitted, all available sections are returned. This would consume credits. Always be explicit:
+
+```python
+# ❌ Returns everything — slow and large
+params={"company": "canva.com"}
+
+# ✅ Returns only what you need
+params={"company": "canva.com", "sections": "firmographics,funding"}
+```
+
+**Accept both domain and full URL formats**
+
+The `company` parameter accepts both bare domains (`canva.com`) and full URLs (`https://www.canva.com`). Either format works — use whichever is more natural for your pipeline. If you have a UUID from Company Search, prefer that for the most reliable resolution:
+
+```python
+# All three are valid
+params={"company": "canva.com"}
+params={"company": "https://www.canva.com"}
+params={"company": "00031n-tesla"}
+```
+
+**Use Company Search to resolve names to UUIDs before enriching**
+
+If your input is a company name (not a domain), resolve it to a UUID via the Company Search API first. Passing a display name like `"Canva"` directly as the `company` parameter may not resolve. Use the domain or UUID returned by Company Search:
+
+```python
+search = requests.get(
+    "https://api.akta.pro/api/v1/company/search",
+    headers={"x-api-key": API_KEY},
+    params={"name": "Canva"}
+)
+company_uuid = search.json()["data"][0]["uuid"]
+```
+
+**Sections for Enterprise tier** - `acquisitions `**,**  `funding `**and** `investments `**require enterprise tier**
+
+The `acquisitions` , `funding` and `investments` sections are gated to enterprise plans. If your plan does not include them, requesting them returns a `403 Forbidden`. Handle this in your section selection logic rather than letting it surface as an uncaught error:
+
+```python
+try:
+    data = enrich_company("canva.com", "firmographics,investments")
+except requests.HTTPError as e:
+    if e.response.status_code == 403:
+        # Re-request without the gated section
+        data = enrich_company("canva.com", "firmographics")
+```

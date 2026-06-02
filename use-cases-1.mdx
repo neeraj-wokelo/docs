@@ -1,3 +1,176 @@
 ---
 title: "Use cases"
 ---
+
+### Deal screening — firmographics and funding for a target
+
+<CodeGroup>
+
+```bash cURL
+curl --location 'https://api.akta.pro/api/v1/company/enrichment?company=canva.com&sections=firmographics,funding,acquisitions' \
+  --header 'x-api-key: <YOUR_API_KEY>'
+```
+
+```python Python
+import requests
+
+HEADERS = {"x-api-key": "<YOUR_API_KEY>"}
+
+response = requests.get(
+    "https://api.akta.pro/api/v1/company/enrichment",
+    headers=HEADERS,
+    params={
+        "company":  "canva.com",
+        "sections": "firmographics,funding,acquisitions"
+    }
+)
+
+data = response.json()["data"]
+
+# Firmographics
+firm = data["firmographics"]
+print(f"{firm['name']} | {firm['company_status']} | {firm['operating_status']}")
+print(f"HQ: {firm['location']} | Founded: {firm['founded']}")
+
+# Funding
+overall = data["funding"]["overall"]
+total_b = overall["total_funding"] / 1e9
+print(f"\nFunding: ${total_b:.2f}B raised")
+print(f"Stage: {overall['funding_stage']} | Rounds: {overall['num_funding_rounds']}")
+print(f"Last round: {overall['last_funding_date']}")
+
+# Acquisitions
+acqs = data.get("acquisitions", [])
+print(f"\nAcquisitions: {len(acqs)}")
+for acq in acqs[:5]:
+    amt = acq.get("amount")
+    amt_str = f"${amt / 1e6:.0f}M" if isinstance(amt, (int, float)) and amt > 0 else "undisclosed"
+    print(f"  {acq.get('acquisition_date', '—')[:10]}  {acq.get('acquiree_name')}  ({amt_str})")
+```
+
+</CodeGroup>
+
+**Sample response:**
+
+```json
+{
+  "data": {
+    "firmographics": {
+      "name": "Canva",
+      "website": "https://www.canva.com",
+      "location": "Sydney, Australia",
+      "founded": 2013,
+      "company_status": "private",
+      "operating_status": "Operating",
+      "ticker": null
+    },
+    "funding": {
+      "overall": {
+        "funding_stage": "Secondary Market",
+        "total_funding": 2508450682.0,
+        "last_funding_date": "2025-08-20",
+        "num_funding_rounds": "21"
+      }
+    }
+  },
+  "credits_consumed": 0.05,
+  "count": 2
+}
+```
+
+### Enriching by UUID from Company Search
+
+When you have a company UUID from the Company Search API, pass it directly.
+
+```python
+import requests
+
+HEADERS = {"x-api-key": "<YOUR_API_KEY>"}
+
+# UUID obtained from Company Search API
+company_uuid = "00031n-tesla"
+
+response = requests.get(
+    "https://api.akta.pro/api/v1/company/enrichment",
+    headers=HEADERS,
+    params={
+        "company":  company_uuid,
+        "sections": "firmographics,funding"
+    }
+)
+data = response.json()["data"]
+print(data["firmographics"]["name"])
+```
+
+### CRM enrichment helper — resolve then enrich
+
+Resolve a company name via Company Search, then enrich synchronously for a CRM record update.
+
+```python
+import requests
+
+HEADERS = {"x-api-key": "<YOUR_API_KEY>"}
+
+def enrich_by_name(company_name, sections):
+    # Step 1: resolve to UUID via Company Search
+    search = requests.get(
+        "https://api.akta.pro/api/v1/company/search",
+        headers=HEADERS,
+        params={"name": company_name}
+    )
+    results = search.json().get("data", [])
+    if not results:
+        raise ValueError(f"Company not found: {company_name}")
+
+    company_uuid = results[0]["uuid"]
+
+    # Step 2: enrich using the UUID
+    enrich = requests.get(
+        "https://api.akta.pro/api/v1/company/enrichment",
+        headers=HEADERS,
+        params={"company": company_uuid, "sections": ",".join(sections)}
+    )
+    return enrich.json()["data"]
+
+data = enrich_by_name("Stripe", ["firmographics", "funding"])
+overall = data["funding"]["overall"]
+print(f"{data['firmographics']['name']}: ${overall['total_funding'] / 1e9:.1f}B raised ({overall['funding_stage']})")
+```
+
+### Batch enrichment across a watchlist
+
+Enrich multiple companies concurrently by running parallel requests.
+
+```python
+import requests, concurrent.futures
+
+HEADERS = {"x-api-key": "<YOUR_API_KEY>"}
+
+WATCHLIST = ["stripe.com", "figma.com", "notion.so", "loom.com", "miro.com"]
+SECTIONS  = "firmographics,funding,headcount"
+
+def enrich_company(domain):
+    r = requests.get(
+        "https://api.akta.pro/api/v1/company/enrichment",
+        headers=HEADERS,
+        params={"company": domain, "sections": SECTIONS}
+    )
+    return domain, r.json().get("data", {})
+
+with concurrent.futures.ThreadPoolExecutor(max_workers=5) as pool:
+    results = dict(pool.map(lambda d: enrich_company(d), WATCHLIST))
+
+print(f"{'Company':<20} {'Status':<12} {'Stage':<22} {'Total Raised'}")
+print("-" * 72)
+for domain, data in results.items():
+    firm    = data.get("firmographics", {})
+    funding = data.get("funding", {}).get("overall", {})
+    total   = funding.get("total_funding", 0)
+    total_s = f"${total / 1e9:.1f}B" if total >= 1e9 else (f"${total / 1e6:.0f}M" if total > 0 else "—")
+    print(
+        f"{firm.get('name', domain):<20} "
+        f"{firm.get('company_status', '—'):<12} "
+        f"{funding.get('funding_stage', '—'):<22} "
+        f"{total_s}"
+    )
+```
