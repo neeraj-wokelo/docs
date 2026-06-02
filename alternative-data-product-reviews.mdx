@@ -3,7 +3,7 @@ title: "Overview"
 description: "Fetch a company's full product catalog and, optionally, detailed per-product reviews — including ratings, star distributions, pros and cons, pricing, and structured individual review content sourced from G2 and other review providers."
 ---
 
-The Product Reviews API returns a company's product catalog and, optionally, detailed reviews for one or more of those products. The API is designed to be called in two steps:
+The Product Reviews API returns a company's product catalog and detailed reviews for one or more of those products. The API is designed to be called in two steps:
 
 1. **Fetch the product list** — call without the `products` parameter to retrieve all products belonging to a company and their IDs. This call is free and returns no review data.
 2. **Fetch reviews for specific products** — call again with one or more `product_id` values in the `products` parameter to retrieve ratings, star distributions, pros, cons, pricing, and individual review records for those products.

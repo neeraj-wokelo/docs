@@ -2,253 +2,554 @@
 title: "Use cases"
 ---
 
-### Full two-step workflow — list products then fetch reviews
+### Fetch product reviews for one or more products
+
+Lets say we want to pull product reviews for Canva. First step would be to fetch the product\_ids. 
 
 <CodeGroup>
 
-```bash cURL — Step 1: list products
-curl --location 'https://api.akta.pro/api/v1/company/product-reviews?company=tesla.com' \
-  --header 'x-api-key: <YOUR_API_KEY>'
+```bash cURL
+curl --location 'https://api.akta.pro/api/v1/company/product-reviews?company=https%3A%2F%2Fcanva.com' \
+--header 'x-api-key: your api key'
 ```
 
 ```python Python
 import requests
 
-HEADERS = {"x-api-key": "<YOUR_API_KEY>"}
+url = "https://api.akta.pro/api/v1/company/product-reviews?company=https://canva.com"
 
-# ── Step 1: Get the product catalog ──────────────────────────
-list_response = requests.get(
-    "https://api.akta.pro/api/v1/company/product-reviews",
-    headers=HEADERS,
-    params={"company": "tesla.com"}
-)
+payload = {}
+headers = {
+  'x-api-key': 'your api key'
+}
 
-products = list_response.json()["data"]["product_reviews"]
-print(f"Products found: {len(products)}")
-for p in products:
-    print(f"  {p['id']:>10}  {p['product_name']}  —  {p['main_category']}")
+response = requests.request("GET", url, headers=headers, data=payload)
 
-# ── Step 2: Fetch reviews for selected product IDs ───────────
-product_ids = [p["id"] for p in products[:2]]   # take first two
-
-review_response = requests.get(
-    "https://api.akta.pro/api/v1/company/product-reviews",
-    headers=HEADERS,
-    params=[("company", "tesla.com")]
-           + [("products", pid) for pid in product_ids]
-           + [("limit", 10), ("offset", 0)]
-)
-
-data = review_response.json()
-print(f"\nCredits consumed: {data['credits_consumed']}")
-
-for product in data["data"]["product_reviews"]:
-    if "reviews" not in product:
-        continue
-    rating = product["rating"].get("g2")
-    total  = product["reviews"]["total"]
-    dist   = product["star_distribution"].get("g2", {})
-    total_dist = sum(dist.values())
-
-    print(f"\n{'='*55}")
-    print(f"  {product['product_name']}")
-    print(f"  Rating: {rating}/5.0  |  {total} reviews total")
-
-    if total_dist > 0:
-        for star in sorted(dist.keys(), key=int, reverse=True):
-            pct = round(dist[star] / total_dist * 100)
-            bar = "█" * (pct // 5)
-            print(f"  {star}★  {bar:<20}  {pct}%  ({dist[star]})")
-
-    print(f"\n  Most recent reviews:")
-    for review in product["reviews"]["data"][:3]:
-        print(f"  [{review['review_rating']}★]  {review['review_title']}")
-        print(f"    {review['publish_date'][:10]}  |  {review['reviewer_company_size']}")
-        print(f"    {review['review_content'][:150].strip()}...")
+print(response.text)
 ```
 
 </CodeGroup>
 
 **Sample response — product list only:**
 
-```json
+```json expandable
 {
-  "data": {
-    "uuid": "000031n-tesla",
-    "product_reviews": [
-      {
-        "id": "177388",
-        "product_name": "Powerpack",
-        "main_category": "Battery Storage Systems Providers",
-        "categories": ["Battery Storage Systems"],
-        "description": "Powerpack supports a host of applications..."
-      },
-      {
-        "id": "112516",
-        "product_name": "Powerwall",
-        "main_category": "Battery Storage Systems Providers",
-        "categories": ["Battery Storage Systems"],
-        "description": "Powerwall integrates with solar to store excess energy..."
-      }
-    ]
-  },
-  "limit": 10,
-  "offset": 0,
-  "credits_consumed": 0.0
-}
-```
-
-**Sample response — with reviews:**
-
-```json
-{
-  "data": {
-    "uuid": "000031n-tesla",
-    "product_reviews": [
-      {
-        "id": "177388",
-        "product_name": "Powerpack",
-        "main_category": "Battery Storage Systems Providers",
-        "categories": ["Battery Storage Systems"],
-        "description": "Powerpack supports a host of applications...",
-        "rating": { "g2": 3.8 },
-        "star_distribution": {
-          "g2": { "1": 0, "2": 0, "3": 1, "4": 0, "5": 1 }
-        },
-        "pros_list": [],
-        "cons_list": [],
-        "pricing": [],
-        "reviews": {
-          "data": [
+    "data": {
+        "uuid": "00000jw-canva",
+        "product_reviews": [
             {
-              "review_id": 8555613,
-              "review_title": "very easy and convenient",
-              "review_content": "What do you like best about Powerpack?\nhaving a stationary energy powerpack...",
-              "review_question_answers": [
-                {
-                  "question": "What do you like best about Powerpack?",
-                  "answer": "having a stationary energy powerpack for yourself is better than easy"
-                }
-              ],
-              "review_rating": 4.5,
-              "publish_date": "2023-09-01T00:00:00",
-              "reviewer_company_size": "Small-Business(50 or fewer emp.)",
-              "review_link": "https://www.g2.com/products/powerpack/reviews/powerpack-review-8555613",
-              "provider": "g2"
+                "id": "89224",
+                "product_name": "Canva",
+                "main_category": "Display Ad Design Software",
+                "categories": [
+                    "AI Writing Assistant",
+                    "Collaborative Whiteboard",
+                    "Presentation",
+                    "Website Builder",
+                    "Content Creation",
+                    "Photo Editing",
+                    "AI Video Generators",
+                    "Video Content Creation",
+                    "AI Content Creation Platforms",
+                    "Data Visualization",
+                    "Display Ad Design",
+                    "Desktop Publishing",
+                    "AI Image Generators",
+                    "Brand Asset Management",
+                    "Print Fulfillment Services",
+                    "Design Systems",
+                    "Logo Design Tools"
+                ],
+                "description": "Canva is an end-to-end AI-powered visual communication and collaboration platform empowering everyone in the world to design everything from presentations to infographics, videos, documents, websites, social media graphics and more. With pre-templated designs and thousands of stock images, videos, soundtracks, and fonts, Canva is a simple way to create visual content at scale. Canva is available on the web, iOS and Android."
+            },
+            {
+                "id": "40370",
+                "product_name": "Canva",
+                "main_category": "Display Ad Design Software",
+                "categories": [
+                    "AI Writing Assistant",
+                    "Collaborative Whiteboard",
+                    "Website Builder",
+                    "Presentation",
+                    "Content Creation",
+                    "Photo Editing",
+                    "AI Video Generators",
+                    "Video Content Creation",
+                    "Data Visualization",
+                    "Display Ad Design",
+                    "AI Content Creation Platforms",
+                    "Desktop Publishing",
+                    "AI Image Generators",
+                    "Brand Asset Management",
+                    "Print Fulfillment Services",
+                    "Design Systems",
+                    "Logo Design Tools"
+                ],
+                "description": "Canva is an online design and publishing platform that provides user friendly design tools for non-designers."
+            },
+            {
+                "id": "51349",
+                "product_name": "remove.bg",
+                "main_category": "Other Design Software",
+                "categories": [
+                    "Other Design"
+                ],
+                "description": "remove.bg is the industry-leading solution for fast, high-quality image background removal, trusted by millions of users worldwide. Built with advanced visual AI technology, remove.bg is designed to help e-commerce brands, photographers, online car dealers, marketplaces, and creatives of every kind produce clean, professional visuals that boost engagement and drive conversions. Designed for speed and simplicity, remove.bg eliminates the need for manual editing, saving valuable time and ensuring consistent image quality across all channels. Whether working with a single image or processing hundreds of thousands, remove.bg scales to your needs to build a seamless workflow. Users can quickly remove backgrounds using the drag-and-drop desktop application, which supports batch processing for high-volume tasks. Images can also be edited directly on the website, providing flexibility for businesses and individuals alike. For organizations with custom workflows, remove.bg offers a robust API that integrates easily into internal systems, enabling automated background removal at scale. remove.bg is also available as a plugin for widely-used design tools like Photoshop, Figma, PowerPoint and more, making it simple to work within existing creative environments. The remove.bg AI is trained to handle even the most complex visual details, including hair, fine edges, and challenging color contrasts, with remarkable accuracy. This ensures high-quality cutouts every time, no matter the subject or background. remove.bg is accessible via desktop, web, mobile, and plugin integrations, making it a versatile tool for professionals and teams looking to elevate their visual content without compromising speed or quality."
+            },
+            {
+                "id": "148891",
+                "product_name": "Designify Pro",
+                "main_category": "Photography Software",
+                "categories": [
+                    "Photo Editing"
+                ],
+                "description": "Editing product photos can be a chore. Countless hours are required to learn complex software, manually pick pixels, remove backgrounds and match colors – for photo after photo, thousands of times. Today all that is over: with Designify Pro, we’re starting a new era of bulk-editing amazing product photos with a single click. Bulk-edit any number of product photos, get high-res downloads, save your designs and integrate the Designify Pro API into your website, app, or workflow. Let our visual AI handle your product photos - automatically and in seconds!"
             }
-          ],
-          "total": 2,
-          "total_by_provider": { "g2": 2 }
-        }
-      }
-    ]
-  },
-  "limit": 10,
-  "offset": 0,
-  "credits_consumed": 1.5
+        ]
+    },
+    "limit": 10,
+    "offset": 0,
+    "credits_consumed": 0.0
 }
 ```
 
-### Paginating through reviews for a high-volume product
+**Fetch product reviews for one or more products.**
 
-```python
+Include product\_ids in the products parameter while making the API call.
+
+<CodeGroup>
+
+```text cURL
+curl --location 'https://api.akta.pro/api/v1/company/product-reviews?company=https%3A%2F%2Fcanva.com&products=89224%2C%20148891' \
+--header 'x-api-key: your api key'
+```
+
+```text Python
 import requests
 
-HEADERS = {"x-api-key": "<YOUR_API_KEY>"}
-PRODUCT_ID  = "177388"
-COMPANY     = "tesla.com"
-PAGE_SIZE   = 50
+url = "https://api.akta.pro/api/v1/company/product-reviews?company=https://canva.com&products=89224, 148891"
 
-all_reviews = []
-offset      = 0
+payload = {}
+headers = {
+  'x-api-key': 'your api key'
+}
 
-while True:
-    r = requests.get(
-        "https://api.akta.pro/api/v1/company/product-reviews",
-        headers=HEADERS,
-        params=[
-            ("company",  COMPANY),
-            ("products", PRODUCT_ID),
-            ("limit",    PAGE_SIZE),
-            ("offset",   offset)
+response = requests.request("GET", url, headers=headers, data=payload)
+
+print(response.text)
+```
+
+</CodeGroup>
+
+**Sample Response**
+
+```json expandable
+{
+    "data": {
+        "uuid": "00000jw-canva",
+        "product_reviews": [
+            {
+                "id": "89224",
+                "product_name": "Canva",
+                "main_category": "Display Ad Design Software",
+                "categories": [
+                    "AI Writing Assistant",
+                    "Collaborative Whiteboard",
+                    "Presentation",
+                    "Website Builder",
+                    "Content Creation",
+                    "Photo Editing",
+                    "AI Video Generators",
+                    "Video Content Creation",
+                    "AI Content Creation Platforms",
+                    "Data Visualization",
+                    "Display Ad Design",
+                    "Desktop Publishing",
+                    "AI Image Generators",
+                    "Brand Asset Management",
+                    "Print Fulfillment Services",
+                    "Design Systems",
+                    "Logo Design Tools"
+                ],
+                "description": "Canva is an end-to-end AI-powered visual communication and collaboration platform empowering everyone in the world to design everything from presentations to infographics, videos, documents, websites, social media graphics and more. With pre-templated designs and thousands of stock images, videos, soundtracks, and fonts, Canva is a simple way to create visual content at scale. Canva is available on the web, iOS and Android.",
+                "rating": {
+                    "g2": 4.7
+                },
+                "star_distribution": {
+                    "g2": [
+                        {
+                            "rating": "5 star",
+                            "reviews_count": "5,694"
+                        },
+                        {
+                            "rating": "4 star",
+                            "reviews_count": "878"
+                        },
+                        {
+                            "rating": "3 star",
+                            "reviews_count": "68"
+                        },
+                        {
+                            "rating": "2 star",
+                            "reviews_count": "14"
+                        },
+                        {
+                            "rating": "1 star",
+                            "reviews_count": "16"
+                        }
+                    ]
+                },
+                "pros_list": [
+                    {
+                        "text": "Ease of Use",
+                        "count": "1564"
+                    },
+                    {
+                        "text": "Templates",
+                        "count": "1127"
+                    },
+                    {
+                        "text": "Features",
+                        "count": "1014"
+                    },
+                    {
+                        "text": "Template Availability",
+                        "count": "942"
+                    },
+                    {
+                        "text": "Useful",
+                        "count": "928"
+                    }
+                ],
+                "cons_list": [
+                    {
+                        "text": "Limited Features",
+                        "count": "515"
+                    },
+                    {
+                        "text": "Limited Options",
+                        "count": "491"
+                    },
+                    {
+                        "text": "Expensive",
+                        "count": "421"
+                    },
+                    {
+                        "text": "Missing Features",
+                        "count": "414"
+                    },
+                    {
+                        "text": "Limited Templates",
+                        "count": "400"
+                    }
+                ],
+                "pricing": [
+                    {
+                        "price": "Free",
+                        "package": "Canva Free"
+                    },
+                    {
+                        "price": "$15.00",
+                        "package": "Canva Pro",
+                        "price_info": "1 person Per Month"
+                    },
+                    {
+                        "price": "$10.00",
+                        "package": "Canva Teams",
+                        "price_info": "1 Person (minimum 3 people) Per Month"
+                    }
+                ],
+                "reviews": {
+                    "data": [],
+                    "total": 6670,
+                    "total_by_provider": {
+                        "g2": 6670
+                    }
+                }
+            },
+            {
+                "id": "148891",
+                "product_name": "Designify Pro",
+                "main_category": "Photography Software",
+                "categories": [
+                    "Photo Editing"
+                ],
+                "description": "Editing product photos can be a chore. Countless hours are required to learn complex software, manually pick pixels, remove backgrounds and match colors – for photo after photo, thousands of times. Today all that is over: with Designify Pro, we’re starting a new era of bulk-editing amazing product photos with a single click. Bulk-edit any number of product photos, get high-res downloads, save your designs and integrate the Designify Pro API into your website, app, or workflow. Let our visual AI handle your product photos - automatically and in seconds!",
+                "rating": {
+                    "g2": 4.4
+                },
+                "star_distribution": {
+                    "g2": {
+                        "1": 0,
+                        "2": 0,
+                        "3": 1,
+                        "4": 3,
+                        "5": 11
+                    }
+                },
+                "pros_list": [],
+                "cons_list": [],
+                "pricing": [],
+                "reviews": {
+                    "data": [
+                        {
+                            "review_id": 5470882,
+                            "review_title": "Modern AI based bulk image editing tool.",
+                            "review_content": "What do you like best about Designify Pro?\nI like its user-friendly user interface which is really easy to use. It is an amazing tool for editing images online as it can be accessed through the web. There are other portals available for the same task as well like Canva Pro but there you can't edit images in bulk. I am in love with the Application Programming Interface (API) it provides for bulk editing. We have integrated it with our website and it works smoothly and does the work in less time. Apart from this, it can also be integrated with Remove.bg tool directly and we can apply different designs and graphics to the background of the images with the help of this tool.\n\nWhat do you dislike about Designify Pro?\nIt is best in the market when we talk about editing images in bulk at one time. Their API works smoothly and I haven't faced any issue with that. But if we compare it with the other tools available for just editing then it has low features and options than them. It doesn't have a rich quantity of templates and pre-built formats. But I hope they will add more features in the future.\n\nRecommendations to others considering Designify Pro:\nI would recommend this tool if you are a current user of remove.bg or if you want to edit images in bulk in less time. If you are looking for this tool for editing a single image then I would recommend Canva Pro.\n\nWhat problems is Designify Pro solving and how is that benefiting you?\nThe main problem that it solves is editing a lot of product images in our e-commerce projects. We if try to use Canva pro for the same then we had to edit every image separately and then we can use it on our website but with this tool, we can integrate their API into our website and automate the process of editing all the images. Moreover, Its interface is really easy to use so even beginners can use it without any kind of difficulty.",
+                            "review_question_answers": [
+                                {
+                                    "question": "What do you like best about Designify Pro?",
+                                    "answer": "I like its user-friendly user interface which is really easy to use. It is an amazing tool for editing images online as it can be accessed through the web. There are other portals available for the same task as well like Canva Pro but there you can't edit images in bulk. I am in love with the Application Programming Interface (API) it provides for bulk editing. We have integrated it with our website and it works smoothly and does the work in less time. Apart from this, it can also be integrated with Remove.bg tool directly and we can apply different designs and graphics to the background of the images with the help of this tool."
+                                },
+                                {
+                                    "question": "What do you dislike about Designify Pro?",
+                                    "answer": "It is best in the market when we talk about editing images in bulk at one time. Their API works smoothly and I haven't faced any issue with that. But if we compare it with the other tools available for just editing then it has low features and options than them. It doesn't have a rich quantity of templates and pre-built formats. But I hope they will add more features in the future."
+                                },
+                                {
+                                    "question": "Recommendations to others considering Designify Pro:",
+                                    "answer": "I would recommend this tool if you are a current user of remove.bg or if you want to edit images in bulk in less time. If you are looking for this tool for editing a single image then I would recommend Canva Pro."
+                                },
+                                {
+                                    "question": "What problems is Designify Pro solving and how is that benefiting you?",
+                                    "answer": "The main problem that it solves is editing a lot of product images in our e-commerce projects. We if try to use Canva pro for the same then we had to edit every image separately and then we can use it on our website but with this tool, we can integrate their API into our website and automate the process of editing all the images. Moreover, Its interface is really easy to use so even beginners can use it without any kind of difficulty."
+                                }
+                            ],
+                            "review_rating": 4.0,
+                            "publish_date": "2022-03-30T00:00:00",
+                            "reviewer_company_size": "Small-Business(50 or fewer emp.)",
+                            "review_link": "https://www.g2.com/products/designify-pro/reviews/designify-pro-review-5470882",
+                            "provider": "g2"
+                        },
+                        {
+                            "review_id": 5320538,
+                            "review_title": "I love it",
+                            "review_content": "",
+                            "review_question_answers": [],
+                            "review_rating": 4.5,
+                            "publish_date": "2022-03-08T00:00:00",
+                            "reviewer_company_size": "Small-Business(50 or fewer emp.)",
+                            "review_link": "https://www.g2.com/products/designify-pro/reviews/designify-pro-review-5320538",
+                            "provider": "g2"
+                        },
+                        {
+                            "review_id": 6750427,
+                            "review_title": "incredible and powerful ai that turns any picture into a materpiece",
+                            "review_content": "What do you like best about Designify Pro?\nThat I can take a photo of a product, on a dark, or busy or badly designed background, and remove the background to turn it into a photo worthy of putting on a wesbiste\n\nWhat do you dislike about Designify Pro?\nI like it...there's a learning curve to getting the right tones, and angles when even taking the picture from the beginning so that it comes out best. But that will just take practice\n\nWhat problems is Designify Pro solving and how is that benefiting you?\nI need product photograhy on white backgrounds all the time. this makes it really easy if our in-house photographer is not available",
+                            "review_question_answers": [
+                                {
+                                    "question": "What do you like best about Designify Pro?",
+                                    "answer": "That I can take a photo of a product, on a dark, or busy or badly designed background, and remove the background to turn it into a photo worthy of putting on a wesbiste"
+                                },
+                                {
+                                    "question": "What do you dislike about Designify Pro?",
+                                    "answer": "I like it...there's a learning curve to getting the right tones, and angles when even taking the picture from the beginning so that it comes out best. But that will just take practice"
+                                },
+                                {
+                                    "question": "What problems is Designify Pro solving and how is that benefiting you?",
+                                    "answer": "I need product photograhy on white backgrounds all the time. this makes it really easy if our in-house photographer is not available"
+                                }
+                            ],
+                            "review_rating": 5.0,
+                            "publish_date": "2022-06-17T00:00:00",
+                            "reviewer_company_size": "Small-Business(50 or fewer emp.)",
+                            "review_link": "https://www.g2.com/products/designify-pro/reviews/designify-pro-review-6750427",
+                            "provider": "g2"
+                        },
+                        {
+                            "review_id": 5341091,
+                            "review_title": "Helps our business to edit large number of Product Photos into great designs & artwork via easy API",
+                            "review_content": "What do you like best about Designify Pro?\nDesignify Pro is a great platform that helps our department create endless photo repositories for multimedia marketing, advertising, branding campaigns, graphic designing, and print media. We make a significant amount of our marketing collateral and events material in-house now with the help of this tool while meeting stringent timelines. We use it for almost everything from web creatives to customized customer communications.\n\nWhat do you dislike about Designify Pro?\nIt's only restricted to limited features currently. Unlike its closest competitor - Canva Pro, which provides an extensive array of features across Presentation design, Video creation, etc.\n\nRecommendations to others considering Designify Pro:\nThis is a great tool to edit a large volume of product photos automatically in a couple of minutes.\n\nWhat problems is Designify Pro solving and how is that benefiting you?\nWe were earlier using Canva Pro; however, it does not allow you bulk photo editing the way Designify Pro does. Designify Pro is an excellent tool for companies like ours which deal with customized product offerings and a large number of products. We hope that they will soon introduce even more features to provide an end-to-end solution for multimedia creative designing.",
+                            "review_question_answers": [
+                                {
+                                    "question": "What do you like best about Designify Pro?",
+                                    "answer": "Designify Pro is a great platform that helps our department create endless photo repositories for multimedia marketing, advertising, branding campaigns, graphic designing, and print media. We make a significant amount of our marketing collateral and events material in-house now with the help of this tool while meeting stringent timelines. We use it for almost everything from web creatives to customized customer communications."
+                                },
+                                {
+                                    "question": "What do you dislike about Designify Pro?",
+                                    "answer": "It's only restricted to limited features currently. Unlike its closest competitor - Canva Pro, which provides an extensive array of features across Presentation design, Video creation, etc."
+                                },
+                                {
+                                    "question": "Recommendations to others considering Designify Pro:",
+                                    "answer": "This is a great tool to edit a large volume of product photos automatically in a couple of minutes."
+                                },
+                                {
+                                    "question": "What problems is Designify Pro solving and how is that benefiting you?",
+                                    "answer": "We were earlier using Canva Pro; however, it does not allow you bulk photo editing the way Designify Pro does. Designify Pro is an excellent tool for companies like ours which deal with customized product offerings and a large number of products. We hope that they will soon introduce even more features to provide an end-to-end solution for multimedia creative designing."
+                                }
+                            ],
+                            "review_rating": 4.5,
+                            "publish_date": "2022-02-13T00:00:00",
+                            "reviewer_company_size": "Mid-Market(51-1000 emp.)",
+                            "review_link": "https://www.g2.com/products/designify-pro/reviews/designify-pro-review-5341091",
+                            "provider": "g2"
+                        },
+                        {
+                            "review_id": 5340610,
+                            "review_title": "Helps our business create professional flowcharts, creatives, customised templates, product albums",
+                            "review_content": "What do you like best about Designify Pro?\nIt helps us create professional flowcharts and infographics in minutes without any hassle and knowledge of photoshop. Designify Pro is a must for every business and an excellent tool for creating quality product photo galleries, reports, presentations, infographics, flowcharts in sync with our global branding guidelines and corporate theme. This is one of the most powerful photo editor tools. We have integrated the DEsignify Pro API into our website, and it works magically for us by helping us in editing a large volume of product photos as well as getting high-resolution downloads and saving our designs for repurposing.\n\nWhat do you dislike about Designify Pro?\nWe love it but sometimes their Drag & Drop feature gets stuck. It needs to be corrected.\n\nRecommendations to others considering Designify Pro:\nGive it a try through the free version. You will love it.\n\nWhat problems is Designify Pro solving and how is that benefiting you?\nWe're editing all our product photos, creating infographics, designing customized templates, presentation slides, etc., with Designify Pro. It has positively impacted our business and improved our brand image in front of our clients.",
+                            "review_question_answers": [
+                                {
+                                    "question": "What do you like best about Designify Pro?",
+                                    "answer": "It helps us create professional flowcharts and infographics in minutes without any hassle and knowledge of photoshop. Designify Pro is a must for every business and an excellent tool for creating quality product photo galleries, reports, presentations, infographics, flowcharts in sync with our global branding guidelines and corporate theme. This is one of the most powerful photo editor tools. We have integrated the DEsignify Pro API into our website, and it works magically for us by helping us in editing a large volume of product photos as well as getting high-resolution downloads and saving our designs for repurposing."
+                                },
+                                {
+                                    "question": "What do you dislike about Designify Pro?",
+                                    "answer": "We love it but sometimes their Drag & Drop feature gets stuck. It needs to be corrected."
+                                },
+                                {
+                                    "question": "Recommendations to others considering Designify Pro:",
+                                    "answer": "Give it a try through the free version. You will love it."
+                                },
+                                {
+                                    "question": "What problems is Designify Pro solving and how is that benefiting you?",
+                                    "answer": "We're editing all our product photos, creating infographics, designing customized templates, presentation slides, etc., with Designify Pro. It has positively impacted our business and improved our brand image in front of our clients."
+                                }
+                            ],
+                            "review_rating": 5.0,
+                            "publish_date": "2022-02-12T00:00:00",
+                            "reviewer_company_size": "Mid-Market(51-1000 emp.)",
+                            "review_link": "https://www.g2.com/products/designify-pro/reviews/designify-pro-review-5340610",
+                            "provider": "g2"
+                        },
+                        {
+                            "review_id": 5321161,
+                            "review_title": "Web-based Photo Editing Tool: Automatic and Free",
+                            "review_content": "What do you like best about Designify Pro?\nOne of the best web-based  AI-based photo editing tools I came across in recent times. It is available free of cost, however, if someone wants to process the editing in bulk then the paid version is really awesome with some pro features like access to the application programming interface (API), high resolution, and continuous features updates. The interface of the tool is quite user-friendly. The also works fantastic on mobile phones. The tool automatically removes the background of the uploaded photo and processes with different AI-customized backgrounds. These automatically customized cool backgrounds give the original photos a premium feel.\n\nWhat do you dislike about Designify Pro?\nSometimes, the automatic processing brings out the original photograph weird. Also, the resolution of the processed photos decreases.\n\nRecommendations to others considering Designify Pro:\nUse it for obtaining a premium touch in the photos without much effort. It customizes and categorizes the original photo in several numbers of AI-based processed photos so that the user can download them as per his/her needs.\n\nWhat problems is Designify Pro solving and how is that benefiting you?\nThis tool produces some really cool stuff by doing some AI-based magic on the photographs. I prefer to process my photos so that they deliver a premium-rich feel while posting on social media platforms like Facebook, instagram, etc.",
+                            "review_question_answers": [
+                                {
+                                    "question": "What do you like best about Designify Pro?",
+                                    "answer": "One of the best web-based  AI-based photo editing tools I came across in recent times. It is available free of cost, however, if someone wants to process the editing in bulk then the paid version is really awesome with some pro features like access to the application programming interface (API), high resolution, and continuous features updates. The interface of the tool is quite user-friendly. The also works fantastic on mobile phones. The tool automatically removes the background of the uploaded photo and processes with different AI-customized backgrounds. These automatically customized cool backgrounds give the original photos a premium feel."
+                                },
+                                {
+                                    "question": "What do you dislike about Designify Pro?",
+                                    "answer": "Sometimes, the automatic processing brings out the original photograph weird. Also, the resolution of the processed photos decreases."
+                                },
+                                {
+                                    "question": "Recommendations to others considering Designify Pro:",
+                                    "answer": "Use it for obtaining a premium touch in the photos without much effort. It customizes and categorizes the original photo in several numbers of AI-based processed photos so that the user can download them as per his/her needs."
+                                },
+                                {
+                                    "question": "What problems is Designify Pro solving and how is that benefiting you?",
+                                    "answer": "This tool produces some really cool stuff by doing some AI-based magic on the photographs. I prefer to process my photos so that they deliver a premium-rich feel while posting on social media platforms like Facebook, instagram, etc."
+                                }
+                            ],
+                            "review_rating": 4.5,
+                            "publish_date": "2022-02-10T00:00:00",
+                            "reviewer_company_size": "Mid-Market(51-1000 emp.)",
+                            "review_link": "https://www.g2.com/products/designify-pro/reviews/designify-pro-review-5321161",
+                            "provider": "g2"
+                        },
+                        {
+                            "review_id": 6677339,
+                            "review_title": "Must have tool for designer to quick work",
+                            "review_content": "What do you like best about Designify Pro?\nI loved their automation tool to edit bulk images like removing background, enhance camera raw pictures. It will take just seconds to do such editing work.\n\nAlso I liked their deployment as I can easily integrate with my native apps so that everytime it auto edit images in single place.\n\nWhat do you dislike about Designify Pro?\nIts pricing that restricts me somehow and its cloud version lags a much while editing large size images.\n\nI also wanted to mention that their background removal tool sometines worsen images as it lacks custom option.\n\nWhat problems is Designify Pro solving and how is that benefiting you?\nDesignyfy helped me to edit basic things that takes lots time on native app like photoshop. Its real automated tool that helped me to speedupy work like charm.\n\nIt also help me to integrate my native and online app easily.",
+                            "review_question_answers": [
+                                {
+                                    "question": "What do you like best about Designify Pro?",
+                                    "answer": "I loved their automation tool to edit bulk images like removing background, enhance camera raw pictures. It will take just seconds to do such editing work.\n\nAlso I liked their deployment as I can easily integrate with my native apps so that everytime it auto edit images in single place."
+                                },
+                                {
+                                    "question": "What do you dislike about Designify Pro?",
+                                    "answer": "Its pricing that restricts me somehow and its cloud version lags a much while editing large size images.\n\nI also wanted to mention that their background removal tool sometines worsen images as it lacks custom option."
+                                },
+                                {
+                                    "question": "What problems is Designify Pro solving and how is that benefiting you?",
+                                    "answer": "Designyfy helped me to edit basic things that takes lots time on native app like photoshop. Its real automated tool that helped me to speedupy work like charm.\n\nIt also help me to integrate my native and online app easily."
+                                }
+                            ],
+                            "review_rating": 4.0,
+                            "publish_date": "2022-05-28T00:00:00",
+                            "reviewer_company_size": "Small-Business(50 or fewer emp.)",
+                            "review_link": "https://www.g2.com/products/designify-pro/reviews/designify-pro-review-6677339",
+                            "provider": "g2"
+                        },
+                        {
+                            "review_id": 6889135,
+                            "review_title": "Interesting",
+                            "review_content": "What do you like best about Designify Pro?\n- it has unique visuals\n- you can create an account for free, even if there is a \"designify pro\" option for more contents\n- everything is secured and trustworthy\n- it's pretty easy to use\n\nWhat do you dislike about Designify Pro?\n- some designs are quite ugly and useless\n\nWhat problems is Designify Pro solving and how is that benefiting you?\nThis makes the photos look much more professional even if the material used is poor quality. With Designify Pro I made photos for my professional instagram and got many likes.",
+                            "review_question_answers": [
+                                {
+                                    "question": "What do you like best about Designify Pro?",
+                                    "answer": "- it has unique visuals\n- you can create an account for free, even if there is a \"designify pro\" option for more contents\n- everything is secured and trustworthy\n- it's pretty easy to use"
+                                },
+                                {
+                                    "question": "What do you dislike about Designify Pro?",
+                                    "answer": "- some designs are quite ugly and useless"
+                                },
+                                {
+                                    "question": "What problems is Designify Pro solving and how is that benefiting you?",
+                                    "answer": "This makes the photos look much more professional even if the material used is poor quality. With Designify Pro I made photos for my professional instagram and got many likes."
+                                }
+                            ],
+                            "review_rating": 3.5,
+                            "publish_date": "2022-07-24T00:00:00",
+                            "reviewer_company_size": "Mid-Market(51-1000 emp.)",
+                            "review_link": "https://www.g2.com/products/designify-pro/reviews/designify-pro-review-6889135",
+                            "provider": "g2"
+                        },
+                        {
+                            "review_id": 5319457,
+                            "review_title": "A Quick solution to a specific problem",
+                            "review_content": "What do you like best about Designify Pro?\nIt accomplishes a very important task in seconds. If you need to change the background of a picture very quickly, or just figure out which version would best suit the picture, all you have to do is download the picture and you will get a variety of solutions and you will immediately find the one that works best for you. In short, you get a lot of urgent solutions to your problem, and there is no need to get and cancel different options on your own with another program.\n\nWhat do you dislike about Designify Pro?\nI think some features need to be added so that people can solve more problems here when the back reaches the visuals. However, it is very well thought out for very specific tasks and artificial intelligence works great for you.\n\nRecommendations to others considering Designify Pro:\nIf you have an urgent need to change any image and get many solutions in which you can easily orient and choose the best for you, then this is what you need. If you want to get a usable image from a poor-quality image, you alsio can solve this problem here.\n\nIf you want to create a new design from scratch, look for other solutions.\n\nWhat problems is Designify Pro solving and how is that benefiting you?\nLots of options to change the background, opportunities to improve the quality, the right choice of colors. Works great for visualizing social media posts",
+                            "review_question_answers": [
+                                {
+                                    "question": "What do you like best about Designify Pro?",
+                                    "answer": "It accomplishes a very important task in seconds. If you need to change the background of a picture very quickly, or just figure out which version would best suit the picture, all you have to do is download the picture and you will get a variety of solutions and you will immediately find the one that works best for you. In short, you get a lot of urgent solutions to your problem, and there is no need to get and cancel different options on your own with another program."
+                                },
+                                {
+                                    "question": "What do you dislike about Designify Pro?",
+                                    "answer": "I think some features need to be added so that people can solve more problems here when the back reaches the visuals. However, it is very well thought out for very specific tasks and artificial intelligence works great for you."
+                                },
+                                {
+                                    "question": "Recommendations to others considering Designify Pro:",
+                                    "answer": "If you have an urgent need to change any image and get many solutions in which you can easily orient and choose the best for you, then this is what you need. If you want to get a usable image from a poor-quality image, you alsio can solve this problem here.\n\nIf you want to create a new design from scratch, look for other solutions."
+                                },
+                                {
+                                    "question": "What problems is Designify Pro solving and how is that benefiting you?",
+                                    "answer": "Lots of options to change the background, opportunities to improve the quality, the right choice of colors. Works great for visualizing social media posts"
+                                }
+                            ],
+                            "review_rating": 5.0,
+                            "publish_date": "2022-02-05T00:00:00",
+                            "reviewer_company_size": "Small-Business(50 or fewer emp.)",
+                            "review_link": "https://www.g2.com/products/designify-pro/reviews/designify-pro-review-5319457",
+                            "provider": "g2"
+                        },
+                        {
+                            "review_id": 6611325,
+                            "review_title": "Disignify Pro for easy and effective product designs",
+                            "review_content": "What do you like best about Designify Pro?\nI like the ux which is super interesting and easy to use. The Bulk editing of photos is a great feature that saves a lot of time and effort. In comparison to many other tools I've used, this worked out the best for me.\n\nWhat do you dislike about Designify Pro?\nThe support of only few file formats like .jpg and .png is a limitation. Also the maximum size of the photos is 12Mb at the time of my use, which made it difficult for me to edit pictures of higher resolution.\n\nWhat problems is Designify Pro solving and how is that benefiting you?\nProduct UX design, product marketing through product images  and making flyers, posters and pamphlets for promotions in campaigns. Main benefits are saving time and effort and reasonable pricing.",
+                            "review_question_answers": [
+                                {
+                                    "question": "What do you like best about Designify Pro?",
+                                    "answer": "I like the ux which is super interesting and easy to use. The Bulk editing of photos is a great feature that saves a lot of time and effort. In comparison to many other tools I've used, this worked out the best for me."
+                                },
+                                {
+                                    "question": "What do you dislike about Designify Pro?",
+                                    "answer": "The support of only few file formats like .jpg and .png is a limitation. Also the maximum size of the photos is 12Mb at the time of my use, which made it difficult for me to edit pictures of higher resolution."
+                                },
+                                {
+                                    "question": "What problems is Designify Pro solving and how is that benefiting you?",
+                                    "answer": "Product UX design, product marketing through product images  and making flyers, posters and pamphlets for promotions in campaigns. Main benefits are saving time and effort and reasonable pricing."
+                                }
+                            ],
+                            "review_rating": 4.5,
+                            "publish_date": "2022-05-14T00:00:00",
+                            "reviewer_company_size": "Enterprise(> 1000 emp.)",
+                            "review_link": "https://www.g2.com/products/designify-pro/reviews/designify-pro-review-6611325",
+                            "provider": "g2"
+                        }
+                    ],
+                    "total": 15,
+                    "total_by_provider": {
+                        "g2": 15
+                    }
+                }
+            }
         ]
-    )
-    data    = r.json()
-    product = data["data"]["product_reviews"][0]
-    batch   = product["reviews"]["data"]
-
-    if not batch:
-        break
-
-    all_reviews.extend(batch)
-    total = product["reviews"]["total"]
-    print(f"Fetched {len(all_reviews)} / {total} reviews...")
-
-    if len(all_reviews) >= total:
-        break
-
-    offset += PAGE_SIZE
-
-print(f"\nTotal reviews retrieved: {len(all_reviews)}")
-```
-
-### Using `review_question_answers` for structured processing
-
-Use `review_question_answers` for clean structured extraction rather than parsing the concatenated `review_content` string.
-
-```python
-for review in product["reviews"]["data"]:
-    print(f"\n[{review['review_rating']}★] {review['review_title']}")
-    for qa in review["review_question_answers"]:
-        print(f"  Q: {qa['question']}")
-        print(f"  A: {qa['answer'][:200]}")
-```
-
-### JavaScript / Node.js
-
-```javascript
-const fetch = require("node-fetch");
-
-const API_KEY = process.env.AKTA_API_KEY;
-const BASE    = "https://api.akta.pro/api/v1/company/product-reviews";
-
-async function getProductList(company) {
-  const res = await fetch(`${BASE}?company=${company}`, {
-    headers: { "x-api-key": API_KEY }
-  });
-  if (!res.ok) throw new Error(`API error: ${res.status}`);
-  return (await res.json()).data.product_reviews;
+    },
+    "limit": 10,
+    "offset": 0,
+    "credits_consumed": 3.0
 }
-
-async function getProductReviews(company, productIds, limit = 10, offset = 0) {
-  const params = new URLSearchParams({ company, limit, offset });
-  productIds.forEach(id => params.append("products", id));
-
-  const res = await fetch(`${BASE}?${params}`, {
-    headers: { "x-api-key": API_KEY }
-  });
-  if (!res.ok) throw new Error(`API error: ${res.status}`);
-  return (await res.json());
-}
-
-// Step 1: list products
-getProductList("tesla.com").then(products => {
-  console.log(`Products: ${products.length}`);
-  products.forEach(p => console.log(`  ${p.id}  ${p.product_name}`));
-
-  // Step 2: fetch reviews for first product
-  const ids = products.slice(0, 1).map(p => p.id);
-  return getProductReviews("tesla.com", ids, 5);
-
-}).then(data => {
-  const product = data.data.product_reviews[0];
-  const rating  = product.rating?.g2;
-  const total   = product.reviews?.total;
-  console.log(`\n${product.product_name}: ${rating}/5.0 (${total} reviews)`);
-  product.reviews.data.forEach(r => {
-    console.log(`  [${r.review_rating}★] ${r.review_title}`);
-  });
-});
 ```
-
----
