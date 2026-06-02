@@ -1,6 +1,5 @@
 ---
 title: "Company Search"
-description: "Look up any company by name, website or UUID to retrieve its Akta UUID and core identity fields — used to resolve company identifiers before calling the Enrichment and News APIs."
 ---
 
 ## 1. Overview
@@ -37,7 +36,7 @@ x-api-key: <YOUR_API_KEY>
 
 | Parameter | Type | Required | Description |
 | --- | --- | --- | --- |
-| `query` | string | **Required** | Company name (e.g. `"Canva"`), website domain (e.g. `"canva.com"`), or UUID (e.g. `"3fa85f64-..."`). The API automatically identifies the input type and resolves it. |
+| `query` | string | **Required** | Company name (e.g. `"Canva"`), website domain (e.g. `"canva.com"`), or UUID (e.g. `"00000jw-canva"`). The API automatically identifies the input type and resolves it. |
 
 **Example requests:**
 
@@ -146,26 +145,3 @@ news = requests.get(
 )
 print(f"Found {news.json()['total']} articles")
 ```
-
----
-
-## 6. Error Handling
-
-| Status | Error Code | Cause & Resolution |
-| --- | --- | --- |
-| `200 OK` | — | Results returned in `data` array. |
-| `204 No Content` | — | No companies matched the query. Try a different name or domain. |
-| `400 Bad Request` | `INVALID_INPUT` | Missing or malformed `name` parameter. |
-| `401 Unauthorized` | `UNAUTHORIZED` | Missing or invalid `x-api-key`. |
-| `500 Internal Server Error` | `SERVER_ERROR` | Unexpected server error. Retry after a brief delay. |
-
-**Error response example:**
-
-```json
-{
-  "error": "INVALID_INPUT",
-  "message": "The name parameter is required."
-}
-```
-
----
