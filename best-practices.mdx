@@ -1,3 +1,55 @@
 ---
 title: "Best Practices"
 ---
+
+**Pass a domain, not a company name**
+
+The `company` parameter accepts a website domain (e.g. `"canva.com"`) or a UUID from the Company Search API — not a display name like `"Canva"`. Passing a display name will not resolve correctly. If you only have a company name, use the Company Search API to look up its domain or UUID first.
+
+**Set `start_date` explicitly — the default lookback is capped**
+
+Non-enterprise plans are limited to a 6-month lookback window. Without a `start_date`, the API defaults to 6 months ago. For longer historical pulls on enterprise plans, always set `start_date` explicitly to avoid unintentional truncation:
+
+```python
+from datetime import datetime, timedelta
+
+start_date = (datetime.today() - timedelta(days=365)).strftime("%Y-%m-%d")
+params["start_date"] = start_date
+```
+
+**Combine `company` and `industry` for more focused results**
+
+Passing both parameters scopes results to articles about the specified company that are also classified under the specified industry. This is useful when a company operates across multiple sectors and you want to isolate coverage of a specific business line:
+
+```python
+params = {
+    "company":  "alphabet.com",
+    "industry": "Artificial Intelligence",
+    "limit":    50
+}
+```
+
+**Use `is_primary` flags on tags and industries for fast classification**
+
+Each `tags` and `industries` array contains exactly one object with `is_primary: true` — the dominant classification for that article. When you only need the top-level category, extract the primary item directly rather than iterating the full array:
+
+```python
+primary_tag = next((t["name"] for t in article["tags"] if t["is_primary"]), None)
+primary_industry = next((i["name"] for i in article["industries"] if i["is_primary"]), None)
+```
+
+**Use `full_text` for LLM pipelines — fall back to `ai_summary` when empty**
+
+`full_text` provides the complete article body and is ideal for embedding, RAG, or detailed analysis. Some articles may have an empty `full_text` due to paywalls or scraping restrictions. Always fall back to `ai_summary`:
+
+```python
+content = article.get("full_text", "").strip()
+if not content:
+    content = article.get("ai_summary", "")
+```
+
+**Paginate correctly — `total` reflects the full matching set**
+
+The `total` field reflects the complete number of matching articles before pagination. Always compare `len(all_articles)` against `total` to determine whether further pages exist. Stop paginating when the returned `data` array is empty or when `len(all_articles) >= total`.
+
+---
