@@ -27,26 +27,48 @@
             "group": "API Products",
             "icon": "network-wired",
             "pages": [
-              "news-doc",
-              "company-enrichment-doc",
-              "company-search-doc",
+              {
+                "group": "News",
+                "pages": [
+                  "news-doc",
+                  "quick-start",
+                  "use-cases",
+                  "best-practices"
+                ]
+              },
+              {
+                "group": "Company Enrichment",
+                "pages": [
+                  "company-enrichment-doc",
+                  "quick-start-1",
+                  "use-cases-1",
+                  "best-practices-1"
+                ]
+              },
               {
                 "group": "Alternative Data",
                 "pages": [
                   {
                     "group": "Product Reviews",
                     "pages": [
-                      "alternative-data-product-reviews"
+                      "alternative-data-product-reviews",
+                      "quick-start-2",
+                      "use-cases-2",
+                      "best-practices-2"
                     ]
                   },
                   {
                     "group": "Employee Reviews",
                     "pages": [
-                      "alternative-data-employee-reviews"
+                      "alternative-data-employee-reviews",
+                      "quick-start-3",
+                      "use-cases-3",
+                      "best-practices-3"
                     ]
                   }
                 ]
-              }
+              },
+              "company-search-doc"
             ]
           },
           "playground",
