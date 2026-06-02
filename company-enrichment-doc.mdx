@@ -126,7 +126,7 @@ All parameters are passed as **URL query parameters**.
 | `sections` | string\[\] | Optional | Comma-separated list of section names to include in the response. Returns all available sections if omitted. Request only what you need — each additional section adds to response size and processing time. See the available sections table in Section 1. |
 
 <Info>
-  `sections` defaults to all available sections when omitted. For time-sensitive integrations, always specify the sections you need rather than relying on the default — this reduces response size significantly and avoids receiving large sections like `acquisitions` when only `firmographics` is needed.
+  `sections` defaults to all available sections when omitted. For time-sensitive integrations, always specify the sections you need rather than relying on the default.
 </Info>
 
 **Full request example:**
@@ -231,7 +231,7 @@ The `funding` section contains an `overall` object with aggregate funding summar
 
 **`headcount`, `website_traffic`, `gtm_and_business_model`,  `acquisitions`, `investments`**
 
-These sections follow the same envelope pattern — each section key maps to a structured object with relevant fields. Refer to the [full schema reference](#) for complete field-level documentation on all sections.
+These sections follow the same envelope pattern — each section key maps to a structured object with relevant fields. 
 
 ---
 

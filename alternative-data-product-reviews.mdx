@@ -110,7 +110,7 @@ All parameters are passed as URL query parameters.
 
 | Parameter | Type | Required | Description |
 | --- | --- | --- | --- |
-| `company` | string | **Required** | Company website domain (e.g. `"tesla.com"`) or company UUID (e.g. `"3fa85f64-..."`). UUIDs are returned by the [Company Search API](/akta-company-search-doc). |
+| `company` | string | **Required** | Company website domain (e.g. `"tesla.com"`) or company UUID (e.g. `"3fa85f64-..."`). UUIDs are returned by the [Company Search API](/company-search-doc). |
 | `products` | string\[\] | Optional | Product ID to fetch reviews for.  Product IDs are returned by this same endpoint when called without `products`. When omitted, only the product list is returned — no reviews. |
 | `limit` | integer | Optional | Maximum number of reviews to return per product. Default `0`, max `50`. Only applies when `products` is provided. |
 | `offset` | integer | Optional | Number of reviews to skip before returning results. Default `0`. Use with `limit` for pagination. |
