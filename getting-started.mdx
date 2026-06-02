@@ -58,7 +58,7 @@ This guide shows you how to create an Akta API key and start making requests in 
     </Card>
   </Column>
   <Column>
-    <Card title="Company Enrichment" icon="database" href="/news-doc">
+    <Card title="Company Enrichment" icon="database" href="/company-enrichment-doc">
       Structured firmographics, funding, and business model details
     </Card>
   </Column>
@@ -68,41 +68,3 @@ This guide shows you how to create an Akta API key and start making requests in 
     </Card>
   </Column>
 </Columns>
-
-### Use-cases
-
-<Tabs>
-  <Tab title="Company News">
-    #### Portfolio adverse signal monitoring
-
-    Fetch legal, compliance, layoff, leadership change, governance, and workforce-related news for a portfolio company.
-
-    ```bash
-    curl -G "https://api.akta.pro/api/v1/company/news/" \
-      -H "x-api-key: YOUR_API_KEY" \
-      --data-urlencode "company=brex" \
-      --data-urlencode "category=Legal & Regulatory,Leadership & Governance,Workforce & Talent" \
-      --data-urlencode "limit=25"
-    ```
-
-    #### Capital markets and transaction monitoring
-
-    Track financing, transaction, strategic development, and governance events for a target company.
-
-    ```bash
-    curl -G "https://api.akta.pro/api/v1/company/news/" \
-      -H "x-api-key: YOUR_API_KEY" \
-      --data-urlencode "company=tesla" \
-      --data-urlencode "category=Capital Markets & Transactions,Strategic Developments,Leadership & Governance" \
-      --data-urlencode "start_date=2026-03-01" \
-      --data-urlencode "end_date=2026-05-05" \
-      --data-urlencode "limit=10"
-    ```
-  </Tab>
-  <Tab title="Company Enrichment">
-    Coming soon
-  </Tab>
-  <Tab title="Industry News">
-    Coming soon
-  </Tab>
-</Tabs>

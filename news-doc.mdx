@@ -5,7 +5,7 @@ description: "Fetch enriched, AI-summarised news articles for any company or ind
 
 ## 1. Overview
 
-The Akta News API fetches enriched news articles for a given company or industry. Each article is returned with an AI-generated summary, full body text, structured event tags, industry classifications, sentiment signal, relevance score, and a resolved list of all companies mentioned — making it ready for direct consumption in LLM pipelines, monitoring workflows, and investment research tools.
+The Akta News API fetches enriched news articles for a given company or industry. Each article is returned with an AI-generated summary, full body text, structured news tags, industry classifications, sentiment signal, relevance score, and a resolved list of all companies mentioned — making it ready for direct consumption in LLM pipelines, monitoring workflows, and investment research tools.
 
 This is a **synchronous GET API** — pass your filters as URL query parameters and receive a paginated array of enriched articles immediately in the response.
 
@@ -17,13 +17,13 @@ Each article in the response includes:
 - **Full text** — the complete article body for downstream LLM processing, embedding, or RAG
 - **Sentiment** — `positive`, `negative`, or `neutral` classification at the article level
 - **News score** — relevance and quality score for signal triage
-- **Event tags** — structured primary and secondary tags (e.g. `"Equity Fund-Raising"`, `"Layoffs"`, `"IPO"`)
-- **Industry classifications** — structured industry objects with primary/secondary flags
+- **News tags** — structured primary and secondary tags (e.g. `"Equity Fund-Raising"`, `"Layoffs"`, `"IPO"`)
+- **Industry classifications** — industry names with primary flag
 - **Company mentions** — resolved array of all companies named in the article, each with UUID, name, and website
 
 **Common use cases:**
 
-- **Company monitoring** — pass a company's website domain to track all coverage for a specific business, filtered by sentiment or event type
+- **Company monitoring** — pass a company's website domain to track all coverage for a specific business, filtered by sentiment or news type
 - **Industry intelligence** — pass an industry name to monitor deal flow, regulatory activity, or innovation signals across an entire sector
 - **LLM pipeline enrichment** — use `full_text` as input to summarisation, classification, or embedding models, pre-filtered by `type` and `sentiment`
 - **Signal triage** — use `news_score` to rank articles by relevance before processing, reducing noise in high-volume feeds
@@ -72,7 +72,7 @@ response = requests.get(
     headers={"x-api-key": "<YOUR_API_KEY>"},
     params={
         "company":    "canva.com",
-        "sentiment":  "positive",
+        "sentiment_list":  ["positive"],
         "start_date": "2024-01-01",
         "end_date":   "2024-12-31",
         "limit":      25
@@ -106,7 +106,7 @@ All requests must include an **API key** in the `x-api-key` HTTP header.
 x-api-key: <YOUR_API_KEY>
 ```
 
-API keys are issued from your Akta account. Contact [support@akta.ai](mailto:support@akta.ai) if you do not yet have API access or need to rotate a key.
+API keys are issued from your Akta account. Contact [support@akta.pro](mailto:support@akta.pro) if you do not yet have API access or need to rotate a key.
 
 <Warning>
   Never expose your API key in client-side code, browser requests, or public repositories. A missing or invalid key returns `401 Unauthorized`.
@@ -131,8 +131,8 @@ All parameters are passed as URL query parameters. All parameters are optional.
 | `start_date` | string | 6 months ago | Start of the date range for articles (`YYYY-MM-DD`). Inclusive. Non-enterprise plans are capped at a 6-month lookback window. |
 | `end_date` | string | Today | End of the date range for articles (`YYYY-MM-DD`). Inclusive. Defaults to today if omitted. |
 | `sentiment_list` | string\[\] | `"all"` | Filter by article sentiment. Accepted values: `"positive"`, `"negative"`, `"neutral"`, `"all"`. |
-| `type_list` | string\[\] | `"all"` | Filter by article event type (e.g. `"Equity Fund-Raising"`, `"Secondary Transactions"`). Default returns all types. |
-| `news_score_list` | string\[\] | `"all"` | Filter by news score tier. Default returns all. |
+| `type_list` | string\[\] | `"all"` | Filter by article event type (e.g. `"Equity Fund-Raising"`, `"Secondary Transactions"`). Default returns all types. [Download Full List](https://playground.akta.pro/news-tags.csv) |
+| `news_score_list` | string\[\] | `"all"` | Filter by news score tier. `"High"`, `"Medium"`, `"Low"`, `"all"` . Default returns all. |
 | `limit` | integer | `10` | Maximum number of articles to return. Max `100`. |
 | `offset` | integer | `0` | Number of articles to skip before returning results. Use with `limit` for pagination. |
 
@@ -177,7 +177,6 @@ print(response.json())
 
 ```json
 {
-  "status": "success",
   "total": 100,
   "limit": 10,
   "offset": 0,
@@ -188,7 +187,6 @@ print(response.json())
 
 | Field | Type | Description |
 | --- | --- | --- |
-| `status` | string | `"success"` when the request was processed successfully. |
 | `total` | integer | Total number of matching articles available across all pages. |
 | `limit` | integer | The `limit` value applied to this response. |
 | `offset` | integer | The `offset` value applied to this response. |
@@ -225,7 +223,6 @@ Each object in the `data` array contains the following fields:
 | --- | --- | --- |
 | `sentiment` | string | Article-level sentiment: `"positive"`, `"negative"`, or `"neutral"`. |
 | `news_score` | float | Relevance and quality score between `0.0` and `1.0`. Higher values indicate greater relevance to the queried company or industry. Use for triage and ranking. |
-| `type` | string | Primary event type of the article (e.g. `"Equity Fund-Raising"`, `"Secondary Transactions"`, `"Layoffs"`). |
 
 **Geography and classification**
 
@@ -233,7 +230,7 @@ Each object in the `data` array contains the following fields:
 | --- | --- | --- |
 | `countries` | string\[\] | Array of ISO 3166-1 alpha-2 country codes relevant to the article (e.g. `["AU", "US"]`). Empty array when not detected. |
 | `industries` | object\[\] | Industries associated with the article. See **Industry object** below. |
-| `tags` | object\[\] | Structured event tags. See **Tag object** below. |
+| `tags` | object\[\] | Structured news tags. See **Tag object** below. |
 | `company_names` | object\[\] | All companies mentioned in the article, each resolved with a UUID and website. See **Company object** below. |
 
 ### Industry object
@@ -243,7 +240,6 @@ Each object in the `industries` array:
 | Field | Type | Description |
 | --- | --- | --- |
 | `name` | string | Industry name (e.g. `"Software"`, `"Design Tools"`). |
-| `code` | string | Machine-readable industry code (e.g. `"software"`, `"design-tools"`). |
 | `is_primary` | boolean | `true` if this is the primary industry classification for the article. Exactly one industry object will have `is_primary: true`. |
 
 ### Tag object
@@ -262,23 +258,9 @@ Each object in the `company_names` array:
 
 | Field | Type | Description |
 | --- | --- | --- |
-| `company_id` | string (UUID) | Akta UUID for this company. Use with the Company Search API for further enrichment. |
+| `uuid` | string (UUID) | Akta UUID for this company. Use with the Company Search API for further enrichment. |
 | `name` | string | Company display name. |
 | `website` | string | Company website URL. |
-| `is_primary` | boolean | `true` if this is the main company the article is about. Exactly one company will have `is_primary: true` when the article has a clear primary subject. |
-
-### Empty results
-
-When no articles match the query, the API returns `204 No Content` with an empty envelope:
-
-```json
-{
-  "total": 0,
-  "limit": 10,
-  "offset": 0,
-  "data": []
-}
-```
 
 ---
 
@@ -664,15 +646,6 @@ def fetch_news_with_retry(params, api_key, max_retries=3):
 **Pass a domain, not a company name**
 
 The `company` parameter accepts a website domain (e.g. `"canva.com"`) or a UUID from the Company Search API — not a display name like `"Canva"`. Passing a display name will not resolve correctly. If you only have a company name, use the Company Search API to look up its domain or UUID first.
-
-**Use `news_score` to triage before processing full text**
-
-The `news_score` float (0.0–1.0) measures article relevance and quality relative to your query. For high-volume feeds, sort by `news_score` descending and process only the top articles before expanding to lower-scored results:
-
-```python
-articles.sort(key=lambda x: x.get("news_score", 0), reverse=True)
-high_signal = [a for a in articles if a.get("news_score", 0) >= 0.7]
-```
 
 **Set `start_date` explicitly — the default lookback is capped**
 
