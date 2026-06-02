@@ -14,7 +14,7 @@ This is a **synchronous GET API** — pass parameters in the URL and receive enr
 | Section | What you get |
 | --- | --- |
 | `firmographics` | Name, website, location, founded year, company type, operating status, and stock ticker |
-| `funding` | Funding stage, total capital raised, last round date, and number of rounds |
+| `funding` | Funding stage, total capital raised, last round date, and number of rounds _(enterprise tier only)_ |
 | `headcount` | Employee count and headcount data |
 | `website_traffic` | Web traffic metrics and visitor estimates |
 | `gtm_and_business_model` | Go-to-market strategy and business model details |
@@ -123,7 +123,7 @@ All parameters are passed as **URL query parameters**.
 | Parameter | Type | Required | Description |
 | --- | --- | --- | --- |
 | `company` | string | **Required** | Company identifier. Accepts either a **website domain** (e.g. `canva.com` or `https://www.canva.com`) or a **company UUID** (e.g. `00031n-tesla`). UUIDs are returned by the [Company Search API](#). |
-| `sections` | string | Optional | Comma-separated list of section names to include in the response. Returns all available sections if omitted. Request only what you need — each additional section adds to response size and processing time. See the available sections table in Section 1. |
+| `sections` | string\[\] | Optional | Comma-separated list of section names to include in the response. Returns all available sections if omitted. Request only what you need — each additional section adds to response size and processing time. See the available sections table in Section 1. |
 
 <Info>
   `sections` defaults to all available sections when omitted. For time-sensitive integrations, always specify the sections you need rather than relying on the default — this reduces response size significantly and avoids receiving large sections like `acquisitions` when only `firmographics` is needed.
@@ -515,7 +515,7 @@ def enrich_with_retry(params, api_key, max_retries=3):
 
 **Always specify `sections` — never rely on the default**
 
-When `sections` is omitted, all available sections are returned. For large sections like `acquisitions` or `public_company_financials`, this increases response size significantly with no benefit if you only need `firmographics`. Always be explicit:
+When `sections` is omitted, all available sections are returned. This would consume credits. Always be explicit:
 
 ```python
 # ❌ Returns everything — slow and large
@@ -536,24 +536,6 @@ params={"company": "https://www.canva.com"}
 params={"company": "00031n-tesla"}
 ```
 
-**`num_funding_rounds` is a string — parse before arithmetic**
-
-The `funding.overall.num_funding_rounds` field returns a string (e.g. `"21"`), not an integer. Parse it before any numeric operations:
-
-```python
-num_rounds = int(data["funding"]["overall"]["num_funding_rounds"])
-```
-
-**`total_funding` is raw USD — scale before displaying**
-
-The `total_funding` field is a raw float in USD (e.g. `2508450682.0`). Always divide by `1e6` or `1e9` before presenting to users:
-
-```python
-total_m = data["funding"]["overall"]["total_funding"] / 1e6   # in millions
-total_b = data["funding"]["overall"]["total_funding"] / 1e9   # in billions
-label = f"${total_b:.1f}B" if total_b >= 1 else f"${total_m:.0f}M"
-```
-
 **Use Company Search to resolve names to UUIDs before enriching**
 
 If your input is a company name (not a domain), resolve it to a UUID via the Company Search API first. Passing a display name like `"Canva"` directly as the `company` parameter may not resolve. Use the domain or UUID returned by Company Search:
@@ -567,24 +549,9 @@ search = requests.get(
 company_uuid = search.json()["data"][0]["uuid"]
 ```
 
-**Check `company_status` before requesting financial sections**
+`acquisitions `**,**  `funding `**and** `investments `**require enterprise tier**
 
-`public_company_financials` only returns data for publicly listed companies, and `uk_private_company_financials` only for UK-registered private entities. Requesting these sections for companies that don't qualify returns empty data. Check `firmographics.company_status` first to avoid unnecessary requests:
-
-```python
-firm = data["firmographics"]
-
-if firm["company_status"] == "public":
-    # Request public financials
-    pass
-elif firm["location"].endswith("United Kingdom"):
-    # May have UK private financials
-    pass
-```
-
-**`acquisitions` and `investments` require enterprise tier — handle `403` gracefully**
-
-The `acquisitions` and `investments` sections are gated to enterprise plans. If your plan does not include them, requesting them returns a `403 Forbidden`. Handle this in your section selection logic rather than letting it surface as an uncaught error:
+The `acquisitions` , `funding` and `investments` sections are gated to enterprise plans. If your plan does not include them, requesting them returns a `403 Forbidden`. Handle this in your section selection logic rather than letting it surface as an uncaught error:
 
 ```python
 try:

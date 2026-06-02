@@ -111,13 +111,9 @@ All parameters are passed as URL query parameters.
 | Parameter | Type | Required | Description |
 | --- | --- | --- | --- |
 | `company` | string | **Required** | Company website domain (e.g. `"tesla.com"`) or company UUID (e.g. `"3fa85f64-..."`). UUIDs are returned by the [Company Search API](/akta-company-search-doc). |
-| `products` | string\[\] | Optional | Product ID to fetch reviews for. Pass this parameter **once per product** to request multiple products simultaneously (e.g. `products=177388&products=112516`). Product IDs are returned by this same endpoint when called without `products`. When omitted, only the product list is returned — no reviews. |
+| `products` | string\[\] | Optional | Product ID to fetch reviews for.  Product IDs are returned by this same endpoint when called without `products`. When omitted, only the product list is returned — no reviews. |
 | `limit` | integer | Optional | Maximum number of reviews to return per product. Default `0`, max `50`. Only applies when `products` is provided. |
 | `offset` | integer | Optional | Number of reviews to skip before returning results. Default `0`. Use with `limit` for pagination. |
-
-<Info>
-  The `products` parameter must be repeated for each product ID — not passed as a comma-separated list or JSON array. In Python's `requests` library, use a list of tuples in the `params` argument to repeat a parameter: `params=[("products", "177388"), ("products", "112516")]`.
-</Info>
 
 **Full request examples:**
 
