@@ -6,233 +6,553 @@ title: "Use cases"
 
 Fetch all positive news about a company over a date range, filtered to funding and M&A event types.
 
+Use the following filters:
+
+- sentiment\_list filter to fetch only positive news.
+- type\_list filter - CM01, CM03 to filter only the news related to funding and M&A activity. Refer to the complete list of news type filters here.
+
 <CodeGroup>
 
 ```bash cURL
-curl --location 'https://api.akta.pro/api/v1/news?company=canva.com&sentiment=positive&start_date=2024-01-01&limit=25' \
-  --header 'x-api-key: <YOUR_API_KEY>'
+curl --location 'https://api.akta.pro/api/v1/news?company=https%3A%2F%2Fcanva.com&sentiment_list=Positive&type_list=CM01%2C%20CM03' \
+--header 'x-api-key: YOUR API KEY'
 ```
 
 ```python Python
 import requests
 
-HEADERS = {"x-api-key": "<YOUR_API_KEY>"}
+url = "https://api.akta.pro/api/v1/news?company=https://canva.com&sentiment_list=Positive&type_list=CM01, CM03"
 
-response = requests.get(
-    "https://api.akta.pro/api/v1/news",
-    headers=HEADERS,
-    params={
-        "company":    "canva.com",
-        "sentiment":  "positive",
-        "start_date": "2024-01-01",
-        "limit":      25
-    }
-)
+payload = {}
+headers = {
+  'x-api-key': 'Your API Key'
+}
 
-data     = response.json()
-articles = data["data"]
+response = requests.request("GET", url, headers=headers, data=payload)
 
-print(f"Found {data['total']} articles (showing {len(articles)})\n")
-
-for article in articles:
-    primary_tag = next(
-        (t["name"] for t in article.get("tags", []) if t.get("is_primary")),
-        "—"
-    )
-    print(f"[{article['published_date']}] [{primary_tag}]")
-    print(f"  {article['title']}")
-    print(f"  {article['publisher']} | Score: {article['news_score']:.2f}")
-    print(f"  {article['ai_summary'][:180]}...")
-    print()
+print(response.text)
 ```
 
 </CodeGroup>
 
 **Sample response:**
 
-```json
+```json expandable
 {
-  "status": "success",
-  "total": 100,
-  "limit": 10,
-  "offset": 0,
-  "credits_consumed": 0.05,
-  "data": [
-    {
-      "id": "news_abc123",
-      "title": "Canva raises $1B at a $26B valuation",
-      "url": "https://techcrunch.com/canva-raises-1b",
-      "publisher": "TechCrunch",
-      "published_date": "2024-09-15",
-      "sentiment": "positive",
-      "news_score": 0.94,
-      "type": "Equity Fund-Raising",
-      "ai_summary": "Canva announced a $1B funding round, bringing its valuation to $26B.",
-      "full_text": "Canva, the Australian design platform...",
-      "original_language": "en",
-      "author": "Jane Doe",
-      "source": "techcrunch.com",
-      "countries": ["AU", "US"],
-      "industries": [
-        { "name": "Software", "code": "software", "is_primary": true },
-        { "name": "Design Tools", "code": "design-tools", "is_primary": false }
-      ],
-      "tags": [
-        { "name": "Funding", "code": "funding", "is_primary": true },
-        { "name": "Valuation", "code": "valuation", "is_primary": false }
-      ],
-      "company_names": [
+    "total": 3,
+    "limit": 10,
+    "offset": 0,
+    "count": 3,
+    "data": [
         {
-          "company_id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-          "name": "Canva",
-          "website": "https://canva.com",
-          "is_primary": true
+            "id": 9538950,
+            "title": "Canva unveils 'AI 2.0,' a new suite of agentic tools, as the design startup becomes an AI powerhouse",
+            "url": "https://fortune.com/2026/04/16/canva-ai-agentic-design-suite-coo-cliff-obrecht/",
+            "publisher": "fortune",
+            "published_date": "2026-04-16T13:00:00+00:00",
+            "sentiment": "Positive",
+            "news_score": "Medium",
+            "ai_summary": "Canva, an Australian startup, is launching 'Canva AI 2.0', a new suite of AI-powered tools that enhance design and workflow automation, integrating with services like Gmail and Slack. The company has acquired several AI startups to develop its own models and claims its AI services are significantly faster and cheaper than frontier models. ",
+            "full_text": "Canva, the Australian startup that’s won over 265 million users with its design software, is launching a new suite of tools that combine visual creation and workflow automation, run by AI agents that respond to conversational prompts\n\nRecommended Video\n\nDubbed “Canva AI 2.0,” the new platform of services lets users create and alter designs using natural language, and connects to other services like Gmail, Slack, and Zoom in order to generate new content. The new platform also boasts persistent memory, allowing Canva to learn how people work, and can automatically update designs as brand imagery gets tweaked. “We had to rearchitect the whole Canva platform,” Cliff Olbrecht, Canva’s co-founder and chief operating officer, tells Fortune. Canva, founded in 2012, integrated generative AI functions onto its platform in early 2023, just a few months after ChatGPT’s release. (At the time, Fortune noted that the startup was wary of using the term “AI” to advertise its services, preferring the term “magic” instead) Olbrecht describes Canva’s previous AI services—generating images and video, or generating a whole presentation—as “a design platform with AI services built on top.” With these new services, Canva hopes to go beyond design to offer more coworking capabilities for users. For example, the new Canva can crawl the web for breaking tech news overnight, determine what’s trending, then create—and even schedule—social media posts on its own. “It can help you complete your whole job,” Olbrecht says. Canva’s rise in AI Canva has quietly become one of the world’s most used consumer AI apps. Canva is the world’s third most used generative AI web product by monthly active users, behind Google Gemini and ahead of China’s DeepSeek chatbot, according to an analysis by VC firm a16z. Canva’s massive user base has pushed the company to think carefully about how to offer AI services without blowing a hole in its budget. “There’s only so long you can fund your user base with VC-funded dollars,” he says. “With 265 million users on a monthly basis hammering our services, we have to own our models and we have to own infrastructure that serves our models.” Canva has acquired several other AI startups in recent years, including Leonardo AI, an image generating platform, in 2024. Just last week, Canva acquired Simtheory, a platform for building agents, and Ortto, a marketing automation company. These investments have helped Canva produce its own foundational AI models, rather than solely relying on models from third parties. The startup claims that its AI services are seven times faster and 30 times cheaper than “comparable” frontier models. Obrecht adds that Canva is also trying to explore how to tap device processing power for AI, rather than go into the cloud. Canva will offer multiple tiers for pricing. Free users will get access to Canva’s basic AI, with a small number of credits for premium models. Pricing then escalates through different tiers all the up to $100 a month, which Olbrecht describes as “almost all-you-can-eat”—even if there are still some limits on Canva’s most powerful models. Software-as-a-service companies have been hit hard in recent months by investor fears about competition from AI developers like OpenAI, Google and Anthropic. Design software developers are particularly threatened by AI, as ChatGPT and Claude increasingly take on the ability to generate video and images. Shares in Adobe, which makes Photoshop and other design and publishing software, are down by over 30% over the past 12 months. Shares in design startup Figma have performed even worse, losing almost 85% of their value since the company’s $1.2 billion IPO. Canva, which is still privately held, claims it generated $3.5 billion in revenue last year. Obrecht, in an interview with Bloomberg last November, suggested an IPO was “probably imminent in the next couple of years.” Olbrecht notes that, despite the so-called AI scare trade, Canva’s shares are still trading at its last valuation of $42 billion, reached during an employee stock sale last year. “We’ve fortunately avoided being hit by that SaaS apocalypse,” he adds. But he’s aware that rapidly changing technology can pose a threat to Canva if executives aren’t careful. “If we’re not going to disrupt ourselves, then we’re going to be disrupted,” he says.",
+            "original_language": "EN",
+            "author": "Nicholas Gordon",
+            "countries": [
+                "AUS"
+            ],
+            "industries": [
+                {
+                    "name": "LLMOps & Generative AI Platforms (Prompt/Agent Orchestration, RAG)",
+                    "is_primary": true
+                },
+                {
+                    "name": "Network Performance Management & Observability Services",
+                    "is_primary": false
+                }
+            ],
+            "tags": [
+                {
+                    "name": "Product Launches & Enhancements",
+                    "code": "SD01",
+                    "is_primary": true
+                },
+                {
+                    "name": "Technology Adoption & Disruption",
+                    "code": "II02",
+                    "is_primary": false
+                },
+                {
+                    "name": "Equity Fund-Raising",
+                    "code": "CM01",
+                    "is_primary": false
+                },
+                {
+                    "name": "Sustainability & ESG",
+                    "code": "SD09",
+                    "is_primary": false
+                }
+            ],
+            "company_mentions": [
+                {
+                    "uuid": "00000jw-canva",
+                    "name": "Canva",
+                    "website": "http://www.canva.com"
+                }
+            ]
+        },
+        {
+            "id": 10846297,
+            "title": "2026 IPO Watchlist: OpenAI, SpaceX and Other Tech Giants",
+            "url": "https://builtin.com/articles/top-tech-ipos-2026",
+            "publisher": "builtin",
+            "published_date": "2026-02-04T13:00:00+00:00",
+            "sentiment": "Positive",
+            "news_score": "Medium",
+            "ai_summary": "Wall Street is anticipating a wave of major tech IPOs in 2026 as AI-focused companies face mounting pressure to raise massive capital for data centers, cloud infrastructure, and next-generation AI chip development. Several companies including OpenAI (valued at $852B), Anthropic ($380B), SpaceX ($1.25T), Lime, Canva, Strava, Databricks ($134B), and Cohere are preparing for or considering public offerings that could surpass the $25B Saudi Aramco record. The surge in IPO activity would pull back the curtain on these companies' financials, including cloud costs, profitability paths, and revenue sustainability—issues that have been obscured by billions in private funding rounds.",
+            "full_text": "Wall Street is bracing for several potential blockbuster tech IPOs in 2026. After years of private, venture capital-fueled growth, companies like OpenAI, Anthropic, SpaceX and Cohere are now facing pressure to scale rapidly, secure massive capital and prove their business models can deliver sustainable revenue under public scrutiny.\n\n2026 could be the year Wall Street finally meets the next generation of tech giants. Companies like OpenAI, Anthropic and SpaceX are edging closer to record-breaking public offerings that could break the boundaries of the IPO market — both in size and spectacle.\n\nFor years, tech startups delayed going public, choosing instead to grow privately on billions in venture funding while avoiding the scrutiny and pressure of the stock market. But the stakes, cost and speed of the artificial intelligence race seems to have changed that calculus. Top contenders now need far more compute capacity to scale ever-larger AI models, investing tens of billions of dollars in data centers and cloud infrastructure, as well as research and development on next-generation AI chips.\n\nWhen it comes down to it, private investors can only supply so much capital. Long-term growth increasingly depends on tapping hungry, FOMO-saturated public markets that want in on the action.\n\nTech IPOs to Look Out For In 2026 OpenAI\n\nAnthropic\n\nSpaceX\n\nLime\n\nCanva\n\nStrava\n\nDatabricks\n\nCohere\n\nStill, timing is everything. Disruptive macroeconomic forces — from ongoing tariff threats to the country’s longest government shutdown to date — have kept IPO activity subdued. According to the New York Times, U.S. listings dropped from 397 in 2021 to just 202 last year. Now, with markets near record highs and investor appetite for AI surging, these companies could stage some of the largest public offerings we’ve ever seen. The current record holder is the world’s largest oil producer, Saudi Aramco, which debuted at $25 billion in 2019. But experts say that some of the upcoming floats could easily dwarf that, with valuations projected into the hundreds of billions.\n\nGoing public would also shed some light on the financial realities of several controversial, multi-billion-dollar cloud deals, revealing whether these AI development pipelines and projected revenue streams are truly sustainable or resemble something closer to a bubble. If all goes as planned, the next few months may very well birth Silicon Valley’s very first hectocorn, ushering in an entirely new cohort of tech billionaires.\n\nRelated ReadingTop Publicly Traded AI Companies to Know\n\nTech Companies That Could Go Public In 2026\n\nOpenAI\n\nOpenAI may be the AI industry’s most prominent loss-making company so far, catapulting generative AI into the mainstream in 2022 with the launch of its popular AI chatbot ChatGPT. Since then, the world has watched the San Francisco startup rework its structure piece by piece, shedding its altruistic, nonprofit, for the “benefit of all of humanity” roots in favor of a for-profit public benefit corporation — a move that makes an eventual IPO all the more feasible. CEO Sam Altman has openly said he’s “zero percent excited” about running a public company, but he also hasn’t been shy about OpenAI’s need for enormous amounts of capital as its models grow more powerful and expensive to run.\n\nDespite remaining deep in the red and fending off periodic bankruptcy rumours, the company was most recently valued at $852 billion after its closed one of the largest funding roundings in history netting $122 billion from investors. A public debut could push that figure into trillion-dollar territory.\n\nNo concrete IPO plans have been announced, although sources have said it could happen in late-2026 or 2027. Some hints include the hiring of veteran finance executive Sarah Friar as CFO, who was instrumental in taking Square and NextDoor public, as well as OpenAI’s continued push to raise massive funding rounds. At the same time, the company is going to integrate ads in ChatGPT and its enterprise AI tools — a move meant to establish more durable revenue streams and demonstrate that there’s more to the business than just hype.\n\nFor OpenAI, going public wouldn’t just unlock new capital, it would also introduce a new level of accountability and scrutiny. The company would have to explicitly disclose the true economics of its massive cloud costs, which have been obscured by more than $1 trillion in circular financing deals. Investors would be watching closely to see if OpenAI can actually turn a profit, especially as quarterly reporting pressures clash with the company’s long-term research ambitions and stated safety priorities.\n\nIn a best-case scenario, public investments could accelerate acquisitions across chip design, AI infrastructure and energy — allowing OpenAI to control more of the AI supply chain while scaling toward its $1.4 trillion infrastructure roadmap to build out data centers over the next eight years.\n\nRelated ReadingWhy Are So Many Companies Selling AI Products to the U.S. Government for $1?\n\nAnthropic\n\nAnthropic, the San Francisco-based AI lab behind the Claude chatbot, hinted at a potential IPO after a $30 billion funding round, which valued it at $380 billion. Signs of its public-market ambitions go as far back as 2024, when the company brought on Krishna Rao, veteran of Airbnb’s IPO, as chief financial officer. And momentum picked up in December 2025 when it hired Wilson Sonsini, the law firm that guided the IPOs of Google and LinkedIn, to begin legal and banking preparations.\n\nUnlike many of its peers burning cash with no clear path to profitability, Anthropic said it’s aiming to break even by 2028. The company reportedly generated roughly $9 billion in annual recurring revenue in 2025, and is projected to make $20 billion this year and as much as $70 billion by 2028. More than anything, that growth trajectory helps make Anthropic look IPO-ready rather than perpetually experimental. Its enterprise push — including its Claude Code coding tool and new Cowork offering — has attracted millions of users and more than 300,000 corporate customers, including Microsoft, IBM, Deloitte and Salesforce, providing the kind of dependable, grown-up revenue stream public investors tend to look for.\n\nWith fresh capital in hand, Anthropic will likely speed up development of its Claude models, escalating the AI arms race against rivals like OpenAI’s ChatGPT and Google’s Gemini. At the same time, a public listing could give the company a bigger stage to promote its “constitutional” approach, effectively using the market to fund and normalize a more safety-oriented vision of AI development.\n\nSpaceX\n\nAfter years of resisting the idea, Elon Musk reportedly filed confidential IPO paperwork with the Securities and Exchange Commission and could see SpaceX publicly trading as early as July 2026.\n\nOriginally, the plan was to wait until the rocket maker was “flying regularly to Mars.” But pressure to expand compute capacity in order to stay competitive amid the AI gold rush seems to have changed the roadmap. Now, Musk is seeking new sources of capital to fund various resource-intensive infrastructure projects, as well as broader AI ambitions, such as his newfound goal to launch data centers into orbit — a goal he seems closer to achieving now that the company has acquired his AI startup xAI. Theoretically, by blasting compute power into space, Musk hopes to bypass Earth’s land and energy constraints, providing xAI with a competitive edge.\n\nSpaceX is reportedly valued at $1.25 trillion now that it has acquired xAI, making it the most valuable private company in the world. A public offering could push that valuation up even higher, potentially making it the largest IPO in history as well.\n\nA powerhouse consortium of finance firms, including Morgan Stanley, Goldman Sachs, JPMorgan Chase and Bank of America, has reportedly been tapped to lead the offering. Musk further stoked investor interest in a post on his social media platform X, indicating that priority share allocations will be reserved for long-term shareholders of his electric vehicle company, Tesla.\n\nGoing public would also pull back the curtain on SpaceX’s finances, forcing the company to publicly disclose numbers it has long guarded — including the profitability of its satellite internet service Starlink, what it earns per customer and how much cash the Starship launch system burns each year. So while an IPO could solidify SpaceX’s lead in the aerospace industry, it could just as easily draw antitrust scrutiny and geopolitical pushback, potentially prompting governments to fund rival rocket and satellite programs to quell the perceived monopoly.\n\nLime\n\nAfter years of preparation and hints, Lime, the electric scooter and bike rental startup backed by Uber, filed for an initial public offering in May 2026. The company intends to list on the Nasdaq under the ticker symbol “LIME,” but no further terms have been shared yet.\n\nLime had been eyeing an IPO for at least five years, holding out for the time when its growth, profitability and the economy were in the right place. Its filing with the SEC shows it has growing revenue, but is not yet profitable. It also reported it has had free cash flow for the past three years, claiming $104 million in cash in 2025 — nearly double from the previous year.\n\nMuch of this growth has been thanks to Lime’s close relationship with Uber, which led the startup’s $170 million funding round in 2020. In the years since, Lime has integrated more closely with Uber. Its bikes and scooters are featured on the ride-hailing giant’s app in nearly all of its shared markets. In fact, a decent chunk of Lime’s revenue — about 14 percent in 2025 — is thanks to its exclusive partnership with Uber, according to the SEC documents.\n\nRelated ReadingSpaceX’s xAI Deal Is a Moonshot — and Possibly a Bailout\n\nCanva\n\nCanva, the company known for its generative AI design tools and ready-made templates, has signaled plans to go public after launching an employee stock sale that valued the business at about $42 billion. The Sydney-based company, founded by husband-and-wife team Melanie Perkins and Cliff Obrecht, also moved its parent company domicile to the United States to prepare for potential flotation, and hired IPO-veteran CFO Kelly Steckelberg, who championed Zoom’s public debut five years earlier. All that being said, there’s been no confirmation that Canva will actually go public.\n\nCanva’s eight consecutive cash-flow-positive years also primes the company for eager investors. But letting them in would mean shifting its focus from simply growing its user base — which currently boasts 240 million active subscribers — to proving that it can extract more revenue from each user. That transition would likely accelerate Canva’s move toward professional-grade enterprise tools, intensifying its competition with other graphic design platforms like Adobe Illustrator, Microsoft Designer and Google.\n\nStrava\n\nStrava, the fitness app that gamified outdoor exercise, is gearing up for the public markets after confidentially filing at a $2.2 billion valuation. Founded in 2009, the San Francisco-based company has reportedly been in talks with investment bank Goldman Sachs to prepare for an IPO in as early as spring 2026. The timing lines up with a thawing stock market as a whole, as steadier conditions and expected rate cuts attract sidelined tech companies back toward public listings.\n\nAccess to an influx of public capital would enable Strava to launch personalized, AI-generated coaching and “instant workout” training plans, as well as continue its acquisition streak. It would also increase the pressure to convert more of its 180 million users to pay for subscriptions. How well it pulls off that balance — growing revenue without losing the community feel that made it popular — could become a test case for other fitness and social-wellness platforms eyeing Wall Street as well.\n\nDatabricks\n\nDatabricks, an AI-powered data analytics and cloud platform that helps its clients build autonomous AI agents, has raised more than $4 billion in private funding rounds, reaching a $134 billion valuation. The company recently brought on Google and Salesforce veteran David Conte as CFO, and CEO Ali Ghodsi says it has been “IPO ready” since 2020, backed by finance leaders with deep IPO experience. Plus, the fact that it already generates predictable revenue from clients like Comcast, Shell and HSBC indicates it’s mature enough for Wall Street.\n\nGoing public would give Databricks the money it needs to scale its Lakehouse platform and accelerate AI model development for its 15,000-plus global customers. The company could also pursue rapid-fire acquisitions of specialized startups to close gaps in its AI offerings, ideally expanding storage for autonomous agents, while also escalating its battle with rivals like Snowflake and Google to become the definitive “source of truth” for the corporate world.\n\nCohere\n\nCohere, a Toronto-based startup founded by former Google Brain researchers, is also emerging as a serious IPO contender after quietly building one of the strongest enterprise businesses in the generative AI race. The company recently announced that it reached $240 million in annual recurring revenue, a milestone that puts it on firmer financial footing than many AI labs still heavily reliant on venture capital. It has also expanded its product lineup beyond proprietary models, launching a new family of open, multilingual AI models aimed at global developers and businesses.\n\nUnlike most consumer-facing AI companies chasing mass adoption, Cohere has positioned itself squarely as an enterprise provider, selling its large language models and custom systems to businesses and governments primarily. This method appears to be paying off. Its recent growth — paired with a tightening cost structure — signals a company preparing to withstand the scrutiny of public markets rather than simply riding the industry hype cycle.\n\nWhile Cohere has not formally filed to go public, executives have indicated that an IPO is under consideration. If it moves forward, its market debut would give investors a rare look at the financial mechanics of a major generative AI company operating outside Silicon Valley’s usual orbit.\n\nFrequently Asked Questions\n\nWhat is an IPO? An IPO, or initial public offering, is when a private company sells shares of stock to the public for the first time. It allows the company to raise capital from public investors, provide liquidity for early shareholders and gain access to public markets. However, the company is also subject to stricter regulatory requirements and ongoing financial scrutiny.\n\nWhy do tech companies go public? In general, companies pursue IPOs to raise large amounts of capital, provide liquidity for investors and employees and gain credibility and visibility in the market. For tech companies specifically, going public can fund costly infrastructure and research projects.",
+            "original_language": "EN",
+            "author": "",
+            "countries": [
+                "USA",
+                "AUS",
+                "CAN"
+            ],
+            "industries": [
+                {
+                    "name": "Initial Public Offerings (IPOs)",
+                    "is_primary": true
+                },
+                {
+                    "name": "Open-Source Model Ecosystems & Model Marketplaces",
+                    "is_primary": false
+                },
+                {
+                    "name": "Compute & Acceleration ICs (CPU/GPU/AI/FPGA/ASIC)",
+                    "is_primary": false
+                }
+            ],
+            "tags": [
+                {
+                    "name": "IPOs & Follow-on Offerings",
+                    "code": "CM05",
+                    "is_primary": true
+                },
+                {
+                    "name": "Equity Fund-Raising",
+                    "code": "CM01",
+                    "is_primary": false
+                },
+                {
+                    "name": "Sector Rotation",
+                    "code": "MD03",
+                    "is_primary": false
+                }
+            ],
+            "company_mentions": [
+                {
+                    "uuid": "000000d-openai",
+                    "name": "OpenAI",
+                    "website": "https://www.openai.com"
+                },
+                {
+                    "uuid": "0000bwq-li",
+                    "name": "Lime",
+                    "website": "https://www.li.me"
+                },
+                {
+                    "uuid": "00002vx-spacex",
+                    "name": "SpaceX",
+                    "website": "https://www.spacex.com"
+                },
+                {
+                    "uuid": "00000jw-canva",
+                    "name": "Canva",
+                    "website": "http://www.canva.com"
+                },
+                {
+                    "uuid": "0000002-anthropic",
+                    "name": "Anthropic",
+                    "website": "https://www.anthropic.com"
+                },
+                {
+                    "uuid": "000000c-cohere",
+                    "name": "Cohere",
+                    "website": "https://cohere.com"
+                },
+                {
+                    "uuid": "0000039-databricks",
+                    "name": "Databricks",
+                    "website": "https://www.databricks.com"
+                },
+                {
+                    "uuid": "000007h-strava",
+                    "name": "Strava",
+                    "website": "http://www.strava.com"
+                }
+            ]
+        },
+        {
+            "id": 9290183,
+            "title": "State of Venture 2025",
+            "url": "https://www.cbinsights.com/research/report/venture-trends-2025/",
+            "publisher": "cbinsights",
+            "published_date": "2026-01-08T00:00:00+00:00",
+            "sentiment": "Positive",
+            "news_score": "High",
+            "ai_summary": "Venture funding rebounded to $469 billion in 2025, with AI companies capturing nearly half of this amount, led by mega-rounds to top startups like OpenAI and Anthropic. Robotics also gained momentum, raising a record $40.7 billion, as valuations among top private companies soared, notably in AI and tech sectors.",
+            "full_text": "Get the full report to access comprehensive CB Insights data on the State of Venture 2025.\n\nVenture funding is back — but only for the AI leaders.\n\nTotal funding reached $469B in 2025 — the highest level since 2022. A handful of AI startups captured much of the capital through mega-rounds, with the biggest deals cycling back to the same names.\n\nState of Venture 2025 Get the full report to access comprehensive CB Insights data on the State of Venture 2025. First Name Last Name Email Company Name Job Title Phone Number\n\nBelow, we break down the top stories from this year’s report, including:\n\nVenture funding rebounds, but deals continue to drop\n\nAI accounts for nearly half of all venture funding\n\nRobotics gains momentum going into 2026\n\nValuations skyrocket among top private companies\n\nLeading investors reinforce AI concentration\n\nLet’s dive in.\n\nAccess all 2025 venture data on the CB Insights platform\n\nDownload the full report to access comprehensive data and charts on the evolving state of venture across sectors, geographies, and more.\n\nTop stories in 2025\n\n1. Venture funding rebounds, but deals continue to drop\n\nAfter two years of decline, venture funding rebounded to $469B in 2025, up 47% YoY, with last quarter alone seeing $152B — the strongest since Q1’22.\n\nBut deal activity continued to slide. In 2025, deal count fell 17% to 29,501, while mega-rounds surged 77% to 738, capturing $307B (65% of total venture funding). Investors are increasingly writing bigger checks to fewer companies, with the biggest AI startups capturing most of the money.\n\nNearly all of that capital is flowing to one place. US startups raised $328B in 2025 — 70% of global funding — approaching its 2021 record of $358B.\n\nMeanwhile, Asia and Europe grew modestly but remain far below their 2021 peaks. Asia increased 7% to $53B, while Europe rose from 18% to nearly $68B.\n\nRegulatory crackdowns in China are driving much of the funding decline in Asia, alongside an increased focus on corporate innovation across the continent. Europe has fewer strong AI startups than the US, so it benefited less from the AI boom.\n\nUS funding dominance means domestic shifts could ripple globally — through valuation changes that reset pricing expectations, regulations that set international precedents, or M&A trends that shape exit paths for startups worldwide.\n\n2. AI accounts for nearly half of all venture funding\n\nAI companies raised $226B in 2025, accounting for 48% of total venture funding — the largest share on record. Investors are betting on every layer of the AI stack under the assumption of winner-take-all dynamics.\n\nThe six largest funding rounds of 2025 all went to AI companies: OpenAI ($41B), Anthropic ($32.5B), Scale ($14.8B), xAI ($12.8B), Databricks ($5B), and Aligned ($5B).\n\nThe first five focus on foundation models and application development, while Aligned builds AI data centers. Together, these companies raised $111B — 49% of all AI funding and 24% of total venture capital.\n\nThese funding levels reflect expectations that a small number of AI companies will control their markets, as Google dominates search or Microsoft leads in enterprise software. Venture capital is essentially making a single bet — that AI will deliver massive returns fast enough to justify current funding totals.\n\nIf the bets pay off, these companies will define the next decade. But technical limitations for foundation models, persistently high computing costs, or regulatory restrictions could severely disrupt the entire venture market. Few other sectors can offset the damage, since venture growth now depends almost entirely on a handful of AI startups.\n\nGet live data on 40K+ AI companies\n\n3. Robotics gains momentum going into 2026\n\nRobotics companies raised a record $40.7B in 2025, accounting for 9% of all venture funding, making it one of the leading sectors alongside AI software. The sector spans humanoid robots, autonomous vehicles, drones, robot foundation models, and supporting hardware.\n\nPhysical AI — AI systems that operate in the physical world and learn from data rather than pre-programmed rules — is driving this growth.\n\nIndustrial humanoid robots led all markets with 80 deals in 2025, but valuations suggest bubble risk. For example, Figure reached a $39B valuation — a 15x jump in one year — with zero revenue and a 2/5 Commercial Maturity score, showing how investors are making huge bets on high-profile physical AI startups, even without proof of commercial success.\n\nPhysical AI model developers are showing the highest momentum among 1,600+ markets, with 4 of the top 10 based on average Mosaic scores.\n\nBetter robot foundation models are critical for real-world functionality. We may look back at 2025 as a turning point for physical AI, but the immediate focus is on proving out specific use cases — getting individual robots to handle narrow tasks reliably in controlled environments.\n\nThe bigger opportunity lies in coordinating fleets of robots across factories, construction sites, battlefields, and supply chains. But full “orchestration AI” that manages these coordinated systems remains years away from commercialization.\n\n4. Valuations skyrocket among top private companies\n\nThe top private companies reached unprecedented valuation levels across multiple sectors in 2025.\n\nThe top 10 companies are worth over $2T combined. While AI companies captured much of the attention — OpenAI raised at a $500B valuation and Anthropic at $350B — the list reveals a concentration of capital across different industries.\n\nByteDance and SpaceX reached valuations of $480B and $400B, respectively, demonstrating that companies with proven business models can command valuations similar to those of AI leaders. Databricks reached $134B, Stripe hit $107B, and Canva climbed to $42B, each showing strong annual growth.\n\nValuation increases vary widely. Anthropic jumped 19x in one year as the only newcomer to the top tier. OpenAI increased 218%, while Databricks grew 116%. In contrast, non-AI companies saw more moderate gains — SpaceX increased 14%, Canva grew 32%, and SHEIN remained flat at $66B.\n\nThe question is whether these premiums reflect fundamental value or a pricing disconnect that will correct.\n\n5. Leading investors reinforce AI concentration\n\nAmong CB Insights Smart Money VCs — the 25 best-performing VC investors over the past decade — deal activity remained high in 2025.\n\nGeneral Catalyst led with 213 deals, followed by Andreessen Horowitz with 178 and Sequoia with 139.\n\nBut volume alone is not the signal. The top 10 markets for SMVCs were all focused on AI. Coding AI agents & copilots captured 22 deals, legal AI agents & copilots took 20, and end-to-end software development agents grabbed 17. Multimodal AI developers, voice AI platforms, and LLM developers are also among the top focus areas.\n\nThe investments represent a narrowing focus. Traditional venture strategy emphasizes spreading investments across different sectors to reduce risk. Now, the most influential investors are essentially running concentrated AI funds.\n\nDive into all 2025 Smart Money investments here\n\nGET THE RECORDING First Name Last Name Email Company Name Job Title Phone Number\n\nRELATED RESOURCES FROM CB INSIGHTS:",
+            "original_language": "EN",
+            "author": "",
+            "countries": [
+                "USA",
+                "CHN",
+                "NGA"
+            ],
+            "industries": [
+                {
+                    "name": "Early-Stage Venture Capital (Series A/B)",
+                    "is_primary": true
+                },
+                {
+                    "name": "Foundation Model Developers (LLM/Multimodal Model Labs)",
+                    "is_primary": false
+                }
+            ],
+            "tags": [
+                {
+                    "name": "Equity Fund-Raising",
+                    "code": "CM01",
+                    "is_primary": true
+                },
+                {
+                    "name": "Economic Indicators",
+                    "code": "MM01",
+                    "is_primary": false
+                },
+                {
+                    "name": "FX & Commodity Pricing",
+                    "code": "MD05",
+                    "is_primary": false
+                },
+                {
+                    "name": "Policy & Legislative Changes",
+                    "code": "RC02",
+                    "is_primary": false
+                }
+            ],
+            "company_mentions": [
+                {
+                    "uuid": "000000d-openai",
+                    "name": "OpenAI",
+                    "website": "https://www.openai.com"
+                },
+                {
+                    "uuid": "00002vx-spacex",
+                    "name": "SpaceX",
+                    "website": "https://www.spacex.com"
+                },
+                {
+                    "uuid": "0000006-x",
+                    "name": "xAI",
+                    "website": "https://x.ai"
+                },
+                {
+                    "uuid": "000032v-bytedance",
+                    "name": "ByteDance",
+                    "website": "http://bytedance.com"
+                },
+                {
+                    "uuid": "000i8sj-scalecoworking",
+                    "name": "Scale",
+                    "website": "http://www.scalecoworking.com"
+                },
+                {
+                    "uuid": "00000jw-canva",
+                    "name": "Canva",
+                    "website": "http://www.canva.com"
+                },
+                {
+                    "uuid": "0000002-anthropic",
+                    "name": "Anthropic",
+                    "website": "https://www.anthropic.com"
+                },
+                {
+                    "uuid": "00003iz-aligneddc",
+                    "name": "Aligned",
+                    "website": "https://aligneddc.com"
+                },
+                {
+                    "uuid": "0000039-databricks",
+                    "name": "Databricks",
+                    "website": "https://www.databricks.com"
+                },
+                {
+                    "uuid": "000002i-stripe",
+                    "name": "Stripe",
+                    "website": "https://stripe.com"
+                }
+            ]
         }
-      ]
-    }
-  ]
+    ],
+    "credits_consumed": 0.13
 }
 ```
 
 ### Industry news monitoring
 
-Monitor all news across an industry, sorted by relevance score.
+Monitor all the high impact news in a sector. In this case, use `industry` field to specify the industry name. Also use news\_score\_list to filter only the High impact news
 
-```python
-import requests
+<CodeGroup>
 
-HEADERS = {"x-api-key": "<YOUR_API_KEY>"}
-
-response = requests.get(
-    "https://api.akta.pro/api/v1/news",
-    headers=HEADERS,
-    params={
-        "industry":   "Fintech",
-        "start_date": "2024-06-01",
-        "limit":      50
-    }
-)
-
-articles = response.json()["data"]
-
-# Sort by news_score descending for triage
-articles.sort(key=lambda x: x.get("news_score", 0), reverse=True)
-
-print(f"Top articles by relevance score:\n")
-for article in articles[:10]:
-    print(f"  [{article['news_score']:.2f}] {article['title']}")
-    print(f"    {article['publisher']} | {article['published_date']} | {article['sentiment']}")
+```text cURL
+curl --location 'https://api.akta.pro/api/v1/news?industry=Electric%20Vehicles&news_scores_list=High&limit=5' \
+--header 'x-api-key: YOUR API KEY'
 ```
 
-### Adverse signal monitoring — negative news for a watchlist
-
-Pull negative sentiment news across a set of companies to surface early warning signals.
-
-```python
-import requests, concurrent.futures
-
-HEADERS   = {"x-api-key": "<YOUR_API_KEY>"}
-WATCHLIST = ["stripe.com", "brex.com", "ramp.com", "mercury.com"]
-
-def get_negative_news(domain):
-    r = requests.get(
-        "https://api.akta.pro/api/v1/news",
-        headers=HEADERS,
-        params={
-            "company":    domain,
-            "sentiment":  "negative",
-            "start_date": "2024-01-01",
-            "limit":      10
-        }
-    )
-    articles = r.json().get("data", [])
-    return domain, articles
-
-# Fetch all in parallel
-with concurrent.futures.ThreadPoolExecutor(max_workers=4) as pool:
-    results = dict(pool.map(lambda d: get_negative_news(d), WATCHLIST))
-
-for domain, articles in results.items():
-    if not articles:
-        continue
-    print(f"\n{domain} — {len(articles)} adverse signals")
-    for article in articles[:3]:
-        primary_tag = next(
-            (t["name"] for t in article.get("tags", []) if t.get("is_primary")), "—"
-        )
-        print(f"  [{article['published_date']}] [{primary_tag}] {article['title']}")
-        print(f"    Score: {article['news_score']:.2f} | {article['ai_summary'][:120]}...")
-```
-
-### Extracting full article text for LLM processing
-
-Use `full_text` to feed complete article content into a summarisation or classification pipeline.
-
-```python
+```text Python
 import requests
 
-HEADERS = {"x-api-key": "<YOUR_API_KEY>"}
+url = "https://api.akta.pro/api/v1/news?industry=Electric Vehicles&news_scores_list=High&limit=5"
 
-response = requests.get(
-    "https://api.akta.pro/api/v1/news",
-    headers=HEADERS,
-    params={
-        "company": "openai.com",
-        "type":    "Equity Fund-Raising",
-        "limit":   20
-    }
-)
-
-articles = response.json()["data"]
-
-# Filter to articles with full text available
-with_text = [a for a in articles if a.get("full_text", "").strip()]
-print(f"{len(with_text)} of {len(articles)} articles have full text\n")
-
-for article in with_text[:3]:
-    word_count = len(article["full_text"].split())
-    print(f"Title:     {article['title']}")
-    print(f"Publisher: {article['publisher']} | Words: {word_count}")
-    print(f"Summary:   {article['ai_summary']}")
-    print()
-    # Pass article["full_text"] to your LLM pipeline here
-```
-
-### Paginating through large result sets
-
-When `total` exceeds `limit`, paginate using `offset`.
-
-```python
-import requests
-
-HEADERS = {"x-api-key": "<YOUR_API_KEY>"}
-PARAMS  = {
-    "company":    "apple.com",
-    "start_date": "2024-01-01",
-    "limit":      100,
-    "offset":     0
+payload = {}
+headers = {
+  'x-api-key': 'YOUR API KEY'
 }
 
-all_articles = []
+response = requests.request("GET", url, headers=headers, data=payload)
 
-while True:
-    response = requests.get(
-        "https://api.akta.pro/api/v1/news",
-        headers=HEADERS,
-        params=PARAMS
-    )
-    data  = response.json()
-    batch = data.get("data", [])
-    all_articles.extend(batch)
-
-    print(f"Fetched {len(all_articles)} / {data['total']} articles")
-
-    if len(all_articles) >= data["total"] or not batch:
-        break
-
-    PARAMS["offset"] += PARAMS["limit"]
-
-print(f"\nTotal retrieved: {len(all_articles)}")
+print(response.text)
 ```
 
----
+</CodeGroup>
+
+**Sample Response:**
+
+```text expandable
+{
+    "total": 1549,
+    "limit": 5,
+    "offset": 0,
+    "count": 5,
+    "data": [
+        {
+            "id": 11399207,
+            "title": "Delhi EV policy 2.0: Government may revise 50% road tax waiver for strong hybrids",
+            "url": "https://indianexpress.com/article/delhi/delhi-ev-policy-draft-hybrid-cars-road-tax-exemption-changes-10720272/",
+            "publisher": "indianexpress",
+            "published_date": "2026-06-02T10:15:51+00:00",
+            "sentiment": "Negative",
+            "news_score": "Medium",
+            "ai_summary": "The Delhi government is considering revising its proposed Electric Vehicle Policy 2.0, potentially limiting the 50% road tax exemption for strong hybrid vehicles priced up to Rs 30 lakh to two years instead of the originally proposed duration till policy expiry. The exemption may be extended by one additional year based on impact and adoption assessment. The draft policy, released in April, had proposed 100% road tax exemption for pure electric vehicles and 50% for strong hybrids up to the same price cap.",
+            "full_text": "As per the draft, a 100% road tax exemption was proposed for all electric vehicles priced up to Rs 30 lakh (ex-showroom) and a 50% exemption for strong hybrid cars priced up to Rs 30 lakh (ex-showroom) till the expiry of the policy. (File Photo)\n\nThe Delhi government may revise its proposed road tax exemption for strong hybrid vehicles priced up to Rs 30 lakh or below (ex-showroom), limiting the benefit to two years after the rollout of the Electric Vehicle policy. The exemption could be extended by one more year, depending on its impact and adoption.\n\nThe government had released the draft EV policy 2.0 in April seeking comments and suggestions from stakeholders, auto industry and public.\n\nAs per the draft, a 100% road tax exemption was proposed for all electric vehicles priced up to Rs 30 lakh (ex-showroom) and a 50% exemption for strong hybrid cars priced up to Rs 30 lakh (ex-showroom) till the expiry of the policy.",
+            "original_language": "EN",
+            "author": "Gayathri Mani",
+            "countries": [
+                "IND"
+            ],
+            "industries": [
+                {
+                    "name": "Electric Drive Unit / E-Axle Manufacturing (Motors/Inverters/Gearboxes)",
+                    "is_primary": true
+                },
+                {
+                    "name": "EV Passenger Vehicle Leasing (Cars/SUVs)",
+                    "is_primary": false
+                },
+                {
+                    "name": "Hybrid System Service (ICE-EV Integration, HV Components)",
+                    "is_primary": false
+                }
+            ],
+            "tags": [
+                {
+                    "name": "Policy & Legislative Changes",
+                    "code": "RC02",
+                    "is_primary": true
+                },
+                {
+                    "name": "Sector Outlook & Forecasts",
+                    "code": "MM07",
+                    "is_primary": false
+                }
+            ],
+            "company_mentions": []
+        },
+        {
+            "id": 11399457,
+            "title": "REVIEW | Volvo ES90 is a luxury cruiser with a difference",
+            "url": "https://www.businessday.co.za/motoring/2026-06-02-review-volvo-es90-is-a-luxury-cruiser-with-a-difference/",
+            "publisher": "businessday",
+            "published_date": "2026-06-02T10:00:40+00:00",
+            "sentiment": "Neutral",
+            "news_score": "Low",
+            "ai_summary": "This article is a vehicle review of the Volvo ES90 electric sedan in range-topping Ultra trim, describing it as a comfortable, minimalist luxury cruiser with a claimed 700km range that delivered approximately 450km of urban driving in testing. Priced at R1,795,000, the rear-wheel-drive model produces 245kW and 480Nm, completing the 0-100km/h sprint in 6.6 seconds. The reviewer notes it competes with the BMW i4 M60 and Audi S7 Sportback, offering a unique fastback design with adjustable ride height, though it is heavier and less powerful than its rivals.",
+            "full_text": "Share current article via Email Share current article via Facebook Share current article via Twitter Share current article via LinkedIn\n\nMeet the Volvo ES90 that’s tested here in range-topping Ultra trim. Three trims in total are on sale, including the entry-level Core and mid-tier Plus.\n\nThere was a time when the appearance of a Volvo sedan and others was normal, but not so in these days of the SUV. The Swedish brand is not only going against the grain by introducing a sedan inside a burgeoning SUV craze, but it’s also creating a conundrum by launching it as an electric-only range.\n\nThe ES90 also doesn’t follow the sedan or limousine traditions to a tee. It’s a four-door sedan with a slightly curved roof and a tailgate that Volvo classifies as a fastback. It’s also got an adjustable ride height. Hallmark Volvo styling cues include the bluff rear end and wide hips, and it’s a stunner in white. The set of active LED headlights and DRLs is typical of the brand’s full-electric range.\n\nThe first of many things it expresses is the length. Whether you need a 5m-long sedan that’s not a limousine like the BMW 7 Series, Mercedes-Benz S-Class or Audi A8 is subjective, but it translates as ample legroom for all, especially in the back.\n\nThe cabin is pure minimalism but it's comfortable and spacious. (PHUTI MPYANE)\n\nInside, it subscribes to modern Volvo minimalism, leaving vast amounts of air, and is not styled or furnished as a luxury limo, as all the tech and features are hidden inside the main display menus.\n\nWhat you get is a sleek and spacious car with all the segment expectations of zone climate control, heated seats and steering wheel, and wireless smartphone connectivity.\n\nThe electric seats and steering afford a comfy perch for safe commanding of the stretched sedan, but threading it inside shopping centre parking bays was tricky at times, even though it’s equipped with front and rear cameras.\n\nPowering the entire ES90 range is a single electric motor for a rear-wheel-drive configuration. All models output 245kW and 480Nm. The 2.9-tonne weight dulls the performance, but though the ES90 is not as lively as some sports electric alternatives, it has a respectable 6.6 second 0-100km/h sprint and a 180km/h top speed.\n\nIt’s on the move, where the ES90 makes it very clear what it’s all about. It’s a gentleman’s cruiser, the combination of its heft and size plus the noiseless drivetrain playing an active role in this regard. The damping that irons out surface imperfections is right up there with the best, and it has all the ingredients needed for drives to the golf course. The 446l boot that expands to 1,427l with the rear seats folded suffices for yours and a mate’s clubs.\n\nSafety is a Volvo byword, and the ES90 has no shortcomings here. It’s equipped with the latest and some of the best driver assistance systems, such as lane-keeping assist. The economy is excellent. When fully charged, the 92kWh battery promises more than 700km, but it yielded a more realistic 450km of purely urban miles.\n\nIt’s also not a 4x4, but you can press a digital button that’s labelled off-road that raises the suspension should you have a need.\n\nIt's not an off-roader but you can raise the suspension height of the fastback Volvo. (PHUTI MPYANE)\n\nWhen it comes to rivals, the BMW i4 M60 is a close match, but it’s much more powerful. The R1,795,000 price of the Volvo is also near-identical to the petrol-powered Audi S7 Sportback, perhaps the latter German’s conventional powertrain having the edge in range anxiety and exhaust histrionics.\n\nThing is, the Volvo ES90 doesn’t easily compare with anything on the market in terms of style and practicality, yet it’s pricier and lower performing than both the mentioned fastback rivals. It’s a subjective buy.\n\nThe price includes a five-year/100,000km maintenance and warranty plan, an eight-year battery warranty, and five years of unlimited roadside assistance. Also included is a home wallbox, two years of free public charging and 10GB of Vodacom data per month for three years.\n\nES90 vs rivals",
+            "original_language": "EN",
+            "author": "Phuti Mpyanesenior Motoring Correspondentopens In New Windowopens In New Windowopens In New Windowopens In New Window",
+            "countries": [],
+            "industries": [
+                {
+                    "name": "Electric Drive Unit / E-Axle Manufacturing (Motors/Inverters/Gearboxes)",
+                    "is_primary": true
+                }
+            ],
+            "tags": [],
+            "company_mentions": [
+                {
+                    "uuid": "000031c-volvocars",
+                    "name": "Volvo Cars",
+                    "website": "https://www.volvocars.com/intl/"
+                }
+            ]
+        },
+        {
+            "id": 11398605,
+            "title": "Nissan Qashqai E-Power Laps Tasmania on a Single Tank",
+            "url": "https://www.autoevolution.com/news/nissan-qashqai-e-power-laps-tasmania-on-a-single-tank-270873.html",
+            "publisher": "autoevolution",
+            "published_date": "2026-06-02T09:44:06+00:00",
+            "sentiment": "Neutral",
+            "news_score": "Medium",
+            "ai_summary": "Nissan tested its Qashqai e-Power hybrid vehicle on a long-distance trip around Tasmania, covering over 800 miles on a single tank to demonstrate its hybrid technology performance in various terrains and climates. The vehicle uses a 1.5-liter petrol engine as a generator and does not require external charging, achieving a fuel consumption of 53.4 MPG. ",
+            "full_text": "12 photos Photo: Nissan\n\nNissan sent its Qashqai e-Power on a real-world long-distance road trip around Tasmania with a single tank to see if it could return to its starting point. It had to cover over 800 miles with the help of its 1.5-liter petrol engine, which only acts as a generator, and on electric power only. Nissan planned this journey, the second of its kind, to prove how its latest e-Power hybrid tech performs in different climates, terrain, and driving conditions. The road trip put the hybrid Qashqai face to face with mountainous terrain, winding roads down the coast, elevation changes, and mixed rural and highway cruising, along with scenic roads. The compact SUV, which is the Nissan-baged sibling of the Kia Sportage, but also a contender for the Hyundai Tucson and the Toyota RAV4, drove along 808 miles (1,300 kilometers) on a single tank, lapping Tasmania without refuelling and achieving a real-world fuel consumption of 53.4 MPG (4.5 l/100 km). Nissan's hybrid system includes a 1.5-liter petrol engine, used exclusively to generate electricity, while an electric motor is the sole source of powering the front wheels. So the system enables fully electric driving without the need for the vehicle to be plugged in. Photo: Nissan The battery charges automatically, supplied by the petrol engine and the regenerative braking system. Unlike the conventional hybrid systems, there is no direct mechanical connection between the petrol engine and the wheels in the Qashqai e-Power. The system produces 188 horsepower (190 metric horsepower) and 243 pound-feet (330 Newton meters) of torque for an acceleration from 0 to 60 mph (0 to 97 kph) in 7.5 seconds and a top speed electronically limited to 105 mph (170 kph). The Nissan Qashqai e-POWER is equipped with a tiny, high-output lithium-ion battery pack, with a gross capacity of 2.1 kWh and a usable capacity of approximately 1.8 kWh. Because the capacity is small, the car can only drive on 100% battery power alone for about 1 to 2 miles (2 to 3 km) at low speeds before the petrol engine must turn on to regenerate power. It is the second such long-distance test on which the Nissan Qashqai e-Power set out. The previous time, it successfully completed the iconic 837-mile (1,347-kilometer) Land's End to John O'Groats journey across the UK on a single tank of petrol. Photo: Nissan During that first journey, the vehicle achieved a fuel economy of 62 MPG (3.76 l/100 km) and, upon completion, there was still a range of 99 miles (160 kilometers ). The route included motorway cruising, urban congestion, and variable weather conditions. Nissan has one more thing to brag about. The Qashqai e-Power compact SUV was named \"Hybrid Car of the Year\" at the News UK Motor Awards for the second consecutive year.",
+            "original_language": "EN",
+            "author": "Elena Luchian",
+            "countries": [
+                "AUT"
+            ],
+            "industries": [
+                {
+                    "name": "Electric Drive Unit / E-Axle Manufacturing (Motors/Inverters/Gearboxes)",
+                    "is_primary": true
+                }
+            ],
+            "tags": [
+                {
+                    "name": "Product Launches & Enhancements",
+                    "code": "SD01",
+                    "is_primary": true
+                },
+                {
+                    "name": "Emerging Technologies",
+                    "code": "II01",
+                    "is_primary": false
+                },
+                {
+                    "name": "Sustainability & ESG",
+                    "code": "SD09",
+                    "is_primary": false
+                }
+            ],
+            "company_mentions": [
+                {
+                    "uuid": "000045c-nissan-global",
+                    "name": "Nissan Motor",
+                    "website": "https://www.nissan-global.com/EN/"
+                }
+            ]
+        },
+        {
+            "id": 11398213,
+            "title": "Hyundai Motor lance le film de campagne mondiale « Le futur commence maintenant",
+            "url": "https://www.prnewswire.com/news-releases/hyundai-motor-lance-le-film-de-campagne-mondiale--le-futur-commence-maintenant--pour-la-coupe-du-monde-de-la-fifa-2026-302788315.html",
+            "publisher": "prnewswire",
+            "published_date": "2026-06-02T09:37:00+00:00",
+            "sentiment": "Neutral",
+            "news_score": "Medium",
+            "ai_summary": "Hyundai Motor has launched a global campaign titled 'Le futur commence maintenant' to coincide with the FIFA World Cup 2026, promoting innovation and the future of mobility through a film shown across 180 countries. The campaign features young football talents and advanced robotics technology, including Atlas, a humanoid robot, to symbolize the blend of human talent and technological progress. ",
+            "full_text": "Le film sera diffusé dans environ 180 pays à la télévision, les plateformes numériques et les réseaux sociaux, afin de toucher les fans de football du monde entier tout au long de la plus prestigieuse des compétitions. Cette campagne étend le partenariat officiel qui unit depuis 27 ans Hyundai Motor et la FIFA à un nouveau territoire en combinant l'innovation humaine et la technologie robotique de pointe.\n\n« Le film « Le futur commence maintenant » saisit l'essence de notre marque. Il nous rappelle qu'il ne faut pas être passif face à ce qui nous attend, car l'avenir se construit aujourd'hui. Ces jeunes joueurs, Son Heung-min et notre technologie robotique de pointe incarnent à eux seuls cette conviction. Nous sommes ravis de partager cette vision avec les fans de football du monde entier pendant la Coupe du Monde de la FIFA 2026™. » - Sungwon Jee, Vice-président exécutif et responsable mondial du marketing chez Hyundai Motor Company.\n\nQuel message la campagne « Le futur commence maintenant » transmet-elle ?\n\nLe message véhiculé par la campagne est très puissant : l'avenir commence maintenant, pas demain. En établissant des parallèles entre l'innovation de Hyundai Motor, la prochaine génération de footballeurs talentueux et les progrès de la robotique, le film montre comment les jeunes athlètes et les technologies émergentes façonnent l'avenir sur la scène internationale.\n\nQui sont les jeunes footballeurs en herbe présentés dans le film de la campagne ?\n\nLe film braque les projecteurs sur cinq talents de la prochaine génération de footballeurs qui se distinguent déjà sur le plan professionnel et redéfinissent les limites du possible dans le sport. Chaque athlète reflète la volonté de Hyundai Motor de repousser les limites et libérer un nouveau potentiel :\n\nDa'vian Kimbrough (Mexique), 16 ans : attaquant, Sacramento Republic FC ; le plus jeune athlète professionnel de l'histoire du sport collectif américain\n\n: attaquant, Sacramento Republic FC ; le plus jeune athlète professionnel de l'histoire du sport collectif américain Bruno Cabral (Argentine), 15 ans : avant-centre, River Plate ; meilleur buteur de la CONMEBOL Liga Evolución Sub15 Masculina (2025)\n\n: avant-centre, River Plate ; meilleur buteur de la CONMEBOL Liga Evolución Sub15 Masculina (2025) Stella Spitzer (États-Unis), 16 ans : attaquante, Carolina Ascent FC ; plus jeune recrue professionnelle de l'histoire de l'USL Super League\n\n: attaquante, Carolina Ascent FC ; plus jeune recrue professionnelle de l'histoire de l'USL Super League Kauan Basile (Brésil), 14 ans : attaquant, Santos FC ; détient le record du nombre de buts inscrits en une seule édition de le Campeonato Paulista Sub-11 (2023)\n\n: attaquant, Santos FC ; détient le record du nombre de buts inscrits en une seule édition de le Campeonato Paulista Sub-11 (2023) Khalil Mitchell (Angleterre), 14 ans : milieu de terrain, Chelsea FC Academy ; nommé meilleur joueur de l'East Mallorca Cup (2023)\n\nDans quelle mesure Son Heung-min et Atlas représentent-ils la vision de Hyundai Motor ?\n\nLe film met en scène Son Heung-min, ambassadeur mondial de la marque Hyundai Motor, icône du football sud-coréen et source d'inspiration pour la prochaine génération de joueurs. En tant que professionnel accompli et modèle de comportement, il observe et encourage les jeunes talents sur le terrain.\n\nIl est accompagné sur le terrain par Atlas, le robot humanoïde de Boston Dynamics, incarnation des avancées de Hyundai Motor en matière de robotique. Apparaissant avec le ballon des matchs officiels de la Coupe du Monde de la FIFA 2026™, Atlas symbolise une fenêtre ouverte sur l'avenir des jeunes joueurs et a pris vie grâce à l'innovation. Cette convergence des talents humains et des technologies de pointe renforce le rôle d'accélérateur de progrès incarné par Hyundai Motor dans les domaines de la mobilité et de la robotique.\n\n« La Coupe du monde est toujours un moment passionnant, car elle met en valeur la nouvelle génération de joueurs sur la plus grande scène du monde. Je suis parfaitement en phase avec la campagne « Le futur commence maintenant » de Hyundai Motor, qui met en lumière les futurs talents tout en délivrant un message d'innovation, et je suis fier d'inspirer les jeunes joueurs à rêver en grand, comme ce fût le cas pour moi autrefois. » - Son Heung-min, capitaine de l'équipe nationale de la République de Corée et ambassadeur mondial de Hyundai Motor Company\n\nQuelles sont les initiatives qui prolongent la campagne « Le futur commence maintenant » ?\n\nS'appuyant sur cette campagne, Hyundai Motor lance une série d'initiatives qui associent le football, la culture et l'innovation tout en renforçant l'engagement des supporters.\n\nLa société a organisé des stages de football pour les jeunes à travers les États-Unis d'avril à mai dans des villes comme Atlanta, Miami, New Jersey et Los Angeles, avec la participation des légendes du football Mia Hamm et Tim Howard. Les événements ont combiné des séances de coaching avec des programmes expérimentaux, notamment des possibilités de rouler en voiture et des chances de gagner des billets pour la Coupe du Monde de la FIFA 2026™.\n\nÀ l'avenir, Hyundai Motor proposera des expériences immersives aux supporters sur les principaux sites de la compétition, y compris les sites du FIFA Fan Festival à Los Angeles, Atlanta, Miami, Toronto, Guadalajara et Monterrey, ainsi que la NYNJ World Cup 26 Fan Zone dans le Queens, à New York. Ces activités intégreront la technologie et la narration pour donner vie à la plateforme « Le futur commence maintenant ».\n\nParmi les autres initiatives, citons la série de contenus « School of Football » avec Atlas et Son Heung-min, l'exposition « Legacies of Champions » du Musée de la FIFA au Rockefeller Center, et la campagne « Be There With Hyundai » National Team Bus, qui présente des œuvres d'art réalisées par des enfants du monde entier.\n\nPour en savoir plus sur la campagne de Hyundai Motor pour la Coupe du monde, « Le futur commence maintenant », consultez l'article « Next Starts Now » (Le futur commence maintenant) du journal de la marque Hyundai.\n\nÀ propos de Hyundai Motor Company\n\nFondée en 1967, Hyundai Motor Company est présente dans plus de 200 pays et emploie plus de 120 000 personnes chargées de relever les défis de la mobilité dans le monde entier. S'appuyant sur la vision de la marque « Le progrès pour l'humanité », Hyundai Motor accélère le rythme de sa transformation bien au-delà de la mobilité grâce à la robotique avancée et à l'IA physique. L'entreprise investit dans les nouvelles technologies pour mettre au point des solutions révolutionnaires tout en poursuivant l'innovation ouverte pour introduire de futurs services de mobilité. Dans sa quête d'un avenir durable pour le monde, Hyundai Motor poursuivra ses efforts en faveur de la réduction des émissions de carbone en tant que fournisseur d'une gamme complète de véhicules à moteur à combustion interne, hybrides, hybrides rechargeables, à pile à combustible hydrogène et à énergie électrique à la pointe du secteur.\n\nPour en savoir plus sur Hyundai Motor et ses produits, visitez :\n\nhttps://www.hyundai.com/worldwide/en/ ou Salle de presse : Media Hub de Hyundai\n\nSuivez notre compte Instagram de Global Newsroom Hyundai @hyundai_mediahub\n\nVisitez le site Hyundai Media_Hub pour plus de contenu.\n\nAvis de non-responsabilité : Hyundai Motor Company estime que les renseignements contenus dans le présent document sont exacts au moment de la publication. Toutefois, l'entreprise peut télécharger des renseignements nouveaux ou mis à jour au besoin et rejette toute responsabilité quant à l'exactitude des renseignements interprétés et utilisés par le lecteur.\n\nPhoto - https://mma.prnewswire.com/media/2991590/Hyundai_Motor_Debuts__Next_Starts_Now__Global_Campaign_Film_for_FIFA_World_Cup_2026.jpg\n\nPhoto - https://mma.prnewswire.com/media/2991591/Hyundai_Motor_Debuts__Next_Starts_Now__Global_Campaign_Film_for_FIFA_World_Cup_2026.jpg\n\nPhoto - https://mma.prnewswire.com/media/2991592/Hyundai_Motor_Debuts__Next_Starts_Now__Global_Campaign_Film_for_FIFA_World_Cup_2026.jpg\n\nPhoto - https://mma.prnewswire.com/media/2991593/Hyundai_Motor_Debuts__Next_Starts_Now__Global_Campaign_Film_for_FIFA_World_Cup_2026.jpg\n\nPhoto - https://mma.prnewswire.com/media/2991594/Hyundai_Motor_Debuts__Next_Starts_Now__Global_Campaign.jpg\n\nLogo - https://mma.prnewswire.com/media/2947195/Hyundai_Motor_Company___FIFA_World_Cup_2026__Logo.jpg",
+            "original_language": "EN",
+            "author": "Hyundai Motor Company",
+            "countries": [
+                "FRA",
+                "DEU",
+                "GBR",
+                "JPN",
+                "CHN",
+                "BRA",
+                "ARG",
+                "USA"
+            ],
+            "industries": [
+                {
+                    "name": "EV Platform/Skateboard & Chassis Integration Manufacturing",
+                    "is_primary": true
+                },
+                {
+                    "name": "Product & Explainer Videos (Demos, How-To, SaaS/Product Walkthroughs)",
+                    "is_primary": false
+                }
+            ],
+            "tags": [
+                {
+                    "name": "Brand & Marketing Initiatives",
+                    "code": "SD07",
+                    "is_primary": true
+                },
+                {
+                    "name": "Sustainability & ESG",
+                    "code": "SD09",
+                    "is_primary": false
+                }
+            ],
+            "company_mentions": [
+                {
+                    "uuid": "000074f-hyundai",
+                    "name": "Hyundai Motor Company",
+                    "website": "https://www.hyundai.com"
+                }
+            ]
+        },
+        {
+            "id": 11398648,
+            "title": "BYD tops global automotive innovation ranking 2026",
+            "url": "https://www.manufacturingtodayindia.com/byd-global-automotive-innovation",
+            "publisher": "manufacturingtodayindia",
+            "published_date": "2026-06-02T08:42:23+00:00",
+            "sentiment": "Positive",
+            "news_score": "Medium",
+            "ai_summary": "BYD has topped the 2026 global automotive innovation ranking published by the Center of Automotive Management in Germany, marking the first time a Chinese automaker has achieved this position. The company has developed significant core technologies in new energy vehicles, including the Blade Battery and e-Platform 3.0, and has led China’s sales of new energy passenger vehicles for a decade. ",
+            "full_text": "BYD has achieved a historic milestone by topping the global automotive innovation ranking in the Automotive INNOVATIONS Report 2026 published by the Center of Automotive Management (CAM) in Germany. This is the first time a Chinese automaker has claimed the top position, scoring 157 points, surpassing last year’s leader Volkswagen, which scored 143 points, and Mercedes-Benz, at third with 134 points. This recognition underscores BYD’s growing strength in innovation and its competitiveness in the global automotive market. Strong foundation in new energy vehicle technologies Founded in 2003, BYD Auto specialises in pure electric and plug-in hybrid vehicles, focusing on technological advancements aimed at facilitating the green transition in transportation. The company has developed core technologies across the entire new energy vehicle supply chain, including innovations such as the Blade Battery and the e-Platform 3.0. Remarkably, BYD was the first carmaker to cease the production of fossil-fuelled vehicles in favour of electric vehicles and has led new energy passenger vehicle sales in China for a decade. Also read: EBG Group launches Vajram Electric manufacturing hub in Hyd Expanding global footprint across Asia-Pacific In the Asia-Pacific region, BYD’s Automotive Sales Division, established in 2012, manages operations in over 20 countries and focuses on delivering innovative mobility solutions and advanced new energy products. The division is based at BYD’s global headquarters in Shenzhen and is expanding its market presence across key areas such as Japan, South Korea, and Southeast Asia.",
+            "original_language": "EN",
+            "author": "Staff Writer",
+            "countries": [
+                "CHN"
+            ],
+            "industries": [
+                {
+                    "name": "Passenger Vehicle Electrical & Electronics Manufacturing (ICE)",
+                    "is_primary": true
+                },
+                {
+                    "name": "Electric Drive Unit / E-Axle Manufacturing (Motors/Inverters/Gearboxes)",
+                    "is_primary": false
+                },
+                {
+                    "name": "Internal Combustion Engine (ICE) Manufacturing (Gasoline/Diesel)",
+                    "is_primary": false
+                }
+            ],
+            "tags": [
+                {
+                    "name": "Product Launches & Enhancements",
+                    "code": "SD01",
+                    "is_primary": true
+                },
+                {
+                    "name": "Sustainability & ESG",
+                    "code": "SD09",
+                    "is_primary": false
+                }
+            ],
+            "company_mentions": [
+                {
+                    "uuid": "0000k93-bydauto",
+                    "name": "BYD Auto",
+                    "website": "https://www.bydauto.com.cn/"
+                }
+            ]
+        }
+    ],
+    "credits_consumed": 0.15
+}
+```

@@ -23,8 +23,6 @@ Each article in the response includes:
 - **Company monitoring** — pass a company's website domain to track all coverage for a specific business, filtered by sentiment or news type
 - **Industry intelligence** — pass an industry name to monitor deal flow, regulatory activity, or innovation signals across an entire sector
 - **LLM pipeline enrichment** — use `full_text` as input to summarisation, classification, or embedding models, pre-filtered by `type` and `sentiment`
-- **Signal triage** — use `news_score` to rank articles by relevance before processing, reducing noise in high-volume feeds
-- **Company mention mapping** — use `company_names` to identify all entities referenced in an article without parsing the text
 
 <Info>
   This API is synchronous. Results are returned directly in the HTTP response — no job submission or polling required.

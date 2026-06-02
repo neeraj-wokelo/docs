@@ -2,104 +2,98 @@
 title: "Use cases"
 ---
 
-### Deal screening — firmographics and funding for a target
+### Deal screening — firmographics and GTM details for a target
 
 <CodeGroup>
 
 ```bash cURL
-curl --location 'https://api.akta.pro/api/v1/company/enrichment?company=canva.com&sections=firmographics,funding,acquisitions' \
-  --header 'x-api-key: <YOUR_API_KEY>'
+curl --location 'https://api.akta.pro/api/v1/company/enrichment?company=htpps%3A%2F%2Fulteig.com&sections=firmographics%2C%20gtm_and_business_model' \
+--header 'x-api-key: YOUR API KEY' \
+--data ''
 ```
 
 ```python Python
 import requests
 
-HEADERS = {"x-api-key": "<YOUR_API_KEY>"}
+url = "https://api.akta.pro/api/v1/company/enrichment?company=htpps://ulteig.com&sections=firmographics, gtm_and_business_model"
 
-response = requests.get(
-    "https://api.akta.pro/api/v1/company/enrichment",
-    headers=HEADERS,
-    params={
-        "company":  "canva.com",
-        "sections": "firmographics,funding,acquisitions"
-    }
-)
+payload = ""
+headers = {
+  'x-api-key': 'your api key'
+}
 
-data = response.json()["data"]
+response = requests.request("GET", url, headers=headers, data=payload)
 
-# Firmographics
-firm = data["firmographics"]
-print(f"{firm['name']} | {firm['company_status']} | {firm['operating_status']}")
-print(f"HQ: {firm['location']} | Founded: {firm['founded']}")
-
-# Funding
-overall = data["funding"]["overall"]
-total_b = overall["total_funding"] / 1e9
-print(f"\nFunding: ${total_b:.2f}B raised")
-print(f"Stage: {overall['funding_stage']} | Rounds: {overall['num_funding_rounds']}")
-print(f"Last round: {overall['last_funding_date']}")
-
-# Acquisitions
-acqs = data.get("acquisitions", [])
-print(f"\nAcquisitions: {len(acqs)}")
-for acq in acqs[:5]:
-    amt = acq.get("amount")
-    amt_str = f"${amt / 1e6:.0f}M" if isinstance(amt, (int, float)) and amt > 0 else "undisclosed"
-    print(f"  {acq.get('acquisition_date', '—')[:10]}  {acq.get('acquiree_name')}  ({amt_str})")
+print(response.text)
 ```
 
 </CodeGroup>
 
 **Sample response:**
 
-```json
+```json expandable
 {
-  "data": {
-    "firmographics": {
-      "name": "Canva",
-      "website": "https://www.canva.com",
-      "location": "Sydney, Australia",
-      "founded": 2013,
-      "company_status": "private",
-      "operating_status": "Operating",
-      "ticker": null
+    "data": {
+        "uuid": "00081ss-ulteig",
+        "firmographics": {
+            "name": "Ulteig",
+            "website": "http://ulteig.com",
+            "location": "Austin, United States",
+            "founded_year": 1944,
+            "type": "private",
+            "operating_status": "Operating",
+            "ticker": "",
+            "region": "North America",
+            "country_code": "United States",
+            "product_category": "Civil Engineering Infrastructure Services",
+            "core_offering": "Ulteig is a civil engineering company that provides comprehensive engineering design, program management, and field services across various sectors including power, renewable energy, transportation, and water management.",
+            "product_catalog": [
+                "engineering design services",
+                "program management",
+                "environmental planning and services",
+                "construction management",
+                "land surveying"
+            ]
+        },
+        "gtm_and_business_model": {
+            "business_model_classification": "B2B",
+            "technology_classification": "NO",
+            "marketplace_classification": "NO",
+            "offering_type": "Services",
+            "customer_segments": [
+                "municipalities",
+                "power generation companies",
+                "renewable energy firms",
+                "transportation agencies",
+                "water management authorities"
+            ],
+            "revenue_streams": [
+                "Service fees"
+            ],
+            "pricing_strategy": [
+                "Fixed fee for services",
+                "Variable pricing based on project scale"
+            ],
+            "cost_structure": [
+                "Personnel",
+                "Operations",
+                "Technology or R&D",
+                "Marketing or Sales"
+            ],
+            "value_proposition": "Ulteig leverages over 75 years of experience to deliver reliable and innovative infrastructure solutions, ensuring client success and project integrity.",
+            "technology": [
+                "3D modeling capabilities",
+                "GIS technology integration"
+            ],
+            "distribution": [
+                "Direct sales to clients in various sectors",
+                "Project-based engagements with municipalities and corporations",
+                "Strong presence in North American markets"
+            ]
+        }
     },
-    "funding": {
-      "overall": {
-        "funding_stage": "Secondary Market",
-        "total_funding": 2508450682.0,
-        "last_funding_date": "2025-08-20",
-        "num_funding_rounds": "21"
-      }
-    }
-  },
-  "credits_consumed": 0.05,
-  "count": 2
+    "credits_consumed": 1.5
 }
-```
-
-### Enriching by UUID from Company Search
-
-When you have a company UUID from the Company Search API, pass it directly.
-
-```python
-import requests
-
-HEADERS = {"x-api-key": "<YOUR_API_KEY>"}
-
-# UUID obtained from Company Search API
-company_uuid = "00031n-tesla"
-
-response = requests.get(
-    "https://api.akta.pro/api/v1/company/enrichment",
-    headers=HEADERS,
-    params={
-        "company":  company_uuid,
-        "sections": "firmographics,funding"
-    }
-)
-data = response.json()["data"]
-print(data["firmographics"]["name"])
 ```
 
 ### CRM enrichment helper — resolve then enrich
