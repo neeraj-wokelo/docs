@@ -4,78 +4,357 @@ title: "Use cases"
 
 ### Aggregate sentiment snapshot
 
-Fetch the overview ratings for a company and display them correctly by scale.
+Fetch the overview ratings for a company.
 
 <CodeGroup>
 
 ```bash cURL
-curl --location 'https://api.akta.pro/api/v1/company/employee-reviews?company=canva.com&limit=1' \
-  --header 'x-api-key: <YOUR_API_KEY>'
+curl --location 'https://api.akta.pro/api/v1/company/employee-reviews/?company=https%3A%2F%2Fcanva.com&limit=10' \
+--header 'x-api-key: your api key'
 ```
 
 ```python Python
 import requests
 
-HEADERS = {"x-api-key": "<YOUR_API_KEY>"}
+url = "https://api.akta.pro/api/v1/company/employee-reviews/?company=https://canva.com&limit=10"
 
-response = requests.get(
-    "https://api.akta.pro/api/v1/company/employee-reviews",
-    headers=HEADERS,
-    params={"company": "canva.com", "limit": 1}
-)
+payload = {}
+headers = {
+  'x-api-key': 'your api key'
+}
 
-data = response.json()
-emp  = data["data"]["employee_reviews"]
+response = requests.request("GET", url, headers=headers, data=payload)
 
-# Overall rating
-overall = emp["overall_rating"].get("glassdoor")
-total   = emp["reviews"]["total"]
-print(f"Overall: {overall}/5.0  ({total:,} reviews)\n")
-
-# Dimension scores — two scales
-RATIO_DIMS = {"business_outlook", "ceo", "recommend_to_friend"}
-
-# Build lookup for easy access
-dim_lookup = {r["type"]: r["value"] for r in emp["other_ratings"]}
-
-print("Dimension Scores:")
-for dim, value in dim_lookup.items():
-    if dim in RATIO_DIMS:
-        print(f"  {dim:<30}  {value * 100:.0f}%")
-    else:
-        print(f"  {dim:<30}  {value:.1f} / 5.0")
+print(response.text)
 ```
 
 </CodeGroup>
 
 **Sample response:**
 
-```json
+```json expandable
 {
-  "data": {
-    "uuid": "00000jw-canva",
-    "employee_reviews": {
-      "overall_rating": { "glassdoor": 3.9 },
-      "other_ratings": [
-        { "type": "business_outlook",         "provider": "glassdoor", "value": 0.7  },
-        { "type": "ceo",                      "provider": "glassdoor", "value": 0.84 },
-        { "type": "recommend_to_friend",      "provider": "glassdoor", "value": 0.69 },
-        { "type": "compensation_and_benefits","provider": "glassdoor", "value": 3.9  },
-        { "type": "culture_and_values",       "provider": "glassdoor", "value": 3.7  },
-        { "type": "diversity_and_inclusion",  "provider": "glassdoor", "value": 4.0  },
-        { "type": "senior_management",        "provider": "glassdoor", "value": 3.1  },
-        { "type": "work_life_balance",        "provider": "glassdoor", "value": 3.7  }
-      ],
-      "reviews": {
-        "data": [ { "..." : "..." } ],
-        "total": 1068,
-        "total_by_provider": { "glassdoor": 1068 }
-      }
-    }
-  },
-  "limit": 1,
-  "offset": 0,
-  "credits_consumed": 1.5
+    "data": {
+        "uuid": "00000jw-canva",
+        "employee_reviews": {
+            "overall_rating": {
+                "glassdoor": 3.9
+            },
+            "other_ratings": [
+                {
+                    "type": "business_outlook",
+                    "provider": "glassdoor",
+                    "value": 0.68
+                },
+                {
+                    "type": "ceo",
+                    "provider": "glassdoor",
+                    "value": 0.84
+                },
+                {
+                    "type": "recommend_to_friend",
+                    "provider": "glassdoor",
+                    "value": 0.7
+                },
+                {
+                    "type": "compensation_and_benefits",
+                    "provider": "glassdoor",
+                    "value": 3.9
+                },
+                {
+                    "type": "culture_and_values",
+                    "provider": "glassdoor",
+                    "value": 3.7
+                },
+                {
+                    "type": "diversity_and_inclusion",
+                    "provider": "glassdoor",
+                    "value": 4.1
+                },
+                {
+                    "type": "senior_management",
+                    "provider": "glassdoor",
+                    "value": 3.1
+                },
+                {
+                    "type": "work_life_balance",
+                    "provider": "glassdoor",
+                    "value": 3.7
+                }
+            ],
+            "reviews": {
+                "data": [
+                    {
+                        "id": 104190734,
+                        "summary": "Good benefits and office, but toxic management issues",
+                        "pros": "Good benefits, good office, free food",
+                        "cons": "Some toxic managers, not so high pay but okay",
+                        "rating": 5,
+                        "review_link": "https://www.glassdoor.com/Reviews/Employee-Review--RVW104190734.htm",
+                        "job_title": "Customer Support Representative",
+                        "review_date": "",
+                        "employment_status": "REGULAR",
+                        "is_current_employee": true,
+                        "years_of_employment": 2,
+                        "location": "Makati City",
+                        "country_code": "",
+                        "helpful_count": 0,
+                        "not_helpful_count": 0,
+                        "career_opportunities_rating": 5,
+                        "ceo_rating": "APPROVE",
+                        "compensation_and_benefits_rating": 4,
+                        "culture_and_values_rating": 5,
+                        "diversity_and_inclusion_rating": 5,
+                        "senior_management_rating": 3,
+                        "work_life_balance_rating": 4,
+                        "language": "eng",
+                        "provider": "glassdoor"
+                    },
+                    {
+                        "id": 104167917,
+                        "summary": "Beloved product overshadowed by insecure and toxic leadership culture",
+                        "pros": "Product is beloved by users. Brand affinity is second to none which makes being a marketer a lot of fun. \nGenuinely good and caring coworkers who want to build something great. Hiring bar is high. \nVibe and Thrive benefit is clever and unique.",
+                        "cons": "Behind the brand is a cult like culture with the “founders” surrounded by yes people (whether they are aware of it or not). \nMediocrity seems to be tolerated among management’s “old guard” causing tension and churn with newer and sometimes more experienced leaders. \nInsecure leaders at some of the highest levels perpetuate much of the toxic behaviors described in the reviews below such as gaslighting and favoritism. \nPeople “disappear” with little to no explanation, but hey, it’s the “Canva way”.",
+                        "rating": 3,
+                        "review_link": "https://www.glassdoor.com/Reviews/Employee-Review--RVW104167917.htm",
+                        "job_title": "Marketing",
+                        "review_date": "",
+                        "employment_status": "REGULAR",
+                        "is_current_employee": false,
+                        "years_of_employment": 0,
+                        "location": "",
+                        "country_code": "",
+                        "helpful_count": 2,
+                        "not_helpful_count": 0,
+                        "career_opportunities_rating": 5,
+                        "ceo_rating": "APPROVE",
+                        "compensation_and_benefits_rating": 3,
+                        "culture_and_values_rating": 3,
+                        "diversity_and_inclusion_rating": 3,
+                        "senior_management_rating": 2,
+                        "work_life_balance_rating": 3,
+                        "language": "eng",
+                        "provider": "glassdoor"
+                    },
+                    {
+                        "id": 104160610,
+                        "summary": "Cool team and benefits, but poor communication and balance",
+                        "pros": "- cool product\n- cool office, tons of events \n- lots of benefits like free therapy, gift allowances\n- great people on the team",
+                        "cons": "- shady corporate moves followed by bad communication of what is going on\n- awful work-life balance",
+                        "rating": 4,
+                        "review_link": "https://www.glassdoor.com/Reviews/Employee-Review--RVW104160610.htm",
+                        "job_title": "Frontend Web Developer",
+                        "review_date": "",
+                        "employment_status": "REGULAR",
+                        "is_current_employee": true,
+                        "years_of_employment": 2,
+                        "location": "Prague",
+                        "country_code": "",
+                        "helpful_count": 0,
+                        "not_helpful_count": 0,
+                        "career_opportunities_rating": 5,
+                        "ceo_rating": "NO_OPINION",
+                        "compensation_and_benefits_rating": 5,
+                        "culture_and_values_rating": 4,
+                        "diversity_and_inclusion_rating": 5,
+                        "senior_management_rating": 2,
+                        "work_life_balance_rating": 1,
+                        "language": "eng",
+                        "provider": "glassdoor"
+                    },
+                    {
+                        "id": 104134824,
+                        "summary": "Great culture",
+                        "pros": "Talented and supportive coworkers, great culture",
+                        "cons": "Fast pace of change can take some getting used to.",
+                        "rating": 5,
+                        "review_link": "https://www.glassdoor.com/Reviews/Employee-Review--RVW104134824.htm",
+                        "job_title": "",
+                        "review_date": "",
+                        "employment_status": "REGULAR",
+                        "is_current_employee": true,
+                        "years_of_employment": 0,
+                        "location": "",
+                        "country_code": "",
+                        "helpful_count": 0,
+                        "not_helpful_count": 0,
+                        "career_opportunities_rating": 5,
+                        "ceo_rating": "APPROVE",
+                        "compensation_and_benefits_rating": 4,
+                        "culture_and_values_rating": 5,
+                        "diversity_and_inclusion_rating": 4,
+                        "senior_management_rating": 5,
+                        "work_life_balance_rating": 3,
+                        "language": "eng",
+                        "provider": "glassdoor"
+                    },
+                    {
+                        "id": 104118495,
+                        "summary": "Decent pay amid constant changes",
+                        "pros": "Pay is still somewhat decent",
+                        "cons": "Things are changing too drastically.",
+                        "rating": 2,
+                        "review_link": "https://www.glassdoor.com/Reviews/Employee-Review--RVW104118495.htm",
+                        "job_title": "Customer Service Representative",
+                        "review_date": "",
+                        "employment_status": "REGULAR",
+                        "is_current_employee": true,
+                        "years_of_employment": 6,
+                        "location": "Austin, TX",
+                        "country_code": "",
+                        "helpful_count": 1,
+                        "not_helpful_count": 0,
+                        "career_opportunities_rating": 2,
+                        "ceo_rating": "APPROVE",
+                        "compensation_and_benefits_rating": 2,
+                        "culture_and_values_rating": 1,
+                        "diversity_and_inclusion_rating": 4,
+                        "senior_management_rating": 1,
+                        "work_life_balance_rating": 2,
+                        "language": "eng",
+                        "provider": "glassdoor"
+                    },
+                    {
+                        "id": 104093537,
+                        "summary": "Great benefits and work-life balance, but slow career growth",
+                        "pros": "Great benefits. Employer friendly. Great work life balance",
+                        "cons": "Career progression is very hard",
+                        "rating": 4,
+                        "review_link": "https://www.glassdoor.com/Reviews/Employee-Review--RVW104093537.htm",
+                        "job_title": "Technical Lead",
+                        "review_date": "",
+                        "employment_status": "REGULAR",
+                        "is_current_employee": true,
+                        "years_of_employment": 0,
+                        "location": "Melbourne",
+                        "country_code": "",
+                        "helpful_count": 0,
+                        "not_helpful_count": 0,
+                        "career_opportunities_rating": 3,
+                        "ceo_rating": null,
+                        "compensation_and_benefits_rating": 4,
+                        "culture_and_values_rating": 4,
+                        "diversity_and_inclusion_rating": 4,
+                        "senior_management_rating": 3,
+                        "work_life_balance_rating": 4,
+                        "language": "eng",
+                        "provider": "glassdoor"
+                    },
+                    {
+                        "id": 104042910,
+                        "summary": "T'was the best of companies, T'was the worst of companies.",
+                        "pros": "Probably the best employee benefits in Australia. \n\nFree food. \n\n2k of free stuff every year. \n\nGreat pay\n\nGreat stock options.\n\nLot of prestige\n\nExposure to great engineers, and great hard working people\n\nGood culture of engineering discussion\n\nGuest speakers like the CTO of amazon randomly arrive and talk.\n\nNice to be on the train home, and see random people using the app you worked on that day.",
+                        "cons": "Navigating the codebase is like dissecting a dried piece of turd that's been sitting on the side of the road for 10 years. (and that's basically what it is). \n\nEspecially the Front End. It's horrible. It has a decade's worth of horrible dev practices at every level baked in. It's too big to change now.\n\nLook up \"avoid prop drilling principle\" on react. Prepare to see it violated on a level that belongs on the Epstein list. We're talking 20 arguments passed through every function, 5 functions in a chain.\n\nThere's a reason the reddit page is like non-stop \"This stopped working\" \"That stopped working\"...\n\n It's 1000 of some of the best engineers in the world using their mind to construct an elaborate maze of duct tape to hold together a rotting architecture... and they can't fix it.\n\nThey are trying to build AI features on top to stay relevant but we are hearing the structure begin to start creaking, every other day is an incident.\n\n---\n\nThe 'Coach' management system is hit or miss. You will regularly get coaches that are great developers, but terrible at reading people or communicating expectations.\n\n---",
+                        "rating": 4,
+                        "review_link": "https://www.glassdoor.com/Reviews/Employee-Review--RVW104042910.htm",
+                        "job_title": "Senior Software Engineer",
+                        "review_date": "",
+                        "employment_status": "REGULAR",
+                        "is_current_employee": false,
+                        "years_of_employment": 1,
+                        "location": "Sydney",
+                        "country_code": "",
+                        "helpful_count": 3,
+                        "not_helpful_count": 0,
+                        "career_opportunities_rating": 1,
+                        "ceo_rating": "APPROVE",
+                        "compensation_and_benefits_rating": 5,
+                        "culture_and_values_rating": 4,
+                        "diversity_and_inclusion_rating": 5,
+                        "senior_management_rating": 5,
+                        "work_life_balance_rating": 3,
+                        "language": "eng",
+                        "provider": "glassdoor"
+                    },
+                    {
+                        "id": 104024941,
+                        "summary": "Great vibe and fun culture with a work hard play hard approach",
+                        "pros": "Great vibe, free food and fun culture",
+                        "cons": "very much work hard play hard culture",
+                        "rating": 5,
+                        "review_link": "https://www.glassdoor.com/Reviews/Employee-Review--RVW104024941.htm",
+                        "job_title": "",
+                        "review_date": "",
+                        "employment_status": "REGULAR",
+                        "is_current_employee": false,
+                        "years_of_employment": 0,
+                        "location": "",
+                        "country_code": "",
+                        "helpful_count": 0,
+                        "not_helpful_count": 0,
+                        "career_opportunities_rating": null,
+                        "ceo_rating": "APPROVE",
+                        "compensation_and_benefits_rating": null,
+                        "culture_and_values_rating": null,
+                        "diversity_and_inclusion_rating": null,
+                        "senior_management_rating": null,
+                        "work_life_balance_rating": null,
+                        "language": "eng",
+                        "provider": "glassdoor"
+                    },
+                    {
+                        "id": 103985284,
+                        "summary": "recently chaos but still not the worst",
+                        "pros": "still a good place to work , young good people",
+                        "cons": "new leadership is causing a mess, plans and goals changing too quickly",
+                        "rating": 4,
+                        "review_link": "https://www.glassdoor.com/Reviews/Employee-Review--RVW103985284.htm",
+                        "job_title": "",
+                        "review_date": "",
+                        "employment_status": "REGULAR",
+                        "is_current_employee": true,
+                        "years_of_employment": 0,
+                        "location": "",
+                        "country_code": "",
+                        "helpful_count": 1,
+                        "not_helpful_count": 0,
+                        "career_opportunities_rating": null,
+                        "ceo_rating": null,
+                        "compensation_and_benefits_rating": null,
+                        "culture_and_values_rating": null,
+                        "diversity_and_inclusion_rating": null,
+                        "senior_management_rating": null,
+                        "work_life_balance_rating": null,
+                        "language": "eng",
+                        "provider": "glassdoor"
+                    },
+                    {
+                        "id": 103959520,
+                        "summary": "Supportive colleagues and good pay, but opaque decision-making",
+                        "pros": "Nice people, good comp, good job stability, Cool product that other people will know about. Can get by with relatively low effort if that's what you're into",
+                        "cons": "Often large disconnect between doing the right thing and doing the \"get promoted\" thing. High level decision making very opaque to all but most senior. Doomed/failed projects continue to be kept alive long after they should have been scrapped and if you end up working on these it's very sad.",
+                        "rating": 3,
+                        "review_link": "https://www.glassdoor.com/Reviews/Employee-Review--RVW103959520.htm",
+                        "job_title": "Senior Frontend Developer",
+                        "review_date": "",
+                        "employment_status": "REGULAR",
+                        "is_current_employee": false,
+                        "years_of_employment": 4,
+                        "location": "Brisbane",
+                        "country_code": "",
+                        "helpful_count": 1,
+                        "not_helpful_count": 0,
+                        "career_opportunities_rating": 2,
+                        "ceo_rating": null,
+                        "compensation_and_benefits_rating": 4,
+                        "culture_and_values_rating": 3,
+                        "diversity_and_inclusion_rating": 5,
+                        "senior_management_rating": 1,
+                        "work_life_balance_rating": 5,
+                        "language": "eng",
+                        "provider": "glassdoor"
+                    }
+                ],
+                "total": 1073,
+                "total_by_provider": {
+                    "glassdoor": 1073
+                }
+            }
+        }
+    },
+    "limit": 10,
+    "offset": 0,
+    "credits_consumed": 1.5
 }
 ```
 
@@ -176,109 +455,4 @@ for r in results:
         f"{round(r['ceo_approval'] * 100):<8} "
         f"{round(r['recommend'] * 100)}"
     )
-```
-
-### Paginating through all reviews
-
-Retrieve the full review corpus for downstream analysis.
-
-```python
-import requests
-
-HEADERS  = {"x-api-key": "<YOUR_API_KEY>"}
-COMPANY  = "canva.com"
-PAGE_SIZE = 100
-
-all_reviews = []
-offset      = 0
-
-while True:
-    r = requests.get(
-        "https://api.akta.pro/api/v1/company/employee-reviews",
-        headers=HEADERS,
-        params={"company": COMPANY, "limit": PAGE_SIZE, "offset": offset}
-    )
-    data    = r.json()
-    emp     = data["data"]["employee_reviews"]
-    batch   = emp["reviews"]["data"]
-    total   = emp["reviews"]["total"]
-
-    if not batch:
-        break
-
-    all_reviews.extend(batch)
-    print(f"Fetched {len(all_reviews)} / {total} reviews...")
-
-    if len(all_reviews) >= total:
-        break
-
-    offset += PAGE_SIZE
-
-print(f"\nTotal reviews retrieved: {len(all_reviews)}")
-
-# Separate current vs former employees
-current = [r for r in all_reviews if r["is_current_employee"]]
-former  = [r for r in all_reviews if not r["is_current_employee"]]
-print(f"Current employees: {len(current)}  |  Former: {len(former)}")
-```
-
-### Filtering reviews by dimension score
-
-Find reviews where a specific dimension score is below a threshold — useful for surfacing recurring concerns.
-
-```python
-reviews = response.json()["data"]["employee_reviews"]["reviews"]["data"]
-
-# Reviews where senior management rated 2 or below
-low_mgmt = [
-    r for r in reviews
-    if r.get("senior_management_rating") is not None
-    and r["senior_management_rating"] <= 2
-]
-
-print(f"Reviews with senior management ≤ 2: {len(low_mgmt)}\n")
-for r in low_mgmt[:5]:
-    print(f"[{r['senior_management_rating']}★ mgmt] {r['summary']}")
-    print(f"  Cons: {r['cons'][:200]}")
-    print()
-```
-
-### JavaScript / Node.js
-
-```javascript
-const fetch = require("node-fetch");
-
-const API_KEY = process.env.AKTA_API_KEY;
-
-async function getEmployeeReviews(company, limit = 10, offset = 0) {
-  const params = new URLSearchParams({ company, limit, offset });
-  const res = await fetch(
-    `https://api.akta.pro/api/v1/company/employee-reviews?${params}`,
-    { headers: { "x-api-key": API_KEY } }
-  );
-  if (!res.ok) throw new Error(`API error: ${res.status}`);
-  return (await res.json()).data.employee_reviews;
-}
-
-const RATIO_DIMS = new Set(["business_outlook", "ceo", "recommend_to_friend"]);
-
-getEmployeeReviews("canva.com", 5).then(emp => {
-  const overall = emp.overall_rating.glassdoor;
-  const total   = emp.reviews.total;
-  console.log(`Overall: ${overall}/5.0 (${total.toLocaleString()} reviews)\n`);
-
-  emp.other_ratings.forEach(({ type, value }) => {
-    const display = RATIO_DIMS.has(type)
-      ? `${Math.round(value * 100)}%`
-      : `${value.toFixed(1)}/5.0`;
-    console.log(`  ${type.padEnd(30)} ${display}`);
-  });
-
-  console.log("\nLatest reviews:");
-  emp.reviews.data.forEach(r => {
-    const status = r.is_current_employee ? "Current" : "Former";
-    console.log(`  [${r.rating}★] ${r.summary}`);
-    console.log(`    ${r.job_title || "—"} | ${status} | ${r.years_of_employment} yr(s)`);
-  });
-});
 ```

@@ -3,9 +3,11 @@ title: "Overview"
 description: "Fetch a company's aggregated employee review signals — overall rating, eight dimension-level scores, and paginated individual reviews with pros, cons, reviewer metadata, and per-dimension ratings — sourced from Glassdoor and other review providers."
 ---
 
-The Employee Reviews API returns aggregated workplace sentiment data and individual employee reviews for any company. A single request returns the overall company rating, eight dimension-level scores (culture, work-life balance, compensation, senior management, diversity and inclusion, business outlook, CEO approval, and recommendation rate), and a paginated list of individual reviews — each with the reviewer's pros, cons, job title, tenure, employment status, location, and per-dimension ratings.
+The Employee Reviews API returns aggregated workplace sentiment data and individual employee reviews for any company. A single request returns the overall company rating, eight dimension-level scores — compensation and benefits, culture and values, diversity and inclusion, senior management, and work-life balance (each on a 5-point scale), plus business outlook, CEO approval, and recommend-to-friend (each expressed as a 0–1 ratio) — and a paginated list of individual reviews, alongside a total review count broken down by provider.
 
-This is a **synchronous GET API** — pass a company identifier and optional pagination parameters and receive the full response immediately.
+Each review includes the reviewer's summary, pros, cons, and overall rating, along with their job title, years of employment, employment status, whether they are a current employee, location, CEO rating, per-dimension ratings (career opportunities, compensation and benefits, culture and values, diversity and inclusion, senior management, and work-life balance), helpful/not-helpful counts, language, a direct review link, and the source provider. Some fields may be empty or null when a reviewer omits them.
+
+This is a synchronous GET API — pass a company identifier and optional pagination parameters (`limit` and `offset`) and receive the full response immediately. The response also reports the credits consumed by the request.
 
 <Info>
   This API is synchronous. Results are returned directly in the HTTP response — no job submission or polling required.
