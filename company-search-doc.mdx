@@ -42,13 +42,8 @@ x-api-key: <YOUR_API_KEY>
 
 <CodeGroup>
 
-```bash cURL — by company name
-curl --location 'https://api.akta.pro/api/v1/company/search?name=Canva' \
-  --header 'x-api-key: <YOUR_API_KEY>'
-```
-
-```bash cURL — by website
-curl --location 'https://api.akta.pro/api/v1/company/search?name=canva.com' \
+```bash cURL
+curl --location 'https://api.akta.pro/api/v1/company/search?query=Canva' \
   --header 'x-api-key: <YOUR_API_KEY>'
 ```
 
@@ -58,7 +53,7 @@ import requests
 response = requests.get(
     "https://api.akta.pro/api/v1/company/search",
     headers={"x-api-key": "<YOUR_API_KEY>"},
-    params={"name": "Canva"}
+    params={"query": "Canva"}
 )
 
 results = response.json()["data"]
@@ -125,7 +120,7 @@ HEADERS = {"x-api-key": "<YOUR_API_KEY>"}
 search = requests.get(
     "https://api.akta.pro/api/v1/company/search",
     headers=HEADERS,
-    params={"name": "Canva"}
+    params={"query": "Canva"}
 )
 uuid = search.json()["data"][0]["uuid"]
 
