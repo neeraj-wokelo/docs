@@ -68,7 +68,13 @@
                   }
                 ]
               },
-              "company-search-doc"
+              {
+                "group": "Supporting APIs",
+                "pages": [
+                  "company-search-doc",
+                  "industry-search"
+                ]
+              }
             ]
           },
           "playground",

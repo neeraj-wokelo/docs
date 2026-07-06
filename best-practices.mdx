@@ -2,18 +2,55 @@
 title: "Best Practices"
 ---
 
-**Always pass website URL or UUID for** `company `**— not the display name**
+**Always pass website URL or UUID for `company` — not the display name**
 
-The `company` parameter expects a full website URL (e.g. `"https://canva.com"`). A bare  display name (`"Canva"`) will not resolve correctly. If you only have a company name, use the [Company Search API](/akta-company-search-doc) to look up the website URL or UUID first:
+The `company` parameter expects a full website URL (e.g. `"https://canva.com"`) or an Akta UUID. A bare display name (`"Canva"`) will not resolve correctly. If you only have a company name, use the [Company Search API](/akta-company-search-doc) to look up the website URL or UUID first:
 
 ```python
 search = requests.get(
     "https://api.akta.pro/api/v1/company/search",
     headers={"x-api-key": API_KEY},
-    params={"name": "Canva"}
+    params={"query": "Canva"}
 )
 website = search.json()["data"][0]["website"]   # "https://canva.com"
 ```
+
+**Always pass an industry code for `industry` — not the industry name**
+
+The `industry` parameter expects one or more Akta industry codes (e.g. `"IMAHAHAN"`), not a free-text sector name like `"Warehouse Automation"`. If you're starting from a topic or sector name, resolve it to a code first with the [Industry Search API](/industry-search-doc):
+
+```python
+search = requests.get(
+    "https://api.akta.pro/api/v1/industry/search",
+    headers={"x-api-key": API_KEY},
+    params={"query": "warehouse automation"}
+)
+industry_code = search.json()["data"][0]["code"]   # "IMAHAHAN"
+```
+
+If the query matches several closely related industries, consider passing more than one code (comma separated) to widen coverage rather than relying on the single top match.
+
+**Use the open-ended `query` parameter for signals with no company or industry anchor**
+
+`company` and `industry` are both optional. For themes, narratives, or commodities that don't map to a single company or sector — a price move, a policy shift, a macro trend — pass a free-text `query` on its own instead of forcing it into an industry code:
+
+```python
+# Track a theme directly, no company or industry resolution needed
+params = {"query": "crude oil price developments", "limit": 20}
+```
+
+Avoid combining a broad `query` with an unrelated `company` or `industry` filter — since all active filters must match, an overly specific combination can silently return zero results. If you want to scope a topic to a specific company's coverage, prefer combining `query` with `company`, not `industry`, unless the topic and industry genuinely overlap.
+
+**Use `entity_person_list` and `entity_event_list` to track a person or event, not `query`**
+
+If you want every article mentioning a specific named person or event — an executive, founder, regulator, conflict, or policy rollout — use `entity_person_list` or `entity_event_list` rather than putting the name in `query`. The entity filters match against resolved, structured entities extracted from each article, so they're more precise than a text search and won't pick up unrelated articles that happen to share a keyword:
+
+```python
+# Precise: matches articles where this person is a recognized entity
+params = {"entity_person_list": "Elon Musk", "limit": 20}
+```
+
+Common names can still match multiple people with the same name. If you see unrelated results, narrow further by adding `company`, `industry`, or `countries` to disambiguate.
 
 **Use `sentiment_list`, `type_list`, and `news_score_list` — not the singular forms**
 
@@ -29,7 +66,7 @@ params = {"company": "https://canva.com", "sentiment_list": "positive"}
 
 **Understand what each filter does and combine them deliberately**
 
-The three filter parameters work independently and additively — all active filters must match for an article to be returned:
+The filter parameters work independently and additively — all active filters must match for an article to be returned:
 
 - `sentiment_list` — filters by the AI-assigned article sentiment (`positive`, `negative`, `neutral`)
 - `type_list` — filters by the event type tag (e.g. `Equity Fund-Raising`, `Layoffs`). [Download the full list of type codes](https://playground.akta.pro/news-tags.csv) to see all accepted values
@@ -56,17 +93,23 @@ params = {
 
 **Set `start_date` explicitly — the default lookback is capped at 6 months**
 
-Without a `start_date`, the API defaults to 6 months ago for non-enterprise plans. For research and historical analysis on enterprise plans, always set the date range explicitly so the window is predictable and reproducible:
+Without a `start_date`, the API defaults to 6 months ago for non-enterprise plans. For research and historical analysis on enterprise plans, always set the date range explicitly so the window is predictable and reproducible.
 
 **Combine `company` and `industry` to scope multi-sector companies**
 
-For companies that operate across multiple sectors (e.g. Amazon in retail, cloud, and logistics), passing `industry` alongside `company` narrows results to articles classified under that specific sector. This reduces noise from unrelated coverage:
+For companies that operate across multiple sectors (e.g. Amazon in retail, cloud, and logistics), passing an `industry` code alongside `company` narrows results to articles classified under that specific sector. This reduces noise from unrelated coverage. Resolve the code with the Industry Search API first:
 
 ```python
 # Amazon cloud coverage only — exclude retail, logistics, and media noise
+industry_code = requests.get(
+    "https://api.akta.pro/api/v1/industry/search",
+    headers={"x-api-key": API_KEY},
+    params={"query": "cloud computing"}
+).json()["data"][0]["code"]
+
 params = {
     "company":  "https://amazon.com",
-    "industry": "Cloud Computing",
+    "industry": industry_code,
     "limit":    50
 }
 ```
@@ -78,3 +121,11 @@ params = {
 ```python
 content = article.get("full_text", "").strip() or article.get("ai_summary", "")
 ```
+
+**Use `entities` for structured cross-referencing, not string matching on `full_text`**
+
+When you need to know which people, locations, products, or events an article touches on, read the `entities.person`, `entities.location`, `entities.product`, and `entities.event` arrays directly rather than pattern-matching against `full_text` or `ai_summary`. The entity arrays are already resolved and deduplicated, so they're more reliable for building watchlists, alerting, or graph-style relationship tracking.
+
+**Exclude low-value sources with `blacklisted` instead of filtering client-side**
+
+If certain publisher domains consistently add noise to your pipeline (e.g. low-quality aggregators or syndication mirrors), pass them to `blacklisted` so they're excluded server-side. This is more efficient than fetching and discarding articles after the fact, and it doesn't count against your effective `limit`.

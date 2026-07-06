@@ -1,0 +1,127 @@
+---
+title: "Industry Search"
+---
+
+## 1. Overview
+
+The Industry Search API resolves a free-text industry or topic name into a ranked list of matching industry codes. Its primary purpose is to look up the `code` needed as the `industry` parameter in the News API when you only have a topic name to start with, not an Akta industry code. This is a **free endpoint** — it does not consume API credits. **Endpoint**
+
+```text
+GET https://api.akta.pro/api/v1/industry/search
+```
+
+## Pass a single `query` query parameter. The backend matches it against Akta's industry taxonomy and returns the closest industries, ranked by similarity.
+
+## 2. Authentication
+
+All requests must include an **API key** in the `x-api-key` HTTP header.
+
+```text
+x-api-key: <YOUR_API_KEY>
+```
+
+<Warning>
+  Never expose your API key in client-side code, browser requests, or public repositories. A missing or invalid key returns `401 Unauthorized`.
+</Warning>
+
+---
+
+## 3. Request Reference
+
+| Parameter | Type | Required | Description |
+| --- | --- | --- | --- |
+| `query` | string | **Required** | Free-text industry name or topic (e.g. `"warehouse automation"`). The API matches this against Akta's industry taxonomy and returns the closest codes. |
+| **Example requests:** |  |  |  |
+
+<CodeGroup>
+
+```bash cURL
+curl --location 'https://api.akta.pro/api/v1/industry/search?query=warehouse%20automation' \
+  --header 'x-api-key: <YOUR_API_KEY>'
+```
+
+```python Python
+import requests
+response = requests.get(
+    "https://api.akta.pro/api/v1/industry/search",
+    headers={"x-api-key": "<YOUR_API_KEY>"},
+    params={"query": "warehouse automation"}
+)
+results = response.json()["data"]
+if results:
+    top_match = results[0]
+    print(f"Code:       {top_match['code']}")
+    print(f"Industry:   {top_match['industry_name']}")
+    print(f"Similarity: {top_match['similarity']}")
+```
+
+</CodeGroup>
+
+---
+
+## 4. Response
+
+### Response envelope
+
+```json
+{
+  "data": [
+    {
+      "code": "IMAHAHAN",
+      "industry_name": "Warehouse & Intralogistics Automation Systems (AS/RS, Sortation, Conveyance Controls)",
+      "similarity": 0.6098
+    },
+    {
+      "code": "IMAHABAK",
+      "industry_name": "Warehouse Automation Systems (AS/RS, Shuttle Systems, Vertical Lift Modules)",
+      "similarity": 0.6026
+    }
+  ],
+  "count": 2,
+  "credits_consumed": 0
+}
+```
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `data` | object\[\] | Array of matching industry objects, ranked by similarity score. Empty array `[]` when no results are found. |
+| `count` | integer | Number of industry objects returned in the `data` array. |
+| `credits_consumed` | float | Always `0` — this is a free endpoint. |
+
+### Industry object
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `code` | string | Unique Akta industry code. Pass this as the `industry` parameter in the News API. |
+| `industry_name` | string | Full name of the industry as per Akta's industry taxonomy. |
+| `similarity` | float | Similarity score between the query and the matched industry, from `0` to `1`. Higher values indicate a closer match. Results are returned in descending order of relevance. |
+| When no industries match the query, the API returns `204 No Content` with an empty `data` array. |  |  |
+
+---
+
+## 5. Using the code in other APIs
+
+Once you have the `code`, pass it as the `industry` field in downstream API calls:
+
+```python
+import requests
+HEADERS = {"x-api-key": "<YOUR_API_KEY>"}
+# Step 1: Search for the industry
+search = requests.get(
+    "https://api.akta.pro/api/v1/industry/search",
+    headers=HEADERS,
+    params={"query": "warehouse automation"}
+)
+code = search.json()["data"][0]["code"]
+# Step 2: Use the code in the News API
+news = requests.get(
+    "https://api.akta.pro/api/v1/news",
+    headers=HEADERS,
+    params={"industry": code, "limit": 10}
+)
+print(f"Found {news.json()['total']} articles")
+```
+
+<Tip>
+  If a query matches several closely related industries, consider passing more than one `code` to the News API's `industry` parameter (comma separated) to widen coverage, rather than relying on the single top match.
+</Tip>

@@ -2,11 +2,11 @@
 title: "Overview"
 ---
 
-The Akta News API fetches enriched news articles for a given company or industry. Each article is returned with an AI-generated summary, full body text, structured news tags, industry classifications, sentiment signal, relevance score, and a resolved list of all companies mentioned — making it ready for direct consumption in LLM pipelines, monitoring workflows, and investment research tools.
+The Akta News API fetches enriched news articles for a given company, industry, or open-ended search query. Each article is returned with an AI-generated summary, full body text, structured news tags, industry classifications, sentiment signal, relevance score, named entities, and a resolved list of all companies mentioned — making it ready for direct consumption in LLM pipelines, monitoring workflows, and investment research tools.
 
 This is a **synchronous GET API** — pass your filters as URL query parameters and receive a paginated array of enriched articles immediately in the response.
 
-Results can be scoped to a **specific company** (by website domain or UUID), a **specific industry**, or both. All filter parameters are optional — omitting them returns the latest articles across Akta's full news index.
+Results can be scoped to a **specific company** (by website domain or UUID), a **specific industry**, or an **open-ended topic query** — or any combination of the three. This means coverage is no longer limited to tracking a known company or industry; you can also monitor news around a free-text theme (e.g. `"tariffs"`, `"data center buildout"`, `"AI regulation"`) that doesn't map neatly to a single company or industry code. All filter parameters are optional — omitting them returns the latest articles across Akta's full news index.
 
 Each article in the response includes:
 
@@ -17,11 +17,16 @@ Each article in the response includes:
 - **News tags** — structured primary and secondary tags (e.g. `"Equity Fund-Raising"`, `"Layoffs"`, `"IPO"`)
 - **Industry classifications** — industry names with primary flag
 - **Company mentions** — resolved array of all companies named in the article, each with UUID, name, and website
+- **Named entities** — people, locations, products, and events extracted from the article text
+- **Classification codes** — IPTC, IAB, NAICS, and SIC codes for cross-referencing against external taxonomies
+- **Article metadata** — flags for whether an article is a press release, opinion piece, or breaking news, plus the country/countries associated with the event
 
 **Common use cases:**
 
 - **Company monitoring** — pass a company's website domain to track all coverage for a specific business, filtered by sentiment or news type
-- **Industry intelligence** — pass an industry name to monitor deal flow, regulatory activity, or innovation signals across an entire sector
+- **Industry intelligence** — resolve an industry via the Industry Search API, then pass the resulting code to monitor deal flow, regulatory activity, or innovation signals across an entire sector
+- **Open-ended topic monitoring** — pass a free-text `query` to track a theme, event, or narrative that spans multiple companies and industries, without needing to resolve it to a company or industry code first
+- **Entity tracking** — filter or post-process by `entity_person_list`, `entity_location_list`, `entity_product_list`, or `entity_event_list` to follow specific people, places, products, or events across coverage
 - **LLM pipeline enrichment** — use `full_text` as input to summarisation, classification, or embedding models, pre-filtered by `type` and `sentiment`
 
 <Info>
