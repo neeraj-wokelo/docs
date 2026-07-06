@@ -34,7 +34,15 @@ The News API fetches news articles filtered by company, industry, date range, se
 </ParamField>
 
 <ParamField query="industry" type="string">
-  Industry name to filter articles by.
+  Comma separated list of industry codes to filter articles by. See the complete list of industry codes here.
+</ParamField>
+
+<ParamField query="query" type="string">
+  Topic name to search articles. Allows open-ended topic name.
+</ParamField>
+
+<ParamField query="title" type="string">
+  Searches articles based on the title entered.
 </ParamField>
 
 <ParamField query="start_date" type="string">
@@ -61,10 +69,22 @@ The News API fetches news articles filtered by company, industry, date range, se
   Default = 0
 </ParamField>
 
+<ParamField query="group_articles" type="boolean">
+  Accepts boolean.True will group similar articles from the same event.
+</ParamField>
+
 <ParamField query="news_score_list" type="string[]">
   Filter by news score tier. Accepted values: `High`, `Medium`, `Low` , `all`
 
   Default = `all`
+</ParamField>
+
+<ParamField query="countries" type="string">
+  Filters articles based on the country of the event. Comma separated list of ISO country codes.
+</ParamField>
+
+<ParamField query="blacklisted" type="string">
+  Comma separated list of publisher domains to exclude.
 </ParamField>
 
 <ParamField query="type_list" type="string[]">
@@ -77,6 +97,38 @@ The News API fetches news articles filtered by company, industry, date range, se
   Filter by sentiment. Accepted values: `positive`, `negative`, `neutral`, `all`.
 
   Default = `all`
+</ParamField>
+
+<ParamField query="entity_person_list" type="string">
+  Comma separated list of people names.
+</ParamField>
+
+<ParamField query="entity_location_list" type="string">
+  Comma separated list of locations.
+</ParamField>
+
+<ParamField query="entity_product_list" type="string">
+  Comma separated list of product names
+</ParamField>
+
+<ParamField query="entity_event_list" type="string">
+  Comma separated list of event names
+</ParamField>
+
+<ParamField query="naics_code_list" type="string">
+  Comma separated list of NAICS codes.
+</ParamField>
+
+<ParamField query="sic_code_list" type="string">
+  Comma separated list of SIC codes
+</ParamField>
+
+<ParamField query="iptc_code_list" type="string">
+  Comma separated list of IPTC codes
+</ParamField>
+
+<ParamField query="iab_code_list" type="string">
+  Comma separated list of IAB codes
 </ParamField>
 
 ## Response
