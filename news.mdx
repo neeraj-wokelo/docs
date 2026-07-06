@@ -6,7 +6,7 @@ openapi: "GET /v1/news"
 
 ## Overview
 
-The News API fetches news articles filtered by company, industry, date range, sentiment, type, and news score. Each result is enriched with an AI-generated summary, event classification, publisher metadata, sentiment, company mentions, geography, industry tags and the full article text. Results are returned in the API response.
+The News API fetches news articles filtered by company, industry, date range, sentiment, type, and news score. Each result is enriched with an AI-generated summary, event classification, publisher metadata, sentiment, company mentions, geography, industry tags, named entities (people, locations, products, and events mentioned in the article) and the full article text. Results are returned in the API response.
 
 ## Endpoint Details
 
@@ -34,11 +34,11 @@ The News API fetches news articles filtered by company, industry, date range, se
 </ParamField>
 
 <ParamField query="industry" type="string">
-  Comma separated list of industry codes to filter articles by. See the complete list of industry codes here.
+  Comma separated list of industry codes to filter articles by. Use [industry search](https://docs.akta.pro/industry-search-api) endpoint to fetch the list of industry codes for a given industry topic.
 </ParamField>
 
 <ParamField query="query" type="string">
-  Topic name to search articles. Allows open-ended topic name.
+  Topic name to search articles. Allows open-ended topic name. Eg. Crude oil price developments
 </ParamField>
 
 <ParamField query="title" type="string">
@@ -60,7 +60,7 @@ The News API fetches news articles filtered by company, industry, date range, se
 
   Default = 10
 
-  Max value = 100
+  Max value = 1000
 </ParamField>
 
 <ParamField query="offset" type="integer">
@@ -70,10 +70,10 @@ The News API fetches news articles filtered by company, industry, date range, se
 </ParamField>
 
 <ParamField query="group_articles" type="boolean">
-  Accepts boolean.True will group similar articles from the same event.
+  Accepts boolean. True will group similar articles from the same event.
 </ParamField>
 
-<ParamField query="news_score_list" type="string[]">
+<ParamField query="news_score_list" type="string">
   Filter by news score tier. Accepted values: `High`, `Medium`, `Low` , `all`
 
   Default = `all`
@@ -87,13 +87,13 @@ The News API fetches news articles filtered by company, industry, date range, se
   Comma separated list of publisher domains to exclude.
 </ParamField>
 
-<ParamField query="type_list" type="string[]">
-  Filter by news type. [Download Full List](https://playground.akta.pro/news-tags.csv)
+<ParamField query="type_list" type="string">
+  Filter by news type. [Download full list](https://playground.akta.pro/news-tags.csv) of news categories.
 
   Default = `all`
 </ParamField>
 
-<ParamField query="sentiment_list" type="string[]">
+<ParamField query="sentiment_list" type="string">
   Filter by sentiment. Accepted values: `positive`, `negative`, `neutral`, `all`.
 
   Default = `all`
@@ -116,19 +116,19 @@ The News API fetches news articles filtered by company, industry, date range, se
 </ParamField>
 
 <ParamField query="naics_code_list" type="string">
-  Comma separated list of NAICS codes.
+  Comma separated list of NAICS codes. [Download full list](https://wkemails.blob.core.windows.net/clients/%28%277c6ae379-82aa-4fc9-8c2f-1a90b73a5fb3%27%2C%29/NAICS.csv) of NAICS codes.
 </ParamField>
 
 <ParamField query="sic_code_list" type="string">
-  Comma separated list of SIC codes
+  Comma separated list of SIC codes. [Download full list](https://wkemails.blob.core.windows.net/clients/%28%27e76825ff-17c7-4538-bd95-cf46961be444%27%2C%29/SIC.csv) of SIC codes.
 </ParamField>
 
 <ParamField query="iptc_code_list" type="string">
-  Comma separated list of IPTC codes
+  Comma separated list of IPTC codes. [Download full list](https://wkemails.blob.core.windows.net/clients/%28%274a971e3b-424a-4b9c-be64-ec169090d267%27%2C%29/IPTC.csv) of IPTC codes.
 </ParamField>
 
 <ParamField query="iab_code_list" type="string">
-  Comma separated list of IAB codes
+  Comma separated list of IAB codes. [Download full list](https://wkemails.blob.core.windows.net/clients/%28%27b0c3af70-6b48-49db-95e6-6f4e742a7741%27%2C%29/IAB.csv)of IAB codes.
 </ParamField>
 
 ## Response
@@ -158,107 +158,7 @@ Returns a JSON object with the following structure:
 </ResponseField>
 
 <ResponseField name="data" type="array">
-  List of news article objects. See **Article Object Fields** below.
-</ResponseField>
-
-#### Article Object Fields
-
-<ResponseField name="title" type="string">
-  Headline of the article.
-</ResponseField>
-
-<ResponseField name="url" type="string">
-  Link to the original article.
-</ResponseField>
-
-<ResponseField name="publisher" type="string">
-  Name of the publishing outlet.
-</ResponseField>
-
-<ResponseField name="published_date" type="string">
-  Publication date in ISO 8601 format `YYYY-MM-DD`.
-</ResponseField>
-
-<ResponseField name="sentiment" type="string">
-  Sentiment of the article: `positive`, `negative`, or `neutral`.
-</ResponseField>
-
-<ResponseField name="news_score" type="string">
-  Relevance and quality score of the article. Values:"high", "medium", "low"
-</ResponseField>
-
-<ResponseField name="ai_summary" type="string">
-  AI-generated summary of the article.
-</ResponseField>
-
-<ResponseField name="full_text" type="string">
-  Full body text of the article.
-</ResponseField>
-
-<ResponseField name="original_language" type="string">
-  Language code of the original article. Example: `en`, `fr`.
-</ResponseField>
-
-<ResponseField name="author" type="string">
-  Author of the article.
-</ResponseField>
-
-<ResponseField name="countries" type="array of strings">
-  Country codes mentioned in the article.
-</ResponseField>
-
-<ResponseField name="industries" type="array of objects">
-  Industries associated with the article. See **Industry Object** below.
-</ResponseField>
-
-<ResponseField name="types" type="array of objects">
-  News types associated with the article. See **Type Object** below.
-</ResponseField>
-
-<ResponseField name="company_mentions" type="array of objects">
-  Companies mentioned in the article. See **Company Object** below.
-</ResponseField>
-
-#### Industry Object
-
-<ResponseField name="name" type="string">
-  Industry name. Example: `Software`.
-</ResponseField>
-
-<ResponseField name="is_primary" type="boolean">
-  `true` if this is the primary industry of the article.
-</ResponseField>
-
-#### Type Object
-
-<ResponseField name="name" type="string">
-  Tag label. Example: `IPO`, `Layoffs`.
-</ResponseField>
-
-<ResponseField name="code" type="string">
-  Tag code. Example: `ipo`, `layoffs`.
-</ResponseField>
-
-<ResponseField name="is_primary" type="boolean">
-  `true` if this is the primary type of the article.
-</ResponseField>
-
-#### Company Object
-
-<ResponseField name="uuid" type="string">
-  Company UUID.
-</ResponseField>
-
-<ResponseField name="name" type="string">
-  Company name.
-</ResponseField>
-
-<ResponseField name="website" type="string">
-  Company website URL.
-</ResponseField>
-
-<ResponseField name="is_primary" type="boolean">
-  `true` if this is the main company the article is about.
+  List of news article objects.
 </ResponseField>
 
 <ResponseExample>
@@ -270,47 +170,80 @@ Returns a JSON object with the following structure:
     "offset": 0,
     "data": [
         {
-            "title": "Canva Raises $1.5B in Secondary Transaction at $32B Valuation",
-            "url": "https://example.com/canva-secondary-2024",
-            "publisher": "TechCrunch",
-            "published_date": "2024-03-12",
-            "type": "Secondary Transactions",
-            "sentiment": "positive",
-            "news_score": 0.92,
-            "ai_summary": "Canva completed a $1.5 billion secondary share sale led by ICONIQ Capital, valuing the design software company at $32 billion. The transaction provides liquidity to existing employees and early investors while the company continues to grow ARR past $2 billion.",
-            "full_text": "Canva, the Australian design software platform, announced today the completion of a $1.5 billion secondary share sale...",
-            "original_language": "en",
-            "author": "Jane Doe",
-            "countries": ["AUS", "USA"],
-            "industries": [
-                {
-                    "name": "Software",
-                    "code": "software",
-                    "is_primary": true
-                }
-            ],
-            "tags": [
-                {
-                    "name": "Secondary Sale",
-                    "code": "secondary_sale",
-                    "is_primary": true
-                }
-            ],
-            "company_mentions": [
-                {
-                    "company_id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-                    "name": "Canva",
-                    "website": "https://canva.com",
-                    "is_primary": true
-                },
-                {
-                    "company_id": "9c2e1d4a-1234-4567-89ab-cdef01234567",
-                    "name": "ICONIQ Capital",
-                    "website": "https://iconiqcapital.com",
-                    "is_primary": false
-                }
-            ]
+      "id": 26877020,
+      "title": "How Canva Offline keeps productivity moving in the Philippines",
+      "url": "https://mb.com.ph/2026/07/01/how-canva-offline-keeps-productivity-moving-in-the-philippines",
+      "publisher": "",
+      "published_date": "2026-07-01T09:18:00",
+      "sentiment": "Positive",
+      "sentiment_score": 1,
+      "ai_summary": "Canva has highlighted how its Offline feature helps Filipino professionals maintain productivity despite unreliable internet connectivity and power interruptions. The article profiles Kredbylle Timbang, a brand designer in Bataan who relies on Canva Offline to continue working during power outages and meet client deadlines. The feature automatically syncs changes once connectivity is restored, allowing users to maintain creative momentum in flexible work environments.",
+      "full_text": "Technews How Canva Offline keeps productivity moving in the Philippines By Manila Bulletin Newsroom\n\nFor many Filipinos today, work can happen anywhere. A presentation might begin at home, get refined in a café, and be finalized between meetings later in the day. As working professionals increasingly embrace flexible work arrangements, productivity is no longer defined by where people work, but by their ability to keep work moving wherever they are. This shift has made flexibility essential. Filipinos need tools that adapt to the realities of modern work, allowing them to stay productive while on the go. In a world where ideas can happen anytime, creativity and momentum should not be limited by location or connectivity. This is the idea behind Canva Offline. Designed for today's increasingly mobile workforce, the feature allows users to continue creating and editing even when connectivity is unavailable. By making essential design tools accessible offline, Canva helps ensure that work can continue uninterrupted, empowering users to stay productive and focused. Once connectivity is restored, changes automatically sync, allowing work to continue seamlessly without losing progress. For content creator and brand designer Kredbylle Timbang, flexibility is not just a preference. It is essential to running her business. Based in Bataan, Kred works with clients remotely, develops brand identities, creates content, and manages multiple creative projects throughout the day. Like many Filipino entrepreneurs building businesses online, she has learned to navigate the challenges that come with remote work while ensuring she consistently delivers quality outputs on time. One of those challenges is something many Filipinos know all too well: unexpected power interruptions. \"Canva is the focal point of everything that I do,\" she shared. \"Power interruption is prominent here, and they often disrupt my focus and creative flow while designing.\" Before Canva Offline became available, losing connectivity often meant putting work on hold entirely. Progress stopped until power or internet service returned, creating unnecessary delays and disrupting momentum. For someone managing client deadlines and projects, those interruptions could easily affect productivity. Today, Canva Offline has become an important part of how Kred works. \"It really is a lifesaver to be able to edit offline when the power goes out unexpectedly,\" she said. \"Even without power and internet, I can continue editing without disruption. I've made it a habit to save my projects offline so I can keep working and make sure I deliver quality outputs to clients on time.\" Rather than worrying about interruptions, she can focus her energy on growing her business, serving clients, and staying creative. Her experience reflects a broader reality for many Filipinos today. As more Filipinos embrace flexible work arrangements, side hustles, online businesses, and freelance careers, productivity increasingly depends on tools that can keep work moving. For students, entrepreneurs, and creators like Kred, the ability to continue working offline provides something increasingly valuable: continuity. It allows them to stay focused on deadlines, serve clients, and bring ideas to life without losing momentum. For many Filipinos, Canva Offline is more than a convenience feature. It addresses a growing challenge in today's flexible work environment by ensuring that creativity and productivity are not dependent on a stable internet connection. In a world where work can happen anywhere, it gives users the freedom to keep moving forward, wherever inspiration or opportunity takes them.\n\nADVERTISEMENT\n\nRelated Tags",
+      "word_count": 548,
+      "original_language": "EN",
+      "author": "Manila Bulletin Newsroom",
+      "countries": [
+        "PHL"
+      ],
+      "industries": [
+        {
+          "name": "Collaboration & Productivity Platforms (M365/Google Workspace, Email, Chat/Meetings)",
+          "is_primary": true
+        },
+        {
+          "name": "Remote/Hybrid Work Effectiveness",
+          "is_primary": false
         }
+      ],
+      "tags": [
+        {
+          "name": "Others",
+          "code": "OT01",
+          "is_primary": true
+        }
+      ],
+      "company_mentions": [
+        {
+          "uuid": "00000l1",
+          "name": "Canva",
+          "website": "http://www.canva.com"
+        }
+      ],
+      "article_type": "Explainer",
+      "is_press_release": true,
+      "is_opinion": true,
+      "is_breaking": false,
+      "iptc_codes": [
+        "20000362",
+        "20001206"
+      ],
+      "iab_categories": [
+        "W3CW2J",
+        "130"
+      ],
+      "naics_codes": [
+        "54151"
+      ],
+      "sic_codes": [
+        "3570"
+      ],
+      "entities": {
+        "person": [
+          "kredbylle timbang"
+        ],
+        "location": [
+          "bataan",
+          "philippines"
+        ],
+        "product": [
+          "canva offline",
+          "canva"
+        ],
+        "event": []
+      },
+      "newsworthiness_score": 0.8162999749183655,
+      "group_id": null
+    }
     ]
 }
 ```

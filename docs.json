@@ -83,7 +83,8 @@
           "company-enrichment",
           "product-review",
           "employee",
-          "company-search-supporting-api"
+          "company-search-supporting-api",
+          "industry-search-api"
         ]
       }
     ]

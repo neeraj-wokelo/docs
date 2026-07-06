@@ -1,0 +1,186 @@
+---
+title: "Industry Search API"
+description: "Resolves an industry from a free-text query and returns matching industry codes ranked by similarity."
+openapi: "GET /v1/industry/search"
+---
+
+## Overview
+
+The Industry Search API resolves an industry from a free-text query — such as `warehouse automation` — and returns a ranked list of matching industry codes and names. Results are ordered by similarity score, so callers can pick the best match or present several candidates to a user. This is a free endpoint and does not consume credits. Results are returned in the API response.
+
+## Endpoint Details
+
+- **Method:** GET
+- **Endpoint:** `/v1/industry/search`
+
+## Authentication requirements
+
+- Include a valid API key in the `x-api-key` request header.
+
+## Request
+
+### Request Parameters
+
+#### Header Parameters
+
+<ParamField header="x-api-key" type="string" required>
+  Your API key.
+</ParamField>
+
+## URL Parameters
+
+<ParamField query="query" type="string" required>
+  Free-text industry name or topic to search for. Example: `warehouse automation`
+</ParamField>
+
+## Request Example
+
+```bash
+curl -G "https://api.akta.pro/api/v1/industry/search/?query=warehouse%20automation" \
+  -H "x-api-key: YOUR_API_KEY"
+```
+
+## Response
+
+#### Successful Response Fields
+
+Returns a JSON object with the following structure:
+
+<ResponseField name="data" type="array">
+  List of matching industry objects, ranked by similarity score. Returns an empty array when no matches are found. See **Industry Object Fields** below.
+</ResponseField>
+
+<ResponseField name="count" type="integer">
+  Number of industry objects returned in the `data` array.
+</ResponseField>
+
+<ResponseField name="credits_consumed" type="float">
+  Credits consumed by the request. This endpoint is free and always returns `0`.
+</ResponseField>
+
+#### Industry Object Fields
+
+<ResponseField name="code" type="string">
+  Unique industry code.
+</ResponseField>
+
+<ResponseField name="industry_name" type="string">
+  Full name of the industry.
+</ResponseField>
+
+<ResponseField name="similarity" type="float">
+  Similarity score between the query and the matched industry, ranging from `0` to `1`. Higher values indicate a closer match. Results are returned in descending order of relevance, though scores are not guaranteed to be strictly sorted for ties.
+</ResponseField>
+
+<ResponseExample>
+
+```json 200 expandable wrap
+{
+  "data": [
+    {
+      "code": "IMAHAHAN",
+      "industry_name": "Warehouse & Intralogistics Automation Systems (AS/RS, Sortation, Conveyance Controls)",
+      "similarity": 0.6098
+    },
+    {
+      "code": "IMAHABAK",
+      "industry_name": "Warehouse Automation Systems (AS/RS, Shuttle Systems, Vertical Lift Modules)",
+      "similarity": 0.6026
+    },
+    {
+      "code": "HDAAAIAA",
+      "industry_name": "Industrial & Warehouse Robotics",
+      "similarity": 0.6004
+    },
+    {
+      "code": "HSAKAKAJ",
+      "industry_name": "Warehouse & Inventory Relocation (Racking, Pallets, Stock)",
+      "similarity": 0.5887
+    },
+    {
+      "code": "TLALADAL",
+      "industry_name": "Automated / Robotics-Enabled Fulfillment Centers (AS/RS, AMRs, Goods-to-Person)",
+      "similarity": 0.5347
+    },
+    {
+      "code": "IMAIAMAJ",
+      "industry_name": "Supply Chain & Warehouse Automation (Smart Logistics)",
+      "similarity": 0.5331
+    },
+    {
+      "code": "HDAEABAK",
+      "industry_name": "Data Observability & Warehouse Monitoring",
+      "similarity": 0.5273
+    },
+    {
+      "code": "TLAEABAI",
+      "industry_name": "WMS for Automation & Robotics Orchestration (WES/WCS Integration)",
+      "similarity": 0.5225
+    },
+    {
+      "code": "EDAOANAI",
+      "industry_name": "Warehousing, Inventory & Materials Handling",
+      "similarity": 0.5157
+    },
+    {
+      "code": "CRAFAMAD",
+      "industry_name": "Pick/Pack & Value-Added Warehouse Services (Kitting, Returns Prep)",
+      "similarity": 0.5155
+    },
+    {
+      "code": "IMAHAHAJ",
+      "industry_name": "Industrial Automation Software (SCADA, HMI, MES, Historian)",
+      "similarity": 0.5588
+    },
+    {
+      "code": "TLALAAAM",
+      "industry_name": "Returns & Reverse Logistics Processing Centers (Non-Temp Controlled)",
+      "similarity": 0.5056
+    },
+    {
+      "code": "BPABABAG",
+      "industry_name": "Industrial & Warehouse Cleaning (Degreasing, Machine/Plant Cleaning)",
+      "similarity": 0.5483
+    },
+    {
+      "code": "IMAHABAC",
+      "industry_name": "Conveyors & Sortation Systems (Warehouse & Parcel)",
+      "similarity": 0.4909
+    },
+    {
+      "code": "HDAEABAL",
+      "industry_name": "Data Warehouse/Lakehouse Performance Optimization & Cost Management",
+      "similarity": 0.4813
+    },
+    {
+      "code": "IMAHAHAL",
+      "industry_name": "Factory Automation Cells & Integrated Systems (Assembly, Welding, Painting Lines)",
+      "similarity": 0.5308
+    },
+    {
+      "code": "TLAEABAD",
+      "industry_name": "WMS for Manufacturing & Production Warehousing",
+      "similarity": 0.4734
+    },
+    {
+      "code": "TLAEACAI",
+      "industry_name": "Slotting, Wave/Batch Planning & Release-to-Warehouse",
+      "similarity": 0.471
+    },
+    {
+      "code": "HSAKAIAD",
+      "industry_name": "Warehouse-Hosted Portable Storage (Off-Site Storage + Redelivery)",
+      "similarity": 0.5202
+    },
+    {
+      "code": "HDAEABAA",
+      "industry_name": "Cloud Data Warehouses",
+      "similarity": 0.4657
+    }
+  ],
+  "count": 20,
+  "credits_consumed": 0
+}
+```
+
+</ResponseExample>
