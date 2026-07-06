@@ -10,7 +10,7 @@ The Industry Search API resolves a free-text industry or topic name into a ranke
 GET https://api.akta.pro/api/v1/industry/search
 ```
 
-## Pass a single `query` query parameter. The backend matches it against Akta's industry taxonomy and returns the closest industries, ranked by similarity.
+Pass a single `query` query parameter. The backend matches it against Akta's industry taxonomy and returns the closest industries, ranked by similarity.
 
 ## 2. Authentication
 
@@ -31,7 +31,8 @@ x-api-key: <YOUR_API_KEY>
 | Parameter | Type | Required | Description |
 | --- | --- | --- | --- |
 | `query` | string | **Required** | Free-text industry name or topic (e.g. `"warehouse automation"`). The API matches this against Akta's industry taxonomy and returns the closest codes. |
-| **Example requests:** |  |  |  |
+
+**Example Request**
 
 <CodeGroup>
 
