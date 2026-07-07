@@ -28,7 +28,7 @@
             "icon": "network-wired",
             "pages": [
               {
-                "group": "News",
+                "group": "News Signals",
                 "pages": [
                   "news-doc",
                   "quick-start",
@@ -37,7 +37,7 @@
                 ]
               },
               {
-                "group": "Company Enrichment",
+                "group": "Company Data",
                 "pages": [
                   "company-enrichment-doc",
                   "quick-start-1",
