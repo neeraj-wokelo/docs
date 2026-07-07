@@ -65,6 +65,24 @@
                       "use-cases-3",
                       "best-practices-3"
                     ]
+                  },
+                  {
+                    "group": "Headcount Trends",
+                    "pages": [
+                      "overview-1",
+                      "quick-start-5",
+                      "use-cases-5",
+                      "best-practices-5"
+                    ]
+                  },
+                  {
+                    "group": "Website Traffic",
+                    "pages": [
+                      "overview",
+                      "quick-start-4",
+                      "use-cases-4",
+                      "best-practices-4"
+                    ]
                   }
                 ]
               },
@@ -90,7 +108,9 @@
           "product-review",
           "employee",
           "company-search-supporting-api",
-          "industry-search-api"
+          "industry-search-api",
+          "headcount",
+          "website-traffic"
         ]
       }
     ]

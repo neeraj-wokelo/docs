@@ -1,0 +1,182 @@
+---
+title: "Website Traffic API"
+description: "Fetches a company's website traffic signals, including engagement metrics, historical monthly visit estimates, and a breakdown of traffic by acquisition source."
+openapi: "GET /v1/company/website-traffic"
+---
+
+## Overview
+
+The Website Traffic API returns a company's website traffic signals, including visitor engagement metrics (bounce rate, pages per visit, time on site, total visits) for the most recent month, a historical series of estimated monthly visits, and a breakdown of traffic by acquisition source (organic search, paid search, social, direct, referral, and more). Results are returned in the API response.
+
+## Endpoint Details
+
+- **Method:** GET
+- **Endpoint:** `/v1/company/website-traffic`
+
+## Authentication requirements
+
+- Include a valid API key in the `x-api-key` request header.
+
+## Request
+
+### Request Parameters
+
+#### Header Parameters
+
+<ParamField header="x-api-key" type="string" required>
+  Your API key.
+</ParamField>
+
+## URL Parameters
+
+<ParamField query="company" type="string" required>
+  Company website (e.g. `canva.com`) or a company UUID (e.g. `00000l1`). The UUID can be obtained from the Company Search API.
+</ParamField>
+
+#### Example Request
+
+```bash
+curl -G "https://api.akta.pro/api/v1/company/website-traffic/" \
+  --data-urlencode "company=00000l1" \
+  -H "x-api-key: YOUR_API_KEY"
+```
+
+## Response
+
+#### Successful Response Fields
+
+Returns a JSON object with the following structure:
+
+<ResponseField name="data" type="object">
+  Container object holding the company's website traffic data. See **Website Traffic Object Fields** below.
+</ResponseField>
+
+<ResponseField name="credits_consumed" type="float">
+  Credits consumed by the request.
+</ResponseField>
+
+#### Website Traffic Object Fields
+
+<ResponseField name="uuid" type="string">
+  Akta UUID of the company.
+</ResponseField>
+
+<ResponseField name="engagements" type="object">
+  Visitor engagement metrics for the most recent reported month. See **Engagements Object** below.
+</ResponseField>
+
+<ResponseField name="estimated_monthly_visits" type="object">
+  Historical series of estimated total monthly visits. Keys are month-start dates formatted as `YYYY-MM-DD`, values are estimated visit counts (integer).
+</ResponseField>
+
+<ResponseField name="traffic_sources" type="object">
+  Breakdown of traffic by acquisition channel for the most recent reported month. See **Traffic Sources Object** below.
+</ResponseField>
+
+#### Engagements Object
+
+<ResponseField name="visits" type="string">
+  Total estimated visits for the month. Returned as a numeric string.
+</ResponseField>
+
+<ResponseField name="bounce_rate" type="string">
+  Share of visits that left after viewing a single page, expressed as a decimal from `0` to `1`. Returned as a numeric string.
+</ResponseField>
+
+<ResponseField name="page_per_visit" type="string">
+  Average number of pages viewed per visit. Returned as a numeric string.
+</ResponseField>
+
+<ResponseField name="time_on_site" type="string">
+  Average time spent on site per visit, in seconds. Returned as a numeric string.
+</ResponseField>
+
+<ResponseField name="month" type="string">
+  Month of the reported engagement metrics (`1`–`12`). Returned as a numeric string.
+</ResponseField>
+
+<ResponseField name="year" type="string">
+  Year of the reported engagement metrics. Returned as a numeric string.
+</ResponseField>
+
+#### Traffic Sources Object
+
+Each field represents the share of total traffic attributed to that channel, expressed as a decimal from `0` to `1`. Shares across all fields sum to approximately `1`.
+
+<ResponseField name="direct" type="float">
+  Share of traffic arriving via direct navigation (typed URL or bookmark).
+</ResponseField>
+
+<ResponseField name="search_organic" type="float">
+  Share of traffic arriving via unpaid search results.
+</ResponseField>
+
+<ResponseField name="search_paid" type="float">
+  Share of traffic arriving via paid search ads.
+</ResponseField>
+
+<ResponseField name="social_organic" type="float">
+  Share of traffic arriving via unpaid social media.
+</ResponseField>
+
+<ResponseField name="social_paid" type="float">
+  Share of traffic arriving via paid social media ads.
+</ResponseField>
+
+<ResponseField name="referrals" type="float">
+  Share of traffic arriving via referral links from other websites.
+</ResponseField>
+
+<ResponseField name="mail" type="float">
+  Share of traffic arriving via email links.
+</ResponseField>
+
+<ResponseField name="display_ads" type="float">
+  Share of traffic arriving via display advertising.
+</ResponseField>
+
+<ResponseField name="affiliate" type="float">
+  Share of traffic arriving via affiliate links.
+</ResponseField>
+
+<ResponseField name="gen_ai" type="float">
+  Share of traffic arriving via generative AI tools and chat assistants (e.g. answer citations, AI-generated links).
+</ResponseField>
+
+<ResponseExample>
+
+```json 200 expandable wrap
+{
+  "data": {
+    "uuid": "00000l1",
+    "engagements": {
+      "bounce_rate": "0.2602897105526746",
+      "month": "5",
+      "year": "2026",
+      "page_per_visit": "6.55412715753744",
+      "visits": "974544088",
+      "time_on_site": "349.0280264736948"
+    },
+    "estimated_monthly_visits": {
+      "2026-03-01": 981605012,
+      "2026-04-01": 973355461,
+      "2026-05-01": 974544088
+    },
+    "traffic_sources": {
+      "social_organic": 0.042621396495100196,
+      "social_paid": 0.017813082048215217,
+      "mail": 0.027515646067013535,
+      "referrals": 0.04181835401212351,
+      "search_organic": 0.2075475145136343,
+      "search_paid": 0.007554620736976237,
+      "direct": 0.634763534328985,
+      "gen_ai": 0.0154293188059966,
+      "affiliate": 0.0020269187393783146,
+      "display_ads": 0.0029096142525770747
+    }
+  },
+  "credits_consumed": 1.5
+}
+```
+
+</ResponseExample>

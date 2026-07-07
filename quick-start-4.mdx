@@ -1,0 +1,79 @@
+---
+title: "Quick Start"
+---
+
+## Authentication
+
+All requests must include an **API key** in the `x-api-key` HTTP header.
+
+```text
+x-api-key: <YOUR_API_KEY>
+```
+
+<Warning>
+  Never expose your API key in client-side code, browser requests, or public repositories. A missing or invalid key returns `401 Unauthorized`.
+</Warning>
+
+## Execute your first request
+
+<CodeGroup>
+
+```bash cURL
+curl -G "https://api.akta.pro/api/v1/company/website-traffic/" \
+  --data-urlencode "company=00000l1" \
+  -H "x-api-key: <YOUR_API_KEY>"
+```
+
+```python Python
+import requests
+
+response = requests.get(
+    "https://api.akta.pro/api/v1/company/website-traffic",
+    headers={"x-api-key": "<YOUR_API_KEY>"},
+    params={"company": "00000l1"}
+)
+data = response.json()
+traffic = data["data"]
+
+visits = traffic["engagements"]["visits"]
+bounce = float(traffic["engagements"]["bounce_rate"]) * 100
+print(f"Monthly visits: {int(visits):,}  |  Bounce rate: {bounce:.1f}%")
+```
+
+</CodeGroup>
+
+**Sample Response**
+
+```python expandable
+{
+  "data": {
+    "uuid": "00000l1",
+    "engagements": {
+      "bounce_rate": "0.2602897105526746",
+      "month": "5",
+      "year": "2026",
+      "page_per_visit": "6.55412715753744",
+      "visits": "974544088",
+      "time_on_site": "349.0280264736948"
+    },
+    "estimated_monthly_visits": {
+      "2026-03-01": 981605012,
+      "2026-04-01": 973355461,
+      "2026-05-01": 974544088
+    },
+    "traffic_sources": {
+      "social_organic": 0.042621396495100196,
+      "social_paid": 0.017813082048215217,
+      "mail": 0.027515646067013535,
+      "referrals": 0.04181835401212351,
+      "search_organic": 0.2075475145136343,
+      "search_paid": 0.007554620736976237,
+      "direct": 0.634763534328985,
+      "gen_ai": 0.0154293188059966,
+      "affiliate": 0.0020269187393783146,
+      "display_ads": 0.0029096142525770747
+    }
+  },
+  "credits_consumed": 1.5
+}
+```

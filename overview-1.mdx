@@ -1,0 +1,14 @@
+---
+title: "Overview"
+description: "Fetch a company's LinkedIn-sourced headcount signals — current total employee count, historical monthly headcount, growth rates across multiple lookback windows, and a breakdown of headcount by function."
+---
+
+The Headcount Trends API returns employee headcount signals for any company, sourced from LinkedIn. A single request returns the current total employee count, a month-by-month historical headcount series, growth rates over several trailing lookback windows (typically 6, 12, and 24 months), and a breakdown of current headcount by job function — such as Engineering, Sales, Marketing, and Arts and Design — each with its own function-level growth rates.
+
+Headcount growth is one of the more reliable proxies for a private company's trajectory: sustained hiring across functions signals expansion, concentrated growth in a single function (e.g. Sales or Engineering) can signal a shift in go-to-market strategy or product investment, and headcount contraction can be an early signal of a slowdown, restructuring, or distress well before it shows up in public news coverage.
+
+This is a **synchronous GET API** — pass a company identifier and receive the full response immediately. The response also reports the credits consumed by the request.
+
+<Info>
+  This API is synchronous. Results are returned directly in the HTTP response — no job submission or polling required.
+</Info>

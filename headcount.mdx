@@ -1,0 +1,226 @@
+---
+title: "Headcount Trends API"
+description: "Fetches a company's LinkedIn-sourced headcount data, including total employee count, historical growth trends, and a functional breakdown of the workforce."
+openapi: "GET /v1/company/headcount-trends"
+---
+
+## Overview
+
+The Headcount Trends API returns a company's employee headcount signals sourced from LinkedIn, including the current total employee count, month-over-month headcount history, growth rates over multiple lookback periods, and a breakdown of headcount by function (e.g. Engineering, Sales, Marketing). Results are returned in the API response.
+
+## Endpoint Details
+
+- **Method:** GET
+- **Endpoint:** `/v1/company/headcount-trends`
+
+## Authentication requirements
+
+- Include a valid API key in the `x-api-key` request header.
+
+## Request
+
+### Request Parameters
+
+#### Header Parameters
+
+<ParamField header="x-api-key" type="string" required>
+  Your API key.
+</ParamField>
+
+## URL Parameters
+
+<ParamField query="company" type="string" required>
+  Company website (e.g. `canva.com`) or a company UUID (e.g. `00000l1`). The UUID can be obtained from the Company Search API.
+</ParamField>
+
+#### Example Request
+
+```bash
+curl -G "https://api.akta.pro/api/v1/company/headcount-trends/" \
+  --data-urlencode "company=00000l1" \
+  -H "x-api-key: YOUR_API_KEY"
+```
+
+## Response
+
+#### Successful Response Fields
+
+Returns a JSON object with the following structure:
+
+<ResponseField name="data" type="object">
+  Container object holding the company's headcount data. See **Headcount Object Fields** below.
+</ResponseField>
+
+<ResponseField name="credits_consumed" type="float">
+  Credits consumed by the request.
+</ResponseField>
+
+#### Headcount Object Fields
+
+<ResponseField name="uuid" type="string">
+  Akta UUID of the company.
+</ResponseField>
+
+<ResponseField name="linkedin_username" type="string">
+  LinkedIn numeric username/identifier for the company page.
+</ResponseField>
+
+<ResponseField name="linkedin_official_name" type="string">
+  Company name as listed on LinkedIn.
+</ResponseField>
+
+<ResponseField name="linkedin_id" type="string">
+  LinkedIn company ID.
+</ResponseField>
+
+<ResponseField name="total_employees" type="integer">
+  Current total employee count as of `date`.
+</ResponseField>
+
+<ResponseField name="date" type="string">
+  Date the headcount snapshot was taken, formatted as `YYYY-MM-DD`.
+</ResponseField>
+
+<ResponseField name="growth_periods" type="array of objects">
+  Headcount growth rate over several trailing lookback windows. See **Growth Period Object** below.
+</ResponseField>
+
+<ResponseField name="headcount_growth" type="array of objects">
+  Month-by-month historical headcount series. See **Headcount Growth Object** below.
+</ResponseField>
+
+<ResponseField name="headcount_by_function" type="array of objects">
+  Current headcount broken down by job function. See **Headcount By Function Object** below.
+</ResponseField>
+
+#### Growth Period Object
+
+<ResponseField name="month_difference" type="integer">
+  Length of the trailing lookback window, in months (e.g. `6`, `12`, `24`).
+</ResponseField>
+
+<ResponseField name="change_percentage" type="integer">
+  Percentage change in total headcount over the lookback window.
+</ResponseField>
+
+#### Headcount Growth Object
+
+<ResponseField name="employee_count" type="integer">
+  Total employee count as of `date`.
+</ResponseField>
+
+<ResponseField name="date" type="string">
+  Snapshot date for this data point, formatted as `YYYY-MM-DD`.
+</ResponseField>
+
+#### Headcount By Function Object
+
+<ResponseField name="name" type="string">
+  Job function name (e.g. `Engineering`, `Sales`, `Arts and Design`).
+</ResponseField>
+
+<ResponseField name="employee_count" type="integer">
+  Current employee count in this function.
+</ResponseField>
+
+<ResponseField name="growth_periods" type="array of objects">
+  Growth rate for this function over trailing lookback windows. Same shape as the top-level **Growth Period Object**, typically returned for `6` and `12` month windows.
+</ResponseField>
+
+<ResponseExample>
+
+```json 200 expandable wrap
+{
+  "data": {
+    "uuid": "00000l1",
+    "linkedin_username": "2850862",
+    "linkedin_official_name": "Canva",
+    "linkedin_id": "2850862",
+    "total_employees": 17694,
+    "growth_periods": [
+      {
+        "month_difference": 6,
+        "change_percentage": 29
+      },
+      {
+        "month_difference": 12,
+        "change_percentage": 73
+      },
+      {
+        "month_difference": 24,
+        "change_percentage": 111
+      }
+    ],
+    "headcount_growth": [
+      {
+        "employee_count": 8376,
+        "date": "2024-07-01"
+      },
+      {
+        "employee_count": 9076,
+        "date": "2025-01-01"
+      },
+      {
+        "employee_count": 10202,
+        "date": "2025-07-01"
+      },
+      {
+        "employee_count": 13716,
+        "date": "2026-01-01"
+      },
+      {
+        "employee_count": 17694,
+        "date": "2026-07-01"
+      }
+    ],
+    "date": "2026-07-01",
+    "headcount_by_function": [
+      {
+        "name": "Arts and Design",
+        "employee_count": 5113,
+        "growth_periods": [
+          {
+            "month_difference": 6,
+            "change_percentage": 42
+          },
+          {
+            "month_difference": 12,
+            "change_percentage": 78
+          }
+        ]
+      },
+      {
+        "name": "Engineering",
+        "employee_count": 2544,
+        "growth_periods": [
+          {
+            "month_difference": 6,
+            "change_percentage": 18
+          },
+          {
+            "month_difference": 12,
+            "change_percentage": 35
+          }
+        ]
+      },
+      {
+        "name": "Sales",
+        "employee_count": 769,
+        "growth_periods": [
+          {
+            "month_difference": 6,
+            "change_percentage": 51
+          },
+          {
+            "month_difference": 12,
+            "change_percentage": 124
+          }
+        ]
+      }
+    ]
+  },
+  "credits_consumed": 2.5
+}
+```
+
+</ResponseExample>

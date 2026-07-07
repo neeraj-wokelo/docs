@@ -1,0 +1,71 @@
+---
+title: "Best Practices"
+---
+
+**`engagements` fields are returned as numeric strings — cast before doing math**
+
+`visits`, `bounce_rate`, `page_per_visit`, `time_on_site`, `month`, and `year` inside `engagements` are all returned as strings, even though they represent numeric values. Casting is required before any arithmetic or comparison:
+
+```python
+# ❌ TypeError / string concatenation instead of addition
+avg_visit_length = eng["time_on_site"] / 60
+
+# ✅ Cast first
+visits      = int(eng["visits"])
+bounce_rate = float(eng["bounce_rate"])
+page_views  = float(eng["page_per_visit"])
+time_on_site_min = float(eng["time_on_site"]) / 60
+```
+
+**`traffic_sources` values are floats and sum to approximately 1 — not exactly**
+
+Each channel share is a `0`–`1` float. Due to independent rounding per channel, the sum across all fields may be slightly above or below `1.0`. Don't assert exact equality to `1.0`, and normalise if you need shares that sum precisely to 100%:
+
+```python
+total = sum(sources.values())   # e.g. 0.9994 or 1.0021, not exactly 1.0
+
+# Normalise if exact 100% totals matter for your output
+normalised = {k: v / total for k, v in sources.items()}
+```
+
+**Sort `estimated_monthly_visits` by key before using it as a time series**
+
+`estimated_monthly_visits` is a JSON object keyed by month-start date, and object key order is not guaranteed to be preserved or chronological once deserialized. Always sort by the date key before computing trends or charting:
+
+```python
+# ❌ Assumes insertion order is chronological
+dates = list(monthly.keys())
+
+# ✅ Explicit sort
+series = sorted(monthly.items(), key=lambda kv: kv[0])
+```
+
+**Reconstruct a proper date from `month` and `year` rather than parsing them as-is**
+
+`month` and `year` in `engagements` are separate string fields, not a combined date. Zero-pad the month and combine them yourself if you need a `YYYY-MM` or `YYYY-MM-DD` value for sorting or joining against other datasets:
+
+```python
+month = eng["month"].zfill(2)          # "5"  -> "05"
+period = f"{eng['year']}-{month}"      # "2026-05"
+```
+
+**Treat `gen_ai` as a distinct, emerging channel — don't fold it into `referrals` or `search_organic`**
+
+`gen_ai` captures traffic attributed to generative AI tools and chat assistants (e.g. answer citations, AI-generated links), which is a fast-growing and analytically distinct channel from traditional organic search or referral traffic. Track it separately in dashboards and trend reports rather than merging it into a broader "other" bucket, since its growth trajectory and drivers differ from the rest of the mix.
+
+**Combine `traffic_sources` with `engagements` for a fuller quality read, not volume alone**
+
+A high `visits` count paired with a high `bounce_rate` and low `page_per_visit` can indicate low-quality or misdirected traffic (e.g. an ad campaign driving clicks that don't convert), while similar visit volume with strong engagement metrics indicates a healthier audience. Read the two sections together rather than treating `visits` as a standalone growth signal:
+
+```python
+quality_score = (1 - bounce_rate) * page_views  # simple composite, adjust weighting as needed
+```
+
+**Handle sparse or missing traffic data gracefully**
+
+Very small or newly tracked companies may return an empty or partial `traffic_sources` or `estimated_monthly_visits` object if web analytics providers don't have sufficient signal. Use `.get()` with defaults rather than assuming every channel key and every recent month will be present:
+
+```python
+direct_share = sources.get("direct", 0)
+latest_month = max(monthly.keys(), default=None)
+```

@@ -1,0 +1,68 @@
+---
+title: "Best Practices"
+---
+
+**Always look up a growth window by `month_difference` — don't assume array order or a fixed set of windows**
+
+`growth_periods` is an array, not a fixed-key object, and the set of windows returned (typically `6`, `12`, `24`) is not guaranteed to be identical across every company or every function. Look up the window you need explicitly rather than indexing by position:
+
+```python
+# ❌ Assumes index 1 is always the 12-month figure
+growth_12mo = data["growth_periods"][1]["change_percentage"]
+
+# ✅ Look up by month_difference
+growth_12mo = next(
+    (g["change_percentage"] for g in data["growth_periods"] if g["month_difference"] == 12),
+    None
+)
+```
+
+**`headcount_by_function` typically reports fewer growth windows than the top-level `growth_periods`**
+
+The top-level `growth_periods` array commonly includes 6, 12, and 24-month windows, while each function's `growth_periods` is typically limited to 6 and 12 months. Don't assume the same windows are available at both levels — always check what's present rather than hardcoding an expected window count.
+
+**Function-level headcount won't sum exactly to `total_employees`**
+
+`headcount_by_function` only includes employees LinkedIn has classified into a known function; roles that are unclassified, mislabeled, or below a reporting threshold are excluded. Treat the sum of `headcount_by_function.employee_count` as an approximation of `total_employees`, not an identity, and avoid deriving an "unclassified" bucket by subtracting the two:
+
+```python
+# Approximate coverage, not exact
+classified = sum(fn["employee_count"] for fn in data["headcount_by_function"])
+coverage_pct = classified / data["total_employees"] * 100
+```
+
+**Sort `headcount_growth` defensively before charting**
+
+While the series is generally returned in chronological order, don't assume this — sort explicitly by `date` before computing trends, especially if you're caching or merging responses across multiple calls:
+
+```python
+series = sorted(data["headcount_growth"], key=lambda p: p["date"])
+```
+
+**Read `growth_periods` as headline growth, not compounding monthly growth**
+
+Each entry in `growth_periods` reports total change over the full window (e.g. `73%` over 12 months), not an annualised or compounded monthly rate. Don't divide by the number of months to estimate a "monthly growth rate" — use the `headcount_growth` series directly if you need month-over-month figures:
+
+```python
+# ❌ Not a valid monthly rate
+monthly_rate = growth_12mo / 12
+
+# ✅ Compute month-over-month from the actual series instead
+mom_changes = [
+    (b["employee_count"] - a["employee_count"]) / a["employee_count"]
+    for a, b in zip(series, series[1:])
+]
+```
+
+**Cross-reference headcount growth with other signals before drawing conclusions**
+
+A sudden slowdown or dip in `total_employees` can reflect a real business change (layoffs, restructuring) but can also reflect changes in LinkedIn profile completeness or self-reporting within a specific market. Corroborate significant inflection points with News API coverage or Employee Reviews sentiment before treating a headcount change as a standalone signal.
+
+**Use `headcount_by_function` growth divergence, not just the top-level number, to detect strategy shifts**
+
+Two companies with identical overall 12-month growth can be pursuing very different strategies — one scaling Sales, another scaling Engineering. Compare function-level growth rates rather than relying on `total_employees` alone when assessing where a company is investing:
+
+```python
+sales_growth = growth_12mo(next(fn for fn in functions if fn["name"] == "Sales"))
+eng_growth   = growth_12mo(next(fn for fn in functions if fn["name"] == "Engineering"))
+```

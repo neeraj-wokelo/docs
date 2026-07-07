@@ -1,0 +1,116 @@
+---
+title: "Quick Start"
+---
+
+## Authentication
+
+All requests must include an **API key** in the `x-api-key` HTTP header.
+
+```text
+x-api-key: <YOUR_API_KEY>
+```
+
+<Warning>
+  Never expose your API key in client-side code, browser requests, or public repositories. A missing or invalid key returns `401 Unauthorized`.
+</Warning>
+
+## Execute your first request
+
+<CodeGroup>
+
+```bash cURL
+curl -G "https://api.akta.pro/api/v1/company/headcount-trends/" \
+  --data-urlencode "company=00000l1" \
+  -H "x-api-key: <YOUR_API_KEY>"
+```
+
+```python Python
+import requests
+
+response = requests.get(
+    "https://api.akta.pro/api/v1/company/headcount-trends",
+    headers={"x-api-key": "<YOUR_API_KEY>"},
+    params={"company": "00000l1"}
+)
+data = response.json()
+hc = data["data"]
+
+total = hc["total_employees"]
+growth_12mo = next(
+    (g["change_percentage"] for g in hc["growth_periods"] if g["month_difference"] == 12),
+    None
+)
+print(f"Total employees: {total:,}  |  12-month growth: {growth_12mo}%")
+```
+
+</CodeGroup>
+
+**Sample Response**
+
+```python expandable
+{
+  "data": {
+    "uuid": "00000l1",
+    "linkedin_username": "2850862",
+    "linkedin_official_name": "Canva",
+    "linkedin_id": "2850862",
+    "total_employees": 17694,
+    "growth_periods": [
+      {
+        "month_difference": 6,
+        "change_percentage": 29
+      },
+      {
+        "month_difference": 12,
+        "change_percentage": 73
+      },
+      {
+        "month_difference": 24,
+        "change_percentage": 111
+      }
+    ],
+    "headcount_growth": [
+      {
+        "employee_count": 17575,
+        "date": "2026-06-01"
+      },
+      {
+        "employee_count": 17694,
+        "date": "2026-07-01"
+      }
+    ],
+    "date": "2026-07-01",
+    "headcount_by_function": [
+      {
+        "name": "Arts and Design",
+        "employee_count": 5113,
+        "growth_periods": [
+          {
+            "month_difference": 6,
+            "change_percentage": 42
+          },
+          {
+            "month_difference": 12,
+            "change_percentage": 78
+          }
+        ]
+      },
+      {
+        "name": "Engineering",
+        "employee_count": 2544,
+        "growth_periods": [
+          {
+            "month_difference": 6,
+            "change_percentage": 18
+          },
+          {
+            "month_difference": 12,
+            "change_percentage": 35
+          }
+        ]
+      }
+    ]
+  },
+  "credits_consumed": 2.5
+}
+```
