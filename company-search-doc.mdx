@@ -2,7 +2,7 @@
 title: "Company Search"
 ---
 
-## 1. Overview
+## Overview
 
 The Company Search API resolves a company name, website domain, or UUID into a structured company record. Its primary purpose is to look up the `uuid` needed by the other APIs when you only have a company name to start with.
 
@@ -18,7 +18,7 @@ Pass a single `name` query parameter. The backend automatically detects whether 
 
 ---
 
-## 2. Authentication
+## Authentication
 
 All requests must include an **API key** in the `x-api-key` HTTP header.
 
@@ -32,7 +32,7 @@ x-api-key: <YOUR_API_KEY>
 
 ---
 
-## 3. Request Reference
+## Request Reference
 
 | Parameter | Type | Required | Description |
 | --- | --- | --- | --- |
@@ -69,7 +69,7 @@ if results:
 
 ---
 
-## 4. Response
+## Response
 
 ### Response envelope
 
@@ -107,7 +107,7 @@ When no companies match the query, the API returns `204 No Content` with an empt
 
 ---
 
-## 5. Using the UUID in other APIs
+## Using the UUID in other APIs
 
 Once you have the `uuid`, pass it as the `company` field in downstream API calls:
 

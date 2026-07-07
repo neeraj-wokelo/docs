@@ -2,7 +2,7 @@
 title: "Industry Search"
 ---
 
-## 1. Overview
+## Overview
 
 The Industry Search API resolves a free-text industry or topic name into a ranked list of matching industry codes. Its primary purpose is to look up the `code` needed as the `industry` parameter in the News API when you only have a topic name to start with, not an Akta industry code. This is a **free endpoint** — it does not consume API credits. **Endpoint**
 
@@ -12,7 +12,7 @@ GET https://api.akta.pro/api/v1/industry/search
 
 Pass a single `query` query parameter. The backend matches it against Akta's industry taxonomy and returns the closest industries, ranked by similarity.
 
-## 2. Authentication
+## Authentication
 
 All requests must include an **API key** in the `x-api-key` HTTP header.
 
@@ -26,7 +26,7 @@ x-api-key: <YOUR_API_KEY>
 
 ---
 
-## 3. Request Reference
+## Request Reference
 
 | Parameter | Type | Required | Description |
 | --- | --- | --- | --- |
@@ -60,7 +60,7 @@ if results:
 
 ---
 
-## 4. Response
+## Response
 
 ### Response envelope
 
@@ -100,7 +100,7 @@ if results:
 
 ---
 
-## 5. Using the code in other APIs
+## Using the code in other APIs
 
 Once you have the `code`, pass it as the `industry` field in downstream API calls:
 
