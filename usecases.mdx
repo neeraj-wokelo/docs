@@ -1,0 +1,163 @@
+---
+title: "Use cases"
+---
+
+### Open roles snapshot
+
+Fetch the most recent open roles for a company and see title, location, and type at a glance.
+
+<CodeGroup>
+
+```bash cURL
+curl -G "https://api.akta.pro/api/v1/company/jobs/" \
+  --data-urlencode "company=https://canva.com" \
+  --data-urlencode "limit=10" \
+  -H "x-api-key: your api key"
+```
+
+```python Python
+import requests
+
+url = "https://api.akta.pro/api/v1/company/jobs"
+
+headers = {"x-api-key": "your api key"}
+params = {"company": "https://canva.com", "limit": 10}
+
+response = requests.get(url, headers=headers, params=params)
+print(response.text)
+```
+
+</CodeGroup>
+
+**Sample response:**
+
+```json expandable
+{
+  "status": "success",
+  "data": [
+    {
+      "job_id": "WX680155RP",
+      "company_uuid": "00000jw-canva",
+      "title": "Head of Product Design - Growth",
+      "source": "linkedin",
+      "job_url": "https://www.linkedin.com/jobs/view/4438650351",
+      "date_posted": "2026-07-09 13:32:22+00:00",
+      "location": "Sydney, New South Wales, Australia",
+      "description": "Set and drive design vision and strategy across the Growth Supergroup, connecting design decisions to real growth outcomes.",
+      "type": "FULL_TIME",
+      "remote": false,
+      "salary_min_usd": null,
+      "salary_max_usd": null,
+      "experience_level": "5-10",
+      "key_skills": ["Design Vision", "Team Leadership", "Product Led Growth", "B2C SaaS", "AI Tools"]
+    }
+  ],
+  "count": 226,
+  "limit": 10,
+  "offset": 0,
+  "credits_consumed": 4
+}
+```
+
+### Hiring by function and location
+
+Aggregate open roles to see which functions and geographies a company is investing in — a proxy for where the business is heading.
+
+```python
+import requests
+from collections import Counter
+
+HEADERS = {"x-api-key": "<YOUR_API_KEY>"}
+
+# Pull all roles via pagination
+all_jobs, offset, limit = [], 0, 100
+while True:
+    resp = requests.get(
+        "https://api.akta.pro/api/v1/company/jobs",
+        headers=HEADERS,
+        params={"company": "canva.com", "limit": limit, "offset": offset}
+    ).json()
+    all_jobs.extend(resp["data"])
+    offset += limit
+    if offset >= resp["count"]:
+        break
+
+# Rough function tagging from the title
+def function_of(title):
+    t = title.lower()
+    if any(k in t for k in ["engineer", "developer", "ml", "machine learning"]): return "Engineering"
+    if any(k in t for k in ["sales", "account"]): return "Sales"
+    if any(k in t for k in ["design", "creative"]): return "Design/Creative"
+    if any(k in t for k in ["product manager", "product management"]): return "Product"
+    if any(k in t for k in ["security"]): return "Security"
+    return "Other"
+
+by_function = Counter(function_of(j["title"]) for j in all_jobs)
+by_country  = Counter((j["location"].split(",")[-1].strip() or "Unknown") for j in all_jobs)
+
+print("Open roles by function:")
+for fn, n in by_function.most_common():
+    print(f"  {fn:<18} {n}")
+
+print("\nTop hiring locations:")
+for loc, n in by_country.most_common(5):
+    print(f"  {loc:<25} {n}")
+```
+
+### Skills demand analysis
+
+Extract and rank `key_skills` across all open roles to understand what capabilities a company is building — useful for competitive intelligence and talent-market analysis.
+
+```python
+import requests
+from collections import Counter
+
+HEADERS = {"x-api-key": "<YOUR_API_KEY>"}
+
+resp = requests.get(
+    "https://api.akta.pro/api/v1/company/jobs",
+    headers=HEADERS,
+    params={"company": "canva.com", "limit": 100}
+).json()
+
+skills = Counter()
+for job in resp["data"]:
+    skills.update(job.get("key_skills", []))
+
+print(f"{'Skill':<32} {'Demand'}")
+print("-" * 42)
+for skill, n in skills.most_common(15):
+    print(f"{skill:<32} {n}")
+```
+
+### Compensation benchmarking
+
+Where salaries are disclosed, use `salary_min_usd` and `salary_max_usd` (already normalized to USD) to benchmark pay bands by role or experience level.
+
+```python
+import requests
+from statistics import median
+
+HEADERS = {"x-api-key": "<YOUR_API_KEY>"}
+
+resp = requests.get(
+    "https://api.akta.pro/api/v1/company/jobs",
+    headers=HEADERS,
+    params={"company": "canva.com", "limit": 100}
+).json()
+
+# Only roles with disclosed pay
+paid = [
+    j for j in resp["data"]
+    if j.get("salary_min_usd") is not None and j.get("salary_max_usd") is not None
+]
+
+if paid:
+    midpoints = [(j["salary_min_usd"] + j["salary_max_usd"]) / 2 for j in paid]
+    print(f"Roles with disclosed pay: {len(paid)} / {len(resp['data'])}")
+    print(f"Median midpoint: ${median(midpoints):,.0f}")
+    for j in sorted(paid, key=lambda x: x['salary_max_usd'], reverse=True)[:5]:
+        print(f"  {j['title']:<40} ${j['salary_min_usd']:,}–${j['salary_max_usd']:,}")
+else:
+    print("No disclosed salary ranges in this page.")
+```

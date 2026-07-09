@@ -1,0 +1,69 @@
+---
+title: "Best Practices"
+hidden: true
+---
+
+**Always guard `salary_min_usd` and `salary_max_usd` against `null`**
+
+Most listings do not disclose compensation, so both salary fields are frequently `null`. Filter them out before any arithmetic, and never assume a range is present:
+
+```python
+# ❌ TypeError when salary is null
+midpoint = (job["salary_min_usd"] + job["salary_max_usd"]) / 2
+
+# ✅ Check both bounds first
+lo, hi = job.get("salary_min_usd"), job.get("salary_max_usd")
+if lo is not None and hi is not None:
+    midpoint = (lo + hi) / 2
+```
+
+**Salary is already normalized to USD — don't re-convert**
+
+The `_usd` suffix means values are pre-normalized to US dollars regardless of the role's location or the currency in the original listing. Don't apply your own FX conversion on top, or you'll double-convert. Treat these as directly comparable across geographies.
+
+**Paginate with `limit` and `offset`, and stop using `count`**
+
+`count` is the total number of open roles, not the number returned in the current page. Use it as the loop terminator rather than looping until you get an empty page:
+
+```python
+all_jobs, offset, limit = [], 0, 100
+while True:
+    resp = requests.get(url, headers=HEADERS,
+                        params={"company": "canva.com", "limit": limit, "offset": offset}).json()
+    all_jobs.extend(resp["data"])
+    offset += limit
+    if offset >= resp["count"]:
+        break
+```
+
+**Deduplicate near-identical listings before counting**
+
+The same role is often posted separately for each location (you'll see identical titles with different `location` values and different `job_id`s). If you're counting "distinct roles" rather than "distinct postings," group by title first; if you're measuring hiring _volume_ or geographic spread, keep them separate. Decide which you mean before aggregating:
+
+```python
+# Distinct roles (collapse per-location duplicates)
+distinct_titles = {j["title"] for j in all_jobs}
+
+# Hiring footprint (keep every posting)
+postings_by_city = Counter(j["location"] for j in all_jobs)
+```
+
+**Use `key_skills` for capability tracking, not `description` string-matching**
+
+`key_skills` is a pre-extracted, structured list — more reliable for trend analysis than grepping the free-text `description`. Aggregate skills across postings to see what a company is building, and diff snapshots over time to detect emerging investment areas (e.g. a jump in AI/ML skills).
+
+**Treat `date_posted` as the freshness signal, and re-pull regularly**
+
+These are _live_ listings — roles get filled and removed. `date_posted` tells you how recent each posting is; sort or filter by it to focus on the freshest hiring activity, and re-pull on a schedule (daily or weekly) if you're monitoring hiring velocity over time rather than taking a one-off snapshot.
+
+**Parse `location` defensively**
+
+`location` is a single free-text string whose granularity varies — sometimes `"Austin, TX"`, sometimes `"Sydney, New South Wales, Australia"`, sometimes just a country. Don't assume a fixed number of comma-separated parts. Take the last segment for country-level grouping and handle missing pieces gracefully:
+
+```python
+country = job["location"].split(",")[-1].strip() if job.get("location") else "Unknown"
+```
+
+**Cross-reference hiring with other signals before drawing conclusions**
+
+A spike in open roles is a strong directional signal but not proof on its own — postings can reflect backfill, reorganizations, or aspirational hiring. Corroborate significant shifts with Headcount Trends (are they actually growing?), News API coverage, or funding data before treating a hiring surge as expansion.

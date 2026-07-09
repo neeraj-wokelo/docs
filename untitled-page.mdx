@@ -1,0 +1,186 @@
+---
+title: "Use cases"
+---
+
+### Recent posts snapshot
+
+Fetch a company's most recent social posts with their content type and top-line engagement.
+
+<CodeGroup>
+
+```bash cURL
+curl -G "https://api.akta.pro/api/v1/company/posts/" \
+  --data-urlencode "company=https://canva.com" \
+  --data-urlencode "limit=10" \
+  -H "x-api-key: your api key"
+```
+
+```python Python
+import requests
+
+url = "https://api.akta.pro/api/v1/company/posts"
+
+headers = {"x-api-key": "your api key"}
+params = {"company": "https://canva.com", "limit": 10}
+
+response = requests.get(url, headers=headers, params=params)
+print(response.text)
+```
+
+</CodeGroup>
+
+**Sample response:**
+
+```json expandable
+{
+  "count": 406,
+  "limit": 10,
+  "offset": 0,
+  "data": {
+    "uuid": "00000jw-canva",
+    "posts": [
+      {
+        "id": "WXFWCQ1N6K",
+        "content_type": "image",
+        "link": "https://www.linkedin.com/feed/update/urn:li:activity:7478764514239315969/",
+        "posted_date": "2026-07-03 11:00:08.920000+00:00",
+        "is_paid": false,
+        "reposted": false,
+        "engagement_metrics": {
+          "total_reaction_count": 1315,
+          "like_count": 1029,
+          "empathy_count": 214,
+          "praise_count": 16,
+          "appreciation_count": 0,
+          "interest_count": 2,
+          "funny_count": 40,
+          "comments_count": 0,
+          "reposts_Count": 65
+        },
+        "text_content": "The growth? We love to see it. 🤩 What did your early designs look like?",
+        "post_classification": "Other",
+        "author": {},
+        "mentions": []
+      }
+    ]
+  },
+  "credits_consumed": 1
+}
+```
+
+### Content mix by classification and format
+
+Break down what a company posts about (`post_classification`) and in what format (`content_type`) to profile its content strategy.
+
+```python
+import requests
+from collections import Counter
+
+HEADERS = {"x-api-key": "<YOUR_API_KEY>"}
+
+resp = requests.get(
+    "https://api.akta.pro/api/v1/company/posts",
+    headers=HEADERS,
+    params={"company": "canva.com", "limit": 100}
+).json()
+
+posts = resp["data"]["posts"]
+
+by_theme  = Counter(p["post_classification"] for p in posts)
+by_format = Counter(p["content_type"] for p in posts)
+
+print("Content by theme:")
+for theme, n in by_theme.most_common():
+    print(f"  {theme:<24} {n}")
+
+print("\nContent by format:")
+for fmt, n in by_format.most_common():
+    print(f"  {fmt:<18} {n}")
+```
+
+### Engagement performance analysis
+
+Rank posts by engagement to find what resonates, and compare average engagement across themes or formats.
+
+```python
+import requests
+from collections import defaultdict
+
+HEADERS = {"x-api-key": "<YOUR_API_KEY>"}
+
+resp = requests.get(
+    "https://api.akta.pro/api/v1/company/posts",
+    headers=HEADERS,
+    params={"company": "canva.com", "limit": 100}
+).json()
+
+posts = resp["data"]["posts"]
+
+def total_engagement(p):
+    m = p["engagement_metrics"]
+    return m["total_reaction_count"] + m["comments_count"] + m["reposts_Count"]
+
+# Top posts overall
+print("Top posts by engagement:")
+for p in sorted(posts, key=total_engagement, reverse=True)[:5]:
+    print(f"  {total_engagement(p):>6}  [{p['content_type']}]  {p['text_content'][:50]}")
+
+# Average engagement per theme
+sums, counts = defaultdict(int), defaultdict(int)
+for p in posts:
+    sums[p["post_classification"]] += total_engagement(p)
+    counts[p["post_classification"]] += 1
+
+print("\nAverage engagement by theme:")
+for theme in sorted(sums, key=lambda t: sums[t]/counts[t], reverse=True):
+    print(f"  {theme:<24} {sums[theme]/counts[theme]:,.0f}")
+```
+
+### Reaction sentiment mix
+
+Beyond raw reaction counts, the breakdown by reaction type hints at _how_ an audience responds — celebratory (`praise`), supportive (`empathy`), amused (`funny`), or simply approving (`like`).
+
+```python
+import requests
+
+HEADERS = {"x-api-key": "<YOUR_API_KEY>"}
+
+resp = requests.get(
+    "https://api.akta.pro/api/v1/company/posts",
+    headers=HEADERS,
+    params={"company": "canva.com", "limit": 50}
+).json()
+
+for p in resp["data"]["posts"][:5]:
+    m = p["engagement_metrics"]
+    total = m["total_reaction_count"] or 1
+    funny_share = m["funny_count"] / total * 100
+    print(f"{p['text_content'][:45]:<48} funny: {funny_share:4.1f}%  total: {m['total_reaction_count']}")
+```
+
+### Posting cadence over time
+
+Use `posted_date` to measure how frequently a company posts — a proxy for marketing activity and consistency.
+
+```python
+import requests
+from collections import Counter
+
+HEADERS = {"x-api-key": "<YOUR_API_KEY>"}
+
+resp = requests.get(
+    "https://api.akta.pro/api/v1/company/posts",
+    headers=HEADERS,
+    params={"company": "canva.com", "limit": 100}
+).json()
+
+posts = resp["data"]["posts"]
+
+# Posts per month (YYYY-MM from the ISO date)
+by_month = Counter(p["posted_date"][:7] for p in posts)
+
+print(f"{'Month':<10} {'Posts'}")
+print("-" * 18)
+for month in sorted(by_month):
+    print(f"{month:<10} {by_month[month]}")
+```

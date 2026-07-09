@@ -1,0 +1,71 @@
+---
+title: "Best Practices"
+hidden: true
+---
+
+**Posts are nested under `data.posts`, not `data` directly**
+
+Unlike some endpoints where `data` is the array, here `data` is an object containing `uuid` and the `posts` array. Reach into `data["posts"]` before iterating:
+
+```python
+# ❌ data is an object, not a list
+for post in resp["data"]:
+    ...
+
+# ✅ posts live one level deeper
+for post in resp["data"]["posts"]:
+    ...
+```
+
+**Don't derive total reactions by summing the individual types — use `total_reaction_count`**
+
+`total_reaction_count` is provided directly. Summing `like_count + empathy_count + ...` can drift from it if the platform introduces reaction types not broken out separately. Use the provided total for headline figures, and use the per-type counts only for the _mix_:
+
+```python
+m = post["engagement_metrics"]
+total = m["total_reaction_count"]                       # headline number
+funny_share = m["funny_count"] / total if total else 0  # composition
+```
+
+**Build a single engagement score deliberately — reactions, comments, and reposts aren't equivalent**
+
+A repost is a stronger endorsement than a like, and comments signal deeper engagement than reactions. If you build a composite score, weight the components intentionally rather than adding raw counts, and be consistent across posts you compare:
+
+```python
+def engagement_score(m):
+    return m["total_reaction_count"] + 3 * m["comments_count"] + 5 * m["reposts_Count"]
+```
+
+**Guard against divide-by-zero on low-engagement posts**
+
+Many posts have zero comments and some have zero reactions. Any ratio (funny share, comment-to-reaction ratio, engagement rate) needs a zero guard:
+
+```python
+total = m["total_reaction_count"] or 1   # avoid ZeroDivisionError
+```
+
+**Separate paid from organic before benchmarking**
+
+`is_paid` distinguishes promoted posts from organic ones. Paid posts get artificially amplified reach and engagement, so mixing them into an "average engagement" figure skews the picture. Filter by `is_paid` when you want a clean read on organic performance:
+
+```python
+organic = [p for p in posts if not p["is_paid"]]
+```
+
+**Exclude reposts when measuring original content output**
+
+`reposted: true` marks posts that reshare other content rather than original material. When you're profiling a company's _own_ content strategy or cadence, filter these out; keep them only if you're studying amplification behavior.
+
+**Parse `posted_date` as a full timestamp, not just a date**
+
+`posted_date` includes microseconds and a timezone offset (e.g. `2026-07-09 12:00:15.781000+00:00`). Slice `[:10]` for the day or `[:7]` for the month when bucketing, but parse the full string if you need precise ordering or intervals:
+
+```python
+from datetime import datetime
+ts = datetime.fromisoformat(post["posted_date"])   # timezone-aware
+month = post["posted_date"][:7]                     # "2026-07" for bucketing
+```
+
+**Analyze `post_classification` distribution, but treat `Other` as a catch-all**
+
+`post_classification` is useful for profiling content mix, but a large share of posts may fall under `Other`. Report it as its own bucket rather than assuming every post maps to a meaningful theme, and don't over-interpret small differences between named categories on a small sample.

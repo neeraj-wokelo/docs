@@ -1,0 +1,238 @@
+---
+title: "Social Posts API"
+description: "Fetches social media posts published by a company, including content type, text, publish date, paid/repost flags, an AI classification, and detailed engagement metrics."
+openapi: "GET /v1/company/posts"
+---
+
+## Overview
+
+The Social Posts API returns social media posts published by a company, sourced from platforms such as LinkedIn. Each post includes its content type, text, publish date, paid and repost flags, an AI-assigned classification, mentions, and a detailed breakdown of engagement metrics (reactions, likes, comments, reposts, and more). Tracking a company's posting cadence, content mix, and engagement is a useful proxy for brand activity and marketing momentum. Results are paginated and returned in the API response.
+
+## Endpoint Details
+
+- **Method:** GET
+- **Endpoint:** `/v1/company/posts`
+
+## Authentication requirements
+
+- Include a valid API key in the `x-api-key` request header.
+
+## Request
+
+### Request Parameters
+
+#### Header Parameters
+
+<ParamField header="x-api-key" type="string" required>
+  Your API key.
+</ParamField>
+
+## URL Parameters
+
+<ParamField query="company" type="string" required>
+  Company website (e.g. `canva.com`) or a company UUID (e.g. `00000l1`). The UUID can be obtained from the Company Search API.
+</ParamField>
+
+<ParamField query="limit" type="integer">
+  Maximum number of posts to return.
+
+  Default = 10
+</ParamField>
+
+<ParamField query="offset" type="integer">
+  Number of posts to skip before returning records. Use with `limit` for pagination.
+
+  Default = 0
+</ParamField>
+
+#### Example Request
+
+```bash
+curl -G "https://api.akta.pro/api/v1/company/posts/" \
+  --data-urlencode "company=00000l1" \
+  -H "x-api-key: YOUR_API_KEY"
+```
+
+## Response
+
+#### Successful Response Fields
+
+Returns a JSON object with the following structure:
+
+<ResponseField name="data" type="object">
+  Container object holding the company's social posts. See **Data Object Fields** below.
+</ResponseField>
+
+<ResponseField name="count" type="integer">
+  Total number of posts available for the company based on the filters set.
+</ResponseField>
+
+<ResponseField name="limit" type="integer">
+  Limit applied to the request.
+</ResponseField>
+
+<ResponseField name="offset" type="integer">
+  Offset applied to the request.
+</ResponseField>
+
+<ResponseField name="credits_consumed" type="float">
+  Credits consumed by the request.
+</ResponseField>
+
+#### Data Object Fields
+
+<ResponseField name="uuid" type="string">
+  Akta UUID of the company.
+</ResponseField>
+
+<ResponseField name="posts" type="array">
+  List of social post objects. See **Post Object Fields** below.
+</ResponseField>
+
+#### Post Object Fields
+
+<ResponseField name="id" type="string">
+  Unique identifier for the post.
+</ResponseField>
+
+<ResponseField name="content_type" type="string">
+  Format of the post. Example values: `image`, `document`, `linkedInVideo`, `text`.
+</ResponseField>
+
+<ResponseField name="link" type="string">
+  Link to the original post on the source platform.
+</ResponseField>
+
+<ResponseField name="posted_date" type="string">
+  Timestamp the post was published, in ISO 8601 format with timezone.
+</ResponseField>
+
+<ResponseField name="is_paid" type="boolean">
+  `true` if the post was a paid/promoted post.
+</ResponseField>
+
+<ResponseField name="reposted" type="boolean">
+  `true` if the post is a repost of other content rather than original.
+</ResponseField>
+
+<ResponseField name="text_content" type="string">
+  The text body of the post.
+</ResponseField>
+
+<ResponseField name="post_classification" type="string">
+  AI-assigned classification of the post's theme. Example values: `Product & technology`, `Brand & occasion`, `Other`.
+</ResponseField>
+
+<ResponseField name="author" type="object">
+  Author details for the post. May be an empty object when not available.
+</ResponseField>
+
+<ResponseField name="mentions" type="array">
+  Entities or accounts mentioned in the post. May be an empty array.
+</ResponseField>
+
+<ResponseField name="engagement_metrics" type="object">
+  Engagement counts for the post. See **Engagement Metrics Object** below.
+</ResponseField>
+
+#### Engagement Metrics Object
+
+<ResponseField name="total_reaction_count" type="integer">
+  Total number of reactions across all reaction types.
+</ResponseField>
+
+<ResponseField name="like_count" type="integer">
+  Number of "like" reactions.
+</ResponseField>
+
+<ResponseField name="empathy_count" type="integer">
+  Number of "empathy" / support reactions.
+</ResponseField>
+
+<ResponseField name="praise_count" type="integer">
+  Number of "praise" / celebrate reactions.
+</ResponseField>
+
+<ResponseField name="appreciation_count" type="integer">
+  Number of "appreciation" reactions.
+</ResponseField>
+
+<ResponseField name="interest_count" type="integer">
+  Number of "interest" reactions.
+</ResponseField>
+
+<ResponseField name="funny_count" type="integer">
+  Number of "funny" reactions.
+</ResponseField>
+
+<ResponseField name="comments_count" type="integer">
+  Number of comments on the post.
+</ResponseField>
+
+<ResponseField name="reposts_Count" type="integer">
+  Number of times the post was reposted / shared.
+</ResponseField>
+
+<ResponseExample>
+
+```json 200 expandable wrap
+{
+  "count": 406,
+  "limit": 10,
+  "offset": 0,
+  "data": {
+    "uuid": "00000l1",
+    "posts": [
+      {
+        "id": "WXLOA811U2",
+        "content_type": "image",
+        "link": "https://www.linkedin.com/feed/update/urn:li:activity:7480953969704419328/",
+        "posted_date": "2026-07-09 12:00:15.781000+00:00",
+        "is_paid": false,
+        "reposted": false,
+        "engagement_metrics": {
+          "total_reaction_count": 76,
+          "like_count": 65,
+          "empathy_count": 8,
+          "praise_count": 2,
+          "appreciation_count": 0,
+          "interest_count": 1,
+          "funny_count": 0,
+          "comments_count": 0,
+          "reposts_Count": 2
+        },
+        "text_content": "Easy-peasy efficiency 🍋✨ Have you got a hack you want to share in the comments?",
+        "post_classification": "Other",
+        "author": {},
+        "mentions": []
+      },
+      {
+        "id": "WXP178134W",
+        "content_type": "image",
+        "link": "https://www.linkedin.com/feed/update/urn:li:activity:7477677369806479361/",
+        "posted_date": "2026-06-30 11:00:13.489000+00:00",
+        "is_paid": false,
+        "reposted": false,
+        "engagement_metrics": {
+          "total_reaction_count": 1172,
+          "like_count": 985,
+          "empathy_count": 125,
+          "praise_count": 38,
+          "appreciation_count": 0,
+          "interest_count": 13,
+          "funny_count": 1,
+          "comments_count": 0,
+          "reposts_Count": 24
+        },
+        "text_content": "What new Canva tool do you wish we could work on next? 💬",
+        "post_classification": "Product & technology",
+        "author": {},
+        "mentions": []
+      }
+    ]
+  },
+  "credits_consumed": 1
+}
+```
+
+</ResponseExample>

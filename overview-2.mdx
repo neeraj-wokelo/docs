@@ -1,0 +1,14 @@
+---
+title: "Overview"
+description: "Fetch social media posts published by any company — content type, text, publish date, paid/repost flags, an AI classification, and detailed engagement metrics — to track brand activity and audience response."
+---
+
+The Social Posts API returns social media posts published by any company, sourced from platforms such as LinkedIn. A single request returns a paginated list of posts, each with its content type, text body, publish date, paid and repost flags, an AI-assigned classification, mentions, and a detailed breakdown of engagement metrics — reactions (by type), comments, and reposts.
+
+A company's social output is a live read on its brand and marketing activity: how often it posts, what themes it leans into (product, brand, hiring, thought leadership), which formats it favors (image, video, document), and — crucially — how its audience responds. Engagement metrics broken out by reaction type make it possible to distinguish a post that was merely _seen_ from one that genuinely _resonated_, and the `post_classification` field lets you analyze content mix and performance by theme.
+
+This is a **synchronous GET API** — pass a company identifier and optional pagination parameters (`limit` and `offset`) and receive the posts immediately. The response also reports the total number of posts available and the credits consumed by the request.
+
+<Info>
+  This API is synchronous. Results are returned directly in the HTTP response — no job submission or polling required.
+</Info>

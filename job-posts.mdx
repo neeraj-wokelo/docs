@@ -1,0 +1,207 @@
+---
+title: "Job Posts API"
+description: "Fetches live LinkedIn and Indeed job listings for a company, including title, location, description, compensation, experience level, and extracted key skills."
+openapi: "GET /v1/company/jobs"
+---
+
+## Overview
+
+The Job Posts API returns live job listings for a company, sourced from LinkedIn and Indeed. Each listing includes the role title, source, location, posting date, an AI-condensed description, employment type, remote flag, salary range (when disclosed), experience level, and a list of extracted key skills. Hiring activity is one of the earliest signals of where a company is investing — a surge in sales roles, a build-out of an engineering function, or expansion into a new geography often shows up here before it's publicly announced. Results are paginated and returned in the API response.
+
+## Endpoint Details
+
+- **Method:** GET
+- **Endpoint:** `/v1/company/jobs`
+
+## Authentication requirements
+
+- Include a valid API key in the `x-api-key` request header.
+
+## Request
+
+### Request Parameters
+
+#### Header Parameters
+
+<ParamField header="x-api-key" type="string" required>
+  Your API key.
+</ParamField>
+
+## URL Parameters
+
+<ParamField query="company" type="string" required>
+  Company website (e.g. `canva.com`) or a company UUID (e.g. `00000l1`). The UUID can be obtained from the Company Search API.
+</ParamField>
+
+<ParamField query="limit" type="integer">
+  Maximum number of job listings to return.
+
+  Default = 10
+</ParamField>
+
+<ParamField query="offset" type="integer">
+  Number of listings to skip before returning records. Use with `limit` for pagination.
+
+  Default = 0
+</ParamField>
+
+#### Example Request
+
+```bash
+curl -G "https://api.wokelo.ai/api/v1/company/jobs/" \
+  --data-urlencode "company=00000l1" \
+  -H "x-api-key: YOUR_API_KEY"
+```
+
+## Response
+
+#### Successful Response Fields
+
+Returns a JSON object with the following structure:
+
+<ResponseField name="status" type="string">
+  Request status. `success` on a successful response.
+</ResponseField>
+
+<ResponseField name="data" type="array">
+  List of job listing objects. See **Job Object Fields** below.
+</ResponseField>
+
+<ResponseField name="count" type="integer">
+  Total number of job listings available for the company based on the filters set.
+</ResponseField>
+
+<ResponseField name="limit" type="integer">
+  Limit applied to the request.
+</ResponseField>
+
+<ResponseField name="offset" type="integer">
+  Offset applied to the request.
+</ResponseField>
+
+<ResponseField name="credits_consumed" type="float">
+  Credits consumed by the request.
+</ResponseField>
+
+#### Job Object Fields
+
+<ResponseField name="job_id" type="string">
+  Unique identifier for the job listing.
+</ResponseField>
+
+<ResponseField name="company_uuid" type="string">
+  Akta UUID of the company the listing belongs to.
+</ResponseField>
+
+<ResponseField name="title" type="string">
+  Job title.
+</ResponseField>
+
+<ResponseField name="source" type="string">
+  Source platform of the listing. Example values: `linkedin`, `indeed`.
+</ResponseField>
+
+<ResponseField name="job_url" type="string">
+  Link to the original listing on the source platform.
+</ResponseField>
+
+<ResponseField name="date_posted" type="string">
+  Timestamp the listing was posted, in ISO 8601 format with timezone.
+</ResponseField>
+
+<ResponseField name="location" type="string">
+  Location of the role. May be a city, region, or country.
+</ResponseField>
+
+<ResponseField name="description" type="string">
+  A concise, AI-condensed summary of the role's responsibilities.
+</ResponseField>
+
+<ResponseField name="type" type="string">
+  Employment type. Example values: `FULL_TIME`, `PART_TIME`, `CONTRACT`, `INTERNSHIP`.
+</ResponseField>
+
+<ResponseField name="remote" type="boolean">
+  `true` if the role is offered as remote.
+</ResponseField>
+
+<ResponseField name="salary_min_usd" type="integer">
+  Lower bound of the disclosed salary range, normalized to USD. `null` when not disclosed.
+</ResponseField>
+
+<ResponseField name="salary_max_usd" type="integer">
+  Upper bound of the disclosed salary range, normalized to USD. `null` when not disclosed.
+</ResponseField>
+
+<ResponseField name="experience_level" type="string">
+  Required years of experience, expressed as a range. Example values: `2-5`, `5-10`.
+</ResponseField>
+
+<ResponseField name="key_skills" type="array">
+  List of skills extracted from the job description.
+</ResponseField>
+
+<ResponseExample>
+
+```json 200 expandable wrap
+{
+  "status": "success",
+  "data": [
+    {
+      "job_id": "WXSDIHAHO5",
+      "company_uuid": "00000l1",
+      "title": "Sales Systems Business Analyst",
+      "source": "linkedin",
+      "job_url": "https://www.linkedin.com/jobs/view/4437585036",
+      "date_posted": "2026-07-09 17:03:33+00:00",
+      "location": "Austin, TX",
+      "description": "The role involves delivering features to support seller productivity and working with cross-functional teams to shape business needs into clear requirements. Additionally, the analyst will help identify workflow friction points and work on building and maintaining solutions in Salesforce.",
+      "type": "FULL_TIME",
+      "remote": false,
+      "salary_min_usd": null,
+      "salary_max_usd": null,
+      "experience_level": "2-5",
+      "key_skills": [
+        "Salesforce Administration",
+        "AI Tools",
+        "Salesforce Certified Administrator",
+        "Sales Cloud",
+        "CI/CD Processes",
+        "Process Mapping",
+        "User Stories",
+        "Agile Environments"
+      ]
+    },
+    {
+      "job_id": "WXB0BWUHHC",
+      "company_uuid": "00000l1",
+      "title": "Sales Systems Business Analyst",
+      "source": "linkedin",
+      "job_url": "https://www.linkedin.com/jobs/view/4437586019",
+      "date_posted": "2026-07-09 17:03:33+00:00",
+      "location": "San Francisco, CA",
+      "description": "The role involves delivering features to support seller productivity and collaborating with cross-functional teams to shape business needs into clear requirements. Additionally, the analyst will work on identifying workflow friction points and leveraging AI to simplify processes.",
+      "type": "FULL_TIME",
+      "remote": false,
+      "salary_min_usd": 114000,
+      "salary_max_usd": 140000,
+      "experience_level": "2-5",
+      "key_skills": [
+        "Salesforce Administration",
+        "AI Tools",
+        "Data Quality Management",
+        "Workflow Optimization",
+        "Sales Cloud",
+        "Automation",
+        "CI/CD Processes"
+      ]
+    }
+  ],
+  "count": 226,
+  "limit": 10,
+  "offset": 0,
+  "credits_consumed": 4
+}
+```
+
+</ResponseExample>

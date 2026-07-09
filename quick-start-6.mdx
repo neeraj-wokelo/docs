@@ -1,0 +1,105 @@
+---
+title: "Quick Start"
+---
+
+## Authentication
+
+All requests must include an **API key** in the `x-api-key` HTTP header.
+
+```text
+x-api-key: <YOUR_API_KEY>
+```
+
+<Warning>
+  Never expose your API key in client-side code, browser requests, or public repositories. A missing or invalid key returns `401 Unauthorized`.
+</Warning>
+
+## Execute your first request
+
+<CodeGroup>
+
+```bash cURL
+curl -G "https://api.akta.pro/api/v1/company/posts/" \
+  --data-urlencode "company=00000l1" \
+  -H "x-api-key: <YOUR_API_KEY>"
+```
+
+```python Python
+import requests
+
+response = requests.get(
+    "https://api.akta.pro/api/v1/company/posts",
+    headers={"x-api-key": "<YOUR_API_KEY>"},
+    params={"company": "00000l1", "limit": 10}
+)
+data = response.json()
+posts = data["data"]["posts"]
+print(f"Showing {len(posts)} of {data['count']} posts")
+for p in posts[:3]:
+    reactions = p["engagement_metrics"]["total_reaction_count"]
+    print(f"  [{p['content_type']}] {reactions} reactions — {p['text_content'][:50]}")
+```
+
+</CodeGroup>
+
+**Sample Response**
+
+```python expandable
+{
+  "count": 406,
+  "limit": 10,
+  "offset": 0,
+  "data": {
+    "uuid": "00000l1",
+    "posts": [
+      {
+        "id": "WXLOA811U2",
+        "content_type": "image",
+        "link": "https://www.linkedin.com/feed/update/urn:li:activity:7480953969704419328/",
+        "posted_date": "2026-07-09 12:00:15.781000+00:00",
+        "is_paid": false,
+        "reposted": false,
+        "engagement_metrics": {
+          "total_reaction_count": 76,
+          "like_count": 65,
+          "empathy_count": 8,
+          "praise_count": 2,
+          "appreciation_count": 0,
+          "interest_count": 1,
+          "funny_count": 0,
+          "comments_count": 0,
+          "reposts_Count": 2
+        },
+        "text_content": "Easy-peasy efficiency 🍋✨ Have you got a hack you want to share in the comments?",
+        "post_classification": "Other",
+        "author": {},
+        "mentions": []
+      },
+      {
+        "id": "WXP178134W",
+        "content_type": "image",
+        "link": "https://www.linkedin.com/feed/update/urn:li:activity:7477677369806479361/",
+        "posted_date": "2026-06-30 11:00:13.489000+00:00",
+        "is_paid": false,
+        "reposted": false,
+        "engagement_metrics": {
+          "total_reaction_count": 1172,
+          "like_count": 985,
+          "empathy_count": 125,
+          "praise_count": 38,
+          "appreciation_count": 0,
+          "interest_count": 13,
+          "funny_count": 1,
+          "comments_count": 0,
+          "reposts_Count": 24
+        },
+        "text_content": "What new Canva tool do you wish we could work on next? 💬",
+        "post_classification": "Product & technology",
+        "author": {},
+        "mentions": []
+      }
+    ]
+  },
+  "credits_consumed": 1
+}
+```

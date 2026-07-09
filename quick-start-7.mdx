@@ -1,0 +1,102 @@
+---
+title: "Quick Start"
+---
+
+## Authentication
+
+All requests must include an **API key** in the `x-api-key` HTTP header.
+
+```text
+x-api-key: <YOUR_API_KEY>
+```
+
+<Warning>
+  Never expose your API key in client-side code, browser requests, or public repositories. A missing or invalid key returns `401 Unauthorized`.
+</Warning>
+
+## Execute your first request
+
+<CodeGroup>
+
+```bash cURL
+curl -G "https://api.akta.pro/api/v1/company/jobs/" \
+  --data-urlencode "company=00000l1" \
+  -H "x-api-key: <YOUR_API_KEY>"
+```
+
+```python Python
+import requests
+
+response = requests.get(
+    "https://api.akta.pro/api/v1/company/jobs",
+    headers={"x-api-key": "<YOUR_API_KEY>"},
+    params={"company": "00000l1", "limit": 10}
+)
+data = response.json()
+jobs = data["data"]
+print(f"Showing {len(jobs)} of {data['count']} open roles")
+for job in jobs[:3]:
+    print(f"  {job['title']} — {job['location']}")
+```
+
+</CodeGroup>
+
+**Sample Response**
+
+```python expandable
+{
+  "status": "success",
+  "data": [
+    {
+      "job_id": "WXSDIHAHO5",
+      "company_uuid": "00000l1",
+      "title": "Sales Systems Business Analyst",
+      "source": "linkedin",
+      "job_url": "https://www.linkedin.com/jobs/view/4437585036",
+      "date_posted": "2026-07-09 17:03:33+00:00",
+      "location": "Austin, TX",
+      "description": "The role involves delivering features to support seller productivity and working with cross-functional teams to shape business needs into clear requirements.",
+      "type": "FULL_TIME",
+      "remote": false,
+      "salary_min_usd": null,
+      "salary_max_usd": null,
+      "experience_level": "2-5",
+      "key_skills": [
+        "Salesforce Administration",
+        "AI Tools",
+        "Sales Cloud",
+        "CI/CD Processes",
+        "Process Mapping",
+        "Agile Environments"
+      ]
+    },
+    {
+      "job_id": "WXB0BWUHHC",
+      "company_uuid": "00000l1",
+      "title": "Sales Systems Business Analyst",
+      "source": "linkedin",
+      "job_url": "https://www.linkedin.com/jobs/view/4437586019",
+      "date_posted": "2026-07-09 17:03:33+00:00",
+      "location": "San Francisco, CA",
+      "description": "The role involves delivering features to support seller productivity and collaborating with cross-functional teams to shape business needs into clear requirements.",
+      "type": "FULL_TIME",
+      "remote": false,
+      "salary_min_usd": 114000,
+      "salary_max_usd": 140000,
+      "experience_level": "2-5",
+      "key_skills": [
+        "Salesforce Administration",
+        "AI Tools",
+        "Workflow Optimization",
+        "Sales Cloud",
+        "Automation",
+        "CI/CD Processes"
+      ]
+    }
+  ],
+  "count": 226,
+  "limit": 10,
+  "offset": 0,
+  "credits_consumed": 4
+}
+```

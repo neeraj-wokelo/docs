@@ -56,24 +56,6 @@
                 "group": "Alternative Data",
                 "pages": [
                   {
-                    "group": "Product Reviews",
-                    "pages": [
-                      "alternative-data-product-reviews",
-                      "quick-start-2",
-                      "use-cases-2",
-                      "best-practices-2"
-                    ]
-                  },
-                  {
-                    "group": "Employee Reviews",
-                    "pages": [
-                      "alternative-data-employee-reviews",
-                      "quick-start-3",
-                      "use-cases-3",
-                      "best-practices-3"
-                    ]
-                  },
-                  {
                     "group": "Headcount Trends",
                     "pages": [
                       "overview-1",
@@ -89,6 +71,42 @@
                       "quick-start-4",
                       "use-cases-4",
                       "best-practices-4"
+                    ]
+                  },
+                  {
+                    "group": "Employee Reviews",
+                    "pages": [
+                      "alternative-data-employee-reviews",
+                      "quick-start-3",
+                      "use-cases-3",
+                      "best-practices-3"
+                    ]
+                  },
+                  {
+                    "group": "Social Posts",
+                    "pages": [
+                      "overview-2",
+                      "quick-start-6",
+                      "untitled-page",
+                      "best-practices-6"
+                    ]
+                  },
+                  {
+                    "group": "Product Reviews",
+                    "pages": [
+                      "alternative-data-product-reviews",
+                      "quick-start-2",
+                      "use-cases-2",
+                      "best-practices-2"
+                    ]
+                  },
+                  {
+                    "group": "Job Posts",
+                    "pages": [
+                      "overview-3",
+                      "quick-start-7",
+                      "usecases",
+                      "best-practices-7"
                     ]
                   }
                 ]
@@ -117,7 +135,9 @@
           "company-search-supporting-api",
           "industry-search-api",
           "headcount",
-          "website-traffic"
+          "website-traffic",
+          "job-posts",
+          "social-posts"
         ]
       },
       {
