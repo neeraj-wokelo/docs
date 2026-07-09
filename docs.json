@@ -23,7 +23,7 @@
           {
             "group": "Getting Started ",
             "pages": [
-              "getting-started",
+              "getting-started/overview",
               "credits",
               "rate-limits",
               "error-codes"
