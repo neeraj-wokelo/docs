@@ -9,7 +9,14 @@
   },
   "favicon": "/images/SVG(dark).png",
   "navigation": {
+    "root": "/home",
     "tabs": [
+      {
+        "tab": "Home",
+        "pages": [
+          "home"
+        ]
+      },
       {
         "tab": "Documentation",
         "pages": [
@@ -111,6 +118,12 @@
           "industry-search-api",
           "headcount",
           "website-traffic"
+        ]
+      },
+      {
+        "tab": "Contact",
+        "pages": [
+          "contact"
         ]
       }
     ]
