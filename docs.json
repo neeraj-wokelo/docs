@@ -74,12 +74,12 @@
                     ]
                   },
                   {
-                    "group": "Employee Reviews",
+                    "group": "Job Posts",
                     "pages": [
-                      "alternative-data-employee-reviews",
-                      "quick-start-3",
-                      "use-cases-3",
-                      "best-practices-3"
+                      "overview-3",
+                      "quick-start-7",
+                      "usecases",
+                      "best-practices-7"
                     ]
                   },
                   {
@@ -92,21 +92,21 @@
                     ]
                   },
                   {
+                    "group": "Employee Reviews",
+                    "pages": [
+                      "alternative-data-employee-reviews",
+                      "quick-start-3",
+                      "use-cases-3",
+                      "best-practices-3"
+                    ]
+                  },
+                  {
                     "group": "Product Reviews",
                     "pages": [
                       "alternative-data-product-reviews",
                       "quick-start-2",
                       "use-cases-2",
                       "best-practices-2"
-                    ]
-                  },
-                  {
-                    "group": "Job Posts",
-                    "pages": [
-                      "overview-3",
-                      "quick-start-7",
-                      "usecases",
-                      "best-practices-7"
                     ]
                   }
                 ]
@@ -130,14 +130,26 @@
         "pages": [
           "news",
           "company-enrichment",
-          "product-review",
-          "employee",
-          "company-search-supporting-api",
-          "industry-search-api",
-          "headcount",
-          "website-traffic",
-          "job-posts",
-          "social-posts"
+          {
+            "group": "Alternative Signals",
+            "expanded": true,
+            "pages": [
+              "headcount",
+              "website-traffic",
+              "job-posts",
+              "social-posts",
+              "employee",
+              "product-review"
+            ]
+          },
+          {
+            "group": "Supporting APIs",
+            "expanded": true,
+            "pages": [
+              "company-search-supporting-api",
+              "industry-search-api"
+            ]
+          }
         ]
       },
       {
