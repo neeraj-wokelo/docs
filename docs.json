@@ -24,9 +24,9 @@
             "group": "Getting Started ",
             "pages": [
               "getting-started/overview",
-              "credits",
-              "rate-limits",
-              "error-codes"
+              "getting-started/pricing",
+              "getting-started/rate-limits",
+              "getting-started/error-codes"
             ],
             "icon": "rocket"
           },
@@ -37,19 +37,19 @@
               {
                 "group": "News Signals",
                 "pages": [
-                  "news-doc",
-                  "quick-start",
-                  "use-cases",
-                  "best-practices"
+                  "docs/news-signals/overview",
+                  "docs/news-signals/quick-start",
+                  "docs/news-signals/use-cases",
+                  "docs/news-signals/best-practices"
                 ]
               },
               {
                 "group": "Company Data",
                 "pages": [
-                  "company-enrichment-doc",
-                  "quick-start-1",
-                  "use-cases-1",
-                  "best-practices-1"
+                  "docs/company-data/overview",
+                  "docs/company-data/quick-start",
+                  "docs/company-data/use-cases",
+                  "docs/company-data/best-practices"
                 ]
               },
               {
@@ -58,55 +58,55 @@
                   {
                     "group": "Headcount Trends",
                     "pages": [
-                      "overview-1",
-                      "quick-start-5",
-                      "use-cases-5",
+                      "docs/alternative-data/headcount-trends/overview",
+                      "docs/alternative-data/headcount-trends/quick-start",
+                      "docs/alternative-data/headcount-trends/use-cases",
                       "best-practices-5"
                     ]
                   },
                   {
                     "group": "Website Traffic",
                     "pages": [
-                      "overview",
-                      "quick-start-4",
-                      "use-cases-4",
+                      "docs/alternative-data/website-traffic/overview",
+                      "docs/alternative-data/website-traffic/quick-start",
+                      "docs/alternative-data/website-traffic/use-cases",
                       "best-practices-4"
                     ]
                   },
                   {
                     "group": "Job Posts",
                     "pages": [
-                      "overview-3",
-                      "quick-start-7",
-                      "usecases",
+                      "docs/alternative-data/job-posts/overview",
+                      "docs/alternative-data/job-posts/quick-start",
+                      "docs/alternative-data/job-posts/use-cases",
                       "best-practices-7"
                     ]
                   },
                   {
                     "group": "Social Posts",
                     "pages": [
-                      "overview-2",
-                      "quick-start-6",
-                      "untitled-page",
+                      "docs/alternative-data/social-posts/overview",
+                      "docs/alternative-data/social-posts/quick-start",
+                      "docs/alternative-data/social-posts/use-cases",
                       "best-practices-6"
                     ]
                   },
                   {
                     "group": "Employee Reviews",
                     "pages": [
-                      "alternative-data-employee-reviews",
-                      "quick-start-3",
-                      "use-cases-3",
+                      "docs/alternative-data/employee-reviews/overview",
+                      "docs/alternative-data/employee-reviews/quick-start",
+                      "docs/alternative-data/employee-reviews/use-cases",
                       "best-practices-3"
                     ]
                   },
                   {
                     "group": "Product Reviews",
                     "pages": [
-                      "alternative-data-product-reviews",
-                      "quick-start-2",
-                      "use-cases-2",
-                      "best-practices-2"
+                      "docs/alternative-data/product-reviews/overview",
+                      "docs/alternative-data/product-reviews/quick-start",
+                      "docs/alternative-data/product-reviews/use-cases",
+                      "docs/alternative-data/product-reviews/best-practices"
                     ]
                   }
                 ]
@@ -114,8 +114,8 @@
               {
                 "group": "Supporting APIs",
                 "pages": [
-                  "company-search-doc",
-                  "industry-search"
+                  "docs/supporting-apis/company-search",
+                  "docs/supporting-apis/industry-search"
                 ]
               }
             ]
@@ -128,26 +128,26 @@
       {
         "tab": "API Reference",
         "pages": [
-          "news",
-          "company-enrichment",
+          "api-reference/news-signals",
+          "api-reference/company-data",
           {
             "group": "Alternative Data",
             "expanded": true,
             "pages": [
-              "headcount",
-              "website-traffic",
-              "job-posts",
-              "social-posts",
-              "employee",
-              "product-review"
+              "api-reference/alternative-data/headcount-trends",
+              "api-reference/alternative-data/website-traffic",
+              "api-reference/alternative-data/job-posts",
+              "api-reference/alternative-data/social-posts",
+              "api-reference/alternative-data/employee-reviews",
+              "api-reference/alternative-data/product-reviews"
             ]
           },
           {
             "group": "Supporting APIs",
             "expanded": true,
             "pages": [
-              "company-search-supporting-api",
-              "industry-search-api"
+              "api-reference/supporting-apis/company-search",
+              "api-reference/supporting-apis/industry-search"
             ]
           }
         ]
