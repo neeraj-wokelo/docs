@@ -125,6 +125,12 @@
         "pages": [
           "contact"
         ]
+      },
+      {
+        "tab": "Changelog",
+        "pages": [
+          "changelog"
+        ]
       }
     ]
   },
