@@ -249,7 +249,7 @@ const Error = ({ text }) => (
           </a>{" "} and
            <a className="underline" href="https://akta.pro/legal?tab=terms">
             Terms And Conditions 
-          </a
+          </a>
           and consent to receive product updates and insights.
         </span>
       </form>
