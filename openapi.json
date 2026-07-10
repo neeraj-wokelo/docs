@@ -189,6 +189,24 @@
           }
         }
       },
+      "IndustrySearchResult": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string",
+            "description": "Unique industry code."
+          },
+          "industry_name": {
+            "type": "string",
+            "description": "Full name of the industry."
+          },
+          "similarity": {
+            "type": "number",
+            "format": "float",
+            "description": "Similarity score between the query and the matched industry, ranging from 0 to 1. Higher values indicate a closer match."
+          }
+        }
+      },
       "ProductReview": {
         "type": "object",
         "properties": {
@@ -364,14 +382,28 @@
             "in": "query",
             "required": false,
             "schema": {"type": "string"},
-            "description": "Website domain (e.g. 'https://canva.com') or company UUID returned by the Company Search API."
+            "description": "Website (e.g. 'https://canva.com') or company UUID returned by the Company Search API."
           },
           {
             "name": "industry",
             "in": "query",
             "required": false,
             "schema": {"type": "string"},
-            "description": "Industry name to filter articles by."
+            "description": "Comma separated list of industry codes to filter articles by. Use industry search endpoint to fetch the list of industry codes for a given industry topic."
+          },
+          {
+            "name": "query",
+            "in": "query",
+            "required": false,
+            "schema": {"type": "string"},
+            "description": "Topic name to search articles. Allows open-ended topic name. Eg. Crude oil price developments"
+          },
+          {
+            "name": "title",
+            "in": "query",
+            "required": false,
+            "schema": {"type": "string"},
+            "description": "Searches articles based on the title entered."
           },
           {
             "name": "start_date",
@@ -385,14 +417,14 @@
             "in": "query",
             "required": false,
             "schema": {"type": "string", "format": "date"},
-            "description": "End of the date range, formatted as YYYY-MM-DD. Defaults to today."
+            "description": "End of the date range, formatted as YYYY-MM-DD. Default = today."
           },
           {
             "name": "limit",
             "in": "query",
             "required": false,
-            "schema": {"type": "integer", "default": 10, "maximum": 100},
-            "description": "Maximum number of news articles to return."
+            "schema": {"type": "integer", "default": 10, "maximum": 1000},
+            "description": "Maximum number of news articles to return. Default = 10, Max = 1000."
           },
           {
             "name": "offset",
@@ -402,25 +434,102 @@
             "description": "Number of results to skip before returning records. Use with limit for pagination."
           },
           {
+            "name": "group_articles",
+            "in": "query",
+            "required": false,
+            "schema": {"type": "boolean"},
+            "description": "Accepts boolean. True will group similar articles from the same event."
+          },
+          {
             "name": "news_score_list",
             "in": "query",
             "required": false,
-            "schema": {"type": "array", "items": {"type": "string", "enum": ["High", "Medium", "Low", "all"]}},
+            "schema": {"type": "string", "enum": ["High", "Medium", "Low", "all"]},
             "description": "Filter by news score tier. Accepted values: High, Medium, Low, all. Default = all"
+          },
+          {
+            "name": "countries",
+            "in": "query",
+            "required": false,
+            "schema": {"type": "string"},
+            "description": "Filters articles based on the country of the event. Comma separated list of ISO country codes."
+          },
+          {
+            "name": "blacklisted",
+            "in": "query",
+            "required": false,
+            "schema": {"type": "string"},
+            "description": "Comma separated list of publisher domains to exclude."
           },
           {
             "name": "type_list",
             "in": "query",
             "required": false,
-            "schema": {"type": "array", "items": {"type": "string", "enum": ["CM00", "CM01", "CM02", "CM03", "CM04", "CM05", "CM06", "CM07", "CM08", "CM09", "CM10", "CM11", "CM12", "FR00", "FR01", "FR02", "FR03", "FR04", "FR05", "FR06", "FR07", "II00", "II01", "II02", "II03", "II04", "II05", "LG00", "LG01", "LG02", "LG03", "LG04", "LG05", "LG06", "MD00", "MD01", "MD02", "MD03", "MD04", "MD05", "MD06", "MD07", "MM00", "MM01", "MM02", "MM03", "MM04", "MM05", "MM06", "MM07", "OT01", "RC00", "RC01", "RC02", "RC03", "RC04", "RC05", "RC06", "RC07", "RC08", "RK00", "RK01", "RK02", "RK03", "RK04", "RK05", "RK06", "RK07", "RK08", "SD00", "SD01", "SD02", "SD03", "SD04", "SD05", "SD06", "SD07", "SD08", "SD09", "SD10", "SD11", "WT00", "WT01", "WT02", "WT03", "WT04", "WT05"]}},
-            "description": "Filter by news type. Default = all. See https://playground.akta.pro/news-tags.csv for the list of available news tags."
+            "schema": {"type": "string"},
+            "description": "Filter by news type. Download full list from https://playground.akta.pro/news-tags.csv. Default = all."
           },
           {
             "name": "sentiment_list",
             "in": "query",
             "required": false,
-            "schema": {"type": "array", "items": {"type": "string", "enum": ["positive", "negative", "neutral", "all"]}},
-            "description": "Filter by sentiment. Accepted values: positive, negative, neutral, all. Default = all"
+            "schema": {"type": "string", "enum": ["positive", "negative", "neutral", "all"]},
+            "description": "Filter by sentiment. Accepted values: positive, negative, neutral, all. Default = all."
+          },
+          {
+            "name": "entity_person_list",
+            "in": "query",
+            "required": false,
+            "schema": {"type": "string"},
+            "description": "Comma separated list of people names."
+          },
+          {
+            "name": "entity_location_list",
+            "in": "query",
+            "required": false,
+            "schema": {"type": "string"},
+            "description": "Comma separated list of locations."
+          },
+          {
+            "name": "entity_product_list",
+            "in": "query",
+            "required": false,
+            "schema": {"type": "string"},
+            "description": "Comma separated list of product names."
+          },
+          {
+            "name": "entity_event_list",
+            "in": "query",
+            "required": false,
+            "schema": {"type": "string"},
+            "description": "Comma separated list of event names."
+          },
+          {
+            "name": "naics_code_list",
+            "in": "query",
+            "required": false,
+            "schema": {"type": "string"},
+            "description": "Comma separated list of NAICS codes."
+          },
+          {
+            "name": "sic_code_list",
+            "in": "query",
+            "required": false,
+            "schema": {"type": "string"},
+            "description": "Comma separated list of SIC codes."
+          },
+          {
+            "name": "iptc_code_list",
+            "in": "query",
+            "required": false,
+            "schema": {"type": "string"},
+            "description": "Comma separated list of IPTC codes."
+          },
+          {
+            "name": "iab_code_list",
+            "in": "query",
+            "required": false,
+            "schema": {"type": "string"},
+            "description": "Comma separated list of IAB codes."
           }
         ],
         "responses": {
@@ -467,7 +576,7 @@
         "security": [{"xApiKeyAuth": []}],
         "parameters": [
           {
-            "name": "name",
+            "name": "query",
             "in": "query",
             "required": true,
             "schema": {"type": "string"},
@@ -513,11 +622,11 @@
         "security": [{"xApiKeyAuth": []}],
         "parameters": [
           {
-            "name": "query",
+            "name": "company",
             "in": "query",
             "required": true,
             "schema": {"type": "string"},
-            "description": "Company website (e.g. 'canva.com') or a company UUID. The UUID can be obtained from the Company Search API."
+            "description": "Company website (e.g. 'https://canva.com') or a company UUID (e.g. '00031n-tesla'). The UUID can be obtained from the Company Search API."
           },
           {
             "name": "sections",
@@ -527,10 +636,10 @@
               "type": "array",
               "items": {
                 "type": "string",
-                "enum": ["firmographics", "gtm_and_business_model", "headcount", "website_traffic", "funding", "acquisitions", "investments"]
+                "enum": ["firmographic", "business_model", "company_assessment", "trust_signal", "company_hierarchy", "digital_presence", "financial_estimate", "location", "management_profile", "product_offering", "strategic_signal", "customer_profile", "industry", "technology"]
               }
             },
-            "description": "List of sections to return. If omitted, all sections are returned. Available values: firmographics, gtm_and_business_model, headcount, website_traffic, funding, acquisitions, investments. Note: acquisitions and investments are available on the Enterprise tier only."
+            "description": "Comma-separated list of sections to return. If omitted, all available sections are returned. Available values: firmographic, business_model, company_assessment, trust_signal, company_hierarchy, digital_presence, financial_estimate, location, management_profile, product_offering, strategic_signal, customer_profile, industry, technology. Note: funding_detail and mna_and_investment are available on the Enterprise tier only."
           }
         ],
         "responses": {
@@ -675,6 +784,256 @@
                     "data": {"$ref": "#/components/schemas/EmployeeReview"},
                     "limit": {"type": "integer"},
                     "offset": {"type": "integer"},
+                    "credits_consumed": {"type": "number", "format": "float"}
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized — missing or invalid API key."
+          }
+        }
+      }
+    },
+    "/v1/industry/search": {
+      "get": {
+        "tags": ["Company"],
+        "operationId": "industrySearch",
+        "summary": "Industry Search",
+        "description": "Resolves an industry from a free-text query and returns matching industry codes ranked by similarity.\nThis is a free endpoint — it does not consume API credits.\n",
+        "security": [{"xApiKeyAuth": []}],
+        "parameters": [
+          {
+            "name": "query",
+            "in": "query",
+            "required": true,
+            "schema": {"type": "string"},
+            "description": "Free-text industry name or topic to search for. Example: 'warehouse automation'"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Industry search results returned",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {"$ref": "#/components/schemas/IndustrySearchResult"}
+                    },
+                    "count": {"type": "integer", "description": "Number of industry objects returned in the data array."},
+                    "credits_consumed": {"type": "number", "format": "float", "example": 0}
+                  }
+                }
+              }
+            }
+          },
+          "204": {
+            "description": "No content — no industries matched the query."
+          },
+          "400": {
+            "description": "Bad request — missing or malformed query parameter."
+          },
+          "401": {
+            "description": "Unauthorized — missing or invalid API key."
+          }
+        }
+      }
+    },
+    "/v1/company/headcount-trends": {
+      "get": {
+        "tags": ["Company"],
+        "operationId": "getHeadcountTrends",
+        "summary": "Headcount Trends",
+        "description": "Fetches a company's LinkedIn-sourced headcount data, including total employee count, historical growth trends, and a functional breakdown of the workforce.\n",
+        "security": [{"xApiKeyAuth": []}],
+        "parameters": [
+          {
+            "name": "company",
+            "in": "query",
+            "required": true,
+            "schema": {"type": "string"},
+            "description": "Company website (e.g. 'canva.com') or a company UUID. The UUID can be obtained from the Company Search API."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Headcount trends data returned",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "uuid": {"type": "string"},
+                        "linkedin_username": {"type": "string"},
+                        "linkedin_official_name": {"type": "string"},
+                        "total_employees": {"type": "integer"},
+                        "date": {"type": "string"},
+                        "growth_periods": {"type": "array"},
+                        "headcount_growth": {"type": "array"},
+                        "headcount_by_function": {"type": "array"}
+                      }
+                    },
+                    "credits_consumed": {"type": "number", "format": "float"}
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized — missing or invalid API key."
+          }
+        }
+      }
+    },
+    "/v1/company/jobs": {
+      "get": {
+        "tags": ["Company"],
+        "operationId": "getJobPosts",
+        "summary": "Job Posts",
+        "description": "Fetches live LinkedIn and Indeed job listings for a company, including title, location, description, compensation, experience level, and extracted key skills.\n",
+        "security": [{"xApiKeyAuth": []}],
+        "parameters": [
+          {
+            "name": "company",
+            "in": "query",
+            "required": true,
+            "schema": {"type": "string"},
+            "description": "Company website (e.g. 'canva.com') or a company UUID. The UUID can be obtained from the Company Search API."
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {"type": "integer", "default": 10},
+            "description": "Maximum number of job listings to return."
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "required": false,
+            "schema": {"type": "integer", "default": 0},
+            "description": "Number of listings to skip before returning records."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Job posts returned",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {"type": "string"},
+                    "data": {"type": "array"},
+                    "count": {"type": "integer"},
+                    "limit": {"type": "integer"},
+                    "offset": {"type": "integer"},
+                    "credits_consumed": {"type": "number", "format": "float"}
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized — missing or invalid API key."
+          }
+        }
+      }
+    },
+    "/v1/company/posts": {
+      "get": {
+        "tags": ["Company"],
+        "operationId": "getSocialPosts",
+        "summary": "Social Posts",
+        "description": "Fetches social media posts published by a company, including content type, text, publish date, paid/repost flags, an AI classification, and detailed engagement metrics.\n",
+        "security": [{"xApiKeyAuth": []}],
+        "parameters": [
+          {
+            "name": "company",
+            "in": "query",
+            "required": true,
+            "schema": {"type": "string"},
+            "description": "Company website (e.g. 'canva.com') or a company UUID. The UUID can be obtained from the Company Search API."
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {"type": "integer", "default": 10},
+            "description": "Maximum number of posts to return."
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "required": false,
+            "schema": {"type": "integer", "default": 0},
+            "description": "Number of posts to skip before returning records."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Social posts returned",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {"type": "object"},
+                    "count": {"type": "integer"},
+                    "limit": {"type": "integer"},
+                    "offset": {"type": "integer"},
+                    "credits_consumed": {"type": "number", "format": "float"}
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized — missing or invalid API key."
+          }
+        }
+      }
+    },
+    "/v1/company/website-traffic": {
+      "get": {
+        "tags": ["Company"],
+        "operationId": "getWebsiteTraffic",
+        "summary": "Website Traffic",
+        "description": "Fetches a company's website traffic signals, including engagement metrics, historical monthly visit estimates, and a breakdown of traffic by acquisition source.\n",
+        "security": [{"xApiKeyAuth": []}],
+        "parameters": [
+          {
+            "name": "company",
+            "in": "query",
+            "required": true,
+            "schema": {"type": "string"},
+            "description": "Company website (e.g. 'canva.com') or a company UUID. The UUID can be obtained from the Company Search API."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Website traffic data returned",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "uuid": {"type": "string"},
+                        "engagements": {"type": "object"},
+                        "estimated_monthly_visits": {"type": "object"},
+                        "traffic_sources": {"type": "object"}
+                      }
+                    },
                     "credits_consumed": {"type": "number", "format": "float"}
                   }
                 }
