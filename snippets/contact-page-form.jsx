@@ -238,7 +238,7 @@ const Error = ({ text }) => (
               Submitting...
             </>
           ) : (
-            "Request API access"
+            "Request API Demo"
           )}
         </button>
 
