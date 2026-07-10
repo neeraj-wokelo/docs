@@ -127,9 +127,14 @@
       },
       {
         "tab": "API Reference",
-        "pages": [
-          "api-reference/news-signals",
-          "api-reference/company-data",
+        "groups": [
+          {
+            "group": "Core APIs",
+            "pages": [
+              "api-reference/news-signals",
+              "api-reference/company-data"
+            ]
+          },
           {
             "group": "Alternative Signals",
             "expanded": true,
