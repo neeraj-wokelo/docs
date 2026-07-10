@@ -8,156 +8,183 @@ import { ApiCodeSwitcher } from "/snippets/api-code-switcher.jsx";
 import { LogoTicker } from "/snippets/LogoTicker.jsx"
 
 <div className="wk-hero-section">
-  <div style={{ 
-    width: '100%',
-    maxWidth: '1030px',
-    margin: '0 auto',
-    padding: '10px 64px',
-    display: 'flex',
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    gap: '48px',
-    position: 'relative',
-    zIndex: 1
-  }}>
-    <div style={{
-      flex: 1,
-      maxWidth: '900px',
-      marginBottom : '60px'
-    }}>
+  <div
+    style={{ 
+width: '100%',
+maxWidth: '1030px',
+margin: '0 auto',
+padding: '10px 64px',
+display: 'flex',
+flexDirection: 'row',
+alignItems: 'center',
+justifyContent: 'space-between',
+gap: '48px',
+position: 'relative',
+zIndex: 1
+}}
+  >
+    <div
+      style={{
+  flex: 1,
+  maxWidth: '900px',
+  marginBottom : '60px'
+}}
+    >
       <h1 className="text-black dark:text-white" style={{
-        fontSize: '40px',
-        fontWeight: 700,
-        lineHeight: 1.15,
-        margin: '0 0 15px 0',
-        letterSpacing: '-0.02em'
-      }}>Build With akta.pro</h1>
+                fontSize: '40px',
+                fontWeight: 700,
+                lineHeight: 1.15,
+                margin: '0 0 15px 0',
+                letterSpacing: '-0.02em'
+              }}>Build With akta.pro</h1>
 
-      <p className="text-gray-700 dark:text-gray-300" style={{
-        fontSize: '16px',
-        fontWeight: 400,
-        lineHeight: 1.6,
-        margin: '0 0 32px 0',
-        maxWidth: '520px'
-      }}>
+      <p
+        className="text-gray-700 dark:text-gray-300"
+        style={{
+    fontSize: '16px',
+    fontWeight: 400,
+    lineHeight: 1.6,
+    margin: '0 0 32px 0',
+    maxWidth: '520px'
+  }}
+      >
         Explore API reference and updates to seamlessly build with our company and news data.
       </p>
 
-      <div style={{
-        display: 'flex',
-        gap: '16px',
-        flexWrap: 'wrap'
-      }}>
-        <a href="https://playground.akta.pro" target="_blank" className="bg-black text-white dark:bg-white dark:text-black" style={{
-          display: 'inline-flex',
-          alignItems: 'center',
-          gap: '8px',
-          padding: '14px 24px',
-          borderRadius: '8px',
-          fontWeight: 600,
-          fontSize: '15px',
-          textDecoration: 'none',
-          border: 'none',
-          cursor: 'pointer',
-          fontFamily: 'inherit',
-          transition: 'opacity 0.15s ease'
-        }}>
+      <div
+        style={{
+    display: 'flex',
+    gap: '16px',
+    flexWrap: 'wrap'
+  }}
+      >
+        <a
+          href="https://playground.akta.pro"
+          target="_blank"
+          className="bg-black text-white dark:bg-white dark:text-black"
+          style={{
+      display: 'inline-flex',
+      alignItems: 'center',
+      gap: '8px',
+      padding: '14px 24px',
+      borderRadius: '8px',
+      fontWeight: 600,
+      fontSize: '15px',
+      textDecoration: 'none',
+      border: 'none',
+      cursor: 'pointer',
+      fontFamily: 'inherit',
+      transition: 'opacity 0.15s ease'
+    }}
+        >
           Get API Access
         </a>
-       <div
-  style={{
-    position: "relative",
-    display: "inline-block",
-    }}
->
-  <a
-    className="text-gray-900 dark:text-gray-400 flex justify-center items-center text-center border-gray-300 dark:border-white"
-    style={{
-      display: "inline-flex",
-      alignItems: "center",
-      gap: "8px",
-      background: "transparent",
-      padding: "14px 24px",
-      borderRadius: "8px",
-      fontWeight: 700,
-      fontSize: "15px",
-      textDecoration: "none",
-      border: "1px solid",
-      cursor: "pointer",
-      fontFamily: "inherit",
-      alignItems: "center",
-      transition: "border-color 0.15s ease, background 0.15s ease",
-    }}
-  >
-    MCP 
-    <span className="text-gray-500 text-xs font-light ml-0.5 mb-0.5 rounded">coming soon</span>
-  </a>
 
-  {/* <span
-    style={{
-      position: "absolute",
-      top: "-10px",
-      right: "0px",
-      background: "#f57c0b", // amber
-      color: "#fff",
-      fontSize: "8px",
-      fontWeight: 700,
-      padding: "3px 10px",
-      borderRadius: "5px",
-      textTransform: "uppercase",
-      letterSpacing: "0.4px",
-      boxShadow: "0 2px 6px rgba(0,0,0,0.15)",
-      pointerEvents: "none",
-    }}
-  >
-    Coming Soon
-  </span> */}
-</div>
+        <div
+          style={{
+position: "relative",
+display: "inline-block",
+}}
+        >
+          <a
+            className="text-gray-900 dark:text-gray-400 flex justify-center items-center text-center border-gray-300 dark:border-white"
+            style={{
+  display: "inline-flex",
+  alignItems: "center",
+  gap: "8px",
+  background: "transparent",
+  padding: "14px 24px",
+  borderRadius: "8px",
+  fontWeight: 700,
+  fontSize: "15px",
+  textDecoration: "none",
+  border: "1px solid",
+  cursor: "pointer",
+  fontFamily: "inherit",
+  alignItems: "center",
+  transition: "border-color 0.15s ease, background 0.15s ease",
+}}
+          >
+            MCP
+            <span className="text-gray-500 text-xs font-light ml-0.5 mb-0.5 rounded">coming soon</span>
+          </a>
+
+          {/* <span
+                      style={{
+                        position: "absolute",
+                        top: "-10px",
+                        right: "0px",
+                        background: "#f57c0b", // amber
+                        color: "#fff",
+                        fontSize: "8px",
+                        fontWeight: 700,
+                        padding: "3px 10px",
+                        borderRadius: "5px",
+                        textTransform: "uppercase",
+                        letterSpacing: "0.4px",
+                        boxShadow: "0 2px 6px rgba(0,0,0,0.15)",
+                        pointerEvents: "none",
+                      }}
+                    >
+                      Coming Soon
+                    </span> */}
+        </div>
       </div>
     </div>
 
-    <div className="hero-image-container wk-hero-image" style={{
-      flex: 1,
-      display: 'flex',
-      justifyContent: 'flex-end',
-      alignItems: 'center'
-    }}>
-         <img
+    <div
+      className="hero-image-container wk-hero-image"
+      style={{
+  flex: 1,
+  display: 'flex',
+  justifyContent: 'flex-end',
+  alignItems: 'center'
+}}
+    >
+      <img
         src="/images/hero.svg"
         alt="akta.pro Hero Image"
         style={{
-          width: '100%',
-          maxWidth: '380px',
-          borderRadius: '12px',
-          marginBottom: '20px',
-          marginRight:'-50px'
-        }}
+      width: '100%',
+      maxWidth: '380px',
+      borderRadius: '12px',
+      marginBottom: '20px',
+      marginRight:'-50px'
+    }}
         loading="lazy"
       />
     </div>
   </div>
+
   {/* Fade overlay at bottom - dark mode only */}
-  <div className="hidden dark:block" style={{
-    position: 'absolute',
-    bottom: 0,
-    left: 0,
-    right: 0,
-    height: '150px',
-    background: 'linear-gradient(to bottom, transparent, #0B0F14)',
-    pointerEvents: 'none'
-  }} />
+
+  <div
+    className="hidden dark:block"
+    style={{
+position: 'absolute',
+bottom: 0,
+left: 0,
+right: 0,
+height: '150px',
+background: 'linear-gradient(to bottom, transparent, #0B0F14)',
+pointerEvents: 'none'
+}}
+  />
 </div>
 
 {/* SEE IT WORK */}
+
 <section style={{ padding: '1rem 0' }}>
   <div style={{ maxWidth: '960px', margin: '0 auto', padding: '0 28px' }}>
-    <h2 className="text-gray-900 dark:text-white" style={{
-      fontSize: '28px',
-      fontWeight: 650,
-      letterSpacing: '-0.02em',
-      marginBottom: '24px',
-    }}>
+    <h2
+      className="text-gray-900 dark:text-white"
+      style={{
+  fontSize: '28px',
+  fontWeight: 650,
+  letterSpacing: '-0.02em',
+  marginBottom: '24px',
+}}
+    >
       See it work
     </h2>
 
@@ -166,68 +193,64 @@ import { LogoTicker } from "/snippets/LogoTicker.jsx"
 </section>
 
 {/* FOOTER LINKS */}
+
 <section style={{ paddingBottom: '4rem' , paddingTop: '1rem' }}>
   <div style={{ maxWidth: '960px', margin: '0 auto', padding: '0 28px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '20px' }}>
-     <div className="wk-footer-links">
-       <a
-       href="/contact"
-       target="_self"
+    <div className="wk-footer-links">
+      <a
+        href="/contact"
+        target="_self"
         style={{
-     display: "flex",
-     alignItems: "center",
-     gap: "0.8rem",
-     textDecoration: "none",
-     lineHeight: 1.45,
-     transition: "transform 160ms ease, opacity 160ms ease, border-color 160ms ease, background 160ms ease, color 160ms ease, box-shadow 160ms ease",
-   }}
+ display: "flex",
+ alignItems: "center",
+ gap: "0.8rem",
+ textDecoration: "none",
+ lineHeight: 1.45,
+ transition: "transform 160ms ease, opacity 160ms ease, border-color 160ms ease, background 160ms ease, color 160ms ease, box-shadow 160ms ease",
+}}
       >
-        
-<svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-<path d="M17.6172 14.6093C16.9969 13.9843 15.4945 13.0722 14.7656 12.7046C13.8164 12.2265 13.7383 12.1874 12.9922 12.7417C12.4945 13.1116 12.1637 13.4421 11.5812 13.3179C10.9988 13.1937 9.73318 12.4933 8.62498 11.3886C7.51678 10.2839 6.77576 8.98155 6.65115 8.40108C6.52654 7.82061 6.86248 7.49366 7.22889 6.99483C7.74529 6.29171 7.70623 6.17452 7.26482 5.2253C6.92068 4.48702 5.98201 2.99874 5.35467 2.38155C4.68357 1.71866 4.68357 1.83585 4.25115 2.01553C3.89909 2.16363 3.56135 2.34368 3.24217 2.55343C2.61717 2.96866 2.27029 3.31358 2.02771 3.83194C1.78514 4.3503 1.67615 5.56553 2.92889 7.84132C4.18162 10.1171 5.06053 11.2808 6.87967 13.0948C8.69881 14.9089 10.0976 15.8843 12.1426 17.0312C14.6722 18.448 15.6426 18.1718 16.1625 17.9296C16.6824 17.6874 17.0289 17.3437 17.4449 16.7187C17.6552 16.4 17.8356 16.0626 17.984 15.7108C18.164 15.28 18.2812 15.28 17.6172 14.6093Z" stroke="#DEDEDE" stroke-width="1.25" stroke-miterlimit="10"/>
-</svg>
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M17.6172 14.6093C16.9969 13.9843 15.4945 13.0722 14.7656 12.7046C13.8164 12.2265 13.7383 12.1874 12.9922 12.7417C12.4945 13.1116 12.1637 13.4421 11.5812 13.3179C10.9988 13.1937 9.73318 12.4933 8.62498 11.3886C7.51678 10.2839 6.77576 8.98155 6.65115 8.40108C6.52654 7.82061 6.86248 7.49366 7.22889 6.99483C7.74529 6.29171 7.70623 6.17452 7.26482 5.2253C6.92068 4.48702 5.98201 2.99874 5.35467 2.38155C4.68357 1.71866 4.68357 1.83585 4.25115 2.01553C3.89909 2.16363 3.56135 2.34368 3.24217 2.55343C2.61717 2.96866 2.27029 3.31358 2.02771 3.83194C1.78514 4.3503 1.67615 5.56553 2.92889 7.84132C4.18162 10.1171 5.06053 11.2808 6.87967 13.0948C8.69881 14.9089 10.0976 15.8843 12.1426 17.0312C14.6722 18.448 15.6426 18.1718 16.1625 17.9296C16.6824 17.6874 17.0289 17.3437 17.4449 16.7187C17.6552 16.4 17.8356 16.0626 17.984 15.7108C18.164 15.28 18.2812 15.28 17.6172 14.6093Z" stroke="#DEDEDE" stroke-width="1.25" stroke-miterlimit="10" />
+        </svg>
 
         <span> Questions? <u style={{ textUnderlineOffset: "0.18em", color: "var(--wk-footer-link)" }}>Contact Sales</u></span>
-       </a>
+      </a>
 
-     <a
-       style={{
-     display: "flex",
-     alignItems: "center",
-     gap: "0.8rem",
-     textDecoration: "none",
-     lineHeight: 1.45,
-     transition: "transform 160ms ease, opacity 160ms ease, border-color 160ms ease, background 160ms ease, color 160ms ease, box-shadow 160ms ease",
-   }}
-       href="/2026"
-     >
-       <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-<path d="M8 9H16M8 13H14M18 4C18.7956 4 19.5587 4.31607 20.1213 4.87868C20.6839 5.44129 21 6.20435 21 7V15C21 15.7956 20.6839 16.5587 20.1213 17.1213C19.5587 17.6839 18.7956 18 18 18H13L8 21V18H6C5.20435 18 4.44129 17.6839 3.87868 17.1213C3.31607 16.5587 3 15.7956 3 15V7C3 6.20435 3.31607 5.44129 3.87868 4.87868C4.44129 4.31607 5.20435 4 6 4H18Z" stroke="#DEDEDE" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
-</svg>
+      <a
+        style={{
+ display: "flex",
+ alignItems: "center",
+ gap: "0.8rem",
+ textDecoration: "none",
+ lineHeight: 1.45,
+ transition: "transform 160ms ease, opacity 160ms ease, border-color 160ms ease, background 160ms ease, color 160ms ease, box-shadow 160ms ease",
+}}
+        href="/changelog"
+      >
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M8 9H16M8 13H14M18 4C18.7956 4 19.5587 4.31607 20.1213 4.87868C20.6839 5.44129 21 6.20435 21 7V15C21 15.7956 20.6839 16.5587 20.1213 17.1213C19.5587 17.6839 18.7956 18 18 18H13L8 21V18H6C5.20435 18 4.44129 17.6839 3.87868 17.1213C3.31607 16.5587 3 15.7956 3 15V7C3 6.20435 3.31607 5.44129 3.87868 4.87868C4.44129 4.31607 5.20435 4 6 4H18Z" stroke="#DEDEDE" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" />
+        </svg>
 
+        <span className="-ml-[2px]">Stay current? <u style={{ textUnderlineOffset: "0.18em", color: "var(--wk-footer-link)" }}>View Changelog</u></span>
+      </a>
 
-       <span className="-ml-[2px]">Stay current? <u style={{ textUnderlineOffset: "0.18em", color: "var(--wk-footer-link)" }}>View Changelog</u></span>
-     </a>
+      <a
+        style={{
+ display: "flex",
+ alignItems: "center",
+ gap: "0.8rem",
+ textDecoration: "none",
+ lineHeight: 1.45,
+ transition: "transform 160ms ease, opacity 160ms ease, border-color 160ms ease, background 160ms ease, color 160ms ease, box-shadow 160ms ease",
+}}
+        href="/llms.txt"
+      >
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M5.55533 18.9732H14.4446C16.1775 18.9732 17.0396 18.0942 17.0396 16.3532V8.7528C17.0396 7.6728 16.9225 7.20423 16.2528 6.51781L11.6321 1.82209C10.9964 1.16888 10.4771 1.02673 9.5314 1.02673H5.55533C3.83104 1.02673 2.96033 1.91388 2.96033 3.6553V16.3532C2.96033 18.1024 3.83104 18.9732 5.55533 18.9732ZM5.62211 17.6257C4.75997 17.6257 4.30783 17.1649 4.30783 16.3282V3.68031C4.30783 2.85173 4.75997 2.37423 5.63068 2.37423H9.34711V7.23781C9.34711 8.29245 9.88283 8.81138 10.9207 8.81138H15.6921V16.3282C15.6921 17.1649 15.2482 17.6257 14.3778 17.6257H5.62211ZM11.0714 7.54709C10.745 7.54709 10.6107 7.41352 10.6107 7.07852V2.63388L15.4321 7.54745L11.0714 7.54709ZM13.0803 11.1132H6.72676C6.42568 11.1132 6.20818 11.3392 6.20818 11.6239C6.20818 11.9167 6.42604 12.1428 6.72711 12.1428H13.0803C13.1488 12.1439 13.2168 12.1313 13.2802 12.1056C13.3437 12.0799 13.4013 12.0417 13.4497 11.9933C13.4981 11.9449 13.5363 11.8872 13.562 11.8238C13.5877 11.7603 13.6004 11.6923 13.5993 11.6239C13.5993 11.3392 13.3732 11.1132 13.0803 11.1132ZM13.0803 14.0346H6.72676C6.42568 14.0346 6.20818 14.2689 6.20818 14.5617C6.20818 14.8464 6.42604 15.0642 6.72711 15.0642H13.0803C13.3732 15.0642 13.5993 14.8464 13.5993 14.5617C13.5993 14.2689 13.3732 14.0346 13.0803 14.0346Z" fill="#DEDEDE" />
+        </svg>
 
-
-     <a
-       style={{
-     display: "flex",
-     alignItems: "center",
-     gap: "0.8rem",
-     textDecoration: "none",
-     lineHeight: 1.45,
-     transition: "transform 160ms ease, opacity 160ms ease, border-color 160ms ease, background 160ms ease, color 160ms ease, box-shadow 160ms ease",
-   }}
-       href="/llms.txt"
-     >
-       <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-<path d="M5.55533 18.9732H14.4446C16.1775 18.9732 17.0396 18.0942 17.0396 16.3532V8.7528C17.0396 7.6728 16.9225 7.20423 16.2528 6.51781L11.6321 1.82209C10.9964 1.16888 10.4771 1.02673 9.5314 1.02673H5.55533C3.83104 1.02673 2.96033 1.91388 2.96033 3.6553V16.3532C2.96033 18.1024 3.83104 18.9732 5.55533 18.9732ZM5.62211 17.6257C4.75997 17.6257 4.30783 17.1649 4.30783 16.3282V3.68031C4.30783 2.85173 4.75997 2.37423 5.63068 2.37423H9.34711V7.23781C9.34711 8.29245 9.88283 8.81138 10.9207 8.81138H15.6921V16.3282C15.6921 17.1649 15.2482 17.6257 14.3778 17.6257H5.62211ZM11.0714 7.54709C10.745 7.54709 10.6107 7.41352 10.6107 7.07852V2.63388L15.4321 7.54745L11.0714 7.54709ZM13.0803 11.1132H6.72676C6.42568 11.1132 6.20818 11.3392 6.20818 11.6239C6.20818 11.9167 6.42604 12.1428 6.72711 12.1428H13.0803C13.1488 12.1439 13.2168 12.1313 13.2802 12.1056C13.3437 12.0799 13.4013 12.0417 13.4497 11.9933C13.4981 11.9449 13.5363 11.8872 13.562 11.8238C13.5877 11.7603 13.6004 11.6923 13.5993 11.6239C13.5993 11.3392 13.3732 11.1132 13.0803 11.1132ZM13.0803 14.0346H6.72676C6.42568 14.0346 6.20818 14.2689 6.20818 14.5617C6.20818 14.8464 6.42604 15.0642 6.72711 15.0642H13.0803C13.3732 15.0642 13.5993 14.8464 13.5993 14.5617C13.5993 14.2689 13.3732 14.0346 13.0803 14.0346Z" fill="#DEDEDE"/>
-</svg>
-
-
-       <span>For LLMs. <u style={{ textUnderlineOffset: "0.18em", color: "var(--wk-footer-link)" }}>llms.txt</u></span>
-     </a>
+        <span>For LLMs. <u style={{ textUnderlineOffset: "0.18em", color: "var(--wk-footer-link)" }}>llms.txt</u></span>
+      </a>
     </div>
   </div>
 </section>
-
