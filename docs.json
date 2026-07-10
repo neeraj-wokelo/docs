@@ -53,7 +53,7 @@
                 ]
               },
               {
-                "group": "Alternative Data",
+                "group": "Alternative Signals",
                 "pages": [
                   {
                     "group": "Headcount Trends",
@@ -131,7 +131,7 @@
           "api-reference/news-signals",
           "api-reference/company-data",
           {
-            "group": "Alternative Data",
+            "group": "Alternative Signals",
             "expanded": true,
             "pages": [
               "api-reference/alternative-data/headcount-trends",
