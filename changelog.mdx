@@ -6,67 +6,7 @@ description: "New features, enhancements, and updates to the Akta API."
 <Update label="July 9, 2026" description="News API">
   ## Improved search, entities, and taxonomies in Akta News API
 
-  We've shipped a significant upgrade to the [akta.pro](http://akta.pro) News API. News API now supports open-ended queries, ability to filter across a range of codes and entities and news mapped to industry taxonomy.
+  The News API now supports open-ended query searches, so you can monitor any theme, narrative, or commodity without first anchoring to a company or industry. Every article is enriched with resolved entities (person, location, product, event) that you can filter on directly, and is classified across four taxonomies simultaneously — Akta's proprietary news and industry taxonomies plus standard NAICS, SIC, IPTC, and IAB codes. This release also adds true event-level deduplication via group\_articles, relevance and sentiment filtering, and a richer article payload (article type, press-release/opinion/breaking flags, fully resolved company mentions, and more). One breaking change: the industry parameter now expects resolved codes instead of free text — use the new free Industry Search API to resolve them.
 
-  Here's everything that's new.
-
-  <Frame>
-    ![News Api Request Schematic Akta](/images/news-api-request-schematic-akta.png)
-  </Frame>
-
-  ### Search however you think about the problem
-
-  Until now, every News API request had to be anchored to a company or an industry. That's still supported, but it's no longer a requirement.
-
-  **Open-ended query search.** Pass a free-text `query` on its own, against the full article text and title, to monitor a theme, narrative, or commodity that doesn't map neatly to a single company or sector. Track "crude oil price developments," "FDA drug approvals," "data center buildout," or any other signal that matters to you, without first having to figure out which industry code it might fall under.
-
-  <Frame>
-    ![News Api Request Response Snippet](/images/news-api-request-response-snippet.png)
-  </Frame>
-
-  **Search by named entity.** Every article is now enriched with an `entities` object: `person`, `location`, `product`, and `event`, extracted directly from the article text. Four new filters, `entity_person_list`, `entity_location_list`, `entity_product_list`, and `entity_event_list`, let you track coverage of a specific executive, region, product, or event directly. This is more precise than keyword search: it matches against resolved entities, not just text that happens to contain a name.
-
-  Between open-ended `query` and entity filters, you can now build a monitoring feed around almost anything: a person, a place, a product, an unfolding event, or a theme that spans dozens of companies and sectors at once.
-
-  ## A much richer classification layer
-
-  Raw article text isn't very useful at scale. Structure is. This release adds several layers of classification on top of every article:
-
-  - **[akta.pro](http://akta.pro)'s proprietary news taxonomy:** structured event-type tags (e.g. _Equity Fund-Raising_, _Layoffs_, _IPOs & Follow-on Offerings_) that let you filter for the kind of event, not just the topic.
-  - **[akta.pro](http://akta.pro)'s proprietary industry taxonomy:** every article is mapped against our taxonomy of 30,000\+ granular industry codes, from broad sectors down to narrow niches like "Warehouse & Intralogistics Automation Systems." Don't know the code you need? The new [Industry Search API](https://docs.akta.pro/industry-search) resolves a free-text topic into the right code for you.\
-    **Note:** The Industry Search API is a new, free endpoint. Give it a free-text industry name, and it returns the matching codes from [akta.pro](http://akta.pro)'s taxonomy
-  - **Standard external taxonomies:** articles are also mapped to **NAICS**, **SIC**, **IPTC**, and **IAB** codes, so you can cross-reference [akta.pro](http://akta.pro) data against any other system that speaks those standards without building a mapping layer yourself.
-
-  Combined, this means an article isn't just "about a company" anymore, it's classified across four independent taxonomies simultaneously, so you can filter and join however your downstream systems already think about industries and content categories.
-
-  ## Real deduplication, not just exact-match filtering
-
-  Widely covered stories like a funding round, an acquisition or a regulatory action, often get written up nearly identically by dozens of publishers within hours of each other. Historically, that meant a lot of near-duplicate noise in any high-volume monitoring feed.
-
-  The `group_articles` parameter now does real event-level deduplication, not just filtering out byte-identical copies. Set it to `true` and you get one representative article per underlying event, even when the coverage comes from many different outlets with different headlines and phrasing. Set it to `false` (or leave it unset) when you specifically need every publisher's independent coverage, for share-of-voice or media-reach analysis, for example.
-
-  ## Filter on relevance, not just recency
-
-  Two fields work together to help you separate signal from noise:
-
-  - `sentiment`: every article is scored `positive`, `negative`, or `neutral`, and you can filter on it directly with `sentiment_list`.
-  - `newsworthiness_score`: a relevance and quality score, exposed as a `High` / `Medium` / `Low` tier via `news_score_list`. Use `High` for daily monitoring briefs where signal density matters, and `all` when recall matters more than precision, for research pulls, for instance.
-
-  ## Everything else that's now on every article
-
-  Beyond the headline features above, every article response has gotten meaningfully richer:
-
-  <Frame>
-    ![News Api Response Fields Cards Akta](/images/news-api-response-fields-cards-akta.png)
-  </Frame>
-
-  - `article_type`: e.g. _Explainer_, _News analysis_, _Press release_
-  - `is_press_release`**,** `is_opinion`**,** `is_breaking`: boolean flags so you can filter out (or specifically target) press releases, opinion pieces, or breaking coverage
-  - `company_mentions`: a fully resolved array of every company named in the article, each with UUID, name, and website, not just the one you searched for
-  - `industries`: with a primary/secondary flag, so you know which classification is the article's main subject versus incidental context
-  - `countries`: geographies tied to the underlying event, independent of where the story was published
-
-  ## What this means for your integration
-
-  None of these changes break existing requests, with one exception: `industry`. If you're currently passing a free-text industry name to the `industry` parameter, that request will now break. `industry` no longer accepts free text and expects one or more resolved codes instead. The [Industry Search API](https://docs.akta.pro/industry-search) is the fastest way to get one. Everything else is additive: `company` continues to work exactly as before, adopt open-ended `query` and entity filters when you're ready, and the richer taxonomies and enrichment fields are simply present in every response going forward. Full details are in the [News API docs](https://docs.akta.pro/news) and [API reference](https://docs.akta.pro/news).
+  [View Full Blog](https://akta.pro/blog/updates-news-signals-api-july-2026)
 </Update>
