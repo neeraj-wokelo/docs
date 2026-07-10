@@ -124,7 +124,7 @@ search = requests.get(
 )
 uuid = search.json()["data"][0]["uuid"]
 
-# Step 2: Use the UUID in Company Enrichment
+# Step 2: Use the UUID in Company Data API
 enrich = requests.post(
     "https://api.akta.pro/api/v1/company/enrichment",
     headers={**HEADERS, "Content-Type": "application/json"},
