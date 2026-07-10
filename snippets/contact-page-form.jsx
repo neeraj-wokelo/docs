@@ -243,10 +243,13 @@ const Error = ({ text }) => (
         </button>
 
          <span className="text-gray-500 dark:text-white/70 max-md:text-xs">
-          By clicking "Request API access, you agree to Wokelo's{" "}
-          <a className="underline" href="https://www.wokelo.ai/legal?tab=privacy">
+          By clicking "Request API access, you agree to akta.pro's{" "}
+          <a className="underline" href="https://akta.pro/legal?tab=privacy">
             Privacy Policy
-          </a>{" "}
+          </a>{" "} and
+           <a className="underline" href="https://akta.pro/legal?tab=terms">
+            Terms And Conditions 
+          </a>
           and consent to receive product updates and insights.
         </span>
       </form>

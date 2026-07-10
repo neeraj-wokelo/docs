@@ -53,7 +53,7 @@
                 ]
               },
               {
-                "group": "Alternative Data",
+                "group": "Alternative Signals",
                 "pages": [
                   {
                     "group": "Headcount Trends",
@@ -127,11 +127,16 @@
       },
       {
         "tab": "API Reference",
-        "pages": [
-          "api-reference/news-signals",
-          "api-reference/company-data",
+        "groups": [
           {
-            "group": "Alternative Data",
+            "group": "Core APIs",
+            "pages": [
+              "api-reference/news-signals",
+              "api-reference/company-data"
+            ]
+          },
+          {
+            "group": "Alternative Signals",
             "expanded": true,
             "pages": [
               "api-reference/alternative-data/headcount-trends",
@@ -159,7 +164,7 @@
         ]
       },
       {
-        "tab": "Contact",
+        "tab": "Contact us",
         "pages": [
           "contact"
         ]
@@ -175,7 +180,7 @@
     "links": [
       {
         "label": "Support",
-        "href": "mailto:support@akta.pro"
+        "href": "/contact"
       }
     ],
     "primary": {

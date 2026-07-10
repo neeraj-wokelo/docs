@@ -2,13 +2,11 @@
 title: "Overview"
 ---
 
-The Akta News Signals API fetches enriched news articles for a given company, industry, or open-ended search query. Each article is returned with an AI-generated summary, full body text, structured news tags, industry classifications, sentiment signal, relevance score, named entities, and a resolved list of all companies mentioned — making it ready for direct consumption in LLM pipelines, monitoring workflows, and investment research tools.
+The Akta News Signals API fetches enriched news articles, optionally scoped by company, industry, open-ended search query, or any of a range of other filters. Each article is returned with an AI-generated summary, full body text, structured news tags, industry classifications, sentiment signal, relevance score, named entities, and a resolved list of all companies mentioned — making it ready for direct consumption in LLM pipelines, monitoring workflows, and investment research tools.
 
-This is a **synchronous GET API** — pass your filters as URL query parameters and receive a paginated array of enriched articles immediately in the response.
+This is a synchronous GET API — pass any filters you need as URL query parameters and receive a paginated array of enriched articles immediately in the response.
 
-Results can be scoped to a **specific company** (by website domain or UUID), a **specific industry**, or an **open-ended topic query** — or any combination of the three. This means coverage is no longer limited to tracking a known company or industry; you can also monitor news around a free-text theme (e.g. `"tariffs"`, `"data center buildout"`, `"AI regulation"`) that doesn't map neatly to a single company or industry code. All filter parameters are optional — omitting them returns the latest articles across Akta's full news index.
-
-Each article in the response includes:
+Every filter parameter is optional. You can scope results to a specific company (by website domain or UUID), an industry, or an open-ended topic query — for example a free-text theme like "tariffs", "data center buildout", or "AI regulation" that doesn't map neatly to a single company or industry code. You can also filter on any of the other supported parameters (named entities, NAICS/SIC/IPTC/IAB codes, sentiment, date range, and more), combine as many as you like, or pass none at all — a request with no filters simply returns the latest articles across Akta's full news index. Each article in the response includes:
 
 - **AI summary** — a concise, machine-generated synopsis of the article's key facts
 - **Full text** — the complete article body for downstream LLM processing, embedding, or RAG
