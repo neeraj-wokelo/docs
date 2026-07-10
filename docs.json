@@ -153,15 +153,15 @@
         ]
       },
       {
-        "tab": "Contact",
-        "pages": [
-          "contact"
-        ]
-      },
-      {
         "tab": "Changelog",
         "pages": [
           "changelog"
+        ]
+      },
+      {
+        "tab": "Contact us",
+        "pages": [
+          "contact"
         ]
       }
     ]
