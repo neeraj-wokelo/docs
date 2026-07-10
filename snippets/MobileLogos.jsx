@@ -14,21 +14,19 @@ export const MobileLogos = () => {
     return () => observer.disconnect()
   }, [])
 
-  const base = "https://wkemails.blob.core.windows.net/fe-application/akta-pro/logo-carousel"
-
   const row1 = [
-    { name: "KPMG", src: `${base}/kpmg-2.svg`, w: 80, h: 45 },
-    { name: "Zams", src: `${base}/zams.svg`, w: 75, h: 30 },
+    { name: "KPMG", src: isDark ? "https://wkemails.blob.core.windows.net/fe-application/akta-pro/logo-carousel/kpmg-2.svg" : "/images/kpmg-black.svg", w: 80, h: 45 },
+    { name: "Zams", src: isDark ? "https://wkemails.blob.core.windows.net/fe-application/akta-pro/logo-carousel/zams.svg" : "/images/zams.svg", w: 75, h: 30 },
   ]
 
   const row2 = [
-    { name: "Adobe", src: `${base}/adobe-2.svg`, w: 85, h: 30 },
-    { name: "Premji Invest", src: `${base}/premji-2.svg`, w: 100, h: 35 },
+    { name: "Adobe", src: isDark ? "https://wkemails.blob.core.windows.net/fe-application/akta-pro/logo-carousel/adobe-2.svg" : "/images/adobe-black.svg", w: 85, h: 30 },
+    { name: "Premji Invest", src: isDark ? "https://wkemails.blob.core.windows.net/fe-application/akta-pro/logo-carousel/premji-2.svg" : "/images/premji.svg", w: 100, h: 35 },
   ]
 
   const row3 = [
-    { name: "Vestberry", src: `${base}/vestberry.svg`, w: 90, h: 30 },
-    { name: "LQD", src: `${base}/lqd-2.svg`, w: 75, h: 30 },
+    { name: "Vestberry", src: isDark ? "https://wkemails.blob.core.windows.net/fe-application/akta-pro/logo-carousel/vestberry.svg" : "/images/vestberry.svg", w: 90, h: 30 },
+    { name: "LQD", src: isDark ? "https://wkemails.blob.core.windows.net/fe-application/akta-pro/logo-carousel/lqd-2.svg" : "/images/lqd-black.svg", w: 75, h: 30 },
   ]
 
   const rowStyle = {

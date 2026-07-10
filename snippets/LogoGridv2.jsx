@@ -14,20 +14,18 @@ export const LogoGridv2 = () => {
     return () => observer.disconnect()
   }, [])
 
-  const base = "https://wkemails.blob.core.windows.net/fe-application/akta-pro/logo-carousel"
-
   const row1 = [
-    { name: "KPMG", src: `${base}/kpmg-2.svg`, w: 102, h: 58 },
-    { name: "Zams", src: `${base}/zams.svg`, w: 100, h: 40 },
-    { name: "Adobe", src: `${base}/adobe-2.svg`, w: 120, h: 40 },
-    { name: "Premji Invest", src: `${base}/premji-2.svg`, w: 140, h: 50 },
+    { name: "KPMG", src: isDark ? "https://wkemails.blob.core.windows.net/fe-application/akta-pro/logo-carousel/kpmg-2.svg" : "/images/kpmg-black.svg", w: 102, h: 58 },
+    { name: "Zams", src: isDark ? "https://wkemails.blob.core.windows.net/fe-application/akta-pro/logo-carousel/zams.svg" : "/images/zams.svg", w: 100, h: 40 },
+    { name: "Adobe", src: isDark ? "https://wkemails.blob.core.windows.net/fe-application/akta-pro/logo-carousel/adobe-2.svg" : "/images/adobe-black.svg", w: 120, h: 40 },
+    { name: "Premji Invest", src: isDark ? "https://wkemails.blob.core.windows.net/fe-application/akta-pro/logo-carousel/premji-2.svg" : "/images/premji.svg", w: 140, h: 50 },
   ]
 
   const row2 = [
-    { name: "Vestberry", src: `${base}/vestberry.svg`, w: 130, h: 40 },
-    { name: "Chicago Booth", src: `${base}/chicagobooth.svg`, w: 160, h: 40 },
-    { name: "LQD", src: `${base}/lqd-2.svg`, w: 100, h: 40 },
-    { name: "JLL", src: `${base}/jll-2.svg`, w: 100, h: 40 },
+    { name: "Vestberry", src: isDark ? "https://wkemails.blob.core.windows.net/fe-application/akta-pro/logo-carousel/vestberry.svg" : "/images/vestberry.svg", w: 130, h: 40 },
+    { name: "Chicago Booth", src: isDark ? "https://wkemails.blob.core.windows.net/fe-application/akta-pro/logo-carousel/chicagobooth.svg" : "/images/chicago-booth-black.svg", w: 160, h: 40 },
+    { name: "LQD", src: isDark ? "https://wkemails.blob.core.windows.net/fe-application/akta-pro/logo-carousel/lqd-2.svg" : "/images/lqd-black.svg", w: 100, h: 40 },
+    { name: "JLL", src: isDark ? "https://wkemails.blob.core.windows.net/fe-application/akta-pro/logo-carousel/jll-2.svg" : "/images/jll-black.svg", w: 100, h: 40 },
   ]
 
   const rowStyle = {

@@ -112,6 +112,19 @@ console.log(data);`
             grid-template-columns: 1fr !important;
           }
         }
+        .api-code-switcher-scroll::-webkit-scrollbar {
+          height: 8px;
+        }
+        .api-code-switcher-scroll::-webkit-scrollbar-track {
+          background: transparent;
+        }
+        .api-code-switcher-scroll::-webkit-scrollbar-thumb {
+          background: rgba(128, 128, 128, 0.4);
+          border-radius: 4px;
+        }
+        .dark .api-code-switcher-scroll::-webkit-scrollbar-thumb {
+          background: rgba(255, 255, 255, 0.2);
+        }
       `}</style>
     <div style={{
       display: 'grid',
@@ -159,7 +172,8 @@ console.log(data);`
 
       {/* Right: Code block */}
         <div style={{
-          overflow: 'hidden',
+          overflowX: 'auto',
+          overflowY: 'hidden',
           borderRadius: '20px',
           border: isDark ? '1px solid rgba(255, 255, 255, 0.08)' : '1px solid rgba(0, 0, 0, 0.08)',
           background: isDark ? '#0B0C0E' : '#F5F5F5',
@@ -236,7 +250,9 @@ console.log(data);`
           overflowY: 'auto',
           minHeight: '450px',
           maxHeight: '450px',
-        }}>
+        }}
+        className="api-code-switcher-scroll"
+        >
           <code style={{
             fontSize: '0.86rem',
             lineHeight: 1.82,
