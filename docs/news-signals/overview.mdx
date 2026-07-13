@@ -2,31 +2,31 @@
 title: "Overview"
 ---
 
-The Akta News Signals API fetches enriched news articles, optionally scoped by company, industry, open-ended search query, or any of a range of other filters. Each article is returned with an AI-generated summary, full body text, structured news tags, industry classifications, sentiment signal, relevance score, named entities, and a resolved list of all companies mentioned — making it ready for direct consumption in LLM pipelines, monitoring workflows, and investment research tools.
+The Akta News Signals API fetches enriched news articles, optionally scoped by company, industry, open-ended search query, or any of a range of other filters. Each article is returned with an AI-generated summary, full body text, structured news tags, industry classifications, sentiment signal, relevance score, named entities, and a resolved list of all companies mentioned,  making it ready for direct consumption in LLM pipelines, monitoring workflows, and investment research tools.
 
-This is a synchronous GET API — pass any filters you need as URL query parameters and receive a paginated array of enriched articles immediately in the response.
+This is a synchronous GET API. You can pass any filters you need as URL query parameters and receive a paginated array of enriched articles immediately in the response.
 
-Every filter parameter is optional. You can scope results to a specific company (by website domain or UUID), an industry, or an open-ended topic query — for example a free-text theme like "tariffs", "data center buildout", or "AI regulation" that doesn't map neatly to a single company or industry code. You can also filter on any of the other supported parameters (named entities, NAICS/SIC/IPTC/IAB codes, sentiment, date range, and more), combine as many as you like, or pass none at all — a request with no filters simply returns the latest articles across Akta's full news index. Each article in the response includes:
+Every filter parameter is optional. You can scope results to a specific company (by website domain or UUID), an industry, or an open-ended topic query. For example a free-text theme like "tariffs", "data center buildout", or "AI regulation" that doesn't map neatly to a single company or industry code. You can also filter on any of the other supported parameters (named entities, NAICS/SIC/IPTC/IAB codes, sentiment, date range, and more), combine as many as you like, or pass none at all. A request with no filters simply returns the latest articles across Akta's full news index. Each article in the response includes:
 
-- **AI summary** — a concise, machine-generated synopsis of the article's key facts
-- **Full text** — the complete article body for downstream LLM processing, embedding, or RAG
-- **Sentiment** — `positive`, `negative`, or `neutral` classification at the article level
-- **News score** — relevance and quality score for signal triage
-- **News tags** — structured primary and secondary tags (e.g. `"Equity Fund-Raising"`, `"Layoffs"`, `"IPO"`)
-- **Industry classifications** — industry names with primary flag
-- **Company mentions** — resolved array of all companies named in the article, each with UUID, name, and website
-- **Named entities** — people, locations, products, and events extracted from the article text
-- **Classification codes** — IPTC, IAB, NAICS, and SIC codes for cross-referencing against external taxonomies
-- **Article metadata** — flags for whether an article is a press release, opinion piece, or breaking news, plus the country/countries associated with the event
+- **AI summary**:  a concise, machine-generated synopsis of the article's key facts
+- **Full text**: the complete article body for downstream LLM processing, embedding, or RAG
+- **Sentiment** : `positive`, `negative`, or `neutral` classification at the article level
+- **News score** : relevance and quality score for signal triage
+- **News tags** : structured primary and secondary tags (e.g. `"Equity Fund-Raising"`, `"Layoffs"`, `"IPO"`)
+- **Industry classifications** : industry names with primary flag
+- **Company mentions** : resolved array of all companies named in the article, each with UUID, name, and website
+- **Named entities** : people, locations, products, and events extracted from the article text
+- **Classification codes** : IPTC, IAB, NAICS, and SIC codes for cross-referencing against external taxonomies
+- **Article metadata** : flags for whether an article is a press release, opinion piece, or breaking news, plus the country/countries associated with the event
 
 **Common use cases:**
 
-- **Company monitoring** — pass a company's website domain to track all coverage for a specific business, filtered by sentiment or news type
-- **Industry intelligence** — resolve an industry via the Industry Search API, then pass the resulting code to monitor deal flow, regulatory activity, or innovation signals across an entire sector
-- **Open-ended topic monitoring** — pass a free-text `query` to track a theme, event, or narrative that spans multiple companies and industries, without needing to resolve it to a company or industry code first
-- **Entity tracking** — filter or post-process by `entity_person_list`, `entity_location_list`, `entity_product_list`, or `entity_event_list` to follow specific people, places, products, or events across coverage
-- **LLM pipeline enrichment** — use `full_text` as input to summarisation, classification, or embedding models, pre-filtered by `type` and `sentiment`
+- **Company monitoring** : pass a company's website domain to track all coverage for a specific business, filtered by sentiment or news type
+- **Industry intelligence** : resolve an industry via the Industry Search API, then pass the resulting code to monitor deal flow, regulatory activity, or innovation signals across an entire sector
+- **Open-ended topic monitoring** : pass a free-text `query` to track a theme, event, or narrative that spans multiple companies and industries, without needing to resolve it to a company or industry code first
+- **Entity tracking** : filter or post-process by `entity_person_list`, `entity_location_list`, `entity_product_list`, or `entity_event_list` to follow specific people, places, products, or events across coverage
+- **LLM pipeline enrichment** : use `full_text` as input to summarisation, classification, or embedding models, pre-filtered by `type` and `sentiment`
 
 <Info>
-  This API is synchronous. Results are returned directly in the HTTP response — no job submission or polling required.
+  This API is synchronous. Results are returned directly in the HTTP response. No job submission or polling required.
 </Info>
