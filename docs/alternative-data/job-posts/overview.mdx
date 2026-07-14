@@ -4,7 +4,7 @@ title: "Overview"
 
 The Job Posts API returns live job listings for any company, sourced from LinkedIn and Indeed. A single request returns a paginated list of open roles, each with the job title, source platform, location, posting date, an AI-condensed description, employment type, remote flag, salary range (when disclosed), required experience level, and a list of extracted key skills.
 
-Hiring activity is one of the most reliable leading indicators of where a company is headed. A surge in sales roles can signal a go-to-market push, a build-out of an engineering or ML function can signal product investment, and a wave of postings in a new city or country can signal geographic expansion — often weeks or months before any of it is publicly announced. The extracted `key_skills` on each listing make it possible to track not just _how much_ a company is hiring, but _what capabilities_ it's building.
+Hiring activity is one of the most reliable leading indicators of where a company is headed. A surge in sales roles can signal a go-to-market push, a build-out of an engineering or ML function can signal product investment, and a wave of postings in a new city or country can signal geographic expansion, often weeks or months before any of it is publicly announced. The extracted `key_skills` on each listing make it possible to track not just _how much_ a company is hiring, but _what capabilities_ it's building.
 
 This is a **synchronous GET API.** Pass a company identifier and optional pagination parameters (`limit` and `offset`) and receive the listings immediately. The response also reports the total number of open roles and the credits consumed by the request.
 
