@@ -2,14 +2,14 @@
 title: "Use cases"
 ---
 
-### Engagement snapshot
+### Growth snapshot
 
-Fetch the most recent month's engagement metrics for a company such as total visits, bounce rate, pages per visit, and time on site.
+Fetch the current headcount and growth rate across standard lookback windows for a company.
 
 <CodeGroup>
 
 ```bash cURL
-curl -G "https://api.akta.pro/api/v1/company/website-traffic/" \
+curl -G "https://api.akta.pro/api/v1/company/headcount-trends/" \
   --data-urlencode "company=https://canva.com" \
   -H "x-api-key: your api key"
 ```
@@ -17,7 +17,7 @@ curl -G "https://api.akta.pro/api/v1/company/website-traffic/" \
 ```python Python
 import requests
 
-url = "https://api.akta.pro/api/v1/company/website-traffic"
+url = "https://api.akta.pro/api/v1/company/headcount-trends"
 
 payload = {}
 headers = {
@@ -38,39 +38,38 @@ print(response.text)
 {
   "data": {
     "uuid": "00000jw-canva",
-    "engagements": {
-      "bounce_rate": "0.2602897105526746",
-      "month": "5",
-      "year": "2026",
-      "page_per_visit": "6.55412715753744",
-      "visits": "974544088",
-      "time_on_site": "349.0280264736948"
-    },
-    "estimated_monthly_visits": {
-      "2026-03-01": 981605012,
-      "2026-04-01": 973355461,
-      "2026-05-01": 974544088
-    },
-    "traffic_sources": {
-      "social_organic": 0.042621396495100196,
-      "social_paid": 0.017813082048215217,
-      "mail": 0.027515646067013535,
-      "referrals": 0.04181835401212351,
-      "search_organic": 0.2075475145136343,
-      "search_paid": 0.007554620736976237,
-      "direct": 0.634763534328985,
-      "gen_ai": 0.0154293188059966,
-      "affiliate": 0.0020269187393783146,
-      "display_ads": 0.0029096142525770747
-    }
+    "linkedin_username": "2850862",
+    "linkedin_official_name": "Canva",
+    "linkedin_id": "2850862",
+    "total_employees": 17694,
+    "growth_periods": [
+      { "month_difference": 6, "change_percentage": 29 },
+      { "month_difference": 12, "change_percentage": 73 },
+      { "month_difference": 24, "change_percentage": 111 }
+    ],
+    "headcount_growth": [
+      { "employee_count": 17575, "date": "2026-06-01" },
+      { "employee_count": 17694, "date": "2026-07-01" }
+    ],
+    "date": "2026-07-01",
+    "headcount_by_function": [
+      {
+        "name": "Arts and Design",
+        "employee_count": 5113,
+        "growth_periods": [
+          { "month_difference": 6, "change_percentage": 42 },
+          { "month_difference": 12, "change_percentage": 78 }
+        ]
+      }
+    ]
   },
-  "credits_consumed": 1.5
+  "credits_consumed": 2.5
 }
 ```
 
-### Trend analysis over time
+### Historical trend charting
 
-Extract the `estimated_monthly_visits` series to chart traffic growth or decline, and compute month-over-month change.
+Extract the `headcount_growth` series to chart hiring trajectory over time, or flag inflection points such as sudden slowdowns or accelerations.
 
 ```python
 import requests
@@ -78,32 +77,33 @@ import requests
 HEADERS = {"x-api-key": "<YOUR_API_KEY>"}
 
 response = requests.get(
-    "https://api.akta.pro/api/v1/company/website-traffic",
+    "https://api.akta.pro/api/v1/company/headcount-trends",
     headers=HEADERS,
     params={"company": "canva.com"}
 )
 
-monthly = response.json()["data"]["estimated_monthly_visits"]
+series = response.json()["data"]["headcount_growth"]
 
-# Sort by date — dict key order is not guaranteed
-series = sorted(monthly.items(), key=lambda kv: kv[0])
+# Series is already chronological, but sort defensively
+series = sorted(series, key=lambda p: p["date"])
 
-print(f"{'Month':<12} {'Visits':<15} {'MoM Change'}")
+print(f"{'Month':<12} {'Headcount':<12} {'MoM Change'}")
 print("-" * 40)
-prev_visits = None
-for date, visits in series:
-    if prev_visits is not None:
-        change = (visits - prev_visits) / prev_visits * 100
+prev = None
+for point in series:
+    count, date = point["employee_count"], point["date"]
+    if prev is not None:
+        change = (count - prev) / prev * 100
         change_str = f"{change:+.1f}%"
     else:
         change_str = "—"
-    print(f"{date:<12} {visits:<15,} {change_str}")
-    prev_visits = visits
+    print(f"{date:<12} {count:<12,} {change_str}")
+    prev = count
 ```
 
-### Traffic channel mix
+### Function-level breakdown
 
-Break down where a company's traffic actually comes from — useful for assessing brand strength versus paid dependency, or spotting emerging channels like AI-assisted discovery.
+Identify which teams are driving overall headcount growth — useful for spotting a shift toward sales-led expansion, an engineering build-out, or disproportionate hiring in a single function.
 
 ```python
 import requests
@@ -111,29 +111,31 @@ import requests
 HEADERS = {"x-api-key": "<YOUR_API_KEY>"}
 
 response = requests.get(
-    "https://api.akta.pro/api/v1/company/website-traffic",
+    "https://api.akta.pro/api/v1/company/headcount-trends",
     headers=HEADERS,
     params={"company": "canva.com"}
 )
 
-sources = response.json()["data"]["traffic_sources"]
+functions = response.json()["data"]["headcount_by_function"]
 
-CHANNEL_GROUPS = {
-    "Owned/Brand":   ["direct"],
-    "Organic":       ["search_organic", "social_organic"],
-    "Paid":          ["search_paid", "social_paid", "display_ads"],
-    "Referral":      ["referrals", "affiliate", "mail"],
-    "Emerging (AI)": ["gen_ai"]
-}
+# Rank functions by 12-month growth rate
+def growth_12mo(fn):
+    return next(
+        (g["change_percentage"] for g in fn["growth_periods"] if g["month_difference"] == 12),
+        0
+    )
 
-for group, channels in CHANNEL_GROUPS.items():
-    share = sum(sources.get(c, 0) for c in channels)
-    print(f"{group:<15} {share * 100:5.1f}%")
+ranked = sorted(functions, key=growth_12mo, reverse=True)
+
+print(f"{'Function':<28} {'Headcount':<12} {'12mo Growth'}")
+print("-" * 55)
+for fn in ranked:
+    print(f"{fn['name']:<28} {fn['employee_count']:<12,} {growth_12mo(fn)}%")
 ```
 
 ### Competitive benchmark across multiple companies
 
-Fetch traffic engagement and channel mix for a set of companies and compare side by side — useful for market share and share-of-voice style analysis.
+Fetch headcount and growth for a set of companies and compare hiring velocity side by side — useful for tracking relative momentum within a competitive set.
 
 ```python
 import requests
@@ -141,34 +143,31 @@ import requests
 HEADERS   = {"x-api-key": "<YOUR_API_KEY>"}
 COMPANIES = ["canva.com", "figma.com", "notion.so", "miro.com"]
 
-def get_traffic(company):
+def get_growth(fn_list, months):
+    return next(
+        (g["change_percentage"] for g in fn_list if g["month_difference"] == months),
+        None
+    )
+
+def get_headcount(company):
     r = requests.get(
-        "https://api.akta.pro/api/v1/company/website-traffic",
+        "https://api.akta.pro/api/v1/company/headcount-trends",
         headers=HEADERS,
         params={"company": company}
     )
     data = r.json()["data"]
-    eng = data["engagements"]
-    src = data["traffic_sources"]
     return {
-        "company":      company,
-        "visits":       int(eng["visits"]),
-        "bounce_rate":  float(eng["bounce_rate"]),
-        "direct_share": src.get("direct", 0),
-        "organic_share": src.get("search_organic", 0) + src.get("social_organic", 0)
+        "company":  company,
+        "total":    data["total_employees"],
+        "growth_6mo":  get_growth(data["growth_periods"], 6),
+        "growth_12mo": get_growth(data["growth_periods"], 12)
     }
 
-results = [get_traffic(c) for c in COMPANIES]
-results.sort(key=lambda x: x["visits"], reverse=True)
+results = [get_headcount(c) for c in COMPANIES]
+results.sort(key=lambda x: x["growth_12mo"] or 0, reverse=True)
 
-print(f"{'Company':<15} {'Visits':<15} {'Bounce':<9} {'Direct%':<10} {'Organic%'}")
-print("-" * 65)
+print(f"{'Company':<15} {'Employees':<12} {'6mo Growth':<12} {'12mo Growth'}")
+print("-" * 55)
 for r in results:
-    print(
-        f"{r['company']:<15} "
-        f"{r['visits']:<15,} "
-        f"{r['bounce_rate'] * 100:<9.1f} "
-        f"{r['direct_share'] * 100:<10.1f} "
-        f"{r['organic_share'] * 100:.1f}"
-    )
+    print(f"{r['company']:<15} {r['total']:<12,} {r['growth_6mo']}%{'':<8} {r['growth_12mo']}%")
 ```
