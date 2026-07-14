@@ -2,9 +2,9 @@
 title: "Best Practices"
 ---
 
-**Always call without `products` first — it's free and gives you the IDs you need**
+**Always call without** `products `**first. It's free and gives you the IDs you need**
 
-The product list call costs zero credits and returns all the `id` values required for subsequent review calls. Never hardcode product IDs — always fetch them dynamically so your integration remains correct if a company's product catalog changes:
+The product list call costs zero credits and returns all the `id` values required for subsequent review calls. Never hardcode product IDs. Always fetch them dynamically so your integration remains correct if a company's product catalog changes:
 
 ```python
 # Step 1: free — get product catalog and IDs
