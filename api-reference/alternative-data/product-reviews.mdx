@@ -36,7 +36,7 @@ The Product Reviews API returns a company's product catalog and, optionally, det
 <ParamField query="products" type="array of strings">
   List of `product_id` values to fetch reviews for. Pass the parameter multiple times to request more than one product, for example `products=177388&products=112516`. Product IDs are returned by this same endpoint when called without the `products` parameter.
 
-  If omitted, the response returns the product list only — no reviews.
+  If omitted, the response returns the product list only and no reviews.
 </ParamField>
 
 <ParamField query="limit" type="integer">
@@ -166,8 +166,8 @@ Returns a JSON object with the following structure:
 <ResponseField name="review_question_answers" type="array of objects">
   Structured question-and-answer pairs from the review. Each object contains:
 
-  - `question` (`string`) — the question prompt.
-  - `answer` (`string`) — the reviewer's answer.
+  - `question` (`string`): the question prompt.
+  - `answer` (`string`): the reviewer's answer.
 </ResponseField>
 
 <ResponseField name="review_rating" type="float">
