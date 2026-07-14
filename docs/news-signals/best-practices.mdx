@@ -2,7 +2,7 @@
 title: "Best Practices"
 ---
 
-**Always pass website URL or UUID for `company` — not the display name**
+**Always pass website URL or UUID for** `company `**and not the display name**
 
 The `company` parameter expects a full website URL (e.g. `"https://canva.com"`) or an Akta UUID. A bare display name (`"Canva"`) will not resolve correctly. If you only have a company name, use the [Company Search API](/akta-company-search-doc) to look up the website URL or UUID first:
 
@@ -15,7 +15,7 @@ search = requests.get(
 website = search.json()["data"][0]["website"]   # "https://canva.com"
 ```
 
-**Always pass an industry code for `industry` — not the industry name**
+**Always pass an industry code for** `industry `**and not the industry name**
 
 The `industry` parameter expects one or more Akta industry codes (e.g. `"IMAHAHAN"`), not a free-text sector name like `"Warehouse Automation"`. If you're starting from a topic or sector name, resolve it to a code first with the [Industry Search API](/industry-search-doc):
 
@@ -32,18 +32,18 @@ If the query matches several closely related industries, consider passing more t
 
 **Use the open-ended `query` parameter for signals with no company or industry anchor**
 
-`company` and `industry` are both optional. For themes, narratives, or commodities that don't map to a single company or sector — a price move, a policy shift, a macro trend — pass a free-text `query` on its own instead of forcing it into an industry code:
+`company` and `industry` are both optional. For themes, narratives, or commodities that don't map to a single company or sector such as say a price move, a policy shift, a macro trend, pass a free-text `query` on its own instead of forcing it into an industry code:
 
 ```python
 # Track a theme directly, no company or industry resolution needed
 params = {"query": "crude oil price developments", "limit": 20}
 ```
 
-Avoid combining a broad `query` with an unrelated `company` or `industry` filter — since all active filters must match, an overly specific combination can silently return zero results. If you want to scope a topic to a specific company's coverage, prefer combining `query` with `company`, not `industry`, unless the topic and industry genuinely overlap.
+Avoid combining a broad `query` with an unrelated `company` or `industry` filter. Since all active filters must match, an overly specific combination can silently return zero results. If you want to scope a topic to a specific company's coverage, prefer combining `query` with `company`, not `industry`, unless the topic and industry genuinely overlap.
 
 **Use `entity_person_list` and `entity_event_list` to track a person or event, not `query`**
 
-If you want every article mentioning a specific named person or event — an executive, founder, regulator, conflict, or policy rollout — use `entity_person_list` or `entity_event_list` rather than putting the name in `query`. The entity filters match against resolved, structured entities extracted from each article, so they're more precise than a text search and won't pick up unrelated articles that happen to share a keyword:
+If you want every article mentioning a specific named person or event such as an executive, founder, regulator, conflict, or policy rollout then use `entity_person_list` or `entity_event_list` rather than putting the name in `query`. The entity filters match against resolved, structured entities extracted from each article, so they're more precise than a text search and won't pick up unrelated articles that happen to share a keyword:
 
 ```python
 # Precise: matches articles where this person is a recognized entity
