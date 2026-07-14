@@ -2,7 +2,7 @@
 title: "Best Practices"
 ---
 
-**Always specify `sections` — never rely on the default**
+**Always specify** `sections `**. Never rely on the default**
 
 When `sections` is omitted, all available sections are returned. This would consume credits. Always be explicit:
 
@@ -16,7 +16,7 @@ params={"company": "canva.com", "sections": "firmographics,funding"}
 
 **Accept both domain and full URL formats**
 
-The `company` parameter accepts both bare domains (`canva.com`) and full URLs (`https://www.canva.com`). Either format works — use whichever is more natural for your pipeline. If you have a UUID from Company Search, prefer that for the most reliable resolution:
+The `company` parameter accepts both bare domains (`canva.com`) and full URLs (`https://www.canva.com`). Either format works so use whichever is more natural for your pipeline. If you have a UUID from Company Search, prefer that for the most reliable resolution:
 
 ```python
 # All three are valid
