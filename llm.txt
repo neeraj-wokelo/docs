@@ -1,56 +1,95 @@
-# akta.pro API Documentation
+# akta.pro
 
-## Docs
+> akta.pro provides a Private Markets API-suite for Agents: enterprise-grade private company data, finally made accessible to AI. Use the API to enrich private company data, monitor company and industry news, and capture alternative signals across 20M+ entity-resolved companies globally. All endpoints are synchronous GET APIs authenticated with an `x-api-key` header.
 
-- [Employee Reviews API](https://docs.akta.pro/api-reference/alternative-data/employee-reviews.md): Fetches a company's employee review data including overall ratings, dimension-level ratings (culture, work-life balance, senior management and more) and individual employee reviews.
-- [Headcount Trends API](https://docs.akta.pro/api-reference/alternative-data/headcount-trends.md): Fetches a company's LinkedIn-sourced headcount data, including total employee count, historical growth trends, and a functional breakdown of the workforce.
-- [Job Posts API](https://docs.akta.pro/api-reference/alternative-data/job-posts.md): Fetches live LinkedIn and Indeed job listings for a company, including title, location, description, compensation, experience level, and extracted key skills.
-- [Product Reviews API](https://docs.akta.pro/api-reference/alternative-data/product-reviews.md): Fetches a company's product catalog and detailed reviews per product including ratings, star distribution, pros, cons, pricing and individual review content.
-- [Social Posts API](https://docs.akta.pro/api-reference/alternative-data/social-posts.md): Fetches social media posts published by a company, including content type, text, publish date, paid/repost flags, an AI classification, and detailed engagement metrics.
-- [Website Traffic API](https://docs.akta.pro/api-reference/alternative-data/website-traffic.md): Fetches a company's website traffic signals, including engagement metrics, historical monthly visit estimates, and a breakdown of traffic by acquisition source.
-- [Company Data API](https://docs.akta.pro/api-reference/company-data.md): Enriches a company with firmographics, business model, headcount, traffic, funding, financials, acquisitions and investment data.
-- [News Signals API](https://docs.akta.pro/api-reference/news-signals.md): Fetches news articles enriched with AI-generated summaries, event types, publisher metadata, sentiment, industry tags, company mentions and full article text.
-- [Company Search API](https://docs.akta.pro/api-reference/supporting-apis/company-search.md): Resolves a company by name, website or UUID and returns core identity and classification fields.
-- [Industry Search API](https://docs.akta.pro/api-reference/supporting-apis/industry-search.md): Resolves an industry from a free-text query and returns matching industry codes ranked by similarity.
-- [Changelog](https://docs.akta.pro/changelog.md): New features, enhancements, and updates to the Akta API.
-- [Contact](https://docs.akta.pro/contact.md): Get in touch with Wokelo
-- [Discord](https://docs.akta.pro/discord.md)
-- [Overview](https://docs.akta.pro/docs/alternative-data/employee-reviews/overview.md): Fetch a company's aggregated employee review signals — overall rating, eight dimension-level scores, and paginated individual reviews with pros, cons, reviewer metadata, and per-dimension ratings — sourced from Glassdoor and other review providers.
-- [Quick Start](https://docs.akta.pro/docs/alternative-data/employee-reviews/quick-start.md)
-- [Use cases](https://docs.akta.pro/docs/alternative-data/employee-reviews/use-cases.md)
-- [Overview](https://docs.akta.pro/docs/alternative-data/headcount-trends/overview.md): Fetch a company's LinkedIn-sourced headcount signals — current total employee count, historical monthly headcount, growth rates across multiple lookback windows, and a breakdown of headcount by function.
-- [Quick Start](https://docs.akta.pro/docs/alternative-data/headcount-trends/quick-start.md)
-- [Use cases](https://docs.akta.pro/docs/alternative-data/headcount-trends/use-cases.md)
-- [Overview](https://docs.akta.pro/docs/alternative-data/job-posts/overview.md): Fetch live LinkedIn and Indeed job listings for any company — title, location, description, compensation, experience level, and extracted key skills — to read hiring activity as a leading business signal.
-- [Quick Start](https://docs.akta.pro/docs/alternative-data/job-posts/quick-start.md)
-- [Use cases](https://docs.akta.pro/docs/alternative-data/job-posts/use-cases.md)
-- [Best Practices](https://docs.akta.pro/docs/alternative-data/product-reviews/best-practices.md)
-- [Overview](https://docs.akta.pro/docs/alternative-data/product-reviews/overview.md): Fetch a company's full product catalog and, optionally, detailed per-product reviews — including ratings, star distributions, pros and cons, pricing, and structured individual review content sourced from G2 and other review providers.
-- [Quick Start](https://docs.akta.pro/docs/alternative-data/product-reviews/quick-start.md)
-- [Use cases](https://docs.akta.pro/docs/alternative-data/product-reviews/use-cases.md)
-- [Overview](https://docs.akta.pro/docs/alternative-data/social-posts/overview.md): Fetch social media posts published by any company — content type, text, publish date, paid/repost flags, an AI classification, and detailed engagement metrics — to track brand activity and audience response.
-- [Quick Start](https://docs.akta.pro/docs/alternative-data/social-posts/quick-start.md)
-- [Use cases](https://docs.akta.pro/docs/alternative-data/social-posts/use-cases.md)
-- [Overview](https://docs.akta.pro/docs/alternative-data/website-traffic/overview.md): Fetch a company's website traffic signals — visitor engagement metrics, a historical monthly visits trend, and a breakdown of traffic by acquisition channel — sourced from web analytics providers.
-- [Quick Start](https://docs.akta.pro/docs/alternative-data/website-traffic/quick-start.md)
-- [Use cases](https://docs.akta.pro/docs/alternative-data/website-traffic/use-cases.md)
-- [Best Practices](https://docs.akta.pro/docs/company-data/best-practices.md)
-- [Overview](https://docs.akta.pro/docs/company-data/overview.md)
-- [Quick Start](https://docs.akta.pro/docs/company-data/quick-start.md)
-- [Use cases](https://docs.akta.pro/docs/company-data/use-cases.md)
-- [Best Practices](https://docs.akta.pro/docs/news-signals/best-practices.md)
-- [Overview](https://docs.akta.pro/docs/news-signals/overview.md)
-- [Quick Start](https://docs.akta.pro/docs/news-signals/quick-start.md)
-- [Use cases](https://docs.akta.pro/docs/news-signals/use-cases.md)
-- [Company Search](https://docs.akta.pro/docs/supporting-apis/company-search.md)
-- [Industry Search](https://docs.akta.pro/docs/supporting-apis/industry-search.md)
-- [Error codes](https://docs.akta.pro/getting-started/error-codes.md)
-- [Overview](https://docs.akta.pro/getting-started/overview.md)
-- [Pricing](https://docs.akta.pro/getting-started/pricing.md)
-- [Rate limits](https://docs.akta.pro/getting-started/rate-limits.md): Default API rate limits for akta.pro plans and endpoints
-- [Home](https://docs.akta.pro/home.md): Build with akta.pro
-- [Playground](https://docs.akta.pro/playground.md)
-- [akta.pro Website](https://docs.akta.pro/website.md)
+## Getting started
+
+- [Overview](https://docs.akta.pro/getting-started/overview.md): Introduction to the akta.pro API platform, its data products, and how to start building.
+- [Home](https://docs.akta.pro/home.md): Build with akta.pro.
+- [Pricing](https://docs.akta.pro/getting-started/pricing.md): Credit consumption per API, cost per credit, and plan details.
+- [Rate limits](https://docs.akta.pro/getting-started/rate-limits.md): Default API rate limits for akta.pro plans and endpoints.
+- [Error codes](https://docs.akta.pro/getting-started/error-codes.md): Reference for API error responses and their meanings.
+- [Playground](https://docs.akta.pro/playground.md): Try akta.pro API endpoints interactively from the browser.
+
+## News Signals API
+
+- [Overview](https://docs.akta.pro/docs/news-signals/overview.md): Fetch news articles enriched with AI summaries, event types, sentiment, industry tags, named entities, and company mentions, scoped by company, industry, open-ended query, or any other filter.
+- [Quick Start](https://docs.akta.pro/docs/news-signals/quick-start.md): Make your first News Signals call; all filters are optional and open-ended query is supported.
+- [Use cases](https://docs.akta.pro/docs/news-signals/use-cases.md): Company monitoring, industry intelligence, open-ended topic monitoring, and entity tracking.
+- [Best Practices](https://docs.akta.pro/docs/news-signals/best-practices.md): Resolving industry codes, open-ended query and entity filters, deduplication, and pagination.
+- [API reference](https://docs.akta.pro/api-reference/news-signals.md): GET /v1/news — full request parameters and response fields including entities and classification codes.
+
+## Company Data API
+
+- [Overview](https://docs.akta.pro/docs/company-data/overview.md): Structured company data across firmographics, business model, headcount, traffic, funding, financials, acquisitions, and investment data.
+- [Quick Start](https://docs.akta.pro/docs/company-data/quick-start.md): Make your first Company Data call and request only the sections you need.
+- [Use cases](https://docs.akta.pro/docs/company-data/use-cases.md): CRM enrichment, deal screening, funding intelligence, and competitive mapping.
+- [Best Practices](https://docs.akta.pro/docs/company-data/best-practices.md): Requesting sections efficiently, handling enterprise-tier sections, and resolving company identifiers.
+- [API reference](https://docs.akta.pro/api-reference/company-data.md): Enriches a company with firmographics, business model, headcount, traffic, funding, financials, acquisitions, and investment data.
+
+## Alternative Signals
+
+### Employee Reviews API
+
+- [Overview](https://docs.akta.pro/docs/alternative-data/employee-reviews/overview.md): Aggregated employee review signals — overall rating, eight dimension-level scores, and paginated individual reviews with pros, cons, and reviewer metadata, sourced from Glassdoor and other providers.
+- [Quick Start](https://docs.akta.pro/docs/alternative-data/employee-reviews/quick-start.md): Make your first Employee Reviews call and read overall and dimension-level ratings.
+- [Use cases](https://docs.akta.pro/docs/alternative-data/employee-reviews/use-cases.md): Aggregate sentiment snapshots, reading individual reviews, and competitive benchmarking.
+- [API reference](https://docs.akta.pro/api-reference/alternative-data/employee-reviews.md): Overall ratings, dimension-level ratings (culture, work-life balance, senior management, and more), and individual employee reviews.
+
+### Product Reviews API
+
+- [Overview](https://docs.akta.pro/docs/alternative-data/product-reviews/overview.md): A company's full product catalog and, optionally, detailed per-product reviews — ratings, star distributions, pros and cons, pricing, and individual review content sourced from G2 and other providers.
+- [Quick Start](https://docs.akta.pro/docs/alternative-data/product-reviews/quick-start.md): Make your first Product Reviews call and read a company's product catalog and ratings.
+- [Use cases](https://docs.akta.pro/docs/alternative-data/product-reviews/use-cases.md): Aggregate rating snapshots, reading individual reviews, and competitive benchmarking across products.
+- [Best Practices](https://docs.akta.pro/docs/alternative-data/product-reviews/best-practices.md): Handling rating scales, null fields, pagination, and separating verified from unverified reviews.
+- [API reference](https://docs.akta.pro/api-reference/alternative-data/product-reviews.md): Product catalog and detailed reviews per product including ratings, star distribution, pros, cons, pricing, and individual review content.
+
+### Headcount Trends API
+
+- [Overview](https://docs.akta.pro/docs/alternative-data/headcount-trends/overview.md): LinkedIn-sourced headcount — total employee count, historical growth trends, and a functional breakdown of the workforce.
+- [Quick Start](https://docs.akta.pro/docs/alternative-data/headcount-trends/quick-start.md): Make your first Headcount Trends call and read total employees and growth rates.
+- [Use cases](https://docs.akta.pro/docs/alternative-data/headcount-trends/use-cases.md): Growth snapshots, historical trend charting, function-level breakdown, and competitive benchmarking.
+- [API reference](https://docs.akta.pro/api-reference/alternative-data/headcount-trends.md): Total employee count, historical growth trends, and a functional breakdown of the workforce.
+
+### Website Traffic API
+
+- [Overview](https://docs.akta.pro/docs/alternative-data/website-traffic/overview.md): Website traffic signals — engagement metrics, historical monthly visit estimates, and a breakdown of traffic by acquisition source.
+- [Quick Start](https://docs.akta.pro/docs/alternative-data/website-traffic/quick-start.md): Make your first Website Traffic call and read visits and engagement metrics.
+- [Use cases](https://docs.akta.pro/docs/alternative-data/website-traffic/use-cases.md): Engagement snapshots, trend analysis, traffic channel mix, and competitive benchmarking.
+- [API reference](https://docs.akta.pro/api-reference/alternative-data/website-traffic.md): Engagement metrics, historical monthly visit estimates, and a breakdown of traffic by acquisition source.
+
+### Job Posts API
+
+- [Overview](https://docs.akta.pro/docs/alternative-data/job-posts/overview.md): Live LinkedIn and Indeed job listings — title, location, description, compensation, experience level, and extracted key skills.
+- [Quick Start](https://docs.akta.pro/docs/alternative-data/job-posts/quick-start.md): Make your first Job Posts call and list a company's open roles.
+- [Use cases](https://docs.akta.pro/docs/alternative-data/job-posts/use-cases.md): Open roles snapshots, hiring by function and location, skills demand analysis, and compensation benchmarking.
+- [API reference](https://docs.akta.pro/api-reference/alternative-data/job-posts.md): Live LinkedIn and Indeed job listings including title, location, description, compensation, experience level, and extracted key skills.
+
+### Social Posts API
+
+- [Overview](https://docs.akta.pro/docs/alternative-data/social-posts/overview.md): Social media posts published by a company — content type, text, publish date, paid/repost flags, an AI classification, and detailed engagement metrics.
+- [Quick Start](https://docs.akta.pro/docs/alternative-data/social-posts/quick-start.md): Make your first Social Posts call and read post content and engagement.
+- [Use cases](https://docs.akta.pro/docs/alternative-data/social-posts/use-cases.md): Content mix by classification and format, engagement performance, and posting cadence.
+- [API reference](https://docs.akta.pro/api-reference/alternative-data/social-posts.md): Social media posts including content type, text, publish date, paid/repost flags, an AI classification, and detailed engagement metrics.
+
+## Supporting APIs
+
+### Company Search API
+
+- [Overview](https://docs.akta.pro/docs/supporting-apis/company-search.md): Resolve a company by name, website, or UUID and obtain the UUID used by other endpoints.
+- [API reference](https://docs.akta.pro/api-reference/supporting-apis/company-search.md): Resolves a company by name, website, or UUID and returns core identity and classification fields.
+
+### Industry Search API
+
+- [Overview](https://docs.akta.pro/docs/supporting-apis/industry-search.md): Resolve an industry from a free-text query into matching industry codes ranked by similarity.
+- [API reference](https://docs.akta.pro/api-reference/supporting-apis/industry-search.md): Resolves an industry from a free-text query and returns matching industry codes ranked by similarity.
+
+## Resources
+
+- [Changelog](https://docs.akta.pro/changelog.md): New features, enhancements, and updates to the akta.pro API.
+- [Contact](https://docs.akta.pro/contact.md): Get in touch with Wokelo.
+- [Discord](https://docs.akta.pro/discord.md): Join the akta.pro developer community on Discord.
+- [akta.pro Website](https://docs.akta.pro/website.md): The main akta.pro product website.
 
 ## OpenAPI Specs
 
