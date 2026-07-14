@@ -2,9 +2,9 @@
 title: "Overview"
 ---
 
-The Akta Company Data API returns structured data for any company from Akta's native database. Pass a company website domain or UUID and specify which sections you need — only the requested sections are returned, keeping responses lean and processing fast.
+The Akta Company Data API returns structured data for any company from Akta's native database. Pass a company website domain or UUID and specify which sections you need. Only the requested sections are returned, keeping responses lean and processing fast.
 
-This is a **synchronous GET API** — pass parameters in the URL and receive enriched company data immediately in the HTTP response. No polling required.
+This is a **synchronous GET API**. Pass parameters in the URL and receive enriched company data immediately in the HTTP response. No polling required.
 
 **The available sections:**
 
@@ -33,15 +33,15 @@ This is a **synchronous GET API** — pass parameters in the URL and receive enr
 
 **Common use cases:**
 
-- **CRM enrichment on demand** — call the API from a webhook or automation to instantly populate Salesforce, HubSpot, or DealCloud records when a new company is added, using `firmographic` \+ `location` \+ `management_profile` as the base record
-- **Deal screening data pull** — request `firmographic` \+ `financial_estimate` \+ `funding_details` \+ `mna_investment` for a shortlist of targets to build a fast pre-IC data pack
-- **Funding intelligence** — pull `funding_details` and `financial_estimate` for a set of companies to map raise history, identify stage, and track total capital deployed
-- **Traffic and growth signals** — combine `digital_presence` and `financial_estimate` to proxy revenue trajectory and growth momentum for private companies
-- **Competitive and market mapping** — use `industry`, `product_offering`, and `strategic_signal` together to compare positioning, differentiators, and recent moves across a peer set
-- **Tech stack and AI maturity screening** — request `technology` on its own to assess a company's AI capabilities and core stack without pulling unrelated sections
+- **CRM enrichment on demand** : call the API from a webhook or automation to instantly populate Salesforce, HubSpot, or DealCloud records when a new company is added, using `firmographic` \+ `location` \+ `management_profile` as the base record
+- **Deal screening data pull** : request `firmographic` \+ `financial_estimate` \+ `funding_details` \+ `mna_investment` for a shortlist of targets to build a fast pre-IC data pack
+- **Funding intelligence** : pull `funding_details` and `financial_estimate` for a set of companies to map raise history, identify stage, and track total capital deployed
+- **Traffic and growth signals** : combine `digital_presence` and `financial_estimate` to proxy revenue trajectory and growth momentum for private companies
+- **Competitive and market mapping** : use `industry`, `product_offering`, and `strategic_signal` together to compare positioning, differentiators, and recent moves across a peer set
+- **Tech stack and AI maturity screening** : request `technology` on its own to assess a company's AI capabilities and core stack without pulling unrelated sections
 
 <Info>
-  This API is synchronous. Enriched data is returned directly in the HTTP response — no job submission or polling required.
+  This API is synchronous. Enriched data is returned directly in the HTTP response. No job submission or polling required.
 </Info>
 
 ---
