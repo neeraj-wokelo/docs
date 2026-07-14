@@ -2,12 +2,12 @@
 title: "Overview"
 ---
 
-The Website Traffic API returns website traffic signals for any company. A single request returns the most recent month's engagement metrics — total visits, bounce rate, pages per visit, and average time on site — a historical series of estimated monthly visits, and a breakdown of that month's traffic by acquisition channel, including direct, organic and paid search, organic and paid social, referrals, email, affiliate, display ads, and generative AI (answer engines and AI chat assistants).
+The Website Traffic API returns website traffic signals for any company. A single request returns the most recent month's engagement metrics such as total visits, bounce rate, pages per visit, and average time on site that includes a historical series of estimated monthly visits, and a breakdown of that month's traffic by acquisition channel, including direct, organic and paid search, organic and paid social, referrals, email, affiliate, display ads, and generative AI (answer engines and AI chat assistants).
 
 The `traffic_sources` breakdown expresses each channel as a share of total traffic for the reported month, so callers can see at a glance whether a company's growth is driven by brand strength (direct), performance marketing (paid search/social), content and SEO (organic search), or emerging channels like AI-assisted discovery.
 
-This is a **synchronous GET API** — pass a company identifier and receive the full response immediately. The response also reports the credits consumed by the request.
+This is a **synchronous GET API**. Pass a company identifier and receive the full response immediately. The response also reports the credits consumed by the request.
 
 <Info>
-  This API is synchronous. Results are returned directly in the HTTP response — no job submission or polling required.
+  This API is synchronous. Results are returned directly in the HTTP response. No job submission or polling required.
 </Info>
