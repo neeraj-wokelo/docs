@@ -117,6 +117,22 @@
                   "docs/supporting-apis/company-search",
                   "docs/supporting-apis/industry-search"
                 ]
+              },
+              {
+                "group": "MCP",
+                "hidden": true,
+                "expanded": true,
+                "pages": [
+                  "getting-started"
+                ]
+              },
+              {
+                "group": "CLI",
+                "hidden": true,
+                "expanded": true,
+                "pages": [
+                  "new"
+                ]
               }
             ]
           },

@@ -1,0 +1,228 @@
+---
+title: "Quick Start"
+description: "Complete setup guide for Akta MCP Server. Connect Claude Desktop, Cursor, VS Code, and other AI assistants to Akta's company search, company data, news, and alternative signal tools."
+---
+
+Akta MCP connects AI assistants to Akta Pro's company-intelligence stack, including company search, structured company profiles, news monitoring, and alternative signals like headcount, traffic, and reviews.
+
+# Installation
+
+Akta's MCP server can be installed in any MCP client with the server URL: `https://mcp.akta.pro/mcp`
+
+<CardGroup cols={2}>
+  <Card title="Install in Cursor" icon="arrow-up-left" href="https://cursor.com/en/install-mcp?name=akta%20mcp&config=eyJ1cmwiOiJodHRwczovL21jcC5kZXZ3ay5jb20vbWNwIn0=" cta="Install">
+    One-click install for Cursor
+  </Card>
+
+  <Card title="Install in VS Code" icon="code" href="https://insiders.vscode.dev/redirect/mcp/install?name=akta%20mcp&config=%7B%22type%22%3A%22http%22%2C%22url%22%3A%22https%3A%2F%2Fmcp.devwk.com%2Fmcp%22%7D" cta="Install">
+    One-click install for VS Code
+  </Card>
+</CardGroup>
+
+<Tabs>
+  <Tab title="Claude Web, Desktop">
+    1. Open Claude and click **Settings** (or **Customize**) from the sidebar
+    2. Go to **Connectors → Add Connectors**
+    3. Enter the name `Akta` and the server URL `https://mcp.devwk.com/mcp`
+    4. Click **Add**, then complete the authentication
+  </Tab>
+  <Tab title="Cursor">
+    Add to `~/.cursor/mcp.json`:
+
+    ```json
+    {
+      "mcpServers": {
+        "akta": {
+          "url": "https://mcp.devwk.com/mcp",
+          "headers": {
+            "x-api-key": "YOUR_AKTA_API_KEY"
+          }
+        }
+      }
+    }
+    ```
+  </Tab>
+  <Tab title="VS Code">
+    Add to `.vscode/mcp.json` in your project root:
+
+    ```json
+    {
+      "servers": {
+        "akta": {
+          "type": "http",
+          "url": "https://mcp.devwk.com/mcp",
+          "headers": {
+            "x-api-key": "YOUR_AKTA_API_KEY"
+          }
+        }
+      }
+    }
+    ```
+  </Tab>
+  <Tab title="Claude Code">
+    Run in terminal:
+
+    ```bash
+    claude mcp add --transport http akta https://mcp.devwk.com/mcp --header "x-api-key: <YOUR_API_KEY>"
+    ```
+  </Tab>
+  <Tab title="OpenCode">
+    Add to your `opencode.json`:
+
+    ```json
+    {
+      "mcp": {
+        "akta": {
+          "type": "remote",
+          "url": "https://mcp.devwk.com/mcp",
+          "enabled": true
+        }
+      }
+    }
+    ```
+  </Tab>
+  <Tab title="Other">
+    Akta MCP works with most other MCP clients — point them at `https://mcp.devwk.com/mcp`. The config key for the URL varies by client:
+
+    | Client | Where to add it | URL key |
+    | --- | --- | --- |
+    | Windsurf | `~/.codeium/windsurf/mcp_config.json` (under `mcpServers`) | `serverUrl` |
+    | Google Antigravity | Agent panel → Manage MCP Servers → View Raw config (under `mcpServers`) | `serverUrl` |
+    | Zed | Zed `settings.json` (under `context_servers`) | `url` |
+    | Gemini CLI | `~/.gemini/settings.json` (under `mcpServers`) | `httpUrl` |
+    | Warp | Settings → MCP Servers → Add MCP Server (top-level `akta`) | `url` |
+
+    Most other clients use the standard `mcpServers` shape:
+
+    ```json
+    {
+      "mcpServers": {
+        "akta": {
+          "url": "https://mcp.devwk.com/mcp"
+        }
+      }
+    }
+    ```
+
+    If your client doesn't support remote MCP servers directly, use the `mcp-remote` bridge:
+
+    ```json
+    {
+      "mcpServers": {
+        "akta": {
+          "command": "npx",
+          "args": ["-y", "mcp-remote", "https://mcp.devwk.com/mcp"]
+        }
+      }
+    }
+    ```
+  </Tab>
+</Tabs>
+
+# API Key
+
+<Card title="Get your Akta API key" icon="key" horizontal href="https://dashboard.devwk.com/api-keys">
+</Card>
+
+Your key resolves to a plan tier — **pay-as-you-go**, **subscription**, or **enterprise** — which determines what the tools below can return. Call `account_status` at any time to check your tier and remaining credit balance.
+
+# Available Tools
+
+All Akta tools are **synchronous** — a call returns its data immediately, with no polling required. Only `company_data` returns **Markdown**; every other tool returns **JSON**.
+
+**Free, resolve-first tools:**
+
+| Tool | Description |
+| --- | --- |
+| `company_search` | Resolve a company name or website to Akta identifiers (`uuid`, website, status) |
+| `industry_search` | Resolve a free-text industry or topic to ranked industry codes, used to filter news by industry |
+| `account_status` | Your plan tier (`is_enterprise`, `package_type`) and remaining credit balance |
+
+**Company data:**
+
+| Tool | Description |
+| --- | --- |
+| `company_data` | Rich, structured company profile as Markdown. Sections are selected explicitly and billed individually |
+| `company_data_concise` | A single condensed company overview in JSON — no section selection, cheapest way to get a fast read |
+
+**News:**
+
+| Tool | Description |
+| --- | --- |
+| `news_signals` | List news filtered by company, industry, query, or title, with sentiment and AI summaries. No full article text |
+| `news_detail` | Full article body for specific article IDs returned by `news_signals` (max 10 per call) |
+| `news_types` | The news-type taxonomy — 77 tag codes across 11 categories, used to filter `news_signals` by kind of news |
+
+**Additional tools** (require Subscription or Enterprise):
+
+| Tool | Description |
+| --- | --- |
+| `headcount_trends` | Employee-count trend over time |
+| `website_traffic` | Web-traffic estimates |
+| `employee_reviews` | Glassdoor-style employee sentiment |
+| `product_reviews` | Product-level reviews — call without a product ID first to list the catalog |
+| `job_posts` | Open roles and hiring signal |
+| `social_posts` | Company social posts |
+
+A call to any of the tools above on a plan that doesn't cover it returns `403`. Enterprise-only `company_data` sections (`funding_detail`, `mna_and_investment`) don't error on lower tiers — they're silently skipped, and the returned Markdown notes what was dropped.
+
+# Credits
+
+Refer to the Pricing page to know more about credits used in each underlying tool.
+
+# Resources
+
+- [**Skill File**](https://wkemails.blob.core.windows.net/clients/%28%27f773bdde-8a2d-4531-960f-7aabcb863042%27%2C%29/Skill%20%283%29.md) - Orchestration guide for AI assistants using Akta
+
+<Accordion title="Usage Examples" icon="magnifying-glass">
+  **Company Overview**
+
+  ```text
+  Tell me about Stripe — recent news, headcount, and product lineup.
+  ```
+
+  **Structured Company Data**
+
+  ```text
+  Pull the firmographic and management profile for Anthropic.
+  ```
+
+  **Filtered News**
+
+  ```text
+  Show me only M&A news on Adobe from the last quarter.
+  ```
+
+  **Alternative Signals**
+
+  ```text
+  How has Notion's headcount trended over the past year, and what's their current hiring look like?
+  ```
+</Accordion>
+
+<Accordion title="Troubleshooting" icon="wrench">
+  **403 error**
+
+  Your plan or credit balance doesn't cover the requested tool — most commonly an alternative signal (`headcount_trends`, `website_traffic`, `employee_reviews`, `product_reviews`, `job_posts`, `social_posts`) on a pay-as-you-go plan. Call `account_status` to confirm your tier, then upgrade or top up.
+
+  **Missing funding\_detail or mna\_and\_investment**
+
+  These `company_data` sections are enterprise-only and are silently skipped (not an error) on lower tiers. The returned Markdown notes what was dropped.
+
+  **Tools not appearing**
+
+  Restart your MCP client after updating the config file. Some clients require a full restart to detect new MCP servers.
+
+  **Claude not connecting**
+
+  Use the built-in connector: click **\+** (or **Add connectors**) → **Connectors** tab → search for **Akta** → click **\+**.
+
+  **Config file not found**
+
+  Common config locations:
+
+  - Cursor: `~/.cursor/mcp.json`
+  - VS Code: `.vscode/mcp.json` (in project root)
+  - Claude Desktop (macOS): `~/Library/Application Support/Claude/claude_desktop_config.json`
+  - Claude Desktop (Windows): `%APPDATA%\Claude\claude_desktop_config.json`
+</Accordion>
