@@ -472,7 +472,9 @@
             "name": "sentiment_list",
             "in": "query",
             "required": false,
-            "schema": {"type": "string", "enum": ["positive", "negative", "neutral", "all"]},
+            "schema": {
+              "type": "string"
+            },
             "description": "Comma-separated list of sentiments to filter by. Accepted values: positive, negative, neutral, all. Default = all. Example: sentiment_list=positive,negative"
           },
           {
@@ -633,10 +635,9 @@
             "in": "query",
             "required": false,
             "schema": {
-              "type": "string",
-              "enum": ["firmographic", "business_model", "company_assessment", "trust_signal", "company_hierarchy", "digital_presence", "financial_estimate", "location", "management_profile", "product_offering", "strategic_signal", "customer_profile", "industry", "technology", "funding_detail", "mna_and_investment"]
+              "type": "string"
             },
-            "description": "Comma-separated list of sections to return. If omitted, all available sections are returned. Available values: firmographic, business_model, company_assessment, trust_signal, company_hierarchy, digital_presence, financial_estimate, location, management_profile, product_offering, strategic_signal, customer_profile, industry, technology, funding_detail, mna_and_investment. Note: funding_detail and mna_and_investment are available on the Enterprise tier only."
+            "description": "Comma-separated list of sections to return. Copy-paste example: `firmographic,business_model,company_assessment,trust_signal,company_hierarchy,digital_presence,financial_estimate,location,management_profile,product_offering,strategic_signal,customer_profile,industry,technology,funding_detail,mna_and_investment`. Note: `funding_detail` and `mna_and_investment` are available on the Enterprise tier only."
           }
         ],
         "responses": {
