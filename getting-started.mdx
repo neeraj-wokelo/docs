@@ -10,11 +10,11 @@ Akta MCP connects AI assistants to Akta Pro's company-intelligence stack, includ
 Akta's MCP server can be installed in any MCP client with the server URL: `https://mcp.akta.pro/mcp`
 
 <CardGroup cols={2}>
-  <Card title="Install in Cursor" icon="arrow-up-left" href="https://cursor.com/en/install-mcp?name=akta%20mcp&config=eyJ1cmwiOiJodHRwczovL21jcC5kZXZ3ay5jb20vbWNwIn0=" cta="Install">
+  <Card title="Install in Cursor" icon="arrow-up-left" href="https://cursor.com/en/install-mcp?name=akta%20mcp&config=eyJ1cmwiOiJodHRwczovL21jcC5ha3RhLnByby9tY3AifQ==" cta="Install">
     One-click install for Cursor
   </Card>
 
-  <Card title="Install in VS Code" icon="code" href="https://insiders.vscode.dev/redirect/mcp/install?name=akta%20mcp&config=%7B%22type%22%3A%22http%22%2C%22url%22%3A%22https%3A%2F%2Fmcp.devwk.com%2Fmcp%22%7D" cta="Install">
+  <Card title="Install in VS Code" icon="code" href="https://insiders.vscode.dev/redirect/mcp/install?name=akta%20mcp&config=%7B%22type%22%3A%22http%22%2C%22url%22%3A%22https%3A%2F%2Fmcp.akta.pro%2Fmcp%22%7D" cta="Install">
     One-click install for VS Code
   </Card>
 </CardGroup>
@@ -23,7 +23,7 @@ Akta's MCP server can be installed in any MCP client with the server URL: `https
   <Tab title="Claude Web, Desktop">
     1. Open Claude and click **Settings** (or **Customize**) from the sidebar
     2. Go to **Connectors → Add Connectors**
-    3. Enter the name `Akta` and the server URL `https://mcp.devwk.com/mcp`
+    3. Enter the name `Akta` and the server URL `https://mcp.akta.pro/mcp`
     4. Click **Add**, then complete the authentication
   </Tab>
   <Tab title="Cursor">
@@ -33,7 +33,7 @@ Akta's MCP server can be installed in any MCP client with the server URL: `https
     {
       "mcpServers": {
         "akta": {
-          "url": "https://mcp.devwk.com/mcp",
+          "url": "https://mcp.akta.pro/mcp",
           "headers": {
             "x-api-key": "YOUR_AKTA_API_KEY"
           }
@@ -50,7 +50,7 @@ Akta's MCP server can be installed in any MCP client with the server URL: `https
       "servers": {
         "akta": {
           "type": "http",
-          "url": "https://mcp.devwk.com/mcp",
+          "url": "https://mcp.akta.pro/mcp",
           "headers": {
             "x-api-key": "YOUR_AKTA_API_KEY"
           }
@@ -63,7 +63,7 @@ Akta's MCP server can be installed in any MCP client with the server URL: `https
     Run in terminal:
 
     ```bash
-    claude mcp add --transport http akta https://mcp.devwk.com/mcp --header "x-api-key: <YOUR_API_KEY>"
+    claude mcp add --transport http akta https://mcp.akta.pro/mcp --header "x-api-key: <YOUR_API_KEY>"
     ```
   </Tab>
   <Tab title="OpenCode">
@@ -74,44 +74,8 @@ Akta's MCP server can be installed in any MCP client with the server URL: `https
       "mcp": {
         "akta": {
           "type": "remote",
-          "url": "https://mcp.devwk.com/mcp",
+          "url": "https://mcp.akta.pro/mcp",
           "enabled": true
-        }
-      }
-    }
-    ```
-  </Tab>
-  <Tab title="Other">
-    Akta MCP works with most other MCP clients — point them at `https://mcp.devwk.com/mcp`. The config key for the URL varies by client:
-
-    | Client | Where to add it | URL key |
-    | --- | --- | --- |
-    | Windsurf | `~/.codeium/windsurf/mcp_config.json` (under `mcpServers`) | `serverUrl` |
-    | Google Antigravity | Agent panel → Manage MCP Servers → View Raw config (under `mcpServers`) | `serverUrl` |
-    | Zed | Zed `settings.json` (under `context_servers`) | `url` |
-    | Gemini CLI | `~/.gemini/settings.json` (under `mcpServers`) | `httpUrl` |
-    | Warp | Settings → MCP Servers → Add MCP Server (top-level `akta`) | `url` |
-
-    Most other clients use the standard `mcpServers` shape:
-
-    ```json
-    {
-      "mcpServers": {
-        "akta": {
-          "url": "https://mcp.devwk.com/mcp"
-        }
-      }
-    }
-    ```
-
-    If your client doesn't support remote MCP servers directly, use the `mcp-remote` bridge:
-
-    ```json
-    {
-      "mcpServers": {
-        "akta": {
-          "command": "npx",
-          "args": ["-y", "mcp-remote", "https://mcp.devwk.com/mcp"]
         }
       }
     }
@@ -121,7 +85,7 @@ Akta's MCP server can be installed in any MCP client with the server URL: `https
 
 # API Key
 
-<Card title="Get your Akta API key" icon="key" horizontal href="https://dashboard.devwk.com/api-keys">
+<Card title="Get your Akta API key" icon="key" horizontal href="https://playground.akta.pro">
 </Card>
 
 Your key resolves to a plan tier — **pay-as-you-go**, **subscription**, or **enterprise** — which determines what the tools below can return. Call `account_status` at any time to check your tier and remaining credit balance.

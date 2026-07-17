@@ -17,25 +17,30 @@ The `akta` CLI is a command-line client for the [Akta REST API](https://api.akta
 
     The `akta` command depends only on `httpx`, `typer`, and `rich`.
   </Tab>
-  <Tab title="pip">
-  </Tab>
   <Tab title="uv">
+    [`uv`](https://docs.astral.sh/uv/) is Astral's faster modern alternative to pipx. It writes a PATH-aware shim on first run, so no extra setup step is needed:
+
+    ```bash
+    uv tool install "git+https://github.com/Wokelo-AI/Akta-CLI@v0.2.1"
+    ```
+
+    Requires `uv` to be installed first — see [Astral's install guide](https://docs.astral.sh/uv/getting-started/installation/).
+  </Tab>
+  <Tab title="pip">
+    Use `pip` when you're embedding `akta-cli` in a Python project (rather than using `akta` as a standalone tool — see the **pipx** or **uv** tabs for that):
+
+    ```bash
+    pip install "git+https://github.com/Wokelo-AI/Akta-CLI@v0.2.1"
+    ```
   </Tab>
 </Tabs>
 
 ## Authentication
 
-v1 authenticates with an Akta API key (`wk_...`), minted at [playground.akta.pro](https://playground.akta.pro) (sign up → API Keys). There are three ways to supply it, in precedence order:
+v1 authenticates with an Akta API key (`wk_...`), minted at [playground.akta.pro](https://playground.akta.pro) (sign up → API Keys).
 
 ```bash
-# 1. Explicit flag
-akta --api-key wk_...  company search Canva
-
-# 2. Environment variable
-export AKTA_API_KEY=wk_...
-
-# 3. Stored (prompts, or --api-key)
-akta login
+akta login --api-key wk_...
 ```
 
 `akta login` validates the key against a free endpoint and stores it at `~/.config/akta/credentials.json` (mode `0600`; `%APPDATA%\akta` on Windows).
@@ -76,11 +81,11 @@ akta company data canva.com -s firmographic --raw
 akta company concise canva.com
 ```
 
-| Command | Cost | Notes |
-| --- | --- | --- |
-| `akta company search <query>` | free | run first; returns `uuid` |
-| `akta company data <company> -s ...` | per section | Markdown; requires ≥1 `--section` |
-| `akta company concise <company>` | 8 | slimmed JSON |
+| Command | Cost | Notes |  |
+| --- | --- | --- | --- |
+| `akta company search <query>` | free | run first; returns `uuid` |  |
+| `akta company data <company> -s ...` | per section | Markdown; requires ≥1 `--section` |  |
+| `akta company concise <company>` | 8 | slimmed JSON |  |
 
 <Accordion title="company data sections">
   Each section is billed separately: `firmographic`, `business_model`, `company_assessment`, `trust_signal`, `company_hierarchy`, `digital_presence`, `financial_estimate`, `location`, `management_profile`, `product_offering`, `strategic_signal`, `customer_profile`, `industry`, `technology`, plus enterprise-only `funding_detail` (3) and `mna_and_investment` (5).
