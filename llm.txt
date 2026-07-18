@@ -84,6 +84,16 @@
 - [Overview](https://docs.akta.pro/docs/supporting-apis/industry-search.md): Resolve an industry from a free-text query into matching industry codes ranked by similarity.
 - [API reference](https://docs.akta.pro/api-reference/supporting-apis/industry-search.md): Resolves an industry from a free-text query and returns matching industry codes ranked by similarity.
 
+## References
+
+- [Company Data dictionary](https://docs.akta.pro/company-data-dictionary.md): Field-by-field reference for every section and attribute returned by the Company Data API.
+- [News Types](https://docs.akta.pro/news-types.md): Reference list of event types used to classify articles returned by the News Signals API.
+- [IPTC Codes](https://docs.akta.pro/iptc-codes.md): Reference list of IPTC media topic codes used for news and content classification.
+- [IAB Codes](https://docs.akta.pro/iab-codes.md): Reference list of IAB content taxonomy codes used for industry and topic classification.
+- [NAICS Codes](https://docs.akta.pro/naics-codes.md): Reference list of NAICS industry classification codes used across the API.
+- [SIC Codes](https://docs.akta.pro/sic-codes.md): Reference list of SIC industry classification codes used across the API.
+- [ISO Country Codes](https://docs.akta.pro/country-codes.md): Reference list of ISO country codes used for location fields across the API.
+
 ## Resources
 
 - [Changelog](https://docs.akta.pro/changelog.md): New features, enhancements, and updates to the akta.pro API.
