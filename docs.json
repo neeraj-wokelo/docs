@@ -123,7 +123,7 @@
                 "hidden": true,
                 "expanded": true,
                 "pages": [
-                  "getting-started"
+                  "mcp-quick-start"
                 ]
               },
               {
@@ -131,7 +131,7 @@
                 "hidden": true,
                 "expanded": true,
                 "pages": [
-                  "new"
+                  "cli-quick-start"
                 ]
               },
               "references",
