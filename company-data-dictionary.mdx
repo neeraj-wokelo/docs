@@ -7405,6 +7405,175 @@ Akta company data is organized into **15 Level-1 (L1) sections** — the same se
     </Tabs>
   </Accordion>
 
+  <Accordion title="Trust Signal (4 fields)">
+    `trust_signal` Third-party validation signals covering certifications, regulatory/legal activity, external recognition, and intellectual property.
+
+    | **Field** | **Type** | **Description** |
+    | :-- | :-- | :-- |
+    | `compliance` | array of objects (class, name, description, source) | Certifications, standards, and regulatory frameworks the company adheres to (e.g., SOC 2 Type II, GDPR, HIPAA), including badge/attestation confirmations. |
+    | `regulatory_updates` | array of objects (title, type, description, source) | Legal and regulatory activity involving the company — investigations, lawsuits, approvals, or agency actions — tagged by type (e.g., investigation, lawsuit, approval). |
+    | `awards` | array of objects (title, body, type, description, source) | External recognition such as best-in-class list placements, customer/peer review ratings, analyst rankings, or market performance milestones. |
+    | `ip` | array of objects (title, type, status, description, source) | Intellectual property activity including patents and trademarks, with filing/grant status (e.g., Filed Pending, Registered Granted) and type (inventions/methods, brand identity). |
+
+    **View Samples**
+
+    <Tabs>
+      <Tab title="n8n">
+        ```json
+        {
+                    "compliance": [
+                      {
+                        "class": {
+                          "code": "soc",
+                          "label": "Soc"
+                        },
+                        "name": {
+                          "code": "soc2_type2",
+                          "label": "Soc2 Type2"
+                        },
+                        "description": "SOC 2 Type II certification confirmed with badge displayed. Regular external penetration testing performed.",
+                        "source": ["https://n8n.io/integrations/"]
+                      },
+                      {
+                        "class": {
+                          "code": "privacy_data_protection",
+                          "label": "Privacy Data Protection"
+                        },
+                        "name": {
+                          "code": "gdpr_compliant",
+                          "label": "Gdpr Compliant"
+                        },
+                        "description": "GDPR compliance confirmed with badge displayed on security page. Data stored in EU (Frankfurt, Germany) for cloud deployments.",
+                        "source": ["https://n8n.io/integrations/"]
+                      }
+                    ],
+                    "regulatory_updates": [
+                      {
+                        "title": "CISA RCE Vulnerability Exploitation",
+                        "type": "investigation",
+                        "description": "CISA announced hackers are exploiting a critical remote code execution vulnerability in the n8n workflow automation platform, with a large share of self-hosted users appearing vulnerable.",
+                        "source": ["https://go.theregister.com/feed/www.theregister.com/2026/03/12/cisa_n8n_rce/"]
+                      },
+                      {
+                        "title": "Belgium Critical Security Advisory",
+                        "type": "investigation",
+                        "description": "The Centre for Cybersecurity Belgium issued a critical advisory disclosing several severe vulnerabilities in n8n with high CVSS scores.",
+                        "source": ["https://ccb.belgium.be/advisories/warning-critical-vulnerabilities-n8n-patch-immediately"]
+                      }
+                    ],
+                    "awards": [
+                      {
+                        "title": "Top 50 GitHub Project",
+                        "body": "GitHub",
+                        "type": {
+                          "code": "best_in_class_list",
+                          "label": "Best-in-class list"
+                        },
+                        "description": "Ranked among Top 50 GitHub projects with 194,063+ stars, indicating extreme popularity and community trust.",
+                        "source": ["https://n8n.io/"]
+                      },
+                      {
+                        "title": "Most Valuable German AI Company",
+                        "body": "Industry Reporting",
+                        "type": {
+                          "code": "analyst_ranking",
+                          "label": "Analyst Ranking"
+                        },
+                        "description": "Valued at €5.2 billion, making n8n the most valuable German AI company.",
+                        "source": ["https://n8n.io/"]
+                      }
+                    ],
+                    "ip": []
+                  }
+        ```
+      </Tab>
+      <Tab title="Tesla">
+        ```json
+        {
+                    "compliance": [
+                      {
+                        "class": {
+                          "code": "us_federal_defense",
+                          "label": "Us Federal Defense"
+                        },
+                        "name": {
+                          "code": "nhtsa_power_steering_investigation_closure",
+                          "label": "NHTSA Power Steering Investigation Closure"
+                        },
+                        "description": "NHTSA closed its multi-year investigation into approximately 376,241 Model 3 and Model Y vehicles regarding power steering loss after Tesla addressed the issue via an over-the-air update and voluntary recall.",
+                        "source": ["https://www.tipranks.com/news/tesla-tsla-stock-gains-as-nhtsa-closes-model-3-and-model-y-steering-probe"]
+                      }
+                    ],
+                    "regulatory_updates": [
+                      {
+                        "title": "NHTSA Power Steering Probe Closure",
+                        "type": "investigation",
+                        "description": "NHTSA closed its investigation into Tesla vehicles regarding power steering loss after a recall and software update addressed the issue.",
+                        "source": ["https://www.benzinga.com/markets/tech/26/06/60146582/nhtsa-closes-tesla-power-steering-probe-after-recall-fix"]
+                      },
+                      {
+                        "title": "FSD Pedestrian Crash Lawsuit Settlement",
+                        "type": "lawsuit",
+                        "description": "Tesla settled a lawsuit concerning a 2023 pedestrian fatality involving a Model Y operating on Full Self-Driving technology.",
+                        "source": ["https://www.engadget.com/2203211/tesla-settles-lawsuit-over-fatal-pedestrian-crash-involving-full-self-driving/"]
+                      }
+                    ],
+                    "awards": [
+                      {
+                        "title": "Cars.com American Made Index - #1 and #2 Rankings",
+                        "body": "Cars.com",
+                        "type": {
+                          "code": "best_in_class_list",
+                          "label": "Best-in-class list"
+                        },
+                        "description": "Model 3 ranked #1 and Model Y ranked #2 in the 2026 American Made Index for the sixth consecutive year.",
+                        "source": ["https://www.ainvest.com/news/tech-lost-4-week-ai-capex-fomo-meets-rate-shock-2606/"]
+                      },
+                      {
+                        "title": "European EV Sales Leadership",
+                        "body": "Market Performance",
+                        "type": {
+                          "code": "market_performance",
+                          "label": "Market Performance"
+                        },
+                        "description": "Tesla sales in Europe rose 77% year-over-year from January through May 2026, led by strong Model Y and Model 3 growth.",
+                        "source": ["https://www.nytimes.com/2026/06/26/business/tesla-elon-musk-europe.html"]
+                      }
+                    ],
+                    "ip": [
+                      {
+                        "title": "Vehicular Seat Suspension System",
+                        "type": {
+                          "code": "inventions_methods",
+                          "label": "Inventions Methods"
+                        },
+                        "status": {
+                          "code": "registered_granted",
+                          "label": "Registered Granted"
+                        },
+                        "description": "Patent granted for an electromagnetic seat suspension system with a crash interlock to prevent seat assembly separation during collisions.",
+                        "source": ["https://www.thecooldown.com/green-tech/tesla-explores-new-electromagnetic-seat-system/"]
+                      },
+                      {
+                        "title": "Megapod",
+                        "type": {
+                          "code": "brand_identity",
+                          "label": "Brand Identity"
+                        },
+                        "status": {
+                          "code": "filed_pending",
+                          "label": "Filed Pending"
+                        },
+                        "description": "Trademark filed for a self-contained modular AI computing platform, expanding beyond core EV and energy businesses into data center infrastructure.",
+                        "source": ["https://www.techradar.com/pro/megapod-is-the-modular-ai-data-center-kit-that-elon-musks-tesla-wants-to-sell-but-theres-a-tiny-problem-actually-three"]
+                      }
+                    ]
+                  }
+        ```
+      </Tab>
+    </Tabs>
+  </Accordion>
+
   <Accordion title="Management Profile (2 fields)">
     `management_profile` Executive leadership team profiles.
 
