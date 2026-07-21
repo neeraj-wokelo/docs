@@ -1,0 +1,68 @@
+---
+title: "Credits"
+---
+
+Each akta.pro MCP tool consumes credits per call, mirroring the underlying API pricing. The tables below list the credits consumed by each tool.
+
+## Free tools
+
+These resolve-first and account tools are free and do not consume credits.
+
+| Tool | Credits Consumed |
+| :-- | :-- |
+| `company_search` | 0 |
+| `industry_search` | 0 |
+| `account_status` | 0 |
+| `news_types` | 0 |
+
+## Company data
+
+`company_data` is billed per section, so you only pay for the sections you request. `company_data_concise` returns a single condensed overview at a flat rate.
+
+| Tool | Section | Credits Consumed |
+| :-- | :-- | :-- |
+| `company_data` | Firmographic | 2 |
+| `company_data` | Business Model | 2 |
+| `company_data` | Company Assessment | 2 |
+| `company_data` | Trust Signal | 0.5 |
+| `company_data` | Company Hierarchy | 0.5 |
+| `company_data` | Digital Presence | 0.5 |
+| `company_data` | Financial Estimate | 0.5 |
+| `company_data` | Location | 0.5 |
+| `company_data` | Management Profile | 1.5 |
+| `company_data` | Product Offering | 2 |
+| `company_data` | Strategic Signal | 1.5 |
+| `company_data` | Customer Profile | 1 |
+| `company_data` | Industry | 1 |
+| `company_data` | Technology | 2 |
+| `company_data` | Funding Detail _(enterprise)_ | 3 |
+| `company_data` | M&A and Investment _(enterprise)_ | 5 |
+| `company_data_concise` | — | 8 |
+
+<Note>
+  Enterprise-only `company_data` sections (`funding_detail`, `mna_and_investment`) are silently skipped on lower tiers rather than billed — the returned Markdown notes what was dropped.
+</Note>
+
+## News
+
+| Tool | Credits Consumed |
+| :-- | :-- |
+| `news_signals` | 0.1 per call, 0.01 per news article |
+| `news_detail` |  |
+
+## Additional tools
+
+These tools require a Subscription or Enterprise plan. A call on a plan that doesn't cover the tool returns `403`.
+
+| Tool | Credits Consumed |
+| :-- | :-- |
+| `headcount_trends` | 2.5 |
+| `website_traffic` | 1.5 |
+| `job_posts` | 4 credits for 10 records |
+| `social_posts` | 1 credit for 10 records |
+| `employee_reviews` | 1.5 credits for 50 records |
+| `product_reviews` | 1.5 credits for 50 records |
+
+<Note>
+  For cost per credit and rate limits by plan, see the [Pricing](/getting-started/pricing) page.
+</Note>

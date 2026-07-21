@@ -147,14 +147,18 @@
                 "group": "MCP",
                 "expanded": true,
                 "pages": [
-                  "docs/mcp/quick-start"
+                  "docs/developer-tools/mcp/setup",
+                  "docs/developer-tools/mcp/tools",
+                  "docs/developer-tools/mcp/credits"
                 ]
               },
               {
                 "group": "CLI",
                 "expanded": true,
                 "pages": [
-                  "docs/cli/quick-start"
+                  "docs/developer-tools/cli/setup",
+                  "docs/developer-tools/cli/commands",
+                  "docs/developer-tools/cli/credits"
                 ]
               }
             ]
