@@ -42,9 +42,9 @@ print(f"Returned {data['count']} of {data['total']} articles")
 
 </CodeGroup>
 
-If you have company name as the starting point, you should first use [Company Search AP](company-search-doc)I to find the Akta UUID and then use the News Signals API.
+If you have company name as the starting point, you should first use [Company Search AP](/docs/supporting-apis/company-search)I to find the Akta UUID and then use the News Signals API.
 
-If you have industry name as the starting point, you should first use [Industry Search API](https://docs.akta.pro/industry-search-api) to find the industry codes as per Akta's industry taxonomy and then use the News Signals API.
+If you have industry name as the starting point, you should first use [Industry Search API](/docs/supporting-apis/industry-search) to find the industry codes as per Akta's industry taxonomy and then use the News Signals API.
 
 <Note>
   `company` and `industry` are both **optional**. You are not required to scope a request to either one. If you want to monitor a custom signal, theme, or narrative that doesn't map to a specific company or industry. For example if you want to get news related to`"tariffs"`, `"data center buildout"`, or `"AI regulation",`pass it directly as an open-ended `query` string instead. This lets you track news around a topic without first resolving it to a company UUID or industry code.
