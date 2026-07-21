@@ -351,6 +351,147 @@
           "language": {"type": "string", "description": "Language code of the review."},
           "provider": {"type": "string", "description": "Review provider identifier."}
         }
+      },
+      "CompanyAdditionRequest": {
+        "required": ["company_name", "website"],
+        "type": "object",
+        "properties": {
+          "company_name": {
+            "description": "Name of the company to add. Example: solios",
+            "type": "string"
+          },
+          "website": {
+            "description": "Primary website URL of the company. Used to disambiguate and resolve the company. Example: https://www.soleosenergy.com/",
+            "type": "string"
+          }
+        }
+      },
+      "CompanyAdditionResponse": {
+        "type": "object",
+        "properties": {
+          "already_exists": {
+            "description": "true if the company is already in the database, in which case no addition request is created. false if a new addition request was created.",
+            "type": "boolean"
+          },
+          "company": {
+            "description": "The existing company's details when already_exists is true; otherwise null.",
+            "oneOf": [
+              {"$ref": "#/components/schemas/ExistingCompany"},
+              {"type": "null"}
+            ]
+          },
+          "request_id": {
+            "description": "Unique identifier for the addition request, in UUID format. Use this to check request status or match webhook notifications. null when the company already exists.",
+            "type": "string",
+            "nullable": true
+          },
+          "status": {
+            "description": "Current status of the addition request at submission time. Typically pending. null when the company already exists.",
+            "type": "string",
+            "nullable": true
+          },
+          "domain": {
+            "description": "The resolved domain for the submitted company.",
+            "type": "string"
+          },
+          "credits_consumed": {
+            "description": "Credits consumed by the request. This endpoint is free and always returns 0.00.",
+            "type": "number"
+          }
+        }
+      },
+      "ExistingCompany": {
+        "type": "object",
+        "properties": {
+          "uuid": {
+            "description": "Unique identifier for the company. Pass this as the company parameter in downstream APIs.",
+            "type": "string"
+          },
+          "website": {
+            "description": "Primary website of the company.",
+            "type": "string"
+          },
+          "domain": {
+            "description": "Resolved domain of the company.",
+            "type": "string"
+          },
+          "name": {
+            "description": "Company name.",
+            "type": "string"
+          },
+          "legal_name": {
+            "description": "Legal or registered name of the company.",
+            "type": "string"
+          }
+        }
+      },
+      "StatusResponse": {
+        "type": "object",
+        "properties": {
+          "request_id": {
+            "description": "Unique identifier of the request being tracked.",
+            "type": "string"
+          },
+          "request_type": {
+            "description": "The type of request. Example: company_addition",
+            "type": "string"
+          },
+          "status": {
+            "description": "Current status of the request. Possible values: pending, in_progress, completed, failed.",
+            "type": "string"
+          },
+          "created_at": {
+            "description": "Timestamp when the request was created, in ISO 8601 format.",
+            "type": "string"
+          },
+          "updated_at": {
+            "description": "Timestamp when the request was last updated, in ISO 8601 format.",
+            "type": "string"
+          },
+          "detail": {
+            "$ref": "#/components/schemas/StatusDetail"
+          }
+        }
+      },
+      "StatusDetail": {
+        "description": "Request-type-specific details for company_addition request.",
+        "type": "object",
+        "properties": {
+          "company_addition_request_id": {
+            "description": "Identifier of the underlying request record.",
+            "type": "string"
+          },
+          "company_name": {
+            "description": "Name of the company submitted for addition.",
+            "type": "string"
+          },
+          "domain": {
+            "description": "Resolved domain of the submitted company.",
+            "type": "string"
+          },
+          "status": {
+            "description": "Status of the underlying request. Possible values: pending, in_progress, completed, failed.",
+            "type": "string"
+          },
+          "reason": {
+            "description": "Explanation when the request did not succeed. null unless the request has failed.",
+            "type": "string",
+            "nullable": true
+          },
+          "company_uuid": {
+            "description": "Akta UUID of the company once it has been added. null until the request is completed.",
+            "type": "string",
+            "nullable": true
+          },
+          "created_at": {
+            "description": "Timestamp when the underlying request was created, in ISO 8601 format.",
+            "type": "string"
+          },
+          "updated_at": {
+            "description": "Timestamp when the underlying request was last updated, in ISO 8601 format.",
+            "type": "string"
+          }
+        }
       }
     }
   },
@@ -361,11 +502,15 @@
     },
     {
       "name": "Company",
-      "description": "Company data enrichment and search"
+      "description": "Company data enrichment, search, and addition"
     },
     {
       "name": "Reviews",
       "description": "Product and employee reviews from external sources"
+    },
+    {
+      "name": "Supporting APIs",
+      "description": "Utility endpoints for request tracking"
     }
   ],
   "paths": {
@@ -1037,6 +1182,90 @@
                 }
               }
             }
+          },
+          "401": {
+            "description": "Unauthorized — missing or invalid API key."
+          }
+        }
+      }
+    },
+    "/v1/company/addition-requests": {
+      "post": {
+        "tags": ["Company"],
+        "operationId": "createCompanyAdditionRequest",
+        "summary": "Company Addition",
+        "description": "Submits a company that is not yet in akta.pro's database to be added, returning a request ID to track, or the existing company if it is already present.\nThis is a free endpoint — it does not consume API credits.\n",
+        "security": [{"xApiKeyAuth": []}],
+        "requestBody": {
+          "description": "Company addition request",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CompanyAdditionRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Company addition response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {"type": "string", "example": "success"},
+                    "data": {"$ref": "#/components/schemas/CompanyAdditionResponse"},
+                    "credits_consumed": {"type": "number", "format": "float", "example": 0}
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request — invalid parameters."
+          },
+          "401": {
+            "description": "Unauthorized — missing or invalid API key."
+          }
+        }
+      }
+    },
+    "/v1/status/{request_id}": {
+      "get": {
+        "tags": ["Supporting APIs"],
+        "operationId": "getRequestStatus",
+        "summary": "Request Status",
+        "description": "Returns the current status of an asynchronous request, such as a company addition request, by its request ID.\nThis is a free endpoint — it does not consume API credits.\n",
+        "security": [{"xApiKeyAuth": []}],
+        "parameters": [
+          {
+            "name": "request_id",
+            "in": "path",
+            "required": true,
+            "schema": {"type": "string"},
+            "description": "The unique identifier of the request to check, returned when the original request was submitted. Example: 2db01b38-5c81-4b3f-b76d-8b36aeed603b"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Status response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {"type": "string", "example": "success"},
+                    "data": {"$ref": "#/components/schemas/StatusResponse"},
+                    "credits_consumed": {"type": "number", "format": "float", "example": 0}
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request — invalid request ID."
           },
           "401": {
             "description": "Unauthorized — missing or invalid API key."
