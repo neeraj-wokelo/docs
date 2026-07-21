@@ -182,8 +182,3 @@ akta company concise canva.com -o canva.json
 | `3` | auth (no/invalid key, plan gating `403`) |
 | `4` | other API/network error |
 | `5` | timeout |
-
-## Caveats
-
-- `company data` (`/enrichment/markdown`) and `company concise` (`/enrichment/concise`) are available where deployed; on environments that don't have them yet they return `404`.
-- Alternative signals (headcount/traffic/jobs/posts/reviews) require Subscription or Enterprise; Pay-as-you-go returns `403` → exit `3`.
