@@ -415,37 +415,49 @@ Fetch aggregate scores for a set of companies and compare side by side.
 
 ```python
 import requests
+import concurrent.futures
 
-HEADERS   = {"x-api-key": "<YOUR_API_KEY>"}
+HEADERS   = {"x-api-key": "your-api-key"}
 COMPANIES = ["canva.com", "figma.com", "notion.so", "miro.com"]
 
-RATIO_DIMS = {"business_outlook", "ceo", "recommend_to_friend"}
+def num(value, default=0):
+    """Return `value` unless it's None/missing, in which case return default."""
+    return value if value is not None else default
 
 def get_overview(company):
-    r = requests.get(
-        "https://api.akta.pro/api/v1/company/employee-reviews",
-        headers=HEADERS,
-        params={"company": company, "limit": 0}
-    )
-    emp = r.json()["data"]["employee_reviews"]
-    lookup = {d["type"]: d["value"] for d in emp["other_ratings"]}
-    return {
-        "company":         company,
-        "overall":         emp["overall_rating"].get("glassdoor", 0),
-        "culture":         lookup.get("culture_and_values", 0),
-        "wlb":             lookup.get("work_life_balance", 0),
-        "senior_mgmt":     lookup.get("senior_management", 0),
-        "ceo_approval":    lookup.get("ceo", 0),
-        "recommend":       lookup.get("recommend_to_friend", 0),
-        "total_reviews":   emp["reviews"]["total"]
-    }
+    try:
+        r = requests.get(
+            "https://api.akta.pro/api/v1/company/employee-reviews",
+            headers=HEADERS,
+            params={"company": company, "limit": 100}
+        )
+        r.raise_for_status()
+        emp = r.json()["data"]["employee_reviews"]
+        lookup = {d["type"]: d["value"] for d in emp.get("other_ratings", [])}
+        return {
+            "company":       company,
+            "overall":       num(emp.get("overall_rating", {}).get("glassdoor")),
+            "culture":       num(lookup.get("culture_and_values")),
+            "wlb":           num(lookup.get("work_life_balance")),
+            "senior_mgmt":   num(lookup.get("senior_management")),
+            "ceo_approval":  num(lookup.get("ceo")),
+            "recommend":     num(lookup.get("recommend_to_friend")),
+            "total_reviews": num(emp.get("reviews", {}).get("total")),
+            "error":         None
+        }
+    except (requests.exceptions.RequestException, KeyError, ValueError) as e:
+        return {"company": company, "error": str(e)}
 
-results = [get_overview(c) for c in COMPANIES]
-results.sort(key=lambda x: x["overall"], reverse=True)
+with concurrent.futures.ThreadPoolExecutor(max_workers=5) as pool:
+    results = list(pool.map(get_overview, COMPANIES))
+
+valid = [r for r in results if not r.get("error")]
+failed = [r for r in results if r.get("error")]
+valid.sort(key=lambda x: x["overall"], reverse=True)
 
 print(f"{'Company':<15} {'Overall':<9} {'Culture':<9} {'WLB':<9} {'Sr Mgmt':<9} {'CEO%':<8} {'Recommend%'}")
 print("-" * 80)
-for r in results:
+for r in valid:
     print(
         f"{r['company']:<15} "
         f"{r['overall']:<9.1f} "
@@ -455,4 +467,9 @@ for r in results:
         f"{round(r['ceo_approval'] * 100):<8} "
         f"{round(r['recommend'] * 100)}"
     )
+
+if failed:
+    print("\nFailed lookups:")
+    for r in failed:
+        print(f"  {r['company']}: {r['error']}")
 ```

@@ -76,18 +76,40 @@ Break down what a company posts about (`post_classification`) and in what format
 import requests
 from collections import Counter
 
-HEADERS = {"x-api-key": "<YOUR_API_KEY>"}
+HEADERS = {"x-api-key": "your_api_key"}
+BASE_URL = "https://api.akta.pro/api/v1/company/posts"
+PAGE_SIZE = 30
 
-resp = requests.get(
-    "https://api.akta.pro/api/v1/company/posts",
-    headers=HEADERS,
-    params={"company": "canva.com", "limit": 100}
-).json()
+def fetch_all_posts(company):
+    all_posts = []
+    offset = 0
 
-posts = resp["data"]["posts"]
+    while True:
+        resp = requests.get(
+            BASE_URL,
+            headers=HEADERS,
+            params={"company": company, "limit": PAGE_SIZE, "offset": offset}
+        )
+        resp.raise_for_status()
+        payload = resp.json()
+
+        posts = payload["data"]["posts"]
+        all_posts.extend(posts)
+
+        total = payload["count"]
+        offset += len(posts)
+
+        if offset >= total or not posts:
+            break
+
+    return all_posts
+
+posts = fetch_all_posts("canva.com")
 
 by_theme  = Counter(p["post_classification"] for p in posts)
 by_format = Counter(p["content_type"] for p in posts)
+
+print(f"Total posts analyzed: {len(posts)}\n")
 
 print("Content by theme:")
 for theme, n in by_theme.most_common():
@@ -106,19 +128,40 @@ Rank posts by engagement to find what resonates, and compare average engagement 
 import requests
 from collections import defaultdict
 
-HEADERS = {"x-api-key": "<YOUR_API_KEY>"}
+HEADERS = {"x-api-key": "your_api_key"}
+BASE_URL = "https://api.akta.pro/api/v1/company/posts"
+PAGE_SIZE = 30
 
-resp = requests.get(
-    "https://api.akta.pro/api/v1/company/posts",
-    headers=HEADERS,
-    params={"company": "canva.com", "limit": 100}
-).json()
+def fetch_all_posts(company):
+    all_posts = []
+    offset = 0
 
-posts = resp["data"]["posts"]
+    while True:
+        resp = requests.get(
+            BASE_URL,
+            headers=HEADERS,
+            params={"company": company, "limit": PAGE_SIZE, "offset": offset}
+        )
+        resp.raise_for_status()
+        payload = resp.json()
+
+        posts = payload["data"]["posts"]
+        all_posts.extend(posts)
+
+        total = payload["count"]
+        offset += len(posts)
+
+        if offset >= total or not posts:
+            break
+
+    return all_posts
 
 def total_engagement(p):
     m = p["engagement_metrics"]
     return m["total_reaction_count"] + m["comments_count"] + m["reposts_Count"]
+
+posts = fetch_all_posts("canva.com")
+print(f"Total posts analyzed: {len(posts)}\n")
 
 # Top posts overall
 print("Top posts by engagement:")
@@ -166,12 +209,12 @@ Use `posted_date` to measure how frequently a company posts — a proxy for mark
 import requests
 from collections import Counter
 
-HEADERS = {"x-api-key": "<YOUR_API_KEY>"}
+HEADERS = {"x-api-key": "your_api_key"}
 
 resp = requests.get(
     "https://api.akta.pro/api/v1/company/posts",
     headers=HEADERS,
-    params={"company": "canva.com", "limit": 100}
+    params={"company": "canva.com", "limit": 30}
 ).json()
 
 posts = resp["data"]["posts"]
