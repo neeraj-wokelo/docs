@@ -22,7 +22,7 @@ The `company` parameter accepts both bare domains (`canva.com`) and full URLs (`
 # All three are valid
 params={"company": "canva.com"}
 params={"company": "https://www.canva.com"}
-params={"company": "00031n-tesla"}
+params={"company": "00000l1"}
 ```
 
 **Use Company Search to resolve names to UUIDs before enriching**
@@ -30,23 +30,30 @@ params={"company": "00031n-tesla"}
 If your input is a company name (not a domain), resolve it to a UUID via the Company Search API first. Passing a display name like `"Canva"` directly as the `company` parameter may not resolve. Use the domain or UUID returned by Company Search:
 
 ```python
-search = requests.get(
-    "https://api.akta.pro/api/v1/company/search",
-    headers={"x-api-key": API_KEY},
-    params={"name": "Canva"}
-)
-company_uuid = search.json()["data"][0]["uuid"]
+import requests
+
+API_KEY = "YOUR API KEY"
+HEADERS = {"x-api-key": API_KEY}
+
+def get_company_uuid(company_name):
+    search = requests.get(
+        "https://api.akta.pro/api/v1/company/search",
+        headers=HEADERS,
+        params={"query": company_name}
+    )
+    search.raise_for_status()
+
+    results = search.json().get("data", [])
+    if not results:
+        raise ValueError(f"Company not found: {company_name}")
+
+    return results[0]["uuid"]
+
+if __name__ == "__main__":
+    company_uuid = get_company_uuid("Canva")
+    print(f"UUID: {company_uuid}")
 ```
 
-**Sections for Enterprise tier** - `acquisitions `**,**  `funding `**and** `investments `**require enterprise tier**
+**Sections for Enterprise tier** - `funding_detail `**and** `mna_and_investment`**require enterprise tier**
 
-The `acquisitions` , `funding` and `investments` sections are gated to enterprise plans. If your plan does not include them, requesting them returns a `403 Forbidden`. Handle this in your section selection logic rather than letting it surface as an uncaught error:
-
-```python
-try:
-    data = enrich_company("canva.com", "firmographics,investments")
-except requests.HTTPError as e:
-    if e.response.status_code == 403:
-        # Re-request without the gated section
-        data = enrich_company("canva.com", "firmographics")
-```
+The `funding_detail`  and `mna_and_investment` sections are gated to enterprise plans. If your plan does not include them, requesting them returns a `403 Forbidden`. Handle this in your section selection logic rather than letting it surface as an uncaught error.

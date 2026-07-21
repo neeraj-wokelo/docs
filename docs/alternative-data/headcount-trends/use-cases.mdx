@@ -74,15 +74,16 @@ Extract the `headcount_growth` series to chart hiring trajectory over time, or f
 ```python
 import requests
 
-HEADERS = {"x-api-key": "<YOUR_API_KEY>"}
+HEADERS = {"x-api-key": "your_api_key"}
 
 response = requests.get(
     "https://api.akta.pro/api/v1/company/headcount-trends",
     headers=HEADERS,
     params={"company": "canva.com"}
 )
+response.raise_for_status()
 
-series = response.json()["data"]["headcount_growth"]
+series = response.json()["data"]["headcount_monthly"]  # was "headcount_growth"
 
 # Series is already chronological, but sort defensively
 series = sorted(series, key=lambda p: p["date"])
@@ -107,30 +108,55 @@ Identify which teams are driving overall headcount growth which could be useful 
 
 ```python
 import requests
+import concurrent.futures
 
-HEADERS = {"x-api-key": "<YOUR_API_KEY>"}
+HEADERS = {"x-api-key": "your_api_key"}
 
-response = requests.get(
-    "https://api.akta.pro/api/v1/company/headcount-trends",
-    headers=HEADERS,
-    params={"company": "canva.com"}
-)
+WATCHLIST = ["canva.com", "figma.com"]
 
-functions = response.json()["data"]["headcount_by_function"]
+def fetch_headcount_functions(domain):
+    try:
+        r = requests.get(
+            "https://api.akta.pro/api/v1/company/headcount-trends",
+            headers=HEADERS,
+            params={"company": domain}
+        )
+        r.raise_for_status()
+        payload = r.json()
 
-# Rank functions by 12-month growth rate
+        data = payload.get("data", {})
+        functions = data.get("headcount_by_function")
+
+        if not functions:
+            return domain, None, "No function-level headcount data available"
+
+        return domain, functions, None
+
+    except requests.exceptions.RequestException as e:
+        return domain, None, f"Request failed: {e}"
+    except ValueError:
+        return domain, None, "Invalid JSON response"
+
 def growth_12mo(fn):
     return next(
         (g["change_percentage"] for g in fn["growth_periods"] if g["month_difference"] == 12),
         0
     )
 
-ranked = sorted(functions, key=growth_12mo, reverse=True)
+with concurrent.futures.ThreadPoolExecutor(max_workers=5) as pool:
+    results = list(pool.map(fetch_headcount_functions, WATCHLIST))
 
-print(f"{'Function':<28} {'Headcount':<12} {'12mo Growth'}")
-print("-" * 55)
-for fn in ranked:
-    print(f"{fn['name']:<28} {fn['employee_count']:<12,} {growth_12mo(fn)}%")
+for domain, functions, error in results:
+    print(f"\n=== {domain} ===")
+    if error:
+        print(f"  Skipped: {error}")
+        continue
+
+    ranked = sorted(functions, key=growth_12mo, reverse=True)
+    print(f"{'Function':<28} {'Headcount':<12} {'12mo Growth'}")
+    print("-" * 55)
+    for fn in ranked:
+        print(f"{fn['name']:<28} {fn['employee_count']:<12,} {growth_12mo(fn)}%")
 ```
 
 ### Competitive benchmark across multiple companies
