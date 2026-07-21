@@ -21,7 +21,7 @@ API keys are issued from your Akta account. Contact [support@akta.ai](mailto:sup
 <CodeGroup>
 
 ```bash cURL
-curl --location 'https://api.akta.pro/api/v1/company/enrichment?company=canva.com&sections=firmographics' \
+curl --location 'https://api.akta.pro/api/v1/company/enrichment?company=canva.com&sections=firmographic' \
   --header 'x-api-key: <YOUR_API_KEY>'
 ```
 
@@ -33,7 +33,7 @@ response = requests.get(
     headers={"x-api-key": "<YOUR_API_KEY>"},
     params={
         "company":  "canva.com",
-        "sections": "firmographics"
+        "sections": "firmographic"
     }
 )
 data = response.json()["data"]
@@ -49,7 +49,7 @@ print(f"Total funding: ${data['funding']['overall']['total_funding'] / 1e9:.1f}B
 {
     "data": {
         "uuid": "00000jw-canva",
-        "firmographics": {
+        "firmographic": {
       "name": "Canva",
       "legal_name": "Canva",
       "website": "canva.com",
