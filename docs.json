@@ -119,20 +119,6 @@
                   "docs/supporting-apis/company-addition",
                   "docs/supporting-apis/request-status-api"
                 ]
-              },
-              {
-                "group": "MCP",
-                "expanded": true,
-                "pages": [
-                  "docs/mcp/quick-start"
-                ]
-              },
-              {
-                "group": "CLI",
-                "expanded": true,
-                "pages": [
-                  "docs/cli/quick-start"
-                ]
               }
             ]
           },
@@ -148,6 +134,29 @@
               "iab-codes",
               "iptc-codes",
               "company-data-dictionary"
+            ],
+            "icon": "books",
+            "expanded": true
+          },
+          {
+            "group": "Developer Tools",
+            "icon": "tools",
+            "expanded": true,
+            "pages": [
+              {
+                "group": "MCP",
+                "expanded": true,
+                "pages": [
+                  "docs/mcp/quick-start"
+                ]
+              },
+              {
+                "group": "CLI",
+                "expanded": true,
+                "pages": [
+                  "docs/cli/quick-start"
+                ]
+              }
             ]
           },
           "playground",
