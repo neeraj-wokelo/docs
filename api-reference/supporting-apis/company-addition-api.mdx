@@ -1,0 +1,128 @@
+---
+title: "Company Addition API"
+description: "Submits a company that is not yet in akta.pro's database to be added, returning a request ID to track, or the existing company if it is already present."
+openapi: "POST /v1/company/addition-requests"
+---
+
+## Overview
+
+The Company Addition API lets you add a company that isn't yet in akta.pro's database. Submit a company name and website, and if the company is new, an addition request is created and a `request_id` is returned so you can track it to completion (by polling the status endpoint or configuring a webhook). If the company already exists, no request is created and the existing company's details are returned directly. This is a free endpoint and does not consume credits.
+
+## Endpoint Details
+
+- **Method:** POST
+- **Endpoint:** `/v1/company/addition-requests`
+
+## Authentication requirements
+
+- Include a valid API key in the `x-api-key` request header.
+
+## Request
+
+### Request Parameters
+
+#### Header Parameters
+
+<ParamField header="x-api-key" type="string" required>
+  Your API key.
+</ParamField>
+
+<ParamField header="Content-Type" type="string" required>
+  Must be `application/json`.
+</ParamField>
+
+#### Body Parameters
+
+<ParamField body="company_name" type="string" required>
+  Name of the company to add. Example: `solios`
+</ParamField>
+
+<ParamField body="website" type="string" required>
+  Primary website URL of the company. Used to disambiguate and resolve the company. Example: `https://www.soleosenergy.com/`
+</ParamField>
+
+## Response
+
+#### Successful Response Fields
+
+Returns a JSON object with the following structure:
+
+<ResponseField name="already_exists" type="boolean">
+  `true` if the company is already in the database, in which case no addition request is created. `false` if a new addition request was created.
+</ResponseField>
+
+<ResponseField name="company" type="object">
+  The existing company's details when `already_exists` is `true`; otherwise `null`. See **Company Object Fields** below.
+</ResponseField>
+
+<ResponseField name="request_id" type="string">
+  Unique identifier for the addition request, in UUID format. Use this to check request status or match webhook notifications. `null` when the company already exists.
+</ResponseField>
+
+<ResponseField name="status" type="string">
+  Current status of the addition request at submission time. Typically `pending`. `null` when the company already exists.
+</ResponseField>
+
+<ResponseField name="domain" type="string">
+  The resolved domain for the submitted company.
+</ResponseField>
+
+<ResponseField name="credits_consumed" type="float">
+  Credits consumed by the request. This endpoint is free and always returns `0.00`.
+</ResponseField>
+
+#### Company Object Fields
+
+Returned only when `already_exists` is `true`.
+
+<ResponseField name="uuid" type="string">
+  Unique identifier for the company. Pass this as the `company` parameter in downstream APIs.
+</ResponseField>
+
+<ResponseField name="website" type="string">
+  Primary website of the company.
+</ResponseField>
+
+<ResponseField name="domain" type="string">
+  Resolved domain of the company.
+</ResponseField>
+
+<ResponseField name="name" type="string">
+  Company name.
+</ResponseField>
+
+<ResponseField name="legal_name" type="string">
+  Legal or registered name of the company.
+</ResponseField>
+
+<ResponseExample>
+
+```json New request created expandable wrap
+{
+    "already_exists": false,
+    "company": null,
+    "request_id": "2db01b38-5c81-4b3f-b76d-8b36aeed603b",
+    "status": "pending",
+    "domain": "brigadegroup.com",
+    "credits_consumed": 0.00
+}
+```
+
+```json Company already exists expandable wrap
+{
+    "already_exists": true,
+    "company": {
+        "uuid": "0002lx7",
+        "website": "maximl.com",
+        "domain": "maximl.com",
+        "name": "Maximl Labs Private Limited",
+        "legal_name": "Maximl Labs Private Limited"
+    },
+    "request_id": null,
+    "status": null,
+    "domain": "maximl.com",
+    "credits_consumed": 0.00
+}
+```
+
+</ResponseExample>

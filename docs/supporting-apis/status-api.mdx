@@ -1,0 +1,116 @@
+---
+title: "Status"
+hidden: true
+---
+
+## Overview
+
+The Status API returns the current status of an asynchronous request by its `request_id`. Its primary purpose is to poll a long-running request — such as a [Company Addition](/docs/supporting-apis/company-addition) request — until it completes. This is a **free endpoint** so it does not consume API credits.
+
+**Endpoint**
+
+```text
+GET https://api.akta.pro/api/v1/status/{request_id}
+```
+
+Pass the `request_id` returned when the original request was submitted as a path parameter.
+
+<Tip>
+  As an alternative to polling, you can configure a webhook to be notified automatically when a request's status changes.
+</Tip>
+
+## Authentication
+
+All requests must include an **API key** in the `x-api-key` HTTP header.
+
+```text
+x-api-key: <YOUR_API_KEY>
+```
+
+<Warning>
+  Never expose your API key in client-side code, browser requests, or public repositories. A missing or invalid key returns `401 Unauthorized`.
+</Warning>
+
+---
+
+## Request Reference
+
+| Parameter | Type | Required | Description |
+| --- | --- | --- | --- |
+| `request_id` | string | **Required** | The unique identifier of the request to check, returned when the original request was submitted. Passed as a path parameter. |
+
+**Example Request**
+
+<CodeGroup>
+
+```bash cURL
+curl --location 'https://api.akta.pro/api/v1/status/2db01b38-5c81-4b3f-b76d-8b36aeed603b/' \
+  --header 'x-api-key: <YOUR_API_KEY>'
+```
+
+```python Python
+import requests
+
+request_id = "2db01b38-5c81-4b3f-b76d-8b36aeed603b"
+
+response = requests.get(
+    f"https://api.akta.pro/api/v1/status/{request_id}/",
+    headers={"x-api-key": "<YOUR_API_KEY>"}
+)
+result = response.json()
+print(f"Status: {result['status']}")
+```
+
+</CodeGroup>
+
+---
+
+## Response
+
+### Response envelope
+
+```json
+{
+  "request_id": "2db01b38-5c81-4b3f-b76d-8b36aeed603b",
+  "request_type": "company_addition",
+  "status": "pending",
+  "created_at": "2026-07-20T12:33:02.713287Z",
+  "updated_at": "2026-07-20T12:33:02.713287Z",
+  "detail": {
+    "request_id": "debdcbbb-8ddd-4084-be86-ca643ec5bad6",
+    "company_name": "Brigade",
+    "domain": "brigadegroup.com",
+    "status": "pending",
+    "reason": null,
+    "company_uuid": null,
+    "created_at": "2026-07-20T12:33:02.713287Z",
+    "updated_at": "2026-07-20T12:33:03.393539Z"
+  }
+}
+```
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `request_id` | string | Unique identifier of the request being tracked. |
+| `request_type` | string | The type of request. Example: `company_addition`. |
+| `status` | string | Current status of the request. One of `pending`, `in_progress`, `completed`, `failed`. |
+| `created_at` | string | Timestamp when the request was created, in ISO 8601 format. |
+| `updated_at` | string | Timestamp when the request was last updated, in ISO 8601 format. |
+| `detail` | object | Request-type-specific details. Fields vary by `request_type`. See **Detail object** below. |
+
+### Detail object
+
+Fields for a `company_addition` request.
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `request_id` | string | Identifier of the underlying request record. |
+| `company_name` | string | Name of the company submitted for addition. |
+| `domain` | string | Resolved domain of the submitted company. |
+| `status` | string | Status of the underlying request. One of `pending`, `in_progress`, `completed`, `failed`. |
+| `reason` | string | Explanation when the request did not succeed. `null` unless the request has failed. |
+| `company_uuid` | string | Akta UUID of the company once it has been added. `null` until the request is `completed`. Pass this as the `company` parameter in downstream APIs. |
+| `created_at` | string | Timestamp when the underlying request was created, in ISO 8601 format. |
+| `updated_at` | string | Timestamp when the underlying request was last updated, in ISO 8601 format. |
+
+---

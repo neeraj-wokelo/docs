@@ -1,0 +1,263 @@
+---
+title: "Company Addition"
+hidden: true
+---
+
+## Overview
+
+The Company Addition API lets you add a company that isn't yet in akta.pro's database. If the Company Search API returns no results for a company, submit it here and akta.pro will add it.
+
+If the company already exists in the database, the API tells you so immediately and returns its details — no addition request is created. Otherwise, this is an **asynchronous, two-step endpoint**:
+
+1. **Submit** a company for addition with a `POST` request. If it's new, the API returns a `request_id`.
+2. **Track** the request to completion, either by polling the status endpoint with that `request_id`, or by configuring a webhook to be notified when the status changes.
+
+This is a **free endpoint** so it does not consume API credits.
+
+**Endpoint**
+
+```text
+POST https://api.akta.pro/api/v1/company/addition-requests/
+```
+
+Pass the `company_name` and `website` in a JSON request body. The `request_id` returned can then be used to check the status of the addition request.
+
+---
+
+## Authentication
+
+All requests must include an **API key** in the `x-api-key` HTTP header.
+
+```text
+x-api-key: <YOUR_API_KEY>
+```
+
+<Warning>
+  Never expose your API key in client-side code, browser requests, or public repositories. A missing or invalid key returns `401 Unauthorized`.
+</Warning>
+
+---
+
+## Request Reference
+
+Send a JSON body with the `Content-Type: application/json` header.
+
+| Parameter | Type | Required | Description |
+| --- | --- | --- | --- |
+| `company_name` | string | **Required** | Name of the company to add (e.g. `"solios"`). |
+| `website` | string | **Required** | Primary website URL of the company (e.g. `"https://www.soleosenergy.com/"`). Used to disambiguate and entity-resolve the company. |
+
+**Example requests:**
+
+<CodeGroup>
+
+```bash cURL
+curl --location 'https://api.akta.pro/api/v1/company/addition-requests/' \
+  --header 'Content-Type: application/json' \
+  --header 'x-api-key: <YOUR_API_KEY>' \
+  --data '{
+    "company_name": "solios",
+    "website": "https://www.soleosenergy.com/"
+  }'
+```
+
+```python Python
+import requests
+
+response = requests.post(
+    "https://api.akta.pro/api/v1/company/addition-requests/",
+    headers={
+        "x-api-key": "<YOUR_API_KEY>",
+        "Content-Type": "application/json",
+    },
+    json={
+        "company_name": "solios",
+        "website": "https://www.soleosenergy.com/",
+    },
+)
+result = response.json()
+
+if result["already_exists"]:
+    # Company is already in the database — use its UUID directly
+    print(f"Already exists: {result['company']['uuid']}")
+else:
+    # A new addition request was created — track it to completion
+    print(f"Addition request submitted: {result['request_id']}")
+```
+
+</CodeGroup>
+
+---
+
+## Response
+
+The response depends on whether the company already exists in akta.pro's database, indicated by the `already_exists` flag.
+
+### Company already exists
+
+If the company is already in the database, **no addition request is created** — `request_id` and `status` are both `null`, and the existing company's details are returned directly in the `company` object. You can use its `uuid` straight away, with no need to track a request.
+
+```json
+{
+  "already_exists": true,
+  "company": {
+    "uuid": "0002lx7",
+    "website": "maximl.com",
+    "domain": "maximl.com",
+    "name": "Maximl Labs Private Limited",
+    "legal_name": "Maximl Labs Private Limited"
+  },
+  "request_id": null,
+  "status": null,
+  "domain": "maximl.com",
+  "credits_consumed": 0.00
+}
+```
+
+### New addition request created
+
+If the company is not yet in the database, an addition request is created. `company` is `null`, and a `request_id` and `status` are returned so you can track the request to completion.
+
+```json
+{
+  "already_exists": false,
+  "company": null,
+  "request_id": "2db01b38-5c81-4b3f-b76d-8b36aeed603b",
+  "status": "pending",
+  "domain": "brigadegroup.com",
+  "credits_consumed": 0.00
+}
+```
+
+### Response fields
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `already_exists` | boolean | `true` if the company is already in the database (no request created), `false` if a new addition request was created. |
+| `company` | object \| null | The existing company's details when `already_exists` is `true`; otherwise `null`. See **Company object** below. |
+| `request_id` | string (UUID) \| null | Unique identifier for the addition request. `null` when the company already exists. Use this to check request status or to match incoming webhook notifications. |
+| `status` | string \| null | Current status of the request at submission time (typically `"pending"`). `null` when the company already exists. See **Request statuses** below. |
+| `domain` | string | The resolved domain for the submitted company. |
+| `credits_consumed` | float | Always `0.00` — this is a free endpoint. |
+
+### Company object
+
+Returned only when `already_exists` is `true`.
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `uuid` | string | Unique Akta identifier for the company. Pass this as the `company` parameter in downstream APIs. |
+| `website` | string | Primary website of the company. |
+| `domain` | string | Resolved domain of the company. |
+| `name` | string | Company name. |
+| `legal_name` | string | Legal or registered company name. |
+
+### Request statuses
+
+| Status | Description |
+| --- | --- |
+| `pending` | The request has been accepted and is queued for processing. |
+| `in_progress` | The company is being ingested and entity-resolved. |
+| `completed` | The company has been added and is now available via the Company Search API and other endpoints. |
+| `failed` | The company could not be added. |
+
+---
+
+## Checking request status
+
+Once a company is submitted, track the request to completion in one of two ways.
+
+### Option 1 — Poll the status endpoint
+
+Pass the `request_id` to the status endpoint to retrieve the current status on demand.
+
+```text
+GET https://api.akta.pro/api/v1/company/addition-requests/{request_id}/
+```
+
+<CodeGroup>
+
+```bash cURL
+curl --location 'https://api.akta.pro/api/v1/company/addition-requests/3fa85f64-5717-4562-b3fc-2c963f66afa6/' \
+  --header 'x-api-key: <YOUR_API_KEY>'
+```
+
+```python Python
+import requests
+
+request_id = "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+
+response = requests.get(
+    f"https://api.akta.pro/api/v1/company/addition-requests/{request_id}/",
+    headers={"x-api-key": "<YOUR_API_KEY>"},
+)
+print(response.json()["status"])
+```
+
+</CodeGroup>
+
+**Sample response**
+
+```json
+{
+  "request_id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+  "company_name": "solios",
+  "website": "https://www.soleosenergy.com/",
+  "status": "completed",
+  "uuid": "00000ab-soleos"
+}
+```
+
+When the request reaches `completed`, the `uuid` field is populated with the newly added company's Akta identifier, which you can then use as the `company` parameter in the Company Data, News, and other APIs.
+
+### Option 2 — Configure a webhook
+
+Instead of polling, configure a webhook to be notified automatically when the status of an addition request changes. akta.pro will send a `POST` request to your configured endpoint each time a request transitions status (e.g. to `completed` or `failed`).
+
+A webhook payload looks like:
+
+```json
+{
+  "request_id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+  "company_name": "solios",
+  "website": "https://www.soleosenergy.com/",
+  "status": "completed",
+  "uuid": "00000ab-soleos"
+}
+```
+
+Match the incoming `request_id` against the one returned at submission to correlate the notification with your original request.
+
+---
+
+## Using the UUID in other APIs
+
+Once the addition request is `completed` and you have the company's `uuid`, pass it as the `company` parameter in downstream API calls:
+
+```python
+import requests
+HEADERS = {"x-api-key": "<YOUR_API_KEY>"}
+
+# Step 1: Submit the company for addition
+submit = requests.post(
+    "https://api.akta.pro/api/v1/company/addition-requests/",
+    headers={**HEADERS, "Content-Type": "application/json"},
+    json={"company_name": "solios", "website": "https://www.soleosenergy.com/"},
+)
+request_id = submit.json()["request_id"]
+
+# Step 2: Once completed (via polling or webhook), retrieve the UUID
+status = requests.get(
+    f"https://api.akta.pro/api/v1/company/addition-requests/{request_id}/",
+    headers=HEADERS,
+)
+uuid = status.json()["uuid"]
+
+# Step 3: Use the UUID in the Company Data API
+enrich = requests.post(
+    "https://api.akta.pro/api/v1/company/enrichment",
+    headers={**HEADERS, "Content-Type": "application/json"},
+    json={"company": uuid, "sections": ["firmographic", "funding_details"]},
+)
+print(enrich.json()["data"]["firmographic"]["name"])
+```

@@ -1,13 +1,13 @@
 ---
 title: "Quick Start"
-description: "Complete setup guide for Akta MCP Server. Connect Claude Desktop, Cursor, VS Code, and other AI assistants to Akta's company search, company data, news, and alternative signal tools."
+description: "Complete setup guide for akta.pro MCP Server. Connect Claude Desktop, Cursor, VS Code, and other AI assistants to akta.pro company search, company data, news, and alternative signal tools."
 ---
 
-Akta MCP connects AI assistants to Akta Pro's company-intelligence stack, including company search, structured company profiles, news monitoring, and alternative signals like headcount, traffic, and reviews.
+akta.pro MCP connects AI assistants to our company-intelligence stack, including company search, structured company profiles, news monitoring, and alternative signals like headcount, traffic, and reviews.
 
 # Installation
 
-Akta's MCP server can be installed in any MCP client with the server URL: `https://mcp.akta.pro/mcp`
+akta.pro MCP server can be installed in any MCP client with the server URL: `https://mcp.akta.pro/mcp`
 
 <CardGroup cols={2}>
   <Card title="Install in Cursor" icon="arrow-up-left" href="https://cursor.com/en/install-mcp?name=akta%20mcp&config=eyJ1cmwiOiJodHRwczovL21jcC5ha3RhLnByby9tY3AifQ==" cta="Install">
@@ -23,7 +23,7 @@ Akta's MCP server can be installed in any MCP client with the server URL: `https
   <Tab title="Claude Web, Desktop">
     1. Open Claude and click **Settings** (or **Customize**) from the sidebar
     2. Go to **Connectors → Add Connectors**
-    3. Enter the name `Akta` and the server URL `https://mcp.akta.pro/mcp`
+    3. Enter the name `akta-pro` and the server URL `https://mcp.akta.pro/mcp`
     4. Click **Add**, then complete the authentication
   </Tab>
   <Tab title="Cursor">
@@ -88,11 +88,11 @@ Akta's MCP server can be installed in any MCP client with the server URL: `https
 <Card title="Get your Akta API key" icon="key" horizontal href="https://playground.akta.pro">
 </Card>
 
-Your key resolves to a plan tier — **pay-as-you-go**, **subscription**, or **enterprise** — which determines what the tools below can return. Call `account_status` at any time to check your tier and remaining credit balance.
+Your key resolves to a plan tier such as **pay-as-you-go**, **subscription**, or **enterprise**,  which determines what the tools below can return. Call `account_status` at any time to check your tier and remaining credit balance.
 
 # Available Tools
 
-All Akta tools are **synchronous** — a call returns its data immediately, with no polling required. Only `company_data` returns **Markdown**; every other tool returns **JSON**.
+All akta.pro tools are **synchronous**. All tools returns its data immediately, with no polling required. Only `company_data` returns **Markdown**; every other tool returns **JSON**.
 
 **Free, resolve-first tools:**
 
@@ -107,7 +107,7 @@ All Akta tools are **synchronous** — a call returns its data immediately, with
 | Tool | Description |
 | --- | --- |
 | `company_data` | Rich, structured company profile as Markdown. Sections are selected explicitly and billed individually |
-| `company_data_concise` | A single condensed company overview in JSON — no section selection, cheapest way to get a fast read |
+| `company_data_concise` | A single condensed company overview in JSON. No section selection, cheapest way to get a fast read |
 
 **News:**
 
@@ -115,7 +115,7 @@ All Akta tools are **synchronous** — a call returns its data immediately, with
 | --- | --- |
 | `news_signals` | List news filtered by company, industry, query, or title, with sentiment and AI summaries. No full article text |
 | `news_detail` | Full article body for specific article IDs returned by `news_signals` (max 10 per call) |
-| `news_types` | The news-type taxonomy — 77 tag codes across 11 categories, used to filter `news_signals` by kind of news |
+| `news_types` | The news-type taxonomy. Contains 77 tag codes across 11 categories, used to filter `news_signals` by kind of news |
 
 **Additional tools** (require Subscription or Enterprise):
 
@@ -124,7 +124,7 @@ All Akta tools are **synchronous** — a call returns its data immediately, with
 | `headcount_trends` | Employee-count trend over time |
 | `website_traffic` | Web-traffic estimates |
 | `employee_reviews` | Glassdoor-style employee sentiment |
-| `product_reviews` | Product-level reviews — call without a product ID first to list the catalog |
+| `product_reviews` | Returns Product-level review. Call without a product ID first to list the catalog |
 | `job_posts` | Open roles and hiring signal |
 | `social_posts` | Company social posts |
 
@@ -162,31 +162,4 @@ Refer to the Pricing page to know more about credits used in each underlying too
   ```text
   How has Notion's headcount trended over the past year, and what's their current hiring look like?
   ```
-</Accordion>
-
-<Accordion title="Troubleshooting" icon="wrench">
-  **403 error**
-
-  Your plan or credit balance doesn't cover the requested tool — most commonly an alternative signal (`headcount_trends`, `website_traffic`, `employee_reviews`, `product_reviews`, `job_posts`, `social_posts`) on a pay-as-you-go plan. Call `account_status` to confirm your tier, then upgrade or top up.
-
-  **Missing funding\_detail or mna\_and\_investment**
-
-  These `company_data` sections are enterprise-only and are silently skipped (not an error) on lower tiers. The returned Markdown notes what was dropped.
-
-  **Tools not appearing**
-
-  Restart your MCP client after updating the config file. Some clients require a full restart to detect new MCP servers.
-
-  **Claude not connecting**
-
-  Use the built-in connector: click **\+** (or **Add connectors**) → **Connectors** tab → search for **Akta** → click **\+**.
-
-  **Config file not found**
-
-  Common config locations:
-
-  - Cursor: `~/.cursor/mcp.json`
-  - VS Code: `.vscode/mcp.json` (in project root)
-  - Claude Desktop (macOS): `~/Library/Application Support/Claude/claude_desktop_config.json`
-  - Claude Desktop (Windows): `%APPDATA%\Claude\claude_desktop_config.json`
 </Accordion>

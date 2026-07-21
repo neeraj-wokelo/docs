@@ -115,7 +115,9 @@
                 "group": "Supporting APIs",
                 "pages": [
                   "docs/supporting-apis/company-search",
-                  "docs/supporting-apis/industry-search"
+                  "docs/supporting-apis/industry-search",
+                  "docs/supporting-apis/company-addition",
+                  "docs/supporting-apis/status-api"
                 ]
               },
               {
@@ -182,7 +184,9 @@
             "expanded": true,
             "pages": [
               "api-reference/supporting-apis/company-search",
-              "api-reference/supporting-apis/industry-search"
+              "api-reference/supporting-apis/industry-search",
+              "api-reference/supporting-apis/company-addition-api",
+              "api-reference/supporting-apis/status-api"
             ]
           }
         ]

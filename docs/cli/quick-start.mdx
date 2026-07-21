@@ -3,22 +3,20 @@ title: "Quick Start"
 description: "Command-line tool for company search, structured company data, news monitoring, and alternative signals, backed by the Akta REST API"
 ---
 
-The `akta` CLI is a command-line client for the [Akta REST API](https://api.akta.pro/api/v1) — a sibling of the Akta MCP server. Both are thin clients over the same endpoints; the CLI is the presentation layer for humans and shell scripts. It ships as its own self-contained distribution (`akta-cli`) with no MCP-server code.
+The `akta` CLI is a command-line client for the [Akta REST API](https://api.akta.pro/api/v1). A sibling of the Akta MCP server. Both are thin clients over the same endpoints; the CLI is the presentation layer for humans and shell scripts. It ships as its own self-contained distribution (`akta-pro-cli`) with no MCP-server code.
 
 ## Installation
 
 <Tabs>
   <Tab title="pipx">
-    Distributed via tagged GitHub Releases. Quickest path (needs read access to the private repo):
+    To install using pipx:
 
     ```bash
     pipx install akta-pro-cli
     ```
-
-    The `akta` command depends only on `httpx`, `typer`, and `rich`.
   </Tab>
   <Tab title="uv">
-    [`uv`](https://docs.astral.sh/uv/) is Astral's faster modern alternative to pipx. It writes a PATH-aware shim on first run, so no extra setup step is needed:
+    `uv` is Astral's faster modern alternative to pipx. It writes a PATH-aware shim on first run, so no extra setup step is needed:
 
     ```bash
     uv tool install akta-pro-cli
@@ -27,7 +25,7 @@ The `akta` CLI is a command-line client for the [Akta REST API](https://api.akta
     Requires `uv` to be installed first — see [Astral's install guide](https://docs.astral.sh/uv/getting-started/installation/).
   </Tab>
   <Tab title="pip">
-    Use `pip` when you're embedding `akta-cli` in a Python project (rather than using `akta` as a standalone tool — see the **pipx** or **uv** tabs for that):
+    Use `pip` when you're embedding `akta-pro-cli` in a Python project (rather than using `akta` as a standalone tool — see the **pipx** or **uv** tabs for that):
 
     ```bash
     pip install akta-pro-cli
@@ -37,7 +35,7 @@ The `akta` CLI is a command-line client for the [Akta REST API](https://api.akta
 
 ## Authentication
 
-v1 authenticates with an Akta API key (`wk_...`), minted at [playground.akta.pro](https://playground.akta.pro) (sign up → API Keys).
+Authenticate using akta.pro API key. Visit [playground.akta.pro](https://playground.akta.pro) to get your API key.
 
 ```bash
 akta login --api-key wk_...
