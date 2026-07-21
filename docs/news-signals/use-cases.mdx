@@ -9,7 +9,7 @@ Fetch all positive news about a company over a date range, filtered to funding a
 Use the following filters:
 
 - sentiment\_list filter to fetch only positive news.
-- type\_list filter - CM01, CM03 to filter only the news related to funding and M&A activity. Refer to the complete list of news type filters [here](https://playground.akta.pro/news-tags.csv).
+- type\_list filter - CM01, CM03 to filter only the news related to funding and M&A activity. Refer to the complete list of news type filters [here](/news-types).
 
 <CodeGroup>
 
@@ -3950,7 +3950,7 @@ print(response.text)
 Monitor all the high impact news in a sector. In this case, use `industry` field to specify the industry name. Also use news\_score\_list to filter only the High impact news.
 
 <Tip>
-  Industry filters accept industry **codes**, not free-text names. Use the [Industry Search API](/api-reference/industry-search) to resolve a topic like `"warehouse automation"` into the codes to pass into this endpoint.
+  Industry filters accept industry **codes**, not free-text names. Use the [Industry Search API](/api-reference/supporting-apis/industry-search) to resolve a topic like `"warehouse automation"` into the codes to pass into this endpoint.
 </Tip>
 
 <CodeGroup>

@@ -4,7 +4,7 @@ title: "Best Practices"
 
 **Always pass website URL or UUID for** `company `**and not the display name**
 
-The `company` parameter expects a full website URL (e.g. `"https://canva.com"`) or an Akta UUID. A bare display name (`"Canva"`) will not resolve correctly. If you only have a company name, use the [Company Search API](/akta-company-search-doc) to look up the website URL or UUID first:
+The `company` parameter expects a full website URL (e.g. `"https://canva.com"`) or an Akta UUID. A bare display name (`"Canva"`) will not resolve correctly. If you only have a company name, use the [Company Search API](/docs/supporting-apis/company-search) to look up the website URL or UUID first:
 
 ```python
 search = requests.get(
@@ -17,7 +17,7 @@ website = search.json()["data"][0]["website"]   # "https://canva.com"
 
 **Always pass an industry code for** `industry `**and not the industry name**
 
-The `industry` parameter expects one or more Akta industry codes (e.g. `"IMAHAHAN"`), not a free-text sector name like `"Warehouse Automation"`. If you're starting from a topic or sector name, resolve it to a code first with the [Industry Search API](/industry-search-doc):
+The `industry` parameter expects one or more Akta industry codes (e.g. `"IMAHAHAN"`), not a free-text sector name like `"Warehouse Automation"`. If you're starting from a topic or sector name, resolve it to a code first with the [Industry Search API](/docs/supporting-apis/industry-search):
 
 ```python
 search = requests.get(
@@ -52,7 +52,7 @@ params = {"entity_person_list": "Elon Musk", "limit": 20}
 
 Common names can still match multiple people with the same name. If you see unrelated results, narrow further by adding `company`, `industry`, or `countries` to disambiguate.
 
-**Use `sentiment_list`, `type_list`, and `news_score_list`** 
+**Use `sentiment_list`, `type_list`, and `news_score_list`**
 
 All three filter parameters use the `_list` suffix. The forms `sentiment`, `type`, and `news_score` are not valid parameters and are silently ignored if passed. This is the most common integration mistake.
 
@@ -69,7 +69,7 @@ params = {"company": "https://canva.com", "sentiment_list": "positive"}
 The filter parameters work independently and additively which means all active filters must match for an article to be returned:
 
 - `sentiment_list` : filters by the AI-assigned article sentiment (`positive`, `negative`, `neutral`)
-- `type_list` : filters by the event type tag (e.g. `Equity Fund-Raising`, `Layoffs`). [Download the full list of type codes](https://playground.akta.pro/news-tags.csv) to see all accepted values
+- `type_list` : filters by the event type tag (e.g. `Equity Fund-Raising`, `Layoffs`). [View full list](/news-types) to see all accepted values
 - `news_score_list` : filters by relevance tier (`High`, `Medium`, `Low`). Use `High` for daily monitoring briefings where signal density matters; use `all` for research pulls where recall is more important than precision
 
 Combining them narrows the result set aggressively. For example, `sentiment_list=negative` \+ `news_score_list=High` returns only high-relevance adverse articles which could be useful for portfolio risk monitoring but may miss lower-profile negative signals if used for comprehensive diligence:
