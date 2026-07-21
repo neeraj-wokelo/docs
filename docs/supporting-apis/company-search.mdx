@@ -114,7 +114,7 @@ Once you have the `uuid`, pass it as the `company` field in downstream API calls
 ```python
 import requests
 
-HEADERS = {"x-api-key": "<YOUR_API_KEY>"}
+HEADERS = {"x-api-key": "your-api-key"}
 
 # Step 1: Search for the company
 search = requests.get(
@@ -125,18 +125,23 @@ search = requests.get(
 uuid = search.json()["data"][0]["uuid"]
 
 # Step 2: Use the UUID in Company Data API
-enrich = requests.post(
-    "https://api.akta.pro/api/v1/company/enrichment",
-    headers={**HEADERS, "Content-Type": "application/json"},
-    json={"company": uuid, "sections": ["firmographics", "funding"]}
+enrich = requests.get(
+    "https://api.akta.pro/api/v1/company/enrichment/",   # was POST /v1/company/enrichment
+    headers=HEADERS,
+    params={"company": uuid, "sections": "firmographic,business_model"}
 )
-print(enrich.json()["data"]["firmographics"]["name"])
+enrich.raise_for_status()   
+enrich_data = enrich.json()
+print(enrich_data["data"]["firmographic"]["name"])
 
 # Or use it in the News API
 news = requests.get(
-    "https://api.akta.pro/api/v1/news",
+    "https://api.akta.pro/api/v1/news/",
     headers=HEADERS,
     params={"company": uuid, "limit": 10}
 )
-print(f"Found {news.json()['total']} articles")
+news.raise_for_status()
+news_data = news.json()
+article_count = news_data.get("count", news_data.get("total", "unknown"))
+print(f"Found {article_count} articles")
 ```
