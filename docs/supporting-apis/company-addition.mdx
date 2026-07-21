@@ -1,6 +1,5 @@
 ---
 title: "Company Addition"
-hidden: true
 ---
 
 ## Overview
@@ -10,7 +9,7 @@ The Company Addition API lets you add a company that isn't yet in akta.pro's dat
 If the company already exists in the database, the API tells you so immediately and returns its details — no addition request is created. Otherwise, this is an **asynchronous, two-step endpoint**:
 
 1. **Submit** a company for addition with a `POST` request. If it's new, the API returns a `request_id`.
-2. **Track** the request to completion, either by polling the status endpoint with that `request_id`, or by configuring a webhook to be notified when the status changes.
+2. **Track** the request to completion, either by polling the [request status endpoint](/docs/supporting-apis/request-status-api) with that `request_id`, or by [configuring a webhook](/webhook-config) to be notified when the status changes.
 
 This is a **free endpoint** so it does not consume API credits.
 
@@ -214,19 +213,7 @@ When the request reaches `completed`, the `uuid` field is populated with the new
 
 Instead of polling, configure a webhook to be notified automatically when the status of an addition request changes. akta.pro will send a `POST` request to your configured endpoint each time a request transitions status (e.g. to `completed` or `failed`).
 
-A webhook payload looks like:
-
-```json
-{
-  "request_id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-  "company_name": "solios",
-  "website": "https://www.soleosenergy.com/",
-  "status": "completed",
-  "uuid": "00000ab-soleos"
-}
-```
-
-Match the incoming `request_id` against the one returned at submission to correlate the notification with your original request.
+Learn more about configuring webhooks [here](/webhook-config).
 
 ---
 

@@ -117,12 +117,11 @@
                   "docs/supporting-apis/company-search",
                   "docs/supporting-apis/industry-search",
                   "docs/supporting-apis/company-addition",
-                  "docs/supporting-apis/status-api"
+                  "docs/supporting-apis/request-status-api"
                 ]
               },
               {
                 "group": "MCP",
-                "hidden": true,
                 "expanded": true,
                 "pages": [
                   "docs/mcp/quick-start"
@@ -130,7 +129,6 @@
               },
               {
                 "group": "CLI",
-                "hidden": true,
                 "expanded": true,
                 "pages": [
                   "docs/cli/quick-start"
@@ -147,7 +145,8 @@
                   "sic-codes",
                   "iab-codes",
                   "iptc-codes",
-                  "company-data-dictionary"
+                  "company-data-dictionary",
+                  "webhook-config"
                 ]
               }
             ]
