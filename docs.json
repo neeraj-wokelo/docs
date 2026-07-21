@@ -145,7 +145,6 @@
             "pages": [
               {
                 "group": "MCP",
-                "expanded": true,
                 "pages": [
                   "docs/developer-tools/mcp/setup",
                   "docs/developer-tools/mcp/tools",
@@ -154,7 +153,6 @@
               },
               {
                 "group": "CLI",
-                "expanded": true,
                 "pages": [
                   "docs/developer-tools/cli/setup",
                   "docs/developer-tools/cli/commands",
