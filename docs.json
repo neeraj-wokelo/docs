@@ -148,7 +148,8 @@
                 "pages": [
                   "docs/developer-tools/mcp/setup",
                   "docs/developer-tools/mcp/tools",
-                  "docs/developer-tools/mcp/credits"
+                  "docs/developer-tools/mcp/credits",
+                  "docs/developer-tools/mcp/use-cases"
                 ]
               },
               {
@@ -156,7 +157,8 @@
                 "pages": [
                   "docs/developer-tools/cli/setup",
                   "docs/developer-tools/cli/commands",
-                  "docs/developer-tools/cli/credits"
+                  "docs/developer-tools/cli/credits",
+                  "docs/developer-tools/cli/use-cases"
                 ]
               }
             ]

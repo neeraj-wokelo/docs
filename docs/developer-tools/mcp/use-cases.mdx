@@ -1,0 +1,126 @@
+---
+title: "Use cases"
+description: "Example prompts and workflows for the akta.pro MCP tools, from company overviews to multi-signal research."
+hidden: true
+---
+
+The akta.pro MCP server exposes company data, news, and alternative signals as tools an AI agent can call directly. Because the agent chooses and chains tools on its own, you drive it with natural language by describing what you want, and it resolves identifiers, selects sections, and combines signals for you. The examples below show the kinds of prompts each workflow supports and which tools they exercise under the hood.
+
+<Note>
+  Most workflows begin with a resolve-first step. `company_search` (name/website → `uuid`) and `industry_search` (topic → industry code) are free, so the agent can resolve identifiers before spending credits on data tools.
+</Note>
+
+## Company overview
+
+Get a fast, well-rounded read on a company. The agent resolves the name, then typically pulls a concise overview and recent news.
+
+```text
+Tell me about Stripe — recent news, headcount, and product lineup.
+```
+
+```text
+Give me a quick snapshot of Anthropic: what they do, how big they are, and what's in the news.
+```
+
+**Tools:** `company_search` → `company_data_concise` (or `company_data`), `news_signals`, and — on Subscription/Enterprise — `headcount_trends`.
+
+## Structured company data
+
+When you need specific, structured sections rather than a general overview, name the sections you want. The agent requests only those, so you only pay for what you use.
+
+```text
+Pull the firmographic and management profile for Anthropic.
+```
+
+```text
+What's Databricks' business model, funding, and technology stack?
+```
+
+```text
+Compare the digital presence and financial estimates of Figma and Canva.
+```
+
+**Tools:** `company_search` → `company_data` (with the relevant sections selected). Funding and M&A/investment sections require Enterprise; on lower tiers they're silently skipped and noted in the returned Markdown.
+
+## Filtered news monitoring
+
+Scope news by company, industry, free-text query, or news type. The agent can look up type codes (`news_types`) and industry codes (`industry_search`) to build precise filters.
+
+```text
+Show me only M&A news on Adobe from the last quarter.
+```
+
+```text
+What are the latest funding rounds across the fintech industry?
+```
+
+```text
+Monitor news about "data center buildout" — I don't have a specific company in mind.
+```
+
+```text
+Any layoffs or restructuring news for Salesforce recently?
+```
+
+**Tools:** `news_types` and/or `industry_search` to resolve filters → `news_signals` → `news_detail` for full article bodies when the agent needs to read specific pieces.
+
+## Open-ended topic and entity tracking
+
+Because News Signals supports free-text queries and doesn't require a company or industry anchor, you can track themes, commodities, or events that span many companies.
+
+```text
+Track regulatory news around AI safety over the past month.
+```
+
+```text
+What's the coverage been on semiconductor export restrictions?
+```
+
+**Tools:** `news_signals` (open-ended `query`) → `news_detail`.
+
+## Alternative signals
+
+Read the operating signals behind a company — hiring, traffic, reviews, and social activity. These tools require Subscription or Enterprise.
+
+```text
+How has Notion's headcount trended over the past year, and what's their current hiring look like?
+```
+
+```text
+Is Webflow's website traffic growing or shrinking, and where does it come from?
+```
+
+```text
+What do employees say about working at Ramp — and how does it compare to Brex?
+```
+
+```text
+Summarize Vercel's recent product reviews: what do customers praise and complain about?
+```
+
+**Tools:** `headcount_trends`, `job_posts`, `website_traffic`, `employee_reviews`, `product_reviews`, `social_posts` — usually preceded by `company_search`.
+
+## Multi-signal research
+
+The real value of the MCP server is letting the agent combine several tools into one answer. A single prompt can trigger a resolve step, structured data, news, and alternative signals — synthesized into a briefing.
+
+```text
+Put together a diligence brief on Anthropic: firmographics, funding, headcount
+trend, recent news, and employee sentiment.
+```
+
+```text
+I'm evaluating Linear as a competitor. Pull their product lineup, hiring activity,
+website traffic trend, and any notable news from the last quarter.
+```
+
+```text
+Which is scaling faster right now, Deel or Rippling? Compare headcount growth,
+hiring volume, and recent funding or M&A news.
+```
+
+**Tools:** `company_search` → `company_data` \+ `news_signals` \+ one or more alternative-signal tools, combined by the agent. Availability of the alternative-signal tools depends on your plan tier — check with `account_status`.
+
+<Tip>
+  Not sure what your plan covers or how many credits you have left? Ask the agent to check `account_status`, which is free.
+</Tip>

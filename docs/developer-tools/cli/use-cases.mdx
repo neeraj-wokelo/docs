@@ -1,0 +1,118 @@
+---
+title: "Use cases"
+description: "Worked examples for the akta CLI, from company lookups to multi-command research pipelines and scripting."
+hidden: true
+---
+
+The akta CLI wraps the akta.pro APIs into composable shell commands. Every workflow starts by resolving a company or industry, then pulls data, news, or alternative signals — and because every command supports `--json`, you can pipe results into `jq`, save them to files, or chain them in scripts. The examples below map common workflows to concrete commands.
+
+<Note>
+  Resolve first. `akta company search` (name/website → `uuid`) and `akta industry search` (topic → industry code) are free — run them before spending credits on data commands.
+</Note>
+
+## Company overview
+
+Resolve a company, then pull a concise overview and recent news for a fast read.
+
+```bash
+# Resolve the name (free) — returns a uuid
+akta company search "Stripe"
+
+# Slimmed JSON overview
+akta company concise stripe.com
+
+# Recent news for the same company
+akta news signals --company stripe.com -n 10
+```
+
+## Structured company data
+
+Request only the sections you need — `company data` requires at least one `--section` (`-s`) and bills per section.
+
+```bash
+# Firmographics + management profile as rendered Markdown
+akta company data anthropic.com -s firmographic -s management_profile
+
+# Business model, funding, and tech stack; save raw Markdown to a file
+akta company data databricks.com -s business_model -s funding_detail -s technology --raw > databricks.md
+```
+
+<Accordion title="Available sections">
+  `firmographic`, `business_model`, `company_assessment`, `trust_signal`, `company_hierarchy`, `digital_presence`, `financial_estimate`, `location`, `management_profile`, `product_offering`, `strategic_signal`, `customer_profile`, `industry`, `technology`, plus enterprise-only `funding_detail` and `mna_and_investment` (auto-skipped on lower tiers). There is no `"all"` — choose explicitly.
+</Accordion>
+
+## Filtered news monitoring
+
+Scope news by company, industry, free-text query, or news type. Look up type codes with `akta news types` and industry codes with `akta industry search`.
+
+```bash
+# Find the news-type codes (free, offline)
+akta news types
+
+# M&A news on Adobe (SD-series type code), latest 20
+akta news signals --company adobe.com -t MA01 -n 20
+
+# Resolve an industry, then filter news by it
+akta industry search "fintech"
+akta news signals --industry <code> -n 25
+```
+
+## Open-ended topic and entity tracking
+
+News Signals doesn't require a company or industry — pass a free-text `--query` to track a theme across many companies, and pipe the ids straight into `jq`.
+
+```bash
+# Theme-based monitoring, extract just the article ids
+akta news signals --query "data center buildout" --json | jq '.data[].id'
+
+# Pull full article bodies for specific ids (max 10)
+akta news detail 12345 12346
+```
+
+## Alternative signals
+
+Hiring, traffic, reviews, and social data. All require **Subscription or Enterprise** — Pay-as-you-go returns `403`.
+
+```bash
+# Headcount trend
+akta headcount notion.so
+
+# Website traffic estimates
+akta traffic webflow.com
+
+# Open roles / hiring signal
+akta jobs notion.so
+
+# Product reviews — list the catalog first to get product ids, then pull one
+akta reviews products vercel.com
+akta reviews products vercel.com --product-id p_123 -n 50
+
+# Employee sentiment
+akta reviews employees ramp.com
+```
+
+## Scripting and pipelines
+
+Every command emits clean JSON with `--json` (applied automatically when stdout is piped), so the CLI composes well in scripts.
+
+```bash
+# Resolve a uuid and feed it into a data pull
+UUID=$(akta company search "Canva" --json | jq -r '.data[0].uuid')
+akta company data "$UUID" -s firmographic -s technology --raw > canva.md
+
+# Save a concise overview to a file
+akta company concise canva.com -o canva.json
+
+# Loop over a list of companies and collect recent news ids
+for domain in stripe.com adobe.com figma.com; do
+  echo "== $domain =="
+  akta news signals --company "$domain" --json | jq -r '.data[].id'
+done
+
+# Suppress the credits_consumed line (printed to stderr) for clean piping
+akta news signals --query "crude oil prices" --json -q | jq '.data[].title'
+```
+
+<Tip>
+  Run `akta <command> --help` to see every flag for a command, and `akta account` to check your tier and remaining credit balance.
+</Tip>
