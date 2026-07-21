@@ -142,10 +142,10 @@ Enrich multiple companies concurrently by running parallel requests.
 ```python
 import requests, concurrent.futures
 
-HEADERS = {"x-api-key": "<YOUR_API_KEY>"}
+HEADERS = {"x-api-key": "YOUR API KEY"}
 
 WATCHLIST = ["stripe.com", "figma.com", "notion.so", "loom.com", "miro.com"]
-SECTIONS  = "firmographics,funding,headcount"
+SECTIONS  = "firmographic,business_model"
 
 def enrich_company(domain):
     r = requests.get(
@@ -156,19 +156,17 @@ def enrich_company(domain):
     return domain, r.json().get("data", {})
 
 with concurrent.futures.ThreadPoolExecutor(max_workers=5) as pool:
-    results = dict(pool.map(lambda d: enrich_company(d), WATCHLIST))
+    results = dict(pool.map(enrich_company, WATCHLIST))
 
-print(f"{'Company':<20} {'Status':<12} {'Stage':<22} {'Total Raised'}")
-print("-" * 72)
+print(f"{'Company':<20} {'Status':<12} {'GTM Type':<15} {'Headcount'}")
+print("-" * 65)
 for domain, data in results.items():
-    firm    = data.get("firmographics", {})
-    funding = data.get("funding", {}).get("overall", {})
-    total   = funding.get("total_funding", 0)
-    total_s = f"${total / 1e9:.1f}B" if total >= 1e9 else (f"${total / 1e6:.0f}M" if total > 0 else "—")
+    firm  = data.get("firmographic", {})
+    model = data.get("business_model", {})
     print(
         f"{firm.get('name', domain):<20} "
-        f"{firm.get('company_status', '—'):<12} "
-        f"{funding.get('funding_stage', '—'):<22} "
-        f"{total_s}"
+        f"{firm.get('operating_status', {}).get('label', '—'):<12} "
+        f"{model.get('gtm_type', '—'):<15} "
+        f"{firm.get('headcount_range', '—')}"
     )
 ```
