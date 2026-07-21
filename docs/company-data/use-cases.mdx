@@ -103,14 +103,14 @@ Resolve a company name via Company Search, then enrich synchronously for a CRM r
 ```python
 import requests
 
-HEADERS = {"x-api-key": "<YOUR_API_KEY>"}
+HEADERS = {"x-api-key": "YOUR API KEY"}
 
 def enrich_by_name(company_name, sections):
     # Step 1: resolve to UUID via Company Search
     search = requests.get(
         "https://api.akta.pro/api/v1/company/search",
         headers=HEADERS,
-        params={"name": company_name}
+        params={"query": company_name}
     )
     results = search.json().get("data", [])
     if not results:
@@ -126,9 +126,13 @@ def enrich_by_name(company_name, sections):
     )
     return enrich.json()["data"]
 
-data = enrich_by_name("Stripe", ["firmographics", "funding"])
-overall = data["funding"]["overall"]
-print(f"{data['firmographics']['name']}: ${overall['total_funding'] / 1e9:.1f}B raised ({overall['funding_stage']})")
+data = enrich_by_name("Stripe", ["firmographic", "funding_detail"])
+funding_overview = data["funding_detail"]["funding_overview"]
+print(
+    f"{data['firmographic']['name']}: "
+    f"${funding_overview['total_funding_usd'] / 1e9:.1f}B raised "
+    f"({funding_overview['funding_stage']['label']})"
+)
 ```
 
 ### Batch enrichment across a watchlist
