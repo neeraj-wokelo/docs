@@ -13,17 +13,17 @@ Go to [playground.akta.pro](https://playground.akta.pro) and log in to your acco
 
 From the left navigation bar, click **Webhooks**.
 
+<Frame>
+  ![Screenshot 2026 07 21 At 12 34 39 PM](/images/Screenshot-2026-07-21-at-12.34.39-PM.png)
+</Frame>
+
 If you already have webhooks configured, you'll see them listed here along with their name, URL, subscribed events, status, and creation date.
 
 ## Step 2: Add a New Webhook
 
 Click the **\+ Add webhook** button in the top-right corner of the Webhooks page.
 
-This opens the webhook creation flow, which has three steps:
-
-1. **Configure**
-2. **Select events**
-3. **Done**
+This opens the webhook creation flow.
 
 ## Step 3: Configure Your Webhook
 
@@ -35,9 +35,13 @@ On the **Configure** step, fill in:
 
 <ParamField path="Endpoint URL" type="string" required>
   The URL that will receive event payloads, e.g. `https://example.com/api/webhook`. This is typically an endpoint on your own server, or a URL provided by an automation tool like Zapier (e.g. `https://hooks.zapier.com/hooks/catch/...`).
-</ParamField>
 
-Once both fields are filled in, click **Continue**.
+  <Frame>
+    ![Screenshot 2026 07 21 At 11 58 24 AM 1](/images/Screenshot-2026-07-21-at-11.58.24-AM-1.png)
+  </Frame>
+
+  Once both fields are filled in, click **Continue**.
+</ParamField>
 
 ## Step 4: Select Events
 
@@ -47,6 +51,10 @@ On the **Select events** step, choose which events should trigger this webhook.
 - Alternatively, select individual events, such as `company.company_addition`, which fires when a requested company has been added and is available.
 
 The number of events you've selected is displayed below the list (e.g. "1 event selected").
+
+<Frame>
+  ![Screenshot 2026 07 21 At 11 58 54 AM](/images/Screenshot-2026-07-21-at-11.58.54-AM.png)
+</Frame>
 
 Click **Create webhook** to finish.
 

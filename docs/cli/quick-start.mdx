@@ -3,7 +3,7 @@ title: "Quick Start"
 description: "Command-line tool for company search, structured company data, news monitoring, and alternative signals, backed by the Akta REST API"
 ---
 
-The `akta` CLI is a command-line client for the [Akta REST API](https://api.akta.pro/api/v1). A sibling of the Akta MCP server. Both are thin clients over the same endpoints; the CLI is the presentation layer for humans and shell scripts. It ships as its own self-contained distribution (`akta-pro-cli`) with no MCP-server code.
+The `akta-pro-cli`  is a command-line client for the akta.pro REST API. A sibling of the Akta MCP server. Both are thin clients over the same endpoints; the CLI is the presentation layer for humans and shell scripts. It ships as its own self-contained distribution (`akta-pro-cli`) with no MCP-server code.
 
 ## Installation
 
@@ -86,9 +86,9 @@ akta company concise canva.com
 | `akta company concise <company>` | 8 | slimmed JSON |  |
 
 <Accordion title="company data sections">
-  Each section is billed separately: `firmographic`, `business_model`, `company_assessment`, `trust_signal`, `company_hierarchy`, `digital_presence`, `financial_estimate`, `location`, `management_profile`, `product_offering`, `strategic_signal`, `customer_profile`, `industry`, `technology`, plus enterprise-only `funding_detail` (3) and `mna_and_investment` (5).
+  Each section is billed separately: `firmographic`, `business_model`, `company_assessment`, `trust_signal`, `company_hierarchy`, `digital_presence`, `financial_estimate`, `location`, `management_profile`, `product_offering`, `strategic_signal`, `customer_profile`, `industry`, `technology`, plus enterprise-only `funding_detail`  and `mna_and_investment` .
 
-  There is no `"all"` — choose explicitly. The two enterprise sections are auto-skipped (not an error) for non-enterprise callers, with a note.
+  There is no `"all"` — choose explicitly. The two enterprise sections are auto-skipped (not an error).
 </Accordion>
 
 ### Industry

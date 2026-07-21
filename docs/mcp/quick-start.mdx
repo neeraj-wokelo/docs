@@ -10,11 +10,11 @@ akta.pro MCP connects AI assistants to our company-intelligence stack, including
 akta.pro MCP server can be installed in any MCP client with the server URL: `https://mcp.akta.pro/mcp`
 
 <CardGroup cols={2}>
-  <Card title="Install in Cursor" icon="arrow-up-left" href="https://cursor.com/en/install-mcp?name=akta%20mcp&config=eyJ1cmwiOiJodHRwczovL21jcC5ha3RhLnByby9tY3AifQ==" cta="Install">
+  <Card title="Install in Cursor" icon="arrow-up-left" href="https://cursor.com/en/install-mcp?name=akta%20mcp&config=eyJ1cmwiOiJodHRwczovL21jcC5ha3RhLnByby9tY3AifQ==">
     One-click install for Cursor
   </Card>
 
-  <Card title="Install in VS Code" icon="code" href="https://insiders.vscode.dev/redirect/mcp/install?name=akta%20mcp&config=%7B%22type%22%3A%22http%22%2C%22url%22%3A%22https%3A%2F%2Fmcp.akta.pro%2Fmcp%22%7D" cta="Install">
+  <Card title="Install in VS Code" icon="code" href="https://insiders.vscode.dev/redirect/mcp/install?name=akta%20mcp&config=%7B%22type%22%3A%22http%22%2C%22url%22%3A%22https%3A%2F%2Fmcp.akta.pro%2Fmcp%22%7D">
     One-click install for VS Code
   </Card>
 </CardGroup>
@@ -25,6 +25,12 @@ akta.pro MCP server can be installed in any MCP client with the server URL: `htt
     2. Go to **Connectors → Add Connectors**
     3. Enter the name `akta-pro` and the server URL `https://mcp.akta.pro/mcp`
     4. Click **Add**, then complete the authentication
+  </Tab>
+  <Tab title="ChatGPT">
+    1. Go to Settings → Apps, then enable Developer Mode.
+    2. Open Apps and click Create to start a new custom app.
+    3. Name it "akta-pro" and paste the Server URL above, with OAuth as the authentication.
+    4. Click Create and complete authentication when prompted.
   </Tab>
   <Tab title="Cursor">
     Add to `~/.cursor/mcp.json`:
