@@ -133,22 +133,21 @@
                 "pages": [
                   "docs/cli/quick-start"
                 ]
-              },
-              "references",
-              {
-                "group": "References",
-                "hidden": true,
-                "pages": [
-                  "news-types",
-                  "country-codes",
-                  "naics-codes",
-                  "sic-codes",
-                  "iab-codes",
-                  "iptc-codes",
-                  "company-data-dictionary",
-                  "webhook-config"
-                ]
               }
+            ]
+          },
+          {
+            "group": "Resources",
+            "pages": [
+              "references",
+              "webhook-config",
+              "news-types",
+              "country-codes",
+              "naics-codes",
+              "sic-codes",
+              "iab-codes",
+              "iptc-codes",
+              "company-data-dictionary"
             ]
           },
           "playground",
