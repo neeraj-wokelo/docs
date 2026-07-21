@@ -6,7 +6,7 @@ openapi: "GET /v1/status/{request_id}"
 
 ## Overview
 
-The Request Status API returns the current status of an asynchronous request by its `request_id`. Use it to poll a long-running request — such as a [Company Addition](/api-reference/supporting-apis/company-addition-api) request — until it completes. The response includes the top-level request status along with a `detail` object carrying request-type-specific fields. This is a free endpoint and does not consume credits.
+The Request Status API returns the current status of an asynchronous request by its `request_id`. Use it to poll a long-running request such as a [Company Addition](/api-reference/supporting-apis/company-addition-api) request until it completes. The response includes the top-level request status along with a `detail` object carrying request-type-specific fields. This is a free endpoint and does not consume credits.
 
 <Tip>
   As an alternative to polling this endpoint, you can [configure a webhook](/webhook-config) to be notified automatically when a request's status changes.
