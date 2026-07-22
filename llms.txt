@@ -84,6 +84,30 @@
 - [Overview](https://docs.akta.pro/docs/supporting-apis/industry-search.md): Resolve an industry from a free-text query into matching industry codes ranked by similarity.
 - [API reference](https://docs.akta.pro/api-reference/supporting-apis/industry-search.md): Resolves an industry from a free-text query and returns matching industry codes ranked by similarity.
 
+### Company Addition API
+
+- [Overview](https://docs.akta.pro/docs/supporting-apis/company-addition.md): Submit a company that isn't yet in akta.pro's database for addition; a free, asynchronous two-step endpoint tracked via the Request Status API or a webhook.
+- [API reference](https://docs.akta.pro/api-reference/supporting-apis/company-addition-api.md): POST a company name and website to add a new company, or get its existing details immediately if it's already in the database.
+
+### Request Status API
+
+- [Overview](https://docs.akta.pro/docs/supporting-apis/request-status-api.md): Poll the status of an asynchronous request, such as a Company Addition request, by its request ID.
+- [API reference](https://docs.akta.pro/api-reference/supporting-apis/status-api.md): GET /v1/status/{request_id} — returns the current status and type-specific detail of an asynchronous request.
+
+## Developer Tools
+
+### MCP Server
+
+- [Setup](https://docs.akta.pro/docs/developer-tools/mcp/setup.md): Connect Claude, ChatGPT, Cursor, VS Code, Claude Code, and other MCP clients to the akta.pro MCP server at `https://mcp.akta.pro/mcp`.
+- [Tools](https://docs.akta.pro/docs/developer-tools/mcp/tools.md): Reference for all synchronous MCP tools — resolve-first tools, company data, news, and Subscription/Enterprise-only alternative signal tools.
+- [Credits](https://docs.akta.pro/docs/developer-tools/mcp/credits.md): Credit consumption per MCP tool call, including per-section billing for `company_data`.
+
+### CLI
+
+- [Setup](https://docs.akta.pro/docs/developer-tools/cli/setup.md): Install (`pipx`, `uv`, or `pip`) and authenticate the `akta-pro-cli` command-line client, a thin client over the same REST API as the MCP server.
+- [Commands](https://docs.akta.pro/docs/developer-tools/cli/commands.md): Full command reference — account, company search/data/concise, industry search, news, alternative signals, and non-interactive/JSON output flags.
+- [Credits](https://docs.akta.pro/docs/developer-tools/cli/credits.md): Credit consumption per CLI command, including per-section billing for `akta company data`.
+
 ## References
 
 - [Company Data dictionary](https://docs.akta.pro/company-data-dictionary.md): Field-by-field reference for every section and attribute returned by the Company Data API.

@@ -375,9 +375,9 @@
           },
           "company": {
             "description": "The existing company's details when already_exists is true; otherwise null.",
-            "oneOf": [
-              {"$ref": "#/components/schemas/ExistingCompany"},
-              {"type": "null"}
+            "nullable": true,
+            "allOf": [
+              {"$ref": "#/components/schemas/ExistingCompany"}
             ]
           },
           "request_id": {
