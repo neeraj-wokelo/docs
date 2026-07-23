@@ -39,7 +39,7 @@ akta.pro MCP server can be installed in any MCP client with the server URL: `htt
     ```json
     {
       "mcpServers": {
-        "akta": {
+        "akta-pro": {
           "url": "https://mcp.akta.pro/mcp",
           "headers": {
             "x-api-key": "YOUR_AKTA_API_KEY"
@@ -55,7 +55,7 @@ akta.pro MCP server can be installed in any MCP client with the server URL: `htt
     ```json
     {
       "servers": {
-        "akta": {
+        "akta-pro": {
           "type": "http",
           "url": "https://mcp.akta.pro/mcp",
           "headers": {
@@ -70,19 +70,24 @@ akta.pro MCP server can be installed in any MCP client with the server URL: `htt
     Run in terminal:
 
     ```bash
-    claude mcp add --transport http akta https://mcp.akta.pro/mcp --header "x-api-key: <YOUR_API_KEY>"
+    claude mcp add --transport http akta-pro https://mcp.akta.pro/mcp --header "x-api-key: <YOUR_API_KEY>"
     ```
   </Tab>
   <Tab title="OpenCode">
-    Add to your `opencode.json`:
+    Add  to `opencode.json` in your project root (or `~/.config/opencode/opencode.json` for a global config):
 
     ```json
     {
+      "$schema": "https://opencode.ai/config.json",
       "mcp": {
-        "akta": {
+        "akta-pro": {
           "type": "remote",
           "url": "https://mcp.akta.pro/mcp",
-          "enabled": true
+          "enabled": true,
+          "oauth": false,
+          "headers": {
+            "x-api-key": "YOUR_AKTA_API_KEY"
+          }
         }
       }
     }
