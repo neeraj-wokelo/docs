@@ -1,7 +1,8 @@
 ---
 title: "Setup"
-description: "Complete setup guide for akta.pro MCP Server. Connect Claude Desktop, Cursor, VS Code, and other AI assistants to akta.pro company search, company data, news, and alternative signal tools."
 ---
+
+Complete setup guide for akta.pro MCP server. 
 
 akta.pro MCP connects AI assistants to our company-intelligence stack, including company search, structured company profiles, news monitoring, and alternative signals like headcount, traffic, and reviews.
 
@@ -27,8 +28,8 @@ akta.pro MCP server can be installed in any MCP client with the server URL: `htt
     4. Click **Add**, then complete the authentication
   </Tab>
   <Tab title="ChatGPT">
-    1. Go to Settings → Apps, then enable Developer Mode.
-    2. Open Apps and click Create to start a new custom app.
+    1. Go to Settings → Plugins → Developer Mode, then enable Developer Mode.
+    2. Open Settings→ Plugins → Browse Plugins and click on \+ icon to add a new plugin
     3. Name it "akta-pro" and paste the Server URL above, with OAuth as the authentication.
     4. Click Create and complete authentication when prompted.
   </Tab>
@@ -91,7 +92,7 @@ akta.pro MCP server can be installed in any MCP client with the server URL: `htt
 
 # API Key
 
-<Card title="Get your Akta API key" icon="key" horizontal href="https://playground.akta.pro">
+<Card title="Get your akta.pro API key" icon="key" horizontal href="https://playground.akta.pro/dashboard/manage/api-keys">
 </Card>
 
 Your key resolves to a plan tier such as **pay-as-you-go**, **subscription**, or **enterprise**,  which determines what the tools below can return. Call `account_status` at any time to check your tier and remaining credit balance.
