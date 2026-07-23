@@ -19,47 +19,78 @@ export const ApiCodeSwitcher = () => {
       cURL: `curl -G "https://api.akta.pro/api/v1/news/?company=00000l1&unique_article=false" \\
   -H "x-api-key: YOUR_API_KEY"`,
       Python: `import requests
-
 url = "https://api.akta.pro/api/v1/news/"
 headers = {"x-api-key": "YOUR_API_KEY"}
 params = {
-    "company": "00000l1",
-    "unique_article": "false"
+    "company": "000036f",
+    "unique_article": "true"
 }
-
 response = requests.get(url, headers=headers, params=params)
 data = response.json()
-
-# data["status"] == "success"
-# data["total"]  — total matching articles
+print(f"Total matching articles: {data['total']} (showing {data['count']} at offset {data['offset']})")
+print()
 for article in data["data"]:
+    # Pull the primary tag out of the tags list (falls back to first tag if none flagged primary)
+    primary_tag = next((t["name"] for t in article.get("tags", []) if t.get("is_primary")), None)
+    if primary_tag is None and article.get("tags"):
+        primary_tag = article["tags"][0]["name"]
     print(article["title"])
-    print(article["published_date"], article["publisher"])
-    print(article["primary_tag"], "|", article["sentiment"])
+    print(article["published_date"], "|", article["publisher"])
+    print(primary_tag, "|", article["sentiment"], f"({article['sentiment_score']})")
     print(article["ai_summary"])
     print(article["url"])
     print()`,
-      JavaScript: `const params = new URLSearchParams({
-  company: "00000l1",
-  unique_article: "false"
+      JavaScript: `const url = "https://api.akta.pro/api/v1/news/";
+
+const headers = {
+  "x-api-key": "YOUR_API_KEY"
+};
+
+const params = new URLSearchParams({
+  company: "000036f",
+  unique_article: "true"
 });
 
-const response = await fetch(
-  \`https://api.akta.pro/api/v1/news/?\${params}\`,
-  { headers: { "x-api-key": "YOUR_API_KEY" } }
-);
+async function fetchNews() {
+  const response = await fetch(
+    url + "?" + params.toString(),
+    {
+      method: "GET",
+      headers
+    }
+  );
 
-const { status, data, total } = await response.json();
+  if (!response.ok) {
+    throw new Error(\`Request failed with status \${response.status}\`);
+  }
 
-// status === "success", total = total matching articles
-for (const article of data) {
-  console.log(article.title);
-  console.log(article.published_date, article.publisher);
-  console.log(article.primary_tag, "|", article.sentiment);
-  console.log(article.ai_summary);
-  console.log(article.url);
-}`
-    },
+  const data = await response.json();
+
+  console.log(
+    \`Total matching articles: \${data.total} (showing \${data.count} at offset \${data.offset})\`
+  );
+
+  for (const article of data.data) {
+    const tags = article.tags || [];
+
+    let primaryTag = tags.find(tag => tag.is_primary)?.name;
+
+    if (!primaryTag && tags.length) {
+      primaryTag = tags[0].name;
+    }
+
+    console.log(article.title);
+    console.log(\`\${article.published_date} | \${article.publisher}\`);
+    console.log(
+      \`\${primaryTag} | \${article.sentiment} (\${article.sentiment_score})\`
+    );
+    console.log(article.ai_summary);
+    console.log(article.url);
+    console.log("");
+  }
+}
+
+fetchNews().catch(console.error);`,
     company: {
       cURL: `curl -G "https://api.akta.pro/api/v1/company/enrichment/?company=00000l1&sections=firmographic" \\
   -H "x-api-key: YOUR_API_KEY"`,
@@ -89,7 +120,8 @@ const response = await fetch(
 const { data } = await response.json();
 console.log(data);`
     }
-  };
+  },
+}
 
   const tabs = [
     { id: 'news', label: 'News Signals', href: '/api-reference/news' },
