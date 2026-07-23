@@ -1,7 +1,8 @@
 ---
 title: "Setup"
-description: "Complete setup guide for akta.pro MCP Server. Connect Claude Desktop, Cursor, VS Code, and other AI assistants to akta.pro company search, company data, news, and alternative signal tools."
 ---
+
+Complete setup guide for akta.pro MCP server. 
 
 akta.pro MCP connects AI assistants to our company-intelligence stack, including company search, structured company profiles, news monitoring, and alternative signals like headcount, traffic, and reviews.
 
@@ -27,8 +28,8 @@ akta.pro MCP server can be installed in any MCP client with the server URL: `htt
     4. Click **Add**, then complete the authentication
   </Tab>
   <Tab title="ChatGPT">
-    1. Go to Settings → Apps, then enable Developer Mode.
-    2. Open Apps and click Create to start a new custom app.
+    1. Go to Settings → Plugins → Developer Mode, then enable Developer Mode.
+    2. Open Settings→ Plugins → Browse Plugins and click on \+ icon to add a new plugin
     3. Name it "akta-pro" and paste the Server URL above, with OAuth as the authentication.
     4. Click Create and complete authentication when prompted.
   </Tab>
@@ -38,7 +39,7 @@ akta.pro MCP server can be installed in any MCP client with the server URL: `htt
     ```json
     {
       "mcpServers": {
-        "akta": {
+        "akta-pro": {
           "url": "https://mcp.akta.pro/mcp",
           "headers": {
             "x-api-key": "YOUR_AKTA_API_KEY"
@@ -54,7 +55,7 @@ akta.pro MCP server can be installed in any MCP client with the server URL: `htt
     ```json
     {
       "servers": {
-        "akta": {
+        "akta-pro": {
           "type": "http",
           "url": "https://mcp.akta.pro/mcp",
           "headers": {
@@ -69,19 +70,24 @@ akta.pro MCP server can be installed in any MCP client with the server URL: `htt
     Run in terminal:
 
     ```bash
-    claude mcp add --transport http akta https://mcp.akta.pro/mcp --header "x-api-key: <YOUR_API_KEY>"
+    claude mcp add --transport http akta-pro https://mcp.akta.pro/mcp --header "x-api-key: <YOUR_API_KEY>"
     ```
   </Tab>
   <Tab title="OpenCode">
-    Add to your `opencode.json`:
+    Add  to `opencode.json` in your project root (or `~/.config/opencode/opencode.json` for a global config):
 
     ```json
     {
+      "$schema": "https://opencode.ai/config.json",
       "mcp": {
-        "akta": {
+        "akta-pro": {
           "type": "remote",
           "url": "https://mcp.akta.pro/mcp",
-          "enabled": true
+          "enabled": true,
+          "oauth": false,
+          "headers": {
+            "x-api-key": "YOUR_AKTA_API_KEY"
+          }
         }
       }
     }
@@ -91,7 +97,7 @@ akta.pro MCP server can be installed in any MCP client with the server URL: `htt
 
 # API Key
 
-<Card title="Get your Akta API key" icon="key" horizontal href="https://playground.akta.pro">
+<Card title="Get your akta.pro API key" icon="key" horizontal href="https://playground.akta.pro/dashboard/manage/api-keys">
 </Card>
 
 Your key resolves to a plan tier such as **pay-as-you-go**, **subscription**, or **enterprise**,  which determines what the tools below can return. Call `account_status` at any time to check your tier and remaining credit balance.

@@ -6,12 +6,12 @@ description: "Complete reference for the akta CLI"
 ## Account
 
 ```bash
-akta account   # check tier + credits
+akta-pro account   # check tier + credits
 ```
 
 | Command | Notes |
 | --- | --- |
-| `akta account` | your tier \+ credit balance |
+| `akta-pro account` | your tier \+ credit balance |
 
 ## Company
 
@@ -19,23 +19,23 @@ Resolve a company, then pull a concise overview or a section-by-section Markdown
 
 ```bash
 # Resolve a name to a uuid — run this first
-akta company search "Canva"
+akta-pro company search "Canva"
 
 # Rendered Markdown profile
-akta company data canva.com -s firmographic -s technology
+akta-pro company data canva.com -s firmographic -s technology
 
 # Raw Markdown (pipe/save)
-akta company data canva.com -s firmographic --raw
+akta-pro company data canva.com -s firmographic --raw
 
 # Slimmed JSON overview
-akta company concise canva.com
+akta-pro company concise canva.com
 ```
 
 | Command | Notes |
 | --- | --- |
-| `akta company search <query>` | run first; returns `uuid` |
-| `akta company data <company> -s ...` | Markdown; requires ≥1 `--section` |
-| `akta company concise <company>` | slimmed JSON |
+| `akta-pro company search <query>` | run first; returns `uuid` |
+| `akta-pro company data <company> -s ...` | Markdown; requires ≥1 `--section` |
+| `akta-pro company concise <company>` | slimmed JSON |
 
 <Accordion title="company data sections">
   Each section is billed separately: `firmographic`, `business_model`, `company_assessment`, `trust_signal`, `company_hierarchy`, `digital_presence`, `financial_estimate`, `location`, `management_profile`, `product_offering`, `strategic_signal`, `customer_profile`, `industry`, `technology`, plus enterprise-only `funding_detail` and `mna_and_investment`.
@@ -46,57 +46,57 @@ akta company concise canva.com
 ## Industry
 
 ```bash
-akta industry search "warehouse automation"
+akta-pro industry search "warehouse automation"
 ```
 
 | Command | Notes |
 | --- | --- |
-| `akta industry search <query>` | codes feed `news signals --industry` |
+| `akta-pro industry search <query>` | codes feed `news signals --industry` |
 
 ## News
 
 ```bash
 # Find type codes
-akta news types
+akta-pro news types
 
 # Product-launch news
-akta news signals --company canva.com -t SD01 -n 20
+akta-pro news signals --company canva.com -t SD01 -n 20
 
 # Filter by free-text query, pipe as JSON
-akta news signals --query "crude oil prices" --json | jq '.data[].id'
+akta-pro news signals --query "crude oil prices" --json | jq '.data[].id'
 
 # Full bodies for specific ids
-akta news detail 12345 12346
+akta-pro news detail 12345 12346
 ```
 
 | Command | Notes |
 | --- | --- |
-| `akta news signals [filters]` | needs ≥1 of `--company`/`--industry`/`--query`/`--title`; compact list with ids |
-| `akta news detail <id>...` | full bodies for ids from signals (max 10) |
-| `akta news types` | tag codes for `--type-code`; offline, no key |
+| `akta-pro news signals [filters]` | needs ≥1 of `--company`/`--industry`/`--query`/`--title`; compact list with ids |
+| `akta-pro news detail <id>...` | full bodies for ids from signals (max 10) |
+| `akta-pro news types` | tag codes for `--type-code`; offline, no key |
 
 ## Alternative signals
 
 Headcount, traffic, hiring, social, and review data. All require **Subscription or Enterprise** — Pay-as-you-go returns `403`.
 
 ```bash
-akta headcount canva.com
+akta-pro headcount canva.com
 
-akta reviews products canva.com               # list catalog + ids
-akta reviews products canva.com --product-id p_123 -n 50
+akta-pro reviews products canva.com               # list catalog + ids
+akta-pro reviews products canva.com --product-id p_123 -n 50
 ```
 
 | Command | Endpoint | Notes |
 | --- | --- | --- |
-| `akta headcount <company>` | `/company/headcount-trends` | Subscription/Enterprise |
-| `akta traffic <company>` | `/company/website-traffic` | Subscription/Enterprise |
-| `akta jobs <company>` | `/company/jobs` | Subscription/Enterprise |
-| `akta posts <company>` | `/company/posts` | Subscription/Enterprise |
-| `akta reviews employees <company>` | `/company/employee-reviews` | Subscription/Enterprise |
-| `akta reviews products <company>` | `/company/product-reviews` | catalog first, then `--product-id` |
+| `akta-pro headcount <company>` | `/company/headcount-trends` | Subscription/Enterprise |
+| `akta-pro traffic <company>` | `/company/website-traffic` | Subscription/Enterprise |
+| `akta-pro jobs <company>` | `/company/jobs` | Subscription/Enterprise |
+| `akta-pro posts <company>` | `/company/posts` | Subscription/Enterprise |
+| `akta-pro reviews employees <company>` | `/company/employee-reviews` | Subscription/Enterprise |
+| `akta-pro reviews products <company>` | `/company/product-reviews` | catalog first, then `--product-id` |
 
 <Note>
-  Run `akta <command> --help` for every flag.
+  Run `akta-pro <command> --help` for every flag.
 </Note>
 
 ## Non-Interactive Mode
@@ -107,16 +107,16 @@ All commands support `--json` output and can be fully controlled via CLI argumen
 
 ```bash
 # Clean, unstyled JSON on stdout (valid for | jq)
-akta news signals --query "crude oil prices" --json | jq '.data[].id'
+akta-pro news signals --query "crude oil prices" --json | jq '.data[].id'
 
 # Applied automatically when stdout is piped/redirected
-akta company search "Canva" > results.json
+akta-pro company search "Canva" > results.json
 
 # For company data, --json (alias --raw) emits the raw Markdown
-akta company data canva.com -s firmographic --json
+akta-pro company data canva.com -s firmographic --json
 
 # Write the raw JSON/text payload to a file
-akta company concise canva.com -o canva.json
+akta-pro company concise canva.com -o canva.json
 ```
 
 | Flag | Behavior |

@@ -9,34 +9,34 @@ Each akta CLI command consumes credits per call, mirroring the underlying API pr
 
 | Command | Credits Consumed |
 | :-- | :-- |
-| `akta account` | 0 |
-| `akta company search <query>` | 0 |
-| `akta industry search <query>` | 0 |
-| `akta news types` | 0 |
+| `akta-pro account` | 0 |
+| `akta-pro company search <query>` | 0 |
+| `akta-pro industry search <query>` | 0 |
+| `akta-pro news types` | 0 |
 
 ## Company
 
-`akta company data` is billed per section, so you only pay for the sections you request.
+`akta-pro company data` is billed per section, so you only pay for the sections you request.
 
 | Command | Section | Credits Consumed |
 | :-- | :-- | :-- |
-| `akta company data` | firmographic | 2 |
-| `akta company data` | business\_model | 2 |
-| `akta company data` | company\_assessment | 2 |
-| `akta company data` | trust\_signal | 0.5 |
-| `akta company data` | company\_hierarchy | 0.5 |
-| `akta company data` | digital\_presence | 0.5 |
-| `akta company data` | financial\_estimate | 0.5 |
-| `akta company data` | location | 0.5 |
-| `akta company data` | management\_profile | 1.5 |
-| `akta company data` | product\_offering | 2 |
-| `akta company data` | strategic\_signal | 1.5 |
-| `akta company data` | customer\_profile | 1 |
-| `akta company data` | industry | 1 |
-| `akta company data` | technology | 2 |
-| `akta company data` | funding\_detail _(enterprise)_ | 3 |
-| `akta company data` | mna\_and\_investment _(enterprise)_ | 5 |
-| `akta company concise` | — | 8 |
+| `akta-pro company data` | firmographic | 2 |
+| `akta-pro company data` | business\_model | 2 |
+| `akta-pro company data` | company\_assessment | 2 |
+| `akta-pro company data` | trust\_signal | 0.5 |
+| `akta-pro company data` | company\_hierarchy | 0.5 |
+| `akta-pro company data` | digital\_presence | 0.5 |
+| `akta-pro company data` | financial\_estimate | 0.5 |
+| `akta-pro company data` | location | 0.5 |
+| `akta-pro company data` | management\_profile | 1.5 |
+| `akta-pro company data` | product\_offering | 2 |
+| `akta-pro company data` | strategic\_signal | 1.5 |
+| `akta-pro company data` | customer\_profile | 1 |
+| `akta-pro company data` | industry | 1 |
+| `akta-pro company data` | technology | 2 |
+| `akta-pro company data` | funding\_detail _(enterprise)_ | 3 |
+| `akta-pro company data` | mna\_and\_investment _(enterprise)_ | 5 |
+| `akta-pro company concise` | — | 8 |
 
 <Note>
   Enterprise-only `company data` sections (`funding_detail`, `mna_and_investment`) are auto-skipped on lower tiers rather than billed.
@@ -46,8 +46,8 @@ Each akta CLI command consumes credits per call, mirroring the underlying API pr
 
 | Command | Credits Consumed |
 | :-- | :-- |
-| `akta news signals [filters]` | 0.1 \+ 0.01 per record |
-| `akta news detail <id>...` | 0.03 per record |
+| `akta-pro news signals [filters]` | 0.1 \+ 0.01 per record |
+| `akta-pro news detail <id>...` | 0.03 per record |
 
 ## Alternative signals
 
@@ -55,12 +55,12 @@ These commands require a Subscription or Enterprise plan. A call on a plan that 
 
 | Command | Credits Consumed |
 | :-- | :-- |
-| `akta headcount <company>` | 2.5 |
-| `akta traffic <company>` | 1.5 |
-| `akta jobs <company>` | 4 credits for 10 records |
-| `akta posts <company>` | 1 credits for 10 records |
-| `akta reviews employees <company>` | 1.5 credits for 50 records |
-| `akta reviews products <company>` | 1.5 credits for 50 records |
+| `akta-pro headcount <company>` | 2.5 |
+| `akta-pro traffic <company>` | 1.5 |
+| `akta-pro jobs <company>` | 4 credits for 10 records |
+| `akta-pro posts <company>` | 1 credits for 10 records |
+| `akta-pro reviews employees <company>` | 1.5 credits for 50 records |
+| `akta-pro reviews products <company>` | 1.5 credits for 50 records |
 
 <Note>
   For cost per credit and rate limits by plan, see the [Pricing](/getting-started/pricing) page.
