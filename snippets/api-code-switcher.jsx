@@ -91,6 +91,7 @@ async function fetchNews() {
 }
 
 fetchNews().catch(console.error);`,
+    },
     company: {
       cURL: `curl -G "https://api.akta.pro/api/v1/company/enrichment/?company=00000l1&sections=firmographic" \\
   -H "x-api-key: YOUR_API_KEY"`,
