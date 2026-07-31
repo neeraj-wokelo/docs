@@ -246,10 +246,11 @@ const Error = ({ text }) => (
           By clicking "Request API access, you agree to akta.pro's{" "}
           <a className="underline" href="https://akta.pro/legal?tab=privacy">
             Privacy Policy
-          </a>{" "} and
+          </a>{" "} and {" "}
            <a className="underline" href="https://akta.pro/legal?tab=terms">
             Terms And Conditions 
           </a>
+          {" "}
           and consent to receive product updates and insights.
         </span>
       </form>
