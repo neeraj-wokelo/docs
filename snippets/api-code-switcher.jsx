@@ -122,7 +122,6 @@ const { data } = await response.json();
 console.log(data);`
     }
   },
-}
 
   const tabs = [
     { id: 'news', label: 'News Signals', href: '/api-reference/news' },
@@ -299,4 +298,4 @@ console.log(data);`
     </div>
     </>
   );
-};
+}
