@@ -130,6 +130,6 @@ When you need to know which people, locations, products, or events an article to
 
 If certain publisher domains consistently add noise to your pipeline (e.g. low-quality aggregators or syndication mirrors), pass them to `blacklisted` so they're excluded server-side. This is more efficient than fetching and discarding articles after the fact, and it doesn't count against your effective `limit`.
 
-**Do NOT pass both** `query `**and title**` parameters `**in the same request.**
+**Do NOT pass both** `query `**and** `title` **parameters in the same request.**
 
 An API request can only have one of `query` or `title` parameters and NOT both. `title` parameter search news based on the presence of exact keywords you enter in the news title.
