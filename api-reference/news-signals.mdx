@@ -42,7 +42,9 @@ The News API fetches news articles filtered by company, industry, date range, se
 </ParamField>
 
 <ParamField query="title" type="string">
-  Searches articles based on the title entered.
+  Searches articles based on the title entered. 
+
+  Note: a request can only have one of `query` or `title` as parameters and NOT both.
 </ParamField>
 
 <ParamField query="start_date" type="string">

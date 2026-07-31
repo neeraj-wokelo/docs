@@ -6,7 +6,7 @@ title: "Company Addition"
 
 The Company Addition API lets you add a company that isn't yet in akta.pro's database. If the Company Search API returns no results for a company, submit it here and akta.pro will add it.
 
-If the company already exists in the database, the API tells you so immediately and returns its details — no addition request is created. Otherwise, this is an **asynchronous, two-step endpoint**:
+If the company already exists in the database, the API tells you so immediately and returns its details so no addition request is created. Otherwise, this is an **asynchronous, two-step endpoint**:
 
 1. **Submit** a company for addition with a `POST` request. If it's new, the API returns a `request_id`.
 2. **Track** the request to completion, either by polling the [request status endpoint](/docs/supporting-apis/request-status-api) with that `request_id`, or by [configuring a webhook](/webhook-config) to be notified when the status changes.
