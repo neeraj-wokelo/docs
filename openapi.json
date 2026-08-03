@@ -530,6 +530,13 @@
             "description": "Website (e.g. 'https://canva.com') or company UUID returned by the Company Search API."
           },
           {
+            "name": "primary_company",
+            "in": "query",
+            "required": false,
+            "schema": {"type": "string"},
+            "description": "Filter to return only articles where the specified company is the primary company featured. Cannot be used with the `company` parameter."
+          },
+          {
             "name": "industry",
             "in": "query",
             "required": false,
