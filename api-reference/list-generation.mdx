@@ -1,0 +1,256 @@
+---
+title: "List Generation API"
+description: "Build targeted company lists using structured filters or natural language queries, with optional data enrichment."
+openapi: "POST /v1/company/list/generate"
+hidden: true
+---
+
+## Overview
+
+The List Generation API lets you build targeted company lists using two approaches:
+
+1. **Structured Filters** - Apply specific criteria like company type, location, funding stage, or industry to filter companies
+2. **Natural Language** - Describe what you're looking for in plain text and the API interprets your intent
+
+Results are ranked by Akta relevance by default and can be enriched with additional company data sections.
+
+## Endpoint Details
+
+- **Method:** POST
+- **Endpoint:** `/v1/company/list/generate`
+
+## Authentication requirements
+
+- Include a valid API key in the `x-api-key` request header.
+
+## Request
+
+### Request Parameters
+
+#### Header Parameters
+
+<ParamField header="x-api-key" type="string" required>
+  Your API key.
+</ParamField>
+
+#### Body Parameters
+
+<ParamField body="query" type="string">
+  Natural language search query. Use this when you want to describe your target companies in plain text (e.g., "SaaS companies in the US with Series A funding").
+
+  Note: Cannot be used together with `filters`. Choose either `query` or `filters`, not both.
+</ParamField>
+
+<ParamField body="filters" type="object">
+  Structured filter conditions. Use this when you need precise control over filtering criteria.
+
+  Each filter key follows a dotted-path notation matching company data structure (e.g., `firmographic.company_type`, `location.hq.country`).
+
+  Note: Cannot be used together with `query`. Choose either `filters` or `query`, not both.
+</ParamField>
+
+<ParamField body="sections" type="array of strings">
+  Additional data sections to include for each company in the results.
+
+  Available values: `firmographic`, `financial_estimate`, `funding_detail`, `technology`, `location`, `company_assessment`, `business_model`, `management_profile` (Enterprise only), `customer_profile` (Enterprise only), `competitive_landscape` (Enterprise only), `strategic_signals` (Enterprise only), `monitoring_signals` (Enterprise only)
+
+  If omitted, results include only basic identity fields (uuid, name, website).
+</ParamField>
+
+<ParamField body="sort_by" type="string">
+  Field to sort results by.
+
+  Available values: `relevance` (default), `revenue_estimate`, `valuation_estimate`, `employee_range`, `total_funding`, `founded_year`
+</ParamField>
+
+<ParamField body="sort_order" type="string">
+  Sort direction.
+
+  Available values: `asc`, `desc`
+
+  Default = `desc`
+</ParamField>
+
+<ParamField body="limit" type="integer">
+  Maximum number of companies to return.
+
+  Default = 50
+
+  Max value = 500
+</ParamField>
+
+<ParamField body="offset" type="integer">
+  Number of results to skip for pagination.
+
+  Default = 0
+</ParamField>
+
+#### Filter Examples
+
+**EQ/IN Filters** - Exact match or multiple values:
+
+```json
+{
+  "filters": {
+    "firmographic.company_type": ["private"],
+    "location.hq.country": ["USA"]
+  }
+}
+```
+
+**RANGE Filters** - Numeric or date ranges:
+
+```json
+{
+  "filters": {
+    "firmographic.founded_year": {"gte": 2018, "lte": 2024},
+    "funding_detail.funding_overview.total_funding_usd": {"gte": 1000000}
+  }
+}
+```
+
+**ARRAY_ANY Filters** - Match any value in a list:
+
+```json
+{
+  "filters": {
+    "business_model.gtm_motion": ["direct_sales", "self_serve_plg"],
+    "industry.naics_codes": ["5112", "5182"]
+  }
+}
+```
+
+**BOOL Filters** - Simple yes/no flags:
+
+```json
+{
+  "filters": {
+    "technology.has_api": true,
+    "location.market_served.is_global": true
+  }
+}
+```
+
+**NESTED Filters** - Match specific details within nested objects:
+
+```json
+{
+  "filters": {
+    "funding_detail.funding_rounds": {
+      "round": ["series_a", "series_b"],
+      "amount_usd": {"gte": 5000000}
+    }
+  }
+}
+```
+
+## Response
+
+#### Successful Response Fields
+
+<ResponseField name="data" type="array">
+  List of matching company objects. Each object includes identity fields (uuid, name, website) plus any requested enrichment sections.
+</ResponseField>
+
+<ResponseField name="count" type="integer">
+  Number of companies returned in this response.
+</ResponseField>
+
+<ResponseField name="total_count" type="integer">
+  Total number of companies matching your filters. Capped at 500.
+</ResponseField>
+
+<ResponseField name="credits_consumed" type="float">
+  Number of credits consumed by this request. Returns 0 when no enrichment sections are requested.
+</ResponseField>
+
+#### Company Object Fields
+
+<ResponseField name="uuid" type="string">
+  Unique identifier for the company.
+</ResponseField>
+
+<ResponseField name="name" type="string">
+  Company name.
+</ResponseField>
+
+<ResponseField name="website" type="string">
+  Company website URL.
+</ResponseField>
+
+<ResponseField name="firmographic" type="object">
+  Basic company information. Present only when `firmographic` is in sections.
+</ResponseField>
+
+<ResponseField name="financial_estimate" type="object">
+  Revenue and valuation estimates. Present only when `financial_estimate` is in sections.
+</ResponseField>
+
+<ResponseField name="funding_detail" type="object">
+  Funding rounds and investor information. Present only when `funding_detail` is in sections.
+</ResponseField>
+
+<ResponseField name="technology" type="object">
+  Technology stack and AI capabilities. Present only when `technology` is in sections.
+</ResponseField>
+
+<ResponseField name="location" type="object">
+  Headquarters and office locations. Present only when `location` is in sections.
+</ResponseField>
+
+<ResponseField name="company_assessment" type="object">
+  Competitive moat and customer concentration. Present only when `company_assessment` is in sections.
+</ResponseField>
+
+<ResponseField name="business_model" type="object">
+  Go-to-market motion, revenue model, and pricing. Present only when `business_model` is in sections.
+</ResponseField>
+
+#### Filtered Results Example
+
+```json 200 expandable wrap
+{
+  "data": [
+    {
+      "uuid": "000031n-tesla",
+      "name": "Tesla",
+      "website": "https://tesla.com",
+      "firmographic": {
+        "company_type": "Public",
+        "founded_year": 2003,
+        "headcount_range": "10001+"
+      },
+      "financial_estimate": {
+        "revenue_estimate": "over_5b",
+        "valuation_estimate": "over_25b"
+      }
+    }
+  ],
+  "count": 1,
+  "total_count": 1,
+  "credits_consumed": 2.0
+}
+```
+
+#### Natural Language Query Example
+
+```json 200 expandable wrap
+{
+  "data": [
+    {
+      "uuid": "00000l1",
+      "name": "Canva",
+      "website": "https://canva.com"
+    },
+    {
+      "uuid": "00002m2", 
+      "name": "Figma",
+      "website": "https://figma.com"
+    }
+  ],
+  "count": 2,
+  "total_count": 2,
+  "credits_consumed": 0.0
+}
+```
+

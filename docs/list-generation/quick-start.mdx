@@ -1,0 +1,136 @@
+---
+title: "Quick Start"
+hidden: true
+---
+
+# Quick Start
+
+Get up and running with the List Generation API in minutes.
+
+## Prerequisites
+
+- An Akta API key (get one at [playground.akta.pro](https://playground.akta.pro))
+- Basic familiarity with REST APIs
+
+## Your First Request
+
+### 1. Generate a Company List
+
+Make your first API call to get companies matching your criteria:
+
+```bash
+curl -X POST "https://api.akta.pro/v1/company/list/generate" \
+  -H "x-api-key: YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "filters": {
+      "firmographic.company_type": ["private"],
+      "location.hq.country": ["USA"]
+    },
+    "sections": ["firmographic", "financial_estimate"],
+    "limit": 10
+  }'
+```
+
+### 2. Parse the Response
+
+You'll receive a JSON response:
+
+```json
+{
+  "data": [
+    {
+      "uuid": "000031n-example",
+      "name": "Example Corp",
+      "website": "https://example.com",
+      "firmographic": {
+        "company_type": "Private",
+        "founded_year": 2018,
+        "headcount_range": "51-200"
+      },
+      "financial_estimate": {
+        "revenue_estimate": "1m_5m"
+      }
+    }
+  ],
+  "count": 1,
+  "total_count": 1,
+  "credits_consumed": 2.0
+}
+```
+
+## Try Natural Language
+
+Instead of filters, pass a `query` parameter:
+
+```bash
+curl -X POST "https://api.akta.pro/v1/company/list/generate" \
+  -H "x-api-key: YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "query": "SaaS companies in the US with Series A funding",
+    "limit": 10
+  }'
+```
+
+## Common First Queries
+
+### Find US-based Private Companies
+
+```json
+{
+  "filters": {
+    "firmographic.company_type": ["private"],
+    "location.hq.country": ["USA"]
+  },
+  "limit": 50
+}
+```
+
+### Find Funded Startups in a Specific Sector
+
+```json
+{
+  "filters": {
+    "funding_detail.funding_overview.funding_stage": ["series_a", "series_b"],
+    "industry.industry": ["saas"]
+  },
+  "sections": ["firmographic", "funding_detail"],
+  "limit": 25
+}
+```
+
+### Find Companies by Headcount
+
+```json
+{
+  "filters": {
+    "firmographic.headcount_range": ["201-500", "501-1000"]
+  },
+  "sort_by": "revenue_estimate",
+  "sort_order": "desc",
+  "limit": 50
+}
+```
+
+## Enrichment Sections
+
+Add detailed data to your company results:
+
+| Section | Description | Credits |
+|---------|-------------|---------|
+| `firmographic` | Basic company info | 1 |
+| `financial_estimate` | Revenue, valuation | 1 |
+| `funding_detail` | Funding rounds, investors | 1 |
+| `technology` | Tech stack, AI capabilities | 1 |
+| `location` | HQ, offices, markets | 1 |
+| `company_assessment` | Moat, risks, highlights | 1 |
+| `business_model` | GTM, pricing, customers | 1 |
+| `management_profile` | Leadership team | 2 |
+| `customer_profile` | Named customers | 2 |
+
+## Next Steps
+
+- [Use Cases](/docs/list-generation/use-cases) - Common patterns and examples
+- [Best Practices](/docs/list-generation/best-practices) - Optimize performance
+

@@ -1,0 +1,206 @@
+---
+title: "Best Practices"
+hidden: true
+---
+
+# Best Practices
+
+Guidelines for building efficient and cost-effective company lists.
+
+## Performance Optimization
+
+### Request Only What You Need
+
+**Don't** request all sections by default. Each enrichment section consumes credits and adds latency.
+
+```json
+{
+  "filters": {...},
+  "sections": ["firmographic"],
+  "limit": 10
+}
+```
+
+Only add sections you actually need for your use case.
+
+### Use Filters Over Natural Language for Precise Queries
+
+Natural language is powerful but adds processing overhead. For exact criteria, use structured filters:
+
+| Use Case | Approach |
+|----------|----------|
+| Exact funding stage match | Filters |
+| Companies in specific countries | Filters |
+| Exploratory research | Natural language |
+| Quick prototyping | Natural language |
+
+### Paginate Large Result Sets
+
+Use `limit` and `offset` to process large lists efficiently:
+
+```json
+{
+  "filters": {...},
+  "limit": 500,
+  "offset": 0
+}
+```
+
+Then increment offset for subsequent pages:
+
+```
+offset: 0, 500, 1000, 1500...
+```
+
+## Credit Optimization
+
+### Zero-Credit Queries
+
+Requesting only identity fields (`uuid`, `name`, `website`) without enrichment sections returns `credits_consumed: 0`:
+
+```json
+{
+  "filters": {
+    "firmographic.company_type": ["private"],
+    "location.hq.country": ["USA"]
+  }
+}
+```
+
+Use this for initial prospecting before spending credits on enrichment.
+
+### Batch Enrichment
+
+1. First: Get a list of target company UUIDs (no credits)
+2. Then: Use Company Data API to enrich individual companies with specific sections
+
+This is more cost-effective than enriching entire lists.
+
+## Filter Best Practices
+
+### Combine Filters Efficiently
+
+More filters = smaller result set = faster queries:
+
+```json
+{
+  "filters": {
+    "firmographic.company_type": ["private"],
+    "location.hq.country": ["USA"],
+    "funding_detail.funding_overview.funding_stage": ["series_a"]
+  }
+}
+```
+
+### Use Range Filters Wisely
+
+Range filters are powerful but can be slow on large datasets:
+
+**Instead of** broad ranges:
+```json
+{"founded_year": {"gte": 1900, "lte": 2024}}
+```
+
+**Use** targeted ranges:
+```json
+{"founded_year": {"gte": 2015, "lte": 2024}}
+```
+
+### Avoid High-Cardinality Filters Without Constraints
+
+| Filter Type | Example | Performance |
+|-------------|---------|--------------|
+| Low cardinality | `company_type` (5 values) | Fast |
+| Medium cardinality | `hq_country` (~50 values) | Good |
+| High cardinality | `naics_codes` (thousands) | Use with other filters |
+
+## Sorting Strategies
+
+### Default Sort (Relevance)
+
+When you don't specify `sort_by`, results are ranked by Akta relevance:
+
+```json
+{
+  "filters": {...}
+}
+```
+
+### Optimize Sort for Your Use Case
+
+| Goal | Sort By |
+|------|---------|
+| Most likely to convert | `relevance` (default) |
+| Largest companies first | `revenue_estimate` |
+| Most valuable companies | `valuation_estimate` |
+| Biggest employers | `employee_range` |
+| Most funded | `total_funding` |
+| Newest companies | `founded_year` |
+
+## Common Mistakes to Avoid
+
+### 1. Confusing Query and Filters
+
+You cannot use both `query` and `filters` in the same request:
+
+```json
+{
+  "query": "SaaS companies",
+  "filters": {
+    "location.hq.country": ["USA"]
+  }
+}
+```
+
+**This will error.** Choose one approach.
+
+### 2. Forgetting Total Count Cap
+
+`total_count` is capped at 500. If you need exact counts beyond 500, use narrower filters.
+
+### 3. Not Checking Credits Consumed
+
+Always verify `credits_consumed` in responses to track usage:
+
+```json
+{
+  "data": [...],
+  "credits_consumed": 3.5
+}
+```
+
+### 4. Using Invalid Filter Values
+
+Use the [List Filter Options API](/api-reference/list-filter-options) to get valid values before building filter payloads.
+
+## Debugging Tips
+
+### Use Query Translation for Natural Language
+
+When natural language returns unexpected results, use the translation endpoint:
+
+```
+POST /v1/company/list/translate-query
+{
+  "query": "your description here"
+}
+```
+
+This shows the exact filters being applied.
+
+### Start Broad, Then Narrow
+
+1. Start with minimal filters to see what matches
+2. Add constraints incrementally
+3. Verify each addition reduces results as expected
+
+## Summary Checklist
+
+- [ ] Request only needed enrichment sections
+- [ ] Use filters for precision, natural language for exploration
+- [ ] Implement pagination for large result sets
+- [ ] Check `credits_consumed` in every response
+- [ ] Validate filter values against options endpoint
+- [ ] Use appropriate sort strategy for your goal
+- [ ] Combine multiple filters to improve performance
+
