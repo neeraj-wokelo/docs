@@ -42,6 +42,42 @@ Company Data is priced per section, so you only pay for the sections you request
 | Funding Detail _(enterprise)_ | 3 |
 | M&A and Investment _(enterprise)_ | 5 |
 
+## List Generation
+
+List Generation credit consumption is made up of a base cost, an additional cost if using natural language `query` instead of structured `filters`, a per-company cost, and an optional per-section enrichment cost. Section costs are the same as those listed in the Company Data table above.
+
+| Component | Credits Consumed |
+| :-- | :-- |
+| Base cost per API call | 1.5 |
+| Additional cost if using `query` instead of `filters` | 2.5 |
+| Per company returned | 0.2 |
+| Per enrichment section requested | (Section cost, per Company Data table above) × companies returned |
+
+**Formula:**
+
+```text
+Total credits = 1.5
+              + (2.5 if using `query`, else 0)
+              + (0.2 × companies returned)
+              + (sum of each requested section's cost × companies returned)
+```
+
+**Example:** A `filters`-based request returning 50 companies, with `firmographic` (2 credits) and `location` (0.5 credits) sections requested:
+
+```text
+1.5 (base) + 0 (filters, not query) + (0.2 × 50) + ((2 + 0.5) × 50)
+= 1.5 + 0 + 10 + 125
+= 136.5 credits
+```
+
+**Example:** A `query`-based request returning 20 companies with no enrichment sections:
+
+```text
+1.5 (base) + 2.5 (query) + (0.2 × 20) + 0 (no sections)
+= 1.5 + 2.5 + 4 + 0
+= 8 credits
+```
+
 ## Alternative Signals
 
 | API | Credits Consumed |

@@ -1,0 +1,330 @@
+---
+title: "Use cases"
+---
+
+### Sales prospecting: build an ideal customer profile (ICP) list
+
+Build a target account list for outbound sales — private, US/UK-based SaaS companies in the growth stage with an API, enriched with firmographic and revenue data so reps can prioritize outreach.
+
+Use the following filters:
+
+- `firmographic.company_type` — restrict to `private` companies (public companies aren't sales targets).
+- `location.hq.country` — scope to `USA` and `GBR`.
+- `business_model.offering_type` — restrict to `software`.
+- `financial_estimate.revenue_estimate` — mid-market revenue bands (`10m_25m`, `25m_50m`, `50m_100m`).
+- `technology.api_detail.has_api` — `true`, since the product is API-first.
+- `sections` — `firmographic`, `location`, `financial_estimate` for context reps need before a call.
+
+<CodeGroup>
+
+```bash cURL
+curl --location 'https://api.akta.pro/v1/company/list/generate' \
+  --header 'x-api-key: <YOUR_API_KEY>' \
+  --header 'Content-Type: application/json' \
+  --data '{
+    "filters": {
+      "firmographic.company_type": ["private"],
+      "location.hq.country": ["USA", "GBR"],
+      "business_model.offering_type": ["software"],
+      "financial_estimate.revenue_estimate": ["10m_25m", "25m_50m", "50m_100m"],
+      "technology.api_detail.has_api": true
+    },
+    "sections": ["firmographic", "location", "financial_estimate"],
+    "sort_by": "revenue_estimate",
+    "sort_order": "desc",
+    "limit": 50
+  }'
+```
+
+```python Python
+import requests
+
+url = "https://api.akta.pro/v1/company/list/generate"
+
+payload = {
+    "filters": {
+        "firmographic.company_type": ["private"],
+        "location.hq.country": ["USA", "GBR"],
+        "business_model.offering_type": ["software"],
+        "financial_estimate.revenue_estimate": ["10m_25m", "25m_50m", "50m_100m"],
+        "technology.api_detail.has_api": True
+    },
+    "sections": ["firmographic", "location", "financial_estimate"],
+    "sort_by": "revenue_estimate",
+    "sort_order": "desc",
+    "limit": 50
+}
+headers = {"x-api-key": "YOUR_API_KEY", "Content-Type": "application/json"}
+
+response = requests.post(url, headers=headers, json=payload)
+data = response.json()
+
+for company in data["data"]:
+    print(company["name"], company["website"], company.get("financial_estimate"))
+```
+
+</CodeGroup>
+
+**Sample response:**
+
+```json expandable
+{
+  "data": [
+    {
+      "uuid": "0000a1b",
+      "name": "ExampleCo",
+      "website": "https://exampleco.com",
+      "firmographic": {
+        "company_type": "private",
+        "founded_year": 2017,
+        "headcount_range": "51-200"
+      },
+      "location": {
+        "hq": {"country": "USA", "region": "North America"}
+      },
+      "financial_estimate": {
+        "revenue_estimate": "25m_50m"
+      }
+    }
+  ],
+  "count": 1,
+  "total_count": 34,
+  "credits_consumed": 6.0
+}
+```
+
+### Market mapping: size a market segment
+
+Enumerate every company in a market segment — for example, API-first fintech companies globally — to understand market size, identify competitors, and spot white space.
+
+Use the following filters:
+
+- `industry.industry` — use the [Industry Search API](/api-reference/supporting-apis/industry-search) to resolve "fintech" or a sub-segment to Akta industry codes first.
+- `business_model.gtm_motion` — restrict to `api_first` to capture companies building API-native products.
+- `location.market_served.is_global` — optionally restrict to companies serving a global market, if you're mapping the global segment rather than a single geography.
+- Omit `sections` for a fast, low-cost count-only pass first (`total_count` tells you market size), then re-run with `sections` for the companies you want to study in detail.
+
+<CodeGroup>
+
+```bash cURL
+curl --location 'https://api.akta.pro/v1/company/list/generate' \
+  --header 'x-api-key: <YOUR_API_KEY>' \
+  --header 'Content-Type: application/json' \
+  --data '{
+    "filters": {
+      "industry.industry": ["FINTECH_CODE"],
+      "business_model.gtm_motion": ["api_first"]
+    },
+    "limit": 1
+  }'
+```
+
+```python Python
+import requests
+
+# Step 1: resolve "fintech" to an industry code
+industry_code = requests.get(
+    "https://api.akta.pro/api/v1/industry/search",
+    headers={"x-api-key": "YOUR_API_KEY"},
+    params={"query": "fintech"}
+).json()["data"][0]["code"]
+
+# Step 2: get total market size with a minimal-cost call (no sections)
+size_check = requests.post(
+    "https://api.akta.pro/v1/company/list/generate",
+    headers={"x-api-key": "YOUR_API_KEY", "Content-Type": "application/json"},
+    json={
+        "filters": {
+            "industry.industry": [industry_code],
+            "business_model.gtm_motion": ["api_first"]
+        },
+        "limit": 1
+    }
+).json()
+
+print(f"Market size: {size_check['total_count']} companies")
+
+# Step 3: pull the full enriched list once you know the size is manageable
+full_list = requests.post(
+    "https://api.akta.pro/v1/company/list/generate",
+    headers={"x-api-key": "YOUR_API_KEY", "Content-Type": "application/json"},
+    json={
+        "filters": {
+            "industry.industry": [industry_code],
+            "business_model.gtm_motion": ["api_first"]
+        },
+        "sections": ["firmographic", "location", "financial_estimate"],
+        "limit": 500
+    }
+).json()
+```
+
+</CodeGroup>
+
+<Note>
+  Requesting `limit: 1` with no `sections` is a near-zero-cost way to check `total_count` before committing to a full enrichment pull — useful when you're not yet sure how large a segment is.
+</Note>
+
+### Investor sourcing: find companies matching a deal thesis
+
+Surface companies that match an investment thesis — for example, Series A or Series B companies that raised in the last 6 months with a lead investor from a specific set of firms.
+
+Use the following filters:
+
+- `funding_detail.funding_rounds.round` — `series_a`, `series_b`.
+- `funding_detail.funding_rounds.date` — a recent date range using `gte`.
+- `funding_detail.funding_rounds.investors.lead_investor` — `true`, to only match rounds where a lead investor is identified.
+- `funding_detail.funding_rounds.investors.uuid` — optionally scope to specific investor UUIDs if you're tracking co-investment patterns with particular firms.
+- `sections` — `funding_detail`, `firmographic`, `financial_estimate` for deal context.
+
+<Note>
+  Funding Detail filters and the `funding_detail` enrichment section are available on Enterprise plans only.
+</Note>
+
+<CodeGroup>
+
+```bash cURL
+curl --location 'https://api.akta.pro/v1/company/list/generate' \
+  --header 'x-api-key: <YOUR_API_KEY>' \
+  --header 'Content-Type: application/json' \
+  --data '{
+    "filters": {
+      "funding_detail.funding_rounds": {
+        "round": ["series_a", "series_b"],
+        "date": {"gte": "2026-01-01"},
+        "investors.lead_investor": true
+      }
+    },
+    "sections": ["funding_detail", "firmographic", "financial_estimate"],
+    "sort_by": "founded_year",
+    "sort_order": "desc",
+    "limit": 100
+  }'
+```
+
+```python Python
+import requests
+
+payload = {
+    "filters": {
+        "funding_detail.funding_rounds": {
+            "round": ["series_a", "series_b"],
+            "date": {"gte": "2026-01-01"},
+            "investors.lead_investor": True
+        }
+    },
+    "sections": ["funding_detail", "firmographic", "financial_estimate"],
+    "sort_by": "founded_year",
+    "sort_order": "desc",
+    "limit": 100
+}
+
+response = requests.post(
+    "https://api.akta.pro/v1/company/list/generate",
+    headers={"x-api-key": "YOUR_API_KEY", "Content-Type": "application/json"},
+    json=payload
+)
+data = response.json()
+for company in data["data"]:
+    print(company["name"], company.get("funding_detail"))
+```
+
+</CodeGroup>
+
+### Lookalike targeting: find companies similar to your best customers
+
+Once you know the profile of your best customers (e.g. product-led, AI-native, mid-market SaaS), use that profile as a filter template to find similar companies you haven't yet reached.
+
+Use the following filters:
+
+- `business_model.gtm_motion` — `product_led_growth`, matching your best customers' go-to-market motion.
+- `technology.ai_maturity.scale` — `ai_native` or `ai_differentiated`, matching your customers' AI sophistication.
+- `firmographic.founded_year` — a range matching your customers' typical company age/maturity.
+- `financial_estimate.revenue_estimate` — the revenue band where your product has the best fit.
+
+<CodeGroup>
+
+```bash cURL
+curl --location 'https://api.akta.pro/v1/company/list/generate' \
+  --header 'x-api-key: <YOUR_API_KEY>' \
+  --header 'Content-Type: application/json' \
+  --data '{
+    "filters": {
+      "business_model.gtm_motion": ["product_led_growth"],
+      "technology.ai_maturity.scale": ["ai_native", "ai_differentiated"],
+      "firmographic.founded_year": {"gte": 2018, "lte": 2023},
+      "financial_estimate.revenue_estimate": ["10m_25m", "25m_50m"]
+    },
+    "sections": ["firmographic", "technology", "financial_estimate"],
+    "limit": 50
+  }'
+```
+
+```python Python
+import requests
+
+payload = {
+    "filters": {
+        "business_model.gtm_motion": ["product_led_growth"],
+        "technology.ai_maturity.scale": ["ai_native", "ai_differentiated"],
+        "firmographic.founded_year": {"gte": 2018, "lte": 2023},
+        "financial_estimate.revenue_estimate": ["10m_25m", "25m_50m"]
+    },
+    "sections": ["firmographic", "technology", "financial_estimate"],
+    "limit": 50
+}
+
+response = requests.post(
+    "https://api.akta.pro/v1/company/list/generate",
+    headers={"x-api-key": "YOUR_API_KEY", "Content-Type": "application/json"},
+    json=payload
+)
+data = response.json()
+for company in data["data"]:
+    print(company["name"], company.get("technology"))
+```
+
+</CodeGroup>
+
+### Natural language exploration: quick prospecting without enumerating filters
+
+When you're exploring a segment for the first time and don't yet know which exact filter values apply, a natural language `query` gets you a relevant starting list without resolving industry codes or enumerating enum values up front.
+
+Use the following:
+
+- `query` — a plain-English description of the target companies (e.g. `"API-first fintech companies in Europe with Series B funding"`).
+- Do not pass `filters` in the same request — `query` and `filters` are mutually exclusive.
+
+<CodeGroup>
+
+```bash cURL
+curl --location 'https://api.akta.pro/v1/company/list/generate' \
+  --header 'x-api-key: <YOUR_API_KEY>' \
+  --header 'Content-Type: application/json' \
+  --data '{
+    "query": "API-first fintech companies in Europe with Series B funding",
+    "limit": 20
+  }'
+```
+
+```python Python
+import requests
+
+response = requests.post(
+    "https://api.akta.pro/v1/company/list/generate",
+    headers={"x-api-key": "YOUR_API_KEY", "Content-Type": "application/json"},
+    json={
+        "query": "API-first fintech companies in Europe with Series B funding",
+        "limit": 20
+    }
+)
+data = response.json()
+for company in data["data"]:
+    print(company["name"], company["website"])
+```
+
+</CodeGroup>
+
+<Tip>
+  Once a natural language query returns a promising set of results, switch to structured `filters` for repeatable, cacheable, and auditable queries — natural language interpretation can vary slightly between calls, while structured filters always resolve deterministically.
+</Tip>

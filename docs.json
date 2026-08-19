@@ -53,6 +53,15 @@
                 ]
               },
               {
+                "group": "List Generation",
+                "pages": [
+                  "untitled-page",
+                  "untitled-page-2",
+                  "untitled-page-3",
+                  "untitled-page-4"
+                ]
+              },
+              {
                 "group": "Alternative Signals",
                 "pages": [
                   {
