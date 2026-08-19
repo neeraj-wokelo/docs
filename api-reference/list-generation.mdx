@@ -1,6 +1,6 @@
 ---
 title: "List Generation API"
-description: "Build targeted company lists using structured filters or natural language queries, with optional data enrichment."
+description: "Build targeted company lists using structured filters or natural language query, with optional data enrichment."
 openapi: "POST /v1/company/list/generate"
 hidden: true
 ---
@@ -44,15 +44,237 @@ Results are ranked by Akta relevance by default and can be enriched with additio
 <ParamField body="filters" type="object">
   Structured filter conditions. Use this when you need precise control over filtering criteria.
 
-  Each filter key follows a dotted-path notation matching company data structure (e.g., `firmographic.company_type`, `location.hq.country`).
+  Note: Cannot be used together with `query.`
 
-  Note: Cannot be used together with `query`. Choose either `filters` or `query`, not both.
+  #### Available Filters
+
+  ##### Firmographic Filters
+
+  <ParamField body="firmographic.company_type" type="string[]">
+    Filter by company ownership structure.
+
+    Available values: `private`, `public`
+  </ParamField>
+
+  <ParamField body="firmographic.ownership_category" type="string[]">
+    Filter by how the company is owned or controlled.
+
+    Available values: `corporate_owned`, `family_owned`, `founder_individual_operated_bootstrapped`, `management_employee_owned`, `nonprofit_foundation_owned`, `private_equity_controlled`, `public`, `state_government_owned`, `venture_growth_investor_backed`
+  </ParamField>
+
+  <ParamField body="firmographic.operating_status" type="string[]">
+    Filter by the company's current operating state.
+
+    Available values: `acquired`, `closed`, `ipo`, `operating`
+  </ParamField>
+
+  <ParamField body="firmographic.founded_year" type="object">
+    Filter by year the company was founded, using a range.
+
+    Accepts `gte` and/or `lte` (integer, four-digit year).
+  </ParamField>
+
+  ##### Business Model Filters
+
+  <ParamField body="business_model.gtm_type" type="string[]">
+    Filter by go-to-market customer type.
+
+    Available values: `b2b`, `b2b_and_b2c`, `b2c`
+  </ParamField>
+
+  <ParamField body="business_model.offering_type" type="string[]">
+    Filter by the primary type of offering.
+
+    Available values: `digital_commerce_content`, `hardware_manufacturing`, `services`, `software`
+  </ParamField>
+
+  <ParamField body="business_model.gtm_motion" type="string[]">
+    Filter by the primary go-to-market motion used to acquire customers.
+
+    Available values: `api_first`, `channel_partners`, `community_led`, `direct_to_consumer`, `enterprise_field_sales`, `event_driven`, `inside_sales`, `marketplace_listing`, `oem_embedded`, `product_led_growth`, `sales_led`, `others`
+  </ParamField>
+
+  <ParamField body="business_model.revenue_model" type="string[]">
+    Filter by how the company primarily generates revenue.
+
+    Available values: `advertising`, `affiliate_referral`, `data_monetisation`, `freemium`, `grants_donations`, `hardware_sales`, `licensing_royalties`, `managed_services`, `marketplace_commission`, `one_time_license`, `professional_services`, `subscription_recurring`, `transaction_fee`, `usage_based`
+  </ParamField>
+
+  ##### Company Assessment Filters
+
+  <ParamField body="company_assessment.customer_concentration.classification" type="string[]">
+    Filter by how concentrated the company's customer base is.
+
+    Available values: `critical`, `high`, `low`, `moderate`
+  </ParamField>
+
+  <ParamField body="company_assessment.competitive_moat" type="string[]">
+    Filter by the type of competitive advantage the company holds.
+
+    Available values: `cost_advantage`, `data_advantage`, `distribution_advantage`, `ecosystem_lock_in`, `efficient_scale`, `intangible_assets`, `network_effects`, `regulatory_moat`, `switching_costs`, `talent_moat`
+  </ParamField>
+
+  ##### Financial Estimate Filters
+
+  <ParamField body="financial_estimate.revenue_estimate" type="string[]">
+    Filter by estimated annual revenue range.
+
+    Available values: `pre_revenue`, `under_1m`, `1m_5m`, `5m_10m`, `10m_25m`, `25m_50m`, `50m_100m`, `100m_250m`, `250m_500m`, `500m_1b`, `1b_5b`, `over_5b`
+  </ParamField>
+
+  <ParamField body="financial_estimate.valuation_estimate" type="string[]">
+    Filter by estimated company valuation range.
+
+    Available values: `under_10m`, `10m_50m`, `50m_100m`, `100m_250m`, `250m_500m`, `500m_1b`, `1b_5b`, `5b_10b`, `10b_25b`, `over_25b`
+  </ParamField>
+
+  ##### Location Filters
+
+  <ParamField body="location.hq.region" type="string[]">
+    Filter by the geographic region of the company's headquarters.
+
+    Available values: `Africa`, `Asia`, `Europe`, `Latin America`, `Middle East`, `North America`, `Oceania`
+  </ParamField>
+
+  <ParamField body="location.hq.country" type="string[]">
+    Filter by the country of the company's headquarters, using 3-letter ISO country codes (e.g. `USA`, `IND`, `GBR`).
+
+    Accepts any valid 3-letter ISO alpha-3 country code. Refer [here](/country-codes).
+  </ParamField>
+
+  <ParamField body="location.hq.city" type="string[]">
+    Filter by the city of the company's headquarters.
+
+    Free text field — accepts any city name (e.g. `delhi`).
+  </ParamField>
+
+  <ParamField body="location.market_served.markets" type="string[]">
+    Filter by countries where the company actively serves customers, using 3-letter ISO country codes (e.g. `USA`, `CHN`).
+
+    Accepts any valid 3-letter ISO alpha-3 country codes. Refer [here](/country-codes).
+  </ParamField>
+
+  <ParamField body="location.market_served.is_global" type="boolean">
+    Filter for companies that serve a global market.
+  </ParamField>
+
+  <ParamField body="location.offices.country" type="string[]">
+    Filter by countries where the company has office locations, using 3-letter ISO country codes (e.g. `USA`, `DZA`).
+
+    Accepts any valid 3-letter ISO 3166-1 country code. Refer [here](/country-codes).
+  </ParamField>
+
+  ##### Strategic Signal Filters
+
+  <ParamField body="strategic_signal.partnership.name" type="string[]">
+    Filter by the name of a partner company.
+
+    Free text field — accepts any partner/company name (e.g. `sequoia`).
+  </ParamField>
+
+  <ParamField body="strategic_signal.partnership.type" type="string[]">
+    Filter by the type of partnership.
+
+    Available values: `channel_reseller_distributor`, `gtm_marketing`, `implementation_si_consulting`, `oem_whitelabel_licensing`, `strategic_codevelopment`, `technology_integration`, `others`
+  </ParamField>
+
+  <ParamField body="strategic_signal.partnership.strategic_tier" type="string">
+    Filter by the strategic tier/importance of the partnership.
+
+    Free text field.
+  </ParamField>
+
+  ##### Customer Profile Filters
+
+  <ParamField body="customer_profile.select_customer.name" type="string[]">
+    Filter by the name of a known/select customer of the company.
+
+    Free text field — accepts any customer/company name (e.g. `Tata`, `Birla`).
+  </ParamField>
+
+  ##### Industry Filters
+
+  <ParamField body="industry.naics" type="string[]">
+    Filter by NAICS industry codes. Matches a company carrying any of the selected codes.
+
+    See the [NAICS Code List](/naics-codes) for all available codes.
+  </ParamField>
+
+  <ParamField body="industry.sic" type="string[]">
+    Filter by SIC industry codes. Matches a company carrying any of the selected codes.
+
+    See the [SIC Code List](/sic-codes) for all available codes.
+  </ParamField>
+
+  <ParamField body="industry.industry" type="string[]">
+    Filter by akta.pro taxonomy industry codes. Matches any of the selected industries.
+
+    Use [industry search API](/api-reference/supporting-apis/industry-search) to find matching industry codes.
+  </ParamField>
+
+  ##### Technology Filters
+
+  <ParamField body="technology.ai_maturity.scale" type="string[]">
+    Filter by the company's AI maturity level. Matches any of the selected levels.
+
+    Available values: `ai_assisted`, `ai_featured`, `ai_differentiated`, `ai_native`, `ai_foundational`
+  </ParamField>
+
+  <ParamField body="technology.api_detail.has_api" type="boolean">
+    Filter for companies that offer a public API.
+  </ParamField>
+
+  <ParamField body="technology.app_detail.has_app" type="boolean">
+    Filter for companies that offer a mobile application.
+  </ParamField>
+
+  <ParamField body="technology.is_technology_focussed" type="boolean">
+    Filter for companies that are primarily technology-focused.
+  </ParamField>
+
+  ##### Funding Detail Filters (Enterprise only)
+
+  <ParamField body="funding_detail.funding_overview.funding_stage" type="string[]">
+    Filter by the company's most recent/current funding stage.
+
+    Available values: `acquired`, `angel`, `corporate_funded`, `crowdfunded`, `debt_funded`, `initial_coin_offering`, `non_equity_assistance`, `post_ipo_debt`, `post_ipo_equity`, `pre_seed`, `private_equity`, `public`, `seed`, `series_a`, `series_b`, `series_c`, `series_d`, `series_e`, `series_f`, `series_g`, `series_h`, `series_i`, `series_j`, `venture_funded`
+  </ParamField>
+
+  <ParamField body="funding_detail.funding_overview.total_funding_usd" type="object">
+    Filter by total funding raised to date, in USD, using a range.
+
+    Accepts `gte` and/or `lte` (integer).
+  </ParamField>
+
+  <ParamField body="funding_detail.funding_overview.num_funding_rounds" type="object">
+    Filter by the total number of funding rounds raised, using a range.
+
+    Accepts `gte` and/or `lte` (integer).
+  </ParamField>
+
+  <ParamField body="funding_detail.funding_overview.last_funding_date" type="object">
+    Filter by the date of the company's most recent funding round, using a range.
+
+    Accepts `gte` and/or `lte` (date string, `YYYY-MM-DD`).
+  </ParamField>
+
+  <ParamField body="funding_detail.funding_rounds" type="object">
+    Filter for companies with a specific funding round matching all specified sub-criteria. This is a nested filter — conditions apply jointly to individual rounds, not the company's overall funding history.
+
+    Supports the following sub-fields:
+
+    - `round` (string\[\]) — funding round type. Same available values as `funding_detail.funding_overview.funding_stage` above.
+    - `date` (object) — round date range. Accepts `gte`/`lte` (date string, `YYYY-MM-DD`).
+    - `amount_usd` (object) — round amount range, in USD. Accepts `gte`/`lte` (integer).
+    - `investors.uuid` (string\[\]) — match rounds that include any of the specified investor UUIDs.
+    - `investors.lead_investor` (boolean) — match rounds where the specified investor(s) led the round.
+  </ParamField>
 </ParamField>
 
-<ParamField body="sections" type="array of strings">
+<ParamField body="sections" type="string[]">
   Additional data sections to include for each company in the results.
 
-  Available values: `firmographic`, `financial_estimate`, `funding_detail`, `technology`, `location`, `company_assessment`, `business_model`, `management_profile` (Enterprise only), `customer_profile` (Enterprise only), `competitive_landscape` (Enterprise only), `strategic_signals` (Enterprise only), `monitoring_signals` (Enterprise only)
+  Available values: `firmographic`, `business_model`, `company_assessment`, `trust_signal`, `company_hierarchy`, `digital_presence`, `financial_estimate`, `location`, `management_profile`, `product_offering`, `strategic_signal`, `customer_profile`, `industry`, `technology`, `funding_detail` (Enterprise only), `mna_and_investment` (Enterprise only)
 
   If omitted, results include only basic identity fields (uuid, name, website).
 </ParamField>
@@ -85,65 +307,6 @@ Results are ranked by Akta relevance by default and can be enriched with additio
   Default = 0
 </ParamField>
 
-#### Filter Examples
-
-**EQ/IN Filters** - Exact match or multiple values:
-
-```json
-{
-  "filters": {
-    "firmographic.company_type": ["private"],
-    "location.hq.country": ["USA"]
-  }
-}
-```
-
-**RANGE Filters** - Numeric or date ranges:
-
-```json
-{
-  "filters": {
-    "firmographic.founded_year": {"gte": 2018, "lte": 2024},
-    "funding_detail.funding_overview.total_funding_usd": {"gte": 1000000}
-  }
-}
-```
-
-**ARRAY_ANY Filters** - Match any value in a list:
-
-```json
-{
-  "filters": {
-    "business_model.gtm_motion": ["direct_sales", "self_serve_plg"],
-    "industry.naics_codes": ["5112", "5182"]
-  }
-}
-```
-
-**BOOL Filters** - Simple yes/no flags:
-
-```json
-{
-  "filters": {
-    "technology.has_api": true,
-    "location.market_served.is_global": true
-  }
-}
-```
-
-**NESTED Filters** - Match specific details within nested objects:
-
-```json
-{
-  "filters": {
-    "funding_detail.funding_rounds": {
-      "round": ["series_a", "series_b"],
-      "amount_usd": {"gte": 5000000}
-    }
-  }
-}
-```
-
 ## Response
 
 #### Successful Response Fields
@@ -164,75 +327,7 @@ Results are ranked by Akta relevance by default and can be enriched with additio
   Number of credits consumed by this request. Returns 0 when no enrichment sections are requested.
 </ResponseField>
 
-#### Company Object Fields
-
-<ResponseField name="uuid" type="string">
-  Unique identifier for the company.
-</ResponseField>
-
-<ResponseField name="name" type="string">
-  Company name.
-</ResponseField>
-
-<ResponseField name="website" type="string">
-  Company website URL.
-</ResponseField>
-
-<ResponseField name="firmographic" type="object">
-  Basic company information. Present only when `firmographic` is in sections.
-</ResponseField>
-
-<ResponseField name="financial_estimate" type="object">
-  Revenue and valuation estimates. Present only when `financial_estimate` is in sections.
-</ResponseField>
-
-<ResponseField name="funding_detail" type="object">
-  Funding rounds and investor information. Present only when `funding_detail` is in sections.
-</ResponseField>
-
-<ResponseField name="technology" type="object">
-  Technology stack and AI capabilities. Present only when `technology` is in sections.
-</ResponseField>
-
-<ResponseField name="location" type="object">
-  Headquarters and office locations. Present only when `location` is in sections.
-</ResponseField>
-
-<ResponseField name="company_assessment" type="object">
-  Competitive moat and customer concentration. Present only when `company_assessment` is in sections.
-</ResponseField>
-
-<ResponseField name="business_model" type="object">
-  Go-to-market motion, revenue model, and pricing. Present only when `business_model` is in sections.
-</ResponseField>
-
 #### Filtered Results Example
-
-```json 200 expandable wrap
-{
-  "data": [
-    {
-      "uuid": "000031n-tesla",
-      "name": "Tesla",
-      "website": "https://tesla.com",
-      "firmographic": {
-        "company_type": "Public",
-        "founded_year": 2003,
-        "headcount_range": "10001+"
-      },
-      "financial_estimate": {
-        "revenue_estimate": "over_5b",
-        "valuation_estimate": "over_25b"
-      }
-    }
-  ],
-  "count": 1,
-  "total_count": 1,
-  "credits_consumed": 2.0
-}
-```
-
-#### Natural Language Query Example
 
 ```json 200 expandable wrap
 {
@@ -253,4 +348,3 @@ Results are ranked by Akta relevance by default and can be enriched with additio
   "credits_consumed": 0.0
 }
 ```
-

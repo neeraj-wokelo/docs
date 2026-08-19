@@ -175,7 +175,8 @@
             "group": "Core APIs",
             "pages": [
               "api-reference/news-signals",
-              "api-reference/company-data"
+              "api-reference/company-data",
+              "api-reference/list-generation"
             ]
           },
           {
