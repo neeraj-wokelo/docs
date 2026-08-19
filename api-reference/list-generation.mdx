@@ -273,6 +273,27 @@ Results are ranked by Akta relevance by default and can be enriched with additio
   </AccordionGroup>
 </ParamField>
 
+Filters from different groups can be combined in a single request. All conditions are combined with AND logic. A company must match every specified filter to be included in the results.
+
+The example below combines a firmographic filter, a location filter, a financial estimate range filter, a technology boolean filter, a business model filter, and an Enterprise-only funding detail nested filter:
+
+```json
+{
+  "filters": {
+    "firmographic.company_type": ["private"],
+    "firmographic.founded_year": {"gte": 2015, "lte": 2022},
+    "location.hq.country": ["USA", "GBR"],
+    "financial_estimate.revenue_estimate": ["10m_25m", "25m_50m", "50m_100m"],
+    "technology.api_detail.has_api": true,
+    "business_model.gtm_motion": ["product_led_growth", "sales_led"],
+    "funding_detail.funding_rounds": {
+      "round": ["series_a", "series_b"],
+      "amount_usd": {"gte": 5000000}
+    }
+  }
+}
+```
+
 <ParamField body="sections" type="string[]">
   Additional data sections to include for each company in the results.
 
