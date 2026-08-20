@@ -1,0 +1,234 @@
+---
+title: "List Generation API"
+description: "Build targeted company lists using structured filters or natural language query, with optional data enrichment."
+openapi: "POST /v1/company/list/generate"
+---
+
+## Overview
+
+The List Generation API lets you build targeted company lists using two approaches:
+
+1. **Structured Filters** - Apply specific criteria like company type, location, funding stage, or industry to filter companies
+2. **Natural Language** - Describe what you're looking for in plain text and the API interprets your intent
+
+Results are ranked by Akta relevance by default and can be enriched with additional company data sections.
+
+## Endpoint Details
+
+- **Method:** POST
+- **Endpoint:** `/v1/company/list/generate`
+
+## Authentication requirements
+
+- Include a valid API key in the `x-api-key` request header.
+
+## Request
+
+### Request Parameters
+
+#### Header Parameters
+
+<ParamField header="x-api-key" type="string" required>
+  Your API key.
+</ParamField>
+
+#### Body Parameters
+
+<ParamField body="query" type="string">
+  Natural language search query. Use this when you want to describe your target companies in plain text (e.g., "SaaS companies in the US with Series A funding").
+
+  Note: Cannot be used together with `filters`. Choose either `query` or `filters`, not both.
+</ParamField>
+
+<ParamField body="filters" type="object">
+  Structured filter conditions. Use this when you need precise control over filtering criteria.
+
+  Note: Cannot be used together with `query.`
+
+  #### Available Filters
+
+  <AccordionGroup>
+    <Accordion title="Firmographic Filters">
+      | Field | Type | Accepted Values |
+      | --- | --- | --- |
+      | `firmographic.company_type` | string\[\] | `private`, `public` |
+      | `firmographic.ownership_category` | string\[\] | `corporate_owned`, `family_owned`, `founder_individual_operated_bootstrapped`, `management_employee_owned`, `nonprofit_foundation_owned`, `private_equity_controlled`, `public`, `state_government_owned`, `venture_growth_investor_backed` |
+      | `firmographic.operating_status` | string\[\] | `acquired`, `closed`, `ipo`, `operating` |
+      | `firmographic.founded_year` | object | Range object. Accepts `gte` and/or `lte` (integer, four-digit year). |
+    </Accordion>
+
+    <Accordion title="Business Model Filters">
+      | Field | Type | Accepted Values |
+      | --- | --- | --- |
+      | `business_model.gtm_type` | string\[\] | `b2b`, `b2b_and_b2c`, `b2c` |
+      | `business_model.offering_type` | string\[\] | `digital_commerce_content`, `hardware_manufacturing`, `services`, `software` |
+      | `business_model.gtm_motion` | string\[\] | `api_first`, `channel_partners`, `community_led`, `direct_to_consumer`, `enterprise_field_sales`, `event_driven`, `inside_sales`, `marketplace_listing`, `oem_embedded`, `product_led_growth`, `sales_led`, `others` |
+      | `business_model.revenue_model` | string\[\] | `advertising`, `affiliate_referral`, `data_monetisation`, `freemium`, `grants_donations`, `hardware_sales`, `licensing_royalties`, `managed_services`, `marketplace_commission`, `one_time_license`, `professional_services`, `subscription_recurring`, `transaction_fee`, `usage_based` |
+    </Accordion>
+
+    <Accordion title="Company Assessment Filters">
+      | Field | Type | Accepted Values |
+      | --- | --- | --- |
+      | `company_assessment.customer_concentration.classification` | string\[\] | `critical`, `high`, `low`, `moderate` |
+      | `company_assessment.competitive_moat` | string\[\] | `cost_advantage`, `data_advantage`, `distribution_advantage`, `ecosystem_lock_in`, `efficient_scale`, `intangible_assets`, `network_effects`, `regulatory_moat`, `switching_costs`, `talent_moat` |
+    </Accordion>
+
+    <Accordion title="Financial Estimate Filters">
+      | Field | Type | Accepted Values |
+      | --- | --- | --- |
+      | `financial_estimate.revenue_estimate` | string\[\] | `pre_revenue`, `under_1m`, `1m_5m`, `5m_10m`, `10m_25m`, `25m_50m`, `50m_100m`, `100m_250m`, `250m_500m`, `500m_1b`, `1b_5b`, `over_5b` |
+      | `financial_estimate.valuation_estimate` | string\[\] | `under_10m`, `10m_50m`, `50m_100m`, `100m_250m`, `250m_500m`, `500m_1b`, `1b_5b`, `5b_10b`, `10b_25b`, `over_25b` |
+    </Accordion>
+
+    <Accordion title="Location Filters">
+      | Field | Type | Accepted Values |
+      | --- | --- | --- |
+      | `location.hq.region` | string\[\] | `Africa`, `Asia`, `Europe`, `Latin America`, `Middle East`, `North America`, `Oceania` |
+      | `location.hq.country` | string\[\] | Any valid 3-letter ISO alpha-3 country code (e.g. `USA`, `IND`, `GBR`). Refer [here](/country-codes). |
+      | `location.hq.city` | string\[\] | Free text — any city name (e.g. `delhi`) |
+      | `location.market_served.markets` | string\[\] | Any valid 3-letter ISO alpha-3 country code (e.g. `USA`, `CHN`). Refer [here](/country-codes). |
+      | `location.market_served.is_global` | boolean | `true`, `false` |
+      | `location.offices.country` | string\[\] | Any valid 3-letter ISO 3166-1 country code (e.g. `USA`, `DZA`). Refer [here](/country-codes). |
+    </Accordion>
+
+    <Accordion title="Strategic Signal Filters">
+      | Field | Type | Accepted Values |
+      | --- | --- | --- |
+      | `strategic_signal.partnership.name` | string\[\] | Free text — any partner/company name (e.g. `sequoia`) |
+      | `strategic_signal.partnership.type` | string\[\] | `channel_reseller_distributor`, `gtm_marketing`, `implementation_si_consulting`, `oem_whitelabel_licensing`, `strategic_codevelopment`, `technology_integration`, `others` |
+      | `strategic_signal.partnership.strategic_tier` | string | Free text |
+    </Accordion>
+
+    <Accordion title="Customer Profile Filters">
+      | Field | Type | Accepted Values |
+      | --- | --- | --- |
+      | `customer_profile.select_customer.name` | string\[\] | Free text — any customer/company name (e.g. `Tata`, `Birla`) |
+    </Accordion>
+
+    <Accordion title="Industry Filters">
+      | Field | Type | Accepted Values |
+      | --- | --- | --- |
+      | `industry.naics` | string\[\] | NAICS industry codes. See the [NAICS Code List](/naics-codes). Matches a company carrying any of the selected codes. |
+      | `industry.sic` | string\[\] | SIC industry codes. See the [SIC Code List](/sic-codes). Matches a company carrying any of the selected codes. |
+      | `industry.industry` | string\[\] | akta.pro taxonomy industry codes. Use the [Industry Search API](/api-reference/supporting-apis/industry-search) to find matching codes. Matches any of the selected industries. |
+    </Accordion>
+
+    <Accordion title="Technology Filters">
+      | Field | Type | Accepted Values |
+      | --- | --- | --- |
+      | `technology.ai_maturity.scale` | string\[\] | `ai_assisted`, `ai_featured`, `ai_differentiated`, `ai_native`, `ai_foundational` |
+      | `technology.api_detail.has_api` | boolean | `true`, `false` |
+      | `technology.app_detail.has_app` | boolean | `true`, `false` |
+      | `technology.is_technology_focussed` | boolean | `true`, `false` |
+    </Accordion>
+
+    <Accordion title="Funding Detail Filters (Enterprise only)">
+      | Field | Type | Accepted Values |
+      | --- | --- | --- |
+      | `funding_detail.funding_overview.funding_stage` | string\[\] | `acquired`, `angel`, `corporate_funded`, `crowdfunded`, `debt_funded`, `initial_coin_offering`, `non_equity_assistance`, `post_ipo_debt`, `post_ipo_equity`, `pre_seed`, `private_equity`, `public`, `seed`, `series_a`, `series_b`, `series_c`, `series_d`, `series_e`, `series_f`, `series_g`, `series_h`, `series_i`, `series_j`, `venture_funded` |
+      | `funding_detail.funding_overview.total_funding_usd` | object | Range object. Accepts `gte` and/or `lte` (integer, USD). |
+      | `funding_detail.funding_overview.num_funding_rounds` | object | Range object. Accepts `gte` and/or `lte` (integer). |
+      | `funding_detail.funding_overview.last_funding_date` | object | Range object. Accepts `gte` and/or `lte` (date string, `YYYY-MM-DD`). |
+      | `funding_detail.funding_rounds` | object | Nested filter — conditions apply jointly to individual rounds, not the company's overall funding history. Sub-fields: `round` (string\[\], same values as `funding_stage` above), `date` (object, `gte`/`lte` date string), `amount_usd` (object, `gte`/`lte` integer USD), `investors.uuid` (string\[\], match rounds including any of the specified investor UUIDs), `investors.lead_investor` (boolean, match rounds where the specified investor(s) led). |
+    </Accordion>
+  </AccordionGroup>
+</ParamField>
+
+Filters from different groups can be combined in a single request. All conditions are combined with AND logic. A company must match every specified filter to be included in the results.
+
+The example below combines a firmographic filter, a location filter, a financial estimate range filter, a technology boolean filter, a business model filter, and an Enterprise-only funding detail nested filter:
+
+```json
+{
+  "filters": {
+    "firmographic.company_type": ["private"],
+    "firmographic.founded_year": {"gte": 2015, "lte": 2022},
+    "location.hq.country": ["USA", "GBR"],
+    "financial_estimate.revenue_estimate": ["10m_25m", "25m_50m", "50m_100m"],
+    "technology.api_detail.has_api": true,
+    "business_model.gtm_motion": ["product_led_growth", "sales_led"],
+    "funding_detail.funding_rounds": {
+      "round": ["series_a", "series_b"],
+      "amount_usd": {"gte": 5000000}
+    }
+  }
+}
+```
+
+<ParamField body="sections" type="string[]">
+  Additional data sections to include for each company in the results.
+
+  Available values: `firmographic`, `business_model`, `company_assessment`, `trust_signal`, `company_hierarchy`, `digital_presence`, `financial_estimate`, `location`, `management_profile`, `product_offering`, `strategic_signal`, `customer_profile`, `industry`, `technology`, `funding_detail` (Enterprise only), `mna_and_investment` (Enterprise only)
+
+  If omitted, results include only basic identity fields (uuid, name, website).
+</ParamField>
+
+<ParamField body="sort_by" type="string">
+  Field to sort results by.
+
+  Available values: `relevance` (default), `revenue_estimate`, `valuation_estimate`, `employee_range`, `total_funding`, `founded_year`
+</ParamField>
+
+<ParamField body="sort_order" type="string">
+  Sort direction.
+
+  Available values: `asc`, `desc`
+
+  Default = `desc`
+</ParamField>
+
+<ParamField body="limit" type="integer">
+  Maximum number of companies to return.
+
+  Default = 50
+
+  Max value = 500
+</ParamField>
+
+<ParamField body="offset" type="integer">
+  Number of results to skip for pagination.
+
+  Default = 0
+</ParamField>
+
+## Response
+
+#### Successful Response Fields
+
+<ResponseField name="data" type="array">
+  List of matching company objects. Each object includes identity fields (uuid, name, website) plus any requested enrichment sections.
+</ResponseField>
+
+<ResponseField name="count" type="integer">
+  Number of companies returned in this response.
+</ResponseField>
+
+<ResponseField name="total_count" type="integer">
+  Total number of companies matching your filters. Capped at 500.
+</ResponseField>
+
+<ResponseField name="credits_consumed" type="float">
+  Number of credits consumed by this request. Returns 0 when no enrichment sections are requested.
+</ResponseField>
+
+#### Filtered Results Example
+
+```json 200 expandable wrap
+{
+  "data": [
+    {
+      "uuid": "00000l1",
+      "name": "Canva",
+      "website": "https://canva.com"
+    },
+    {
+      "uuid": "00002m2", 
+      "name": "Figma",
+      "website": "https://figma.com"
+    }
+  ],
+  "count": 2,
+  "total_count": 2,
+  "credits_consumed": 0.0
+}
+```
