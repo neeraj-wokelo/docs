@@ -1,206 +1,103 @@
 ---
 title: "Best Practices"
-hidden: true
 ---
 
-# Best Practices
+**Never combine `query` and `filters` in the same request**
 
-Guidelines for building efficient and cost-effective company lists.
+`query` and `filters` are mutually exclusive. Pass one or the other, not both. If you send both, the request will not resolve to a predictable result set. If you started with a natural language `query` and want to refine it, translate the criteria into an equivalent `filters` object rather than layering `filters` on top of `query`.
 
-## Performance Optimization
+```python
+# ❌ Invalid — mutually exclusive parameters combined
+payload = {
+    "query": "SaaS companies in the US",
+    "filters": {"firmographic.company_type": ["private"]}
+}
 
-### Request Only What You Need
-
-**Don't** request all sections by default. Each enrichment section consumes credits and adds latency.
-
-```json
-{
-  "filters": {...},
-  "sections": ["firmographic"],
-  "limit": 10
+# ✅ Correct — pick one
+payload = {
+    "filters": {
+        "location.hq.country": ["USA"],
+        "business_model.offering_type": ["software"],
+        "firmographic.company_type": ["private"]
+    }
 }
 ```
 
-Only add sections you actually need for your use case.
+**Resolve industry names to codes before filtering. Never pass free text to** `industry.industry`
 
-### Use Filters Over Natural Language for Precise Queries
+The `industry.industry` filter expects akta.pro taxonomy industry codes, not free-text sector names like `"warehouse automation"` or `"fintech"`. Resolve the topic first with the [Industry Search API](/api-reference/supporting-apis/industry-search):
 
-Natural language is powerful but adds processing overhead. For exact criteria, use structured filters:
+```python
+industry_code = requests.get(
+    "https://api.akta.pro/api/v1/industry/search",
+    headers={"x-api-key": API_KEY},
+    params={"query": "warehouse automation"}
+).json()["data"][0]["code"]
 
-| Use Case | Approach |
-|----------|----------|
-| Exact funding stage match | Filters |
-| Companies in specific countries | Filters |
-| Exploratory research | Natural language |
-| Quick prototyping | Natural language |
+payload = {"filters": {"industry.industry": [industry_code]}}
+```
 
-### Paginate Large Result Sets
+If a topic maps to multiple closely related industries, pass several codes rather than relying on the single top match — `industry.industry` matches any company carrying any of the selected codes.
 
-Use `limit` and `offset` to process large lists efficiently:
+**Use 3-letter ISO country codes for all location filters, not country names**
 
-```json
-{
-  "filters": {...},
-  "limit": 500,
-  "offset": 0
+`location.hq.country`, `location.market_served.markets`, and `location.offices.country` all expect 3-letter ISO alpha-3 codes (`USA`, `IND`, `GBR`), not full country names (`"United States"`). Passing a name instead of a code will not match. `location.hq.city` and `location.hq.region`, by contrast, take free text and region names respectively — check each field's accepted format before assuming they're interchangeable.
+
+```python
+# ❌ Will not match
+"location.hq.country": ["United States"]
+
+# ✅ Correct
+"location.hq.country": ["USA"]
+```
+
+**Understand that all filters are combined with AND logic — narrow incrementally, not all at once**
+
+Every key inside the `filters` object must match for a company to be included in the results. Stacking many highly specific filters at once (e.g. a narrow revenue band \+ a narrow founding year range \+ a specific funding round \+ a specific investor) can silently return zero results if the combination doesn't exist in the data. Start with 2–3 broad filters, check `total_count`, and narrow from there rather than assembling the full filter set speculatively.
+
+```python
+# Start broad
+payload = {"filters": {"location.hq.country": ["USA"], "business_model.offering_type": ["software"]}}
+# check total_count, then progressively add:
+# firmographic.founded_year, financial_estimate.revenue_estimate, technology.api_detail.has_api, etc.
+```
+
+**Only request the** `sections `**you actually need**
+
+`credits_consumed` scales with the enrichment sections requested per company, not simply with how many companies are returned. Requesting `sections: ["firmographic", "business_model", "financial_estimate", "location", "technology", "management_profile", "funding_detail", ...]` when you only need `firmographic` and `location` unnecessarily inflates cost. Natural language queries and filter requests with no `sections` at all return identity fields only and cost 0 credits — useful for market-sizing or exploratory passes.
+
+```python
+# Cheaper: only what you need
+"sections": ["firmographic", "location"]
+
+# More expensive: requesting everything when you only use two fields downstream
+"sections": ["firmographic", "business_model", "company_assessment", "trust_signal",
+             "company_hierarchy", "digital_presence", "financial_estimate", "location",
+             "management_profile", "product_offering", "strategic_signal",
+             "customer_profile", "industry", "technology"]
+```
+
+**Remember `funding_detail` and `mna_and_investment` are Enterprise-only**
+
+Both the `funding_detail`/`mna_and_investment` enrichment sections and the corresponding `funding_detail.*` structured filters require an Enterprise plan. If your plan doesn't include Enterprise access, requests using these will not return the expected data — check your plan tier before building a workflow that depends on funding-stage or investor-level filtering.
+
+**Use nested filters (like `funding_detail.funding_rounds`) for round-level conditions — don't confuse them with overview filters**
+
+`funding_detail.funding_overview.*` filters apply to a company's aggregate funding history (total raised, most recent stage, number of rounds). `funding_detail.funding_rounds` is a nested filter whose sub-fields (`round`, `date`, `amount_usd`, `investors.uuid`, `investors.lead_investor`) apply jointly to a _single_ funding round — not across the company's whole history. If you need "raised a Series B of at least \$10M led by a specific investor," use the nested `funding_detail.funding_rounds` filter, not a combination of overview filters, since overview filters can't guarantee those conditions co-occur in the same round.
+
+```python
+# Correct: all conditions apply to the same round
+"funding_detail.funding_rounds": {
+    "round": ["series_b"],
+    "amount_usd": {"gte": 10000000},
+    "investors.lead_investor": True
 }
 ```
 
-Then increment offset for subsequent pages:
+**Set `sort_by` and `sort_order` explicitly for reproducible lists**
 
-```
-offset: 0, 500, 1000, 1500...
-```
+The default sort is `relevance`, which can shift between calls as the underlying index updates. For lists you'll re-run periodically (e.g. a weekly prospecting pull) or need to diff over time, sort by a stable field like `founded_year`, `total_funding`, or `revenue_estimate` with an explicit `sort_order` so the ordering — and therefore your `offset`-based pagination — stays consistent.
 
-## Credit Optimization
+**Use `query` for exploration, `filters` for production workflows**
 
-### Zero-Credit Queries
-
-Requesting only identity fields (`uuid`, `name`, `website`) without enrichment sections returns `credits_consumed: 0`:
-
-```json
-{
-  "filters": {
-    "firmographic.company_type": ["private"],
-    "location.hq.country": ["USA"]
-  }
-}
-```
-
-Use this for initial prospecting before spending credits on enrichment.
-
-### Batch Enrichment
-
-1. First: Get a list of target company UUIDs (no credits)
-2. Then: Use Company Data API to enrich individual companies with specific sections
-
-This is more cost-effective than enriching entire lists.
-
-## Filter Best Practices
-
-### Combine Filters Efficiently
-
-More filters = smaller result set = faster queries:
-
-```json
-{
-  "filters": {
-    "firmographic.company_type": ["private"],
-    "location.hq.country": ["USA"],
-    "funding_detail.funding_overview.funding_stage": ["series_a"]
-  }
-}
-```
-
-### Use Range Filters Wisely
-
-Range filters are powerful but can be slow on large datasets:
-
-**Instead of** broad ranges:
-```json
-{"founded_year": {"gte": 1900, "lte": 2024}}
-```
-
-**Use** targeted ranges:
-```json
-{"founded_year": {"gte": 2015, "lte": 2024}}
-```
-
-### Avoid High-Cardinality Filters Without Constraints
-
-| Filter Type | Example | Performance |
-|-------------|---------|--------------|
-| Low cardinality | `company_type` (5 values) | Fast |
-| Medium cardinality | `hq_country` (~50 values) | Good |
-| High cardinality | `naics_codes` (thousands) | Use with other filters |
-
-## Sorting Strategies
-
-### Default Sort (Relevance)
-
-When you don't specify `sort_by`, results are ranked by Akta relevance:
-
-```json
-{
-  "filters": {...}
-}
-```
-
-### Optimize Sort for Your Use Case
-
-| Goal | Sort By |
-|------|---------|
-| Most likely to convert | `relevance` (default) |
-| Largest companies first | `revenue_estimate` |
-| Most valuable companies | `valuation_estimate` |
-| Biggest employers | `employee_range` |
-| Most funded | `total_funding` |
-| Newest companies | `founded_year` |
-
-## Common Mistakes to Avoid
-
-### 1. Confusing Query and Filters
-
-You cannot use both `query` and `filters` in the same request:
-
-```json
-{
-  "query": "SaaS companies",
-  "filters": {
-    "location.hq.country": ["USA"]
-  }
-}
-```
-
-**This will error.** Choose one approach.
-
-### 2. Forgetting Total Count Cap
-
-`total_count` is capped at 500. If you need exact counts beyond 500, use narrower filters.
-
-### 3. Not Checking Credits Consumed
-
-Always verify `credits_consumed` in responses to track usage:
-
-```json
-{
-  "data": [...],
-  "credits_consumed": 3.5
-}
-```
-
-### 4. Using Invalid Filter Values
-
-Use the [List Filter Options API](/api-reference/list-filter-options) to get valid values before building filter payloads.
-
-## Debugging Tips
-
-### Use Query Translation for Natural Language
-
-When natural language returns unexpected results, use the translation endpoint:
-
-```
-POST /v1/company/list/translate-query
-{
-  "query": "your description here"
-}
-```
-
-This shows the exact filters being applied.
-
-### Start Broad, Then Narrow
-
-1. Start with minimal filters to see what matches
-2. Add constraints incrementally
-3. Verify each addition reduces results as expected
-
-## Summary Checklist
-
-- [ ] Request only needed enrichment sections
-- [ ] Use filters for precision, natural language for exploration
-- [ ] Implement pagination for large result sets
-- [ ] Check `credits_consumed` in every response
-- [ ] Validate filter values against options endpoint
-- [ ] Use appropriate sort strategy for your goal
-- [ ] Combine multiple filters to improve performance
-
+Natural language `query` is convenient for a first pass at an unfamiliar segment, but its interpretation can vary slightly between calls since it depends on query understanding rather than deterministic filter matching. Once you've validated that a query surfaces the right kind of companies, translate the underlying criteria into an equivalent `filters` object for any workflow you'll run repeatedly, cache, or need to audit — filters always resolve the same way given the same inputs.

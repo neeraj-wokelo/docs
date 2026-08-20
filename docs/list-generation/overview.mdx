@@ -1,71 +1,32 @@
 ---
 title: "Overview"
-hidden: true
 ---
 
-# List Generation
+The akta.pro List Generation API builds targeted lists of companies using either structured filters or a natural language query, with optional data enrichment for each matching company. It's the entry point for prospecting, market mapping, and building segmented account lists directly from akta.pro company data index.
 
-Build targeted company lists using structured filters or natural language queries, enriched with detailed company data.
+You pass either a `query` string or a `filters` object as the request body, and receive a paginated array of matching companies immediately in the response.
 
-## What is List Generation?
+## Two ways to build a list
 
-List Generation allows you to create focused lists of companies based on specific criteria. Whether you need to find:
+**Structured Filters** : Apply precise criteria across 10 filter groups (firmographic, business model, financials, location, technology, funding, and more) using exact-match, range, boolean, or nested conditions. Use this when you know exactly which attributes define your target list. For example, "US-based, Series B\+ SaaS companies with an API, founded after 2018."
 
-- SaaS companies in the US with Series A funding
-- Private companies with 500+ employees in the healthcare sector
-- AI-focused startups that raised capital in the last 12 months
+**Natural Language Query**: Describe your target companies in plain English (e.g. _"SaaS companies in the US with Series A funding"_) and the API interprets your intent. Use this for quick exploration or when you don't need to enumerate every filter condition explicitly.
 
-List Generation gives you the flexibility to express your criteria either through precise filters or plain language descriptions.
+`query` and `filters` are mutually exclusive. A single request uses one or the other, never both.
 
-## Two Ways to Build Lists
+## What you get back
 
-### Structured Filters
+Each company in the response includes, at minimum, its identity fields:
 
-Apply specific, combinable filter conditions across 35+ company attributes:
+- **uuid**: akta.pro unique identifier for the company
+- **name** : company name
+- **website** : company website URL
 
-- **Company Attributes**: Type, founding year, headcount, operating status
-- **Location**: Headquarters country, region, city; markets served
-- **Financial**: Revenue estimates, valuation bands, funding stage and amount
-- **Business Model**: GTM motion, revenue model, pricing structure
-- **Technology**: API availability, mobile apps, AI maturity
-- **Industry**: NAICS, SIC, and Akta's industry taxonomy
+If you request additional `sections`, each company object is enriched with structured data blocks. Refer to [API reference](/api-reference/list-generation) for more details. Results are ranked by akta.pro relevance by default, or can be sorted by revenue, valuation, headcount, total funding, or founded year.
 
-### Natural Language
+## Common use cases
 
-Describe what you're looking for in plain text:
-
-```
-"SaaS companies in the US with Series A funding founded after 2018"
-```
-
-The API interprets your intent and returns matching companies.
-
-## How It Works
-
-1. **Define your criteria** - Use filters or natural language
-2. **Choose enrichment** - Add optional data sections (firmographics, financials, technology, etc.)
-3. **Sort and paginate** - Order results by relevance or specific metrics
-4. **Get results** - Receive ranked companies with requested data
-
-## Response Structure
-
-Each company in the response includes:
-
-| Field | Description |
-|-------|-------------|
-| `uuid` | Unique company identifier |
-| `name` | Company name |
-| `website` | Company website |
-| `sections` | Any enrichment data you requested |
-
-Plus metadata:
-- `count` - Number of results in this response
-- `total_count` - Total matching companies (capped at 500)
-- `credits_consumed` - API credits used
-
-## Next Steps
-
-- [Quick Start](/docs/list-generation/quick-start) - Make your first API call
-- [Use Cases](/docs/list-generation/use-cases) - Common list building patterns
-- [Best Practices](/docs/list-generation/best-practices) - Optimize your queries
-
+- **Sales prospecting** : build a list of companies matching your ideal customer profile (industry, headcount, funding stage, tech stack) for outbound campaigns
+- **Market mapping** : enumerate every company in a market segment (e.g. "API-first fintech companies in Europe") to size a market or identify competitors
+- **Investor sourcing / deal flow** : filter by funding stage, investor, or funding round criteria to surface companies matching an investment thesis
+- **Lookalike / expansion targeting** : combine firmographic and technology filters to find companies similar to your best customers
