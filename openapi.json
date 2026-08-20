@@ -166,7 +166,6 @@
         "properties": {
           "uuid": {
             "type": "string",
-            "format": "uuid",
             "description": "Unique Akta identifier for the company."
           },
           "name": {
@@ -251,6 +250,7 @@
           },
           "pricing": {
             "type": "array",
+            "items": {"type": "object"},
             "description": "Pricing information for the product. Present only when products is provided."
           },
           "reviews": {
@@ -492,9 +492,8 @@
             "type": "string"
           }
         }
-      }
-    },
-    "TranslateQueryRequest": {
+      },
+      "TranslateQueryRequest": {
       "type": "object",
       "properties": {
         "query": {
@@ -503,75 +502,83 @@
         }
       },
       "required": ["query"]
-    },
-    "TranslateQueryResponse": {
-      "type": "object",
-      "properties": {
-        "data": {
-          "type": "object",
-          "properties": {
-            "filters": {
-              "type": "object",
-              "description": "Structured filters object equivalent to the input query, using dotted-path filter keys."
-            }
-          }
-        },
-        "credits_consumed": {
-          "type": "number",
-          "format": "float"
-        }
-      }
-    },
-    "ListGenerationRequest": {
-      "type": "object",
-      "properties": {
-        "query": {
-          "type": "string",
-          "description": "Natural language search query (e.g. 'SaaS companies in the US with Series A funding'). Cannot be used with filters."
-        },
-        "filters": {
-          "type": "object",
-          "additionalProperties": true,
-          "description": "Structured filter conditions. Use the Filter Builder API to generate valid filters. Cannot be used with query. See filter options at /api-reference/listgen-api."
-        },
-        "sections": {
-          "type": "array",
-          "items": {"type": "string"},
-          "description": "Data enrichment sections to include. Values: firmographic, business_model, company_assessment, trust_signal, company_hierarchy, digital_presence, financial_estimate, location, management_profile, product_offering, strategic_signal, customer_profile, industry, technology, funding_detail (Enterprise), mna_and_investment (Enterprise)"
-        },
-        "sort_by": {
-          "type": "string",
-          "enum": ["relevance", "revenue_estimate", "valuation_estimate", "employee_range", "total_funding", "founded_year"],
-          "description": "Field to sort results by. Default: relevance"
-        },
-        "sort_order": {
-          "type": "string",
-          "enum": ["asc", "desc"],
-          "description": "Sort direction. Default: desc"
-        },
-        "limit": {
-          "type": "integer",
-          "description": "Maximum companies to return. Default: 50, Max: 500"
-        },
-        "offset": {
-          "type": "integer",
-          "description": "Number of results to skip for pagination. Default: 0"
-        }
-      }
-    },
-    "ListGenerationResponse": {
-      "type": "object",
-      "properties": {
-        "data": {
-          "type": "array",
-          "items": {
+      },
+      "TranslateQueryResponse": {
+        "type": "object",
+        "properties": {
+          "data": {
             "type": "object",
-            "description": "Company object with identity fields (uuid, name, website) plus any requested enrichment sections."
+            "properties": {
+              "filters": {
+                "type": "object",
+                "description": "Structured filters object equivalent to the input query, using dotted-path filter keys."
+              }
+            }
+          },
+          "credits_consumed": {
+            "type": "number",
+            "format": "float"
           }
-        },
-        "count": {"type": "integer", "description": "Number of companies returned."},
-        "total_count": {"type": "integer", "description": "Total matching companies. Capped at 500."},
-        "credits_consumed": {"type": "number", "format": "float", "description": "Credits consumed. Returns 0 when no enrichment sections requested."}
+        }
+      },
+      "ListGenerationRequest": {
+        "type": "object",
+        "properties": {
+          "query": {
+            "type": "string",
+            "description": "Natural language search query (e.g. 'SaaS companies in the US with Series A funding'). Cannot be used with filters."
+          },
+          "filters": {
+            "type": "object",
+            "additionalProperties": true,
+            "description": "Structured filter conditions. Use the Filter Builder API to generate valid filters. Cannot be used with query. See filter options at /api-reference/listgen-api."
+          },
+          "sections": {
+            "type": "array",
+            "items": {"type": "string"},
+            "description": "Data enrichment sections to include. Values: firmographic, business_model, company_assessment, trust_signal, company_hierarchy, digital_presence, financial_estimate, location, management_profile, product_offering, strategic_signal, customer_profile, industry, technology, funding_detail (Enterprise), mna_and_investment (Enterprise)"
+          },
+          "sort_by": {
+            "type": "string",
+            "enum": ["relevance", "revenue_estimate", "valuation_estimate", "employee_range", "total_funding", "founded_year"],
+            "description": "Field to sort results by. Default: relevance"
+          },
+          "sort_order": {
+            "type": "string",
+            "enum": ["asc", "desc"],
+            "description": "Sort direction. Default: desc"
+          },
+          "limit": {
+            "type": "integer",
+            "description": "Maximum companies to return. Default: 50, Max: 500"
+          },
+          "offset": {
+            "type": "integer",
+            "description": "Number of results to skip for pagination. Default: 0"
+          }
+        }
+      },
+      "ListGenerationResponse": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "description": "Company object with identity fields (uuid, name, website) plus any requested enrichment sections."
+            }
+          },
+          "count": {"type": "integer", "description": "Number of companies returned."},
+          "total_count": {"type": "integer", "description": "Total matching companies. Capped at 500."},
+          "credits_consumed": {"type": "number", "format": "float", "description": "Credits consumed. Returns 0 when no enrichment sections requested."}
+        }
+      },
+      "Error": {
+        "type": "object",
+        "properties": {
+          "status": {"type": "string"},
+          "message": {"type": "string"}
+        }
       }
     }
   },
@@ -923,6 +930,8 @@
             "name": "products",
             "in": "query",
             "required": false,
+            "style": "form",
+            "explode": true,
             "schema": {"type": "array", "items": {"type": "string"}},
             "description": "List of product_id values to fetch reviews for. Pass the parameter multiple times to request more than one product. If omitted, the response returns the product list only."
           },
@@ -1112,9 +1121,9 @@
                         "linkedin_official_name": {"type": "string"},
                         "total_employees": {"type": "integer"},
                         "date": {"type": "string"},
-                        "growth_periods": {"type": "array"},
-                        "headcount_growth": {"type": "array"},
-                        "headcount_by_function": {"type": "array"}
+                        "growth_periods": {"type": "array", "items": {"type": "string"}},
+                        "headcount_growth": {"type": "array", "items": {"type": "object"}},
+                        "headcount_by_function": {"type": "array", "items": {"type": "object"}}
                       }
                     },
                     "credits_consumed": {"type": "number", "format": "float"}
@@ -1168,7 +1177,7 @@
                   "type": "object",
                   "properties": {
                     "status": {"type": "string"},
-                    "data": {"type": "array"},
+                    "data": {"type": "array", "items": {"type": "object"}},
                     "count": {"type": "integer"},
                     "limit": {"type": "integer"},
                     "offset": {"type": "integer"},
