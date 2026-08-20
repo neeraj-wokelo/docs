@@ -70,13 +70,9 @@ Total credits = 1.5
 = 136.5 credits
 ```
 
-**Example:** A `query`-based request returning 20 companies with no enrichment sections:
-
-```text
-1.5 (base) + 2.5 (query) + (0.2 × 20) + 0 (no sections)
-= 1.5 + 2.5 + 4 + 0
-= 8 credits
-```
+<Note>
+  **Filter Builder API** — 2.5 credits per run. Rather than passing natural language directly to List Generation's `query` parameter, you can call the [Filter Builder API](/api-reference/supporting-apis/filter-builder) first to convert it into a structured `filters` object. This costs the same 2.5 credits as the `query` surcharge, but gives you a reviewable, reusable filter set you can inspect, tweak, or cache before running (and re-running) List Generation with `filters` instead.
+</Note>
 
 ## Alternative Signals
 

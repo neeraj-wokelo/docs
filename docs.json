@@ -55,10 +55,10 @@
               {
                 "group": "List Generation",
                 "pages": [
-                  "untitled-page",
-                  "untitled-page-2",
-                  "untitled-page-3",
-                  "untitled-page-4"
+                  "docs/list-generation/overview",
+                  "docs/list-generation/quickstart",
+                  "docs/list-generation/use-cases",
+                  "docs/list-generation/best-practices"
                 ]
               },
               {
@@ -126,7 +126,8 @@
                   "docs/supporting-apis/company-search",
                   "docs/supporting-apis/industry-search",
                   "docs/supporting-apis/company-addition",
-                  "docs/supporting-apis/request-status-api"
+                  "docs/supporting-apis/request-status-api",
+                  "docs/supporting-apis/translate-query"
                 ]
               }
             ]
@@ -207,7 +208,8 @@
               "api-reference/supporting-apis/company-search",
               "api-reference/supporting-apis/industry-search",
               "api-reference/supporting-apis/company-addition-api",
-              "api-reference/supporting-apis/status-api"
+              "api-reference/supporting-apis/status-api",
+              "api-reference/supporting-apis/filter-builder"
             ]
           }
         ]

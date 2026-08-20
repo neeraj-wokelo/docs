@@ -1,0 +1,83 @@
+---
+title: "Filter Builder API"
+description: "Convert a natural language description of target companies into a structured filters object for use with the List Generation API."
+openapi: "POST /v1/company/list/translate-query"
+---
+
+## Overview
+
+The Filter Builder API converts a free-text description of your target companies into the structured `filters` object accepted by the [List Generation API](/api-reference/list-generation). Use it when you want the precision and reproducibility of structured filters, but would rather describe your target companies in plain English than look up enum values, industry codes, and filter keys yourself.
+
+The endpoint does not return any companies itself — it only returns the equivalent `filters` object. Pass that object straight into the `filters` parameter of a subsequent `/v1/company/list/generate` call to fetch the actual matching companies.
+
+## Endpoint Details
+
+- **Method:** POST
+- **Endpoint:** `/v1/company/list/translate-query`
+
+## Authentication requirements
+
+- Include a valid API key in the `x-api-key` request header.
+
+## Request
+
+### Request Parameters
+
+#### Header Parameters
+
+<ParamField header="x-api-key" type="string" required>
+  Your API key.
+</ParamField>
+
+#### Body Parameters
+
+<ParamField body="query" type="string" required>
+  Natural language description of your target companies (e.g. "series a companies in mumbai working in climate tech").
+
+  The API interprets location, funding stage, industry, and other filterable attributes mentioned in the query and resolves them to the corresponding structured filter keys and values used by the List Generation API.
+</ParamField>
+
+## Response
+
+#### Successful Response Fields
+
+<ResponseField name="data" type="object">
+  Container for the translated result. Contains `filters` key that includes all the translated filters.
+
+  <ResponseField name="filters" type="object">
+    The structured filters object equivalent to the input query, using the same dotted-path filter keys as the [List Generation API](/api-reference/list-generation) (e.g. `location.hq.city`, `funding_detail.funding_overview.funding_stage`, `industry.industry`).
+
+    Only the filter groups relevant to the query are included. Pass this object directly into the `filters` parameter of a List Generation API request.
+  </ResponseField>
+</ResponseField>
+
+<ResponseField name="credits_consumed" type="float">
+  Number of credits consumed by this request. See [Pricing](/getting-started/pricing) for the full credit breakdown.
+</ResponseField>
+
+<ResponseExample>
+
+```json 200 expandable wrap
+{
+  "data": {
+    "filters": {
+      "location.hq.city": [
+        "Mumbai"
+      ],
+      "funding_detail.funding_overview.funding_stage": [
+        "series_a"
+      ],
+      "industry.industry": [
+        "EUAB",
+        "EUACAJ",
+        "EUAAAL",
+        "EUAFAN",
+        "EUAFAF"
+      ]
+    }
+  },
+  "credits_consumed": 2.5
+}
+```
+
+</ResponseExample>

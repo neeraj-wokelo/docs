@@ -4,13 +4,13 @@ title: "Industry Search"
 
 ## Overview
 
-The Industry Search API resolves a free-text industry or topic name into a ranked list of matching industry codes. Its primary purpose is to look up the `code` needed as the `industry` parameter in the News API when you only have a topic name to start with, not an Akta industry code. This is a **free endpoint** so it does not consume API credits. **Endpoint**
+The Industry Search API resolves a free-text industry or topic name into a ranked list of matching industry codes. Its primary purpose is to look up the `code` needed as the `industry` parameter in the News API or List Generation API when you only have a topic name to start with, not an akta.pro industry code. This is a **free endpoint** so it does not consume API credits. **Endpoint**
 
 ```text
 GET https://api.akta.pro/api/v1/industry/search
 ```
 
-Pass a single `query` query parameter. The backend matches it against Akta's industry taxonomy and returns the closest industries, ranked by similarity.
+Pass a `query` parameter to search, and an optional `level` parameter to restrict results to specific tiers of akta.pro industry taxonomy. The backend matches `query` against the taxonomy and returns the closest industries, ranked by similarity.
 
 ## Authentication
 
@@ -31,8 +31,7 @@ x-api-key: <YOUR_API_KEY>
 | Parameter | Type | Required | Description |
 | --- | --- | --- | --- |
 | `query` | string | **Required** | Free-text industry name or topic (e.g. `"warehouse automation"`). The API matches this against Akta's industry taxonomy and returns the closest codes. |
-
-**Example Request**
+| `level` | string | Optional | One or more taxonomy levels to restrict results to. Accepts a single value or a comma-separated list (e.g. `"l4,l1"`). Available values: `l1`, `l2`, `l3`, `l4`, `all`. **Default is `l4`** — the most granular taxonomy tier. Pass `all` or a specific combination of levels to widen results to broader industry groupings as well. |
 
 <CodeGroup>
 
@@ -54,6 +53,31 @@ if results:
     print(f"Code:       {top_match['code']}")
     print(f"Industry:   {top_match['industry_name']}")
     print(f"Similarity: {top_match['similarity']}")
+```
+
+</CodeGroup>
+
+**Searching across multiple taxonomy levels**
+
+By default, results are restricted to `l4` (the most granular level). Pass `level` with multiple values, or `all`, to also surface broader, higher-level industry groupings in the same call:
+
+<CodeGroup>
+
+```bash cURL
+curl -G "https://api.akta.pro/api/v1/industry/search/?query=warehouse+automation&level=l4%2Cl1" \
+  -H "x-api-key: <YOUR_API_KEY>"
+```
+
+```python Python
+import requests
+response = requests.get(
+    "https://api.akta.pro/api/v1/industry/search",
+    headers={"x-api-key": "<YOUR_API_KEY>"},
+    params={"query": "warehouse automation", "level": "l4,l1"}
+)
+results = response.json()["data"]
+for match in results[:5]:
+    print(match["code"], match["industry_name"], match["similarity"])
 ```
 
 </CodeGroup>
@@ -96,7 +120,6 @@ if results:
 | `code` | string | Unique Akta industry code. Pass this as the `industry` parameter in the News API. |
 | `industry_name` | string | Full name of the industry as per Akta's industry taxonomy. |
 | `similarity` | float | Similarity score between the query and the matched industry, from `0` to `1`. Higher values indicate a closer match. Results are returned in descending order of relevance. |
-| When no industries match the query, the API returns `204 No Content` with an empty `data` array. |  |  |
 
 ---
 
@@ -125,4 +148,8 @@ print(f"Found {news.json()['total']} articles")
 
 <Tip>
   If a query matches several closely related industries, consider passing more than one `code` to the News API's `industry` parameter (comma separated) to widen coverage, rather than relying on the single top match.
+</Tip>
+
+<Tip>
+  If the default `l4` results feel too narrow or too specific for your use case, pass `level=all` (or a specific combination like `level=l3,l4`) to also pull in broader taxonomy groupings before deciding which `code`(s) to use downstream.
 </Tip>

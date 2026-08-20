@@ -1,0 +1,142 @@
+---
+title: "Filter Builder"
+---
+
+## Overview
+
+The Translate Query API converts a free-text description of your target companies into the structured `filters` object accepted by the [List Generation API](/api-reference/list-generation). Its primary purpose is to let you describe a target company list in plain English and get back a deterministic, reusable `filters` object — instead of looking up enum values, industry codes, and filter keys yourself.
+
+This endpoint does not return any companies itself — it only returns the equivalent `filters` object. Pass that object into the `filters` parameter of a subsequent List Generation API call to fetch the actual matching companies.
+
+**Endpoint**
+
+```text
+POST https://api.akta.pro/api/v1/company/list/translate-query/
+```
+
+Pass a single `query` field in the JSON request body. The backend interprets the location, funding stage, industry, and other filterable attributes mentioned in the query and resolves them to the corresponding structured filter keys and values used by List Generation.
+
+---
+
+## Authentication
+
+All requests must include an **API key** in the `x-api-key` HTTP header.
+
+```text
+x-api-key: <YOUR_API_KEY>
+```
+
+<Warning>
+  Never expose your API key in client-side code, browser requests, or public repositories. A missing or invalid key returns `401 Unauthorized`.
+</Warning>
+
+---
+
+## Request Reference
+
+| Parameter | Type | Required | Description |
+| --- | --- | --- | --- |
+| `query` | string | **Required** | Natural language description of your target companies (e.g. `"series a companies in mumbai working in climate tech"`). The API interprets location, funding stage, industry, and other filterable attributes mentioned in the query. |
+
+**Example requests:**
+
+<CodeGroup>
+
+```bash cURL
+curl -X POST "https://api.akta.pro/api/v1/company/list/translate-query/" \
+  -H "x-api-key: YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{"query": "Series A companies in US working in Climate Tech"}'
+```
+
+```python Python
+import requests
+
+url = "https://api.akta.pro/api/v1/company/list/translate-query/"
+headers = {"x-api-key": "YOUR_API_KEY"}
+payload = {"query": "Series A companies in US working in Climate Tech"}
+
+response = requests.post(url, headers=headers, json=payload)
+data = response.json()
+
+print(data["filters"])
+```
+
+</CodeGroup>
+
+---
+
+## Response
+
+### Response envelope
+
+```json
+{
+  "data": {
+    "filters": {
+      "location.hq.city": [
+        "Mumbai"
+      ],
+      "funding_detail.funding_overview.funding_stage": [
+        "series_a"
+      ],
+      "industry.industry": [
+        "EUAB",
+        "EUACAJ",
+        "EUAAAL",
+        "EUAFAN",
+        "EUAFAF"
+      ]
+    }
+  },
+  "credits_consumed": 2.5
+}
+```
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `data` | object | Container for the translated result. |
+| `data.filters` | object | The structured filters object equivalent to the input query, using the same dotted-path filter keys as the [List Generation API](/api-reference/list-generation) (e.g. `location.hq.city`, `funding_detail.funding_overview.funding_stage`, `industry.industry`). Only the filter groups relevant to the query are included. |
+| `credits_consumed` | float | Number of credits consumed by this request. See [Pricing](/getting-started/pricing) for the full credit breakdown. |
+
+When the query cannot be mapped to any recognizable filters, the API returns an empty `filters` object (`{}`).
+
+---
+
+## Using the translated filters with List Generation
+
+Once you have the `filters` object, pass it directly into the `filters` parameter of a List Generation call to fetch matching companies:
+
+```python
+import requests
+
+HEADERS = {"x-api-key": "your-api-key", "Content-Type": "application/json"}
+
+# Step 1: Translate the query
+translate = requests.post(
+    "https://api.akta.pro/api/v1/company/list/translate-query/",
+    headers=HEADERS,
+    json={"query": "series a companies in mumbai working in climate tech"}
+)
+translate.raise_for_status()
+filters = translate.json()["data"]["filters"]
+
+# Step 2: Use the returned filters in List Generation
+generate = requests.post(
+    "https://api.akta.pro/api/v1/company/list/generate",
+    headers=HEADERS,
+    json={
+        "filters": filters,
+        "sections": ["firmographic", "location", "funding_detail"],
+        "limit": 50
+    }
+)
+generate.raise_for_status()
+companies = generate.json()["data"]
+for company in companies:
+    print(company["name"], company["website"])
+```
+
+<Tip>
+  Translating a query once and reviewing the resulting `filters` object lets you catch any misinterpretation (e.g. an unexpected industry code) before committing to a full List Generation call — and gives you a deterministic, reusable filter object for repeated runs, instead of relying on natural language `query` interpretation each time you call List Generation directly.
+</Tip>

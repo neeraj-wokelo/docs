@@ -11,6 +11,8 @@ All akta.pro tools are **synchronous**. All tools returns its data immediately, 
 | `company_search` | Resolve a company name or website to Akta identifiers (`uuid`, website, status) |
 | `industry_search` | Resolve a free-text industry or topic to ranked industry codes, used to filter news by industry |
 | `account_status` | Your plan tier (`is_enterprise`, `package_type`) and remaining credit balance |
+| `list_filters` | List the available filter fields for `generate_company_list` (e.g. `location.hq.country`, `firmographic.founded_year`), grouped by filter category |
+| `get_filter_values` | Get the allowed values for one or more filters (e.g. valid country codes, funding stage enums), used to build a valid `filters` payload before calling `generate_company_list` |
 
 **Company data:**
 
@@ -26,6 +28,12 @@ All akta.pro tools are **synchronous**. All tools returns its data immediately, 
 | `news_signals` | List news filtered by company, industry, query, or title, with sentiment and AI summaries. No full article text |
 | `news_detail` | Full article body for specific article IDs returned by `news_signals` (max 10 per call) |
 | `news_types` | The news-type taxonomy. Contains 77 tag codes across 11 categories, used to filter `news_signals` by kind of news |
+
+**List Generation:**
+
+| Tool | Description |
+| --- | --- |
+| `generate_company_list` | Build a targeted list of companies using structured filters or a natural language query, with optional per-company data enrichment |
 
 **Additional tools** (require Subscription or Enterprise):
 
