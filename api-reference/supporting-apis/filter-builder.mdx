@@ -6,9 +6,9 @@ openapi: "POST /v1/company/list/translate-query"
 
 ## Overview
 
-The Filter Builder API converts a free-text description of your target companies into the structured `filters` object accepted by the [List Generation API](/api-reference/list-generation). Use it when you want the precision and reproducibility of structured filters, but would rather describe your target companies in plain English than look up enum values, industry codes, and filter keys yourself.
+The Filter Builder API converts a free-text description of your target companies into the structured `filters` object accepted by the [List Generation API](/api-reference/listgen-api). Use it when you want the precision and reproducibility of structured filters, but would rather describe your target companies in plain English than look up enum values, industry codes, and filter keys yourself.
 
-The endpoint does not return any companies itself — it only returns the equivalent `filters` object. Pass that object straight into the `filters` parameter of a subsequent `/v1/company/list/generate` call to fetch the actual matching companies.
+The endpoint does not return any companies itself. It only returns the equivalent `filters` object. Pass that object straight into the `filters` parameter of a subsequent `/v1/company/list/generate` call to fetch the actual matching companies.
 
 ## Endpoint Details
 
@@ -45,7 +45,7 @@ The endpoint does not return any companies itself — it only returns the equiva
   Container for the translated result. Contains `filters` key that includes all the translated filters.
 
   <ResponseField name="filters" type="object">
-    The structured filters object equivalent to the input query, using the same dotted-path filter keys as the [List Generation API](/api-reference/list-generation) (e.g. `location.hq.city`, `funding_detail.funding_overview.funding_stage`, `industry.industry`).
+    The structured filters object equivalent to the input query, using the same dotted-path filter keys as the [List Generation API](/api-reference/listgen-api) (e.g. `location.hq.city`, `funding_detail.funding_overview.funding_stage`, `industry.industry`).
 
     Only the filter groups relevant to the query are included. Pass this object directly into the `filters` parameter of a List Generation API request.
   </ResponseField>
