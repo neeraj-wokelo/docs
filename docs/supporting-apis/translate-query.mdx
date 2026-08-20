@@ -4,9 +4,9 @@ title: "Filter Builder"
 
 ## Overview
 
-The Translate Query API converts a free-text description of your target companies into the structured `filters` object accepted by the [List Generation API](/api-reference/list-generation). Its primary purpose is to let you describe a target company list in plain English and get back a deterministic, reusable `filters` object — instead of looking up enum values, industry codes, and filter keys yourself.
+The Filter Builder API converts a free-text description of your target companies into the structured `filters` object accepted by the [List Generation API](/api-reference/listgen-api). Its primary purpose is to let you describe a target company list in plain English and get back a deterministic, reusable `filters` object , instead of looking up enum values, industry codes, and filter keys yourself.
 
-This endpoint does not return any companies itself — it only returns the equivalent `filters` object. Pass that object into the `filters` parameter of a subsequent List Generation API call to fetch the actual matching companies.
+This endpoint does not return any companies itself, it only returns the equivalent `filters` object. Pass that object into the `filters` parameter of a subsequent List Generation API call to fetch the actual matching companies.
 
 **Endpoint**
 
@@ -96,7 +96,7 @@ print(data["filters"])
 | Field | Type | Description |
 | --- | --- | --- |
 | `data` | object | Container for the translated result. |
-| `data.filters` | object | The structured filters object equivalent to the input query, using the same dotted-path filter keys as the [List Generation API](/api-reference/list-generation) (e.g. `location.hq.city`, `funding_detail.funding_overview.funding_stage`, `industry.industry`). Only the filter groups relevant to the query are included. |
+| `data.filters` | object | The structured filters object equivalent to the input query, using the same dotted-path filter keys as the [List Generation API](/api-reference/listgen-api) (e.g. `location.hq.city`, `funding_detail.funding_overview.funding_stage`, `industry.industry`). Only the filter groups relevant to the query are included. |
 | `credits_consumed` | float | Number of credits consumed by this request. See [Pricing](/getting-started/pricing) for the full credit breakdown. |
 
 When the query cannot be mapped to any recognizable filters, the API returns an empty `filters` object (`{}`).

@@ -83,7 +83,7 @@ Results are ranked by Akta relevance by default and can be enriched with additio
     <Accordion title="Location Filters">
       | Field | Type | Accepted Values |
       | --- | --- | --- |
-      | `location.hq.region` | string\[\] | `Africa`, `Asia`, `Europe`, `Latin America`, `Middle East`, `North America`, `Oceania` |
+      | `location.hq.region` | string\[\] | M49 region codes. Refer [here](/region-codes). |
       | `location.hq.country` | string\[\] | Any valid 3-letter ISO alpha-3 country code (e.g. `USA`, `IND`, `GBR`). Refer [here](/country-codes). |
       | `location.hq.city` | string\[\] | Free text — any city name (e.g. `delhi`) |
       | `location.market_served.markets` | string\[\] | Any valid 3-letter ISO alpha-3 country code (e.g. `USA`, `CHN`). Refer [here](/country-codes). |
@@ -211,7 +211,7 @@ The example below combines a firmographic filter, a location filter, a financial
   Number of credits consumed by this request. Returns 0 when no enrichment sections are requested.
 </ResponseField>
 
-#### Filtered Results Example
+<ResponseExample>
 
 ```json 200 expandable wrap
 {
@@ -232,3 +232,5 @@ The example below combines a firmographic filter, a location filter, a financial
   "credits_consumed": 0.0
 }
 ```
+
+</ResponseExample>
