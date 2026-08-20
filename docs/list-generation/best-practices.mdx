@@ -51,52 +51,13 @@ If a topic maps to multiple closely related industries, pass several codes rathe
 "location.hq.country": ["USA"]
 ```
 
-**Understand that all filters are combined with AND logic — narrow incrementally, not all at once**
-
-Every key inside the `filters` object must match for a company to be included in the results. Stacking many highly specific filters at once (e.g. a narrow revenue band \+ a narrow founding year range \+ a specific funding round \+ a specific investor) can silently return zero results if the combination doesn't exist in the data. Start with 2–3 broad filters, check `total_count`, and narrow from there rather than assembling the full filter set speculatively.
-
-```python
-# Start broad
-payload = {"filters": {"location.hq.country": ["USA"], "business_model.offering_type": ["software"]}}
-# check total_count, then progressively add:
-# firmographic.founded_year, financial_estimate.revenue_estimate, technology.api_detail.has_api, etc.
-```
-
 **Only request the** `sections `**you actually need**
 
-`credits_consumed` scales with the enrichment sections requested per company, not simply with how many companies are returned. Requesting `sections: ["firmographic", "business_model", "financial_estimate", "location", "technology", "management_profile", "funding_detail", ...]` when you only need `firmographic` and `location` unnecessarily inflates cost. Natural language queries and filter requests with no `sections` at all return identity fields only and cost 0 credits — useful for market-sizing or exploratory passes.
-
-```python
-# Cheaper: only what you need
-"sections": ["firmographic", "location"]
-
-# More expensive: requesting everything when you only use two fields downstream
-"sections": ["firmographic", "business_model", "company_assessment", "trust_signal",
-             "company_hierarchy", "digital_presence", "financial_estimate", "location",
-             "management_profile", "product_offering", "strategic_signal",
-             "customer_profile", "industry", "technology"]
-```
+`credits_consumed` scales with the enrichment sections requested per company, not just with how many companies are returned.
 
 **Remember `funding_detail` and `mna_and_investment` are Enterprise-only**
 
 Both the `funding_detail`/`mna_and_investment` enrichment sections and the corresponding `funding_detail.*` structured filters require an Enterprise plan. If your plan doesn't include Enterprise access, requests using these will not return the expected data — check your plan tier before building a workflow that depends on funding-stage or investor-level filtering.
-
-**Use nested filters (like `funding_detail.funding_rounds`) for round-level conditions — don't confuse them with overview filters**
-
-`funding_detail.funding_overview.*` filters apply to a company's aggregate funding history (total raised, most recent stage, number of rounds). `funding_detail.funding_rounds` is a nested filter whose sub-fields (`round`, `date`, `amount_usd`, `investors.uuid`, `investors.lead_investor`) apply jointly to a _single_ funding round — not across the company's whole history. If you need "raised a Series B of at least \$10M led by a specific investor," use the nested `funding_detail.funding_rounds` filter, not a combination of overview filters, since overview filters can't guarantee those conditions co-occur in the same round.
-
-```python
-# Correct: all conditions apply to the same round
-"funding_detail.funding_rounds": {
-    "round": ["series_b"],
-    "amount_usd": {"gte": 10000000},
-    "investors.lead_investor": True
-}
-```
-
-**Set `sort_by` and `sort_order` explicitly for reproducible lists**
-
-The default sort is `relevance`, which can shift between calls as the underlying index updates. For lists you'll re-run periodically (e.g. a weekly prospecting pull) or need to diff over time, sort by a stable field like `founded_year`, `total_funding`, or `revenue_estimate` with an explicit `sort_order` so the ordering — and therefore your `offset`-based pagination — stays consistent.
 
 **Use `query` for exploration, `filters` for production workflows**
 
