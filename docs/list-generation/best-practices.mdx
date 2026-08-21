@@ -37,11 +37,11 @@ industry_code = requests.get(
 payload = {"filters": {"industry.industry": [industry_code]}}
 ```
 
-If a topic maps to multiple closely related industries, pass several codes rather than relying on the single top match — `industry.industry` matches any company carrying any of the selected codes.
+If a topic maps to multiple closely related industries, pass several codes rather than relying on the single top match.
 
 **Use 3-letter ISO country codes for all location filters, not country names**
 
-`location.hq.country`, `location.market_served.markets`, and `location.offices.country` all expect 3-letter ISO alpha-3 codes (`USA`, `IND`, `GBR`), not full country names (`"United States"`). Passing a name instead of a code will not match. `location.hq.city` and `location.hq.region`, by contrast, take free text and region names respectively — check each field's accepted format before assuming they're interchangeable.
+`location.hq.country`, `location.market_served.markets`, and `location.offices.country` all expect 3-letter ISO alpha-3 codes (`USA`, `IND`, `GBR`), not full country names (`"United States"`). Passing a name instead of a code will not match. `location.hq.city` by contrast, take free text. `hq.region` takes [M49 region codes](/region-codes).
 
 ```python
 # ❌ Will not match
