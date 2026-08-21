@@ -2,17 +2,9 @@
 title: "Best Practices"
 ---
 
-**Always specify** `sections`**. Never rely on the default**
+**Always specify** `sections`
 
-When `sections` is omitted, all available sections are returned. This would consume credits. Always be explicit:
-
-```python
-# ❌ Returns everything — slow and large
-params={"company": "canva.com"}
-
-# ✅ Returns only what you need
-params={"company": "canva.com", "sections": "firmographics,funding"}
-```
+Request only the sections you need. Each sections consumes credits. Refer to [pricing page](/getting-started/pricing) for more details.
 
 **Accept both domain and full URL formats**
 

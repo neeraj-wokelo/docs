@@ -2,10 +2,6 @@
 title: "Use Cases"
 ---
 
-# Use Cases
-
-Common patterns for building targeted company lists.
-
 ## Sales & Business Development
 
 ### Find Prospects by Funding Stage
@@ -25,8 +21,6 @@ Build lists of recently funded companies for outreach:
   "limit": 100
 }
 ```
-
-**Use case**: Find companies that recently raised capital and may be ready to purchase tools or services.
 
 ### Identify Expansion-Ready Companies
 
@@ -109,9 +103,7 @@ Build a list of direct competitors:
 
 ### Find Companies by Business Model
 
-```text
 Subscription-based SaaS companies with self-serve GTM:
-```
 
 ```json
 {
@@ -141,22 +133,6 @@ Subscription-based SaaS companies with self-serve GTM:
 }
 ```
 
-### Target Enterprise Companies
-
-```json
-{
-  "filters": {
-    "funding_detail.funding_overview.funding_stage": ["series_c", "late"],
-    "firmographic.headcount_range": ["5001-10000", "10001+"],
-    "firmographic.company_type": ["private"]
-  },
-  "sections": ["firmographic", "company_assessment", "business_model"],
-  "sort_by": "valuation_estimate",
-  "sort_order": "desc",
-  "limit": 50
-}
-```
-
 ## Custom Queries with Natural Language
 
 Use the `query` parameter for quick exploration:
@@ -180,7 +156,3 @@ Use the `query` parameter for quick exploration:
   "limit": 100
 }
 ```
-
-## Next Steps
-
-- [Best Practices](/docs/list-generation/best-practices) - Optimize queries and avoid common pitfalls

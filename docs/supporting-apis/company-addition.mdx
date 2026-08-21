@@ -174,26 +174,26 @@ Once a company is submitted, track the request to completion in one of two ways.
 Pass the `request_id` to the status endpoint to retrieve the current status on demand.
 
 ```text
-GET https://api.akta.pro/api/v1/company/addition-requests/{request_id}/
+GET https://api.akta.pro/api/v1/status/{REQUEST_ID}/
 ```
 
 <CodeGroup>
 
 ```bash cURL
-curl --location 'https://api.akta.pro/api/v1/status/3fa85f64-5717-4562-b3fc-2c963f66afa6/' \
-  --header 'x-api-key: <YOUR_API_KEY>'
+curl "https://api.akta.pro/api/v1/status/a16f1790-9bbc-45d1-8bc7-86281ab7a9a3/" \
+  -H "x-api-key: YOUR_API_KEY"
 ```
 
 ```python Python
 import requests
 
-request_id = "dac3d4f7-9171-40e4-8856-10570c886095"
+url = "https://api.akta.pro/api/v1/status/a16f1790-9bbc-45d1-8bc7-86281ab7a9a3/"
+headers = {"x-api-key": "YOUR_API_KEY"}
 
-response = requests.get(
-    f"https://api.akta.pro/api/v1/status/{request_id}/",
-    headers={"x-api-key": "your-api-key"},
-)
-print(response.json()["status"])
+response = requests.get(url, headers=headers)
+data = response.json()
+
+print(data["detail"]["status"])
 ```
 
 </CodeGroup>
@@ -202,18 +202,16 @@ print(response.json()["status"])
 
 ```json
 {
-  "request_id": "dac3d4f7-9171-40e4-8856-10570c886095",
+  "request_id": "a16f1790-9bbc-45d1-8bc7-86281ab7a9a3",
   "request_type": "company_addition",
-  "status": "failed",
   "detail": {
-    "company_addition_request_id": "0e0ac245-f591-4b43-b29d-a65b722c22b9",
-    "company_name": "Lento India",
-    "domain": "lentoindia.com",
-    "status": "failed",
+    "company_name": "Simile",
+    "domain": "simile.com",
+    "status": "pending",
     "reason": null,
-    "company_uuid": "02lko2r",
-    "created_at": "2026-07-21T13:41:52.095899Z",
-    "updated_at": "2026-07-21T13:46:37.096111Z"
+    "company_uuid": "005o6s3",
+    "created_at": "2026-08-21T04:52:42.066260Z",
+    "updated_at": "2026-08-21T04:52:46.302452Z"
   }
 }
 ```
@@ -246,7 +244,7 @@ request_id = submit.json()["request_id"]
 
 # Step 2: Once completed (via polling or webhook), retrieve the UUID
 status = requests.get(
-    f"https://api.akta.pro/api/v1/company/addition-requests/{request_id}/",
+    f"https://api.akta.pro/api/v1/status/{request_id}/",
     headers=HEADERS,
 )
 uuid = status.json()["uuid"]
