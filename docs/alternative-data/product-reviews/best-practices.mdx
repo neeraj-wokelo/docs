@@ -4,16 +4,7 @@ title: "Best Practices"
 
 **Always call without** `products `**first. It's free and gives you the IDs you need**
 
-The product list call costs zero credits and returns all the `id` values required for subsequent review calls. Never hardcode product IDs. Always fetch them dynamically so your integration remains correct if a company's product catalog changes:
-
-```python
-# Step 1: free — get product catalog and IDs
-products = get_product_list("canva.com")
-product_ids = [p["id"] for p in products]
-
-# Step 2: paid — fetch reviews for selected products
-reviews = get_product_reviews("canva.com", product_ids[:2], limit=10)
-```
+The product list call costs 0.5 credits and returns all the `id` values required for subsequent review calls. Never hardcode product IDs. Always fetch them dynamically so your integration remains correct if a company's product catalog changes.
 
 **Pass `products` as a comma-separated string of product IDs** The `products` parameter should contain comma separated list of product Ids whose reviews need to be fetched.
 

@@ -21,25 +21,27 @@ x-api-key: <YOUR_API_KEY>
 <CodeGroup>
 
 ```bash cURL
-curl --location 'https://api.akta.pro/api/v1/company/product-reviews?company=tesla.com' \
-  --header 'x-api-key: <YOUR_API_KEY>'
+curl -G "https://api.akta.pro/api/v1/company/product-reviews/?company=00000l1" \
+  -H "x-api-key: YOUR_API_KEY"
 ```
 
 ```python Python
 import requests
 
-response = requests.get(
-    "https://api.akta.pro/api/v1/company/product-reviews",
-    headers={"x-api-key": "<YOUR_API_KEY>"},
-    params={"company": "tesla.com"}
-)
+url = "https://api.akta.pro/api/v1/company/product-reviews/"
+headers = {"x-api-key": "YOUR_API_KEY"}
+params = {
+    "company": "00000l1"
+}
 
-data     = response.json()
-products = data["data"]["product_reviews"]
+response = requests.get(url, headers=headers, params=params)
+data = response.json()
 
-print(f"Found {len(products)} products (credits consumed: {data['credits_consumed']})\n")
-for product in products:
-    print(f"  ID: {product['id']}  |  {product['product_name']}  ({product['main_category']})")
+for product in data["data"]["product"]:
+    print(product["product_name"])
+    if "reviews" in product:
+        for review in product["reviews"]["data"]:
+            print(" ", review.get("review_title"))
 ```
 
 </CodeGroup>
@@ -48,57 +50,112 @@ for product in products:
 
 ```text expandable
 {
-    "data": {
-        "uuid": "000036f",
-        "product_reviews": [
-            {
-                "id": "177388",
-                "product_name": "Powerpack",
-                "main_category": "Battery Storage Systems Providers",
-                "categories": [
-                    "Battery Storage Systems"
-                ],
-                "description": "Powerpack supports a host of applications that offer commercial consumers and energy providers greater control, efficiency and reliability across the electric grid."
-            },
-            {
-                "id": "112516",
-                "product_name": "Powerwall",
-                "main_category": "Battery Storage Systems Providers",
-                "categories": [
-                    "Battery Storage Systems"
-                ],
-                "description": "Powerwall integrates with solar to store excess energy generated during the day and makes it available when needed, minimizing reliance on utility."
-            }
-        ]
-    },
-    "limit": 10,
-    "offset": 0,
-    "credits_consumed": 0.0
+  "data": {
+    "uuid": "00000l1",
+    "product": [
+      {
+        "id": "89224",
+        "product_name": "Canva",
+        "main_category": "Display Ad Design Software",
+        "categories": [
+          "AI Writing Assistant",
+          "Collaborative Whiteboard",
+          "Presentation",
+          "Website Builder",
+          "Content Creation",
+          "Photo Editing",
+          "AI Video Generators",
+          "Video Content Creation",
+          "AI Content Creation Platforms",
+          "Data Visualization",
+          "Display Ad Design",
+          "Desktop Publishing",
+          "AI Image Generators",
+          "Brand Asset Management",
+          "Print Fulfillment Services",
+          "Design Systems",
+          "Logo Design Tools"
+        ],
+        "description": "Canva is an end-to-end AI-powered visual communication and collaboration platform empowering everyone in the world to design everything from presentations to infographics, videos, documents, websites, social media graphics and more. With pre-templated designs and thousands of stock images, videos, soundtracks, and fonts, Canva is a simple way to create visual content at scale. Canva is available on the web, iOS and Android."
+      },
+      {
+        "id": "40370",
+        "product_name": "Canva",
+        "main_category": "Display Ad Design Software",
+        "categories": [
+          "AI Writing Assistant",
+          "Collaborative Whiteboard",
+          "Website Builder",
+          "Presentation",
+          "Content Creation",
+          "Photo Editing",
+          "AI Video Generators",
+          "Video Content Creation",
+          "Data Visualization",
+          "Display Ad Design",
+          "AI Content Creation Platforms",
+          "Desktop Publishing",
+          "AI Image Generators",
+          "Brand Asset Management",
+          "Print Fulfillment Services",
+          "Design Systems",
+          "Logo Design Tools"
+        ],
+        "description": "Canva is an online design and publishing platform that provides user friendly design tools for non-designers."
+      },
+      {
+        "id": "51349",
+        "product_name": "remove.bg",
+        "main_category": "Other Design Software",
+        "categories": [
+          "Other Design"
+        ],
+        "description": "remove.bg is the industry-leading solution for fast, high-quality image background removal, trusted by millions of users worldwide. Built with advanced visual AI technology, remove.bg is designed to help e-commerce brands, photographers, online car dealers, marketplaces, and creatives of every kind produce clean, professional visuals that boost engagement and drive conversions. Designed for speed and simplicity, remove.bg eliminates the need for manual editing, saving valuable time and ensuring consistent image quality across all channels. Whether working with a single image or processing hundreds of thousands, remove.bg scales to your needs to build a seamless workflow. Users can quickly remove backgrounds using the drag-and-drop desktop application, which supports batch processing for high-volume tasks. Images can also be edited directly on the website, providing flexibility for businesses and individuals alike. For organizations with custom workflows, remove.bg offers a robust API that integrates easily into internal systems, enabling automated background removal at scale. remove.bg is also available as a plugin for widely-used design tools like Photoshop, Figma, PowerPoint and more, making it simple to work within existing creative environments. The remove.bg AI is trained to handle even the most complex visual details, including hair, fine edges, and challenging color contrasts, with remarkable accuracy. This ensures high-quality cutouts every time, no matter the subject or background. remove.bg is accessible via desktop, web, mobile, and plugin integrations, making it a versatile tool for professionals and teams looking to elevate their visual content without compromising speed or quality."
+      },
+      {
+        "id": "148891",
+        "product_name": "Designify Pro",
+        "main_category": "Photography Software",
+        "categories": [
+          "Photo Editing"
+        ],
+        "description": "Editing product photos can be a chore. Countless hours are required to learn complex software, manually pick pixels, remove backgrounds and match colors – for photo after photo, thousands of times. Today all that is over: with Designify Pro, we’re starting a new era of bulk-editing amazing product photos with a single click. Bulk-edit any number of product photos, get high-res downloads, save your designs and integrate the Designify Pro API into your website, app, or workflow. Let our visual AI handle your product photos - automatically and in seconds!"
+      }
+    ]
+  },
+  "limit": 10,
+  "offset": 0,
+  "credits_consumed": 0.5
 }
 ```
 
-Use the `id` values from the previous step to request reviews. Use the same endpoint and pass product\_id in the `products` parameter 
+Use the `id` values from the previous step to request reviews. Use the same endpoint and pass product\_id in the `products` parameter
 
 <CodeGroup>
 
 ```text cURL
-curl --location 'https://api.akta.pro/api/v1/company/product-reviews?company=https%3A%2F%2Ftesla.com&products=177388' \
---header 'x-api-key: Your API Key'
+curl -G "https://api.akta.pro/api/v1/company/product-reviews/?company=00000l1&products=89224" \
+  -H "x-api-key: YOUR_API_KEY"
 ```
 
 ```text Python
 import requests
 
-url = "https://api.akta.pro/api/v1/company/product-reviews?company=https://tesla.com&products=177388"
-
-payload = {}
-headers = {
-  'x-api-key': 'your API Key'
+url = "https://api.akta.pro/api/v1/company/product-reviews/"
+headers = {"x-api-key": "YOUR_API_KEY"}
+params = {
+    "company": "00000l1",
+    "products": "89224"
 }
 
-response = requests.request("GET", url, headers=headers, data=payload)
+response = requests.get(url, headers=headers, params=params)
+data = response.json()
 
-print(response.text)
+for product in data["data"]["product"]:
+    print(product["product_name"])
+    if "reviews" in product:
+        for review in product["reviews"]["data"]:
+            print(" ", review.get("review_title"))
 ```
 
 </CodeGroup>
@@ -107,93 +164,358 @@ print(response.text)
 
 ```text expandable
 {
-    "data": {
-        "uuid": "000036f",
-        "product_reviews": [
+  "data": {
+    "uuid": "00000l1",
+    "product": [
+      {
+        "id": "89224",
+        "product_name": "Canva",
+        "main_category": "Display Ad Design Software",
+        "categories": [
+          "AI Writing Assistant",
+          "Collaborative Whiteboard",
+          "Presentation",
+          "Website Builder",
+          "Content Creation",
+          "Photo Editing",
+          "AI Video Generators",
+          "Video Content Creation",
+          "AI Content Creation Platforms",
+          "Data Visualization",
+          "Display Ad Design",
+          "Desktop Publishing",
+          "AI Image Generators",
+          "Brand Asset Management",
+          "Print Fulfillment Services",
+          "Design Systems",
+          "Logo Design Tools"
+        ],
+        "description": "Canva is an end-to-end AI-powered visual communication and collaboration platform empowering everyone in the world to design everything from presentations to infographics, videos, documents, websites, social media graphics and more. With pre-templated designs and thousands of stock images, videos, soundtracks, and fonts, Canva is a simple way to create visual content at scale. Canva is available on the web, iOS and Android.",
+        "rating": {
+          "g2": 4.7
+        },
+        "star_distribution": {
+          "g2": {
+            "1": 0,
+            "2": 0,
+            "3": 12,
+            "4": 61,
+            "5": 427
+          }
+        },
+        "pros_list": [
+          {
+            "text": "Ease of Use",
+            "count": "1564"
+          },
+          {
+            "text": "Templates",
+            "count": "1127"
+          },
+          {
+            "text": "Features",
+            "count": "1014"
+          },
+          {
+            "text": "Template Availability",
+            "count": "942"
+          },
+          {
+            "text": "Useful",
+            "count": "928"
+          }
+        ],
+        "cons_list": [
+          {
+            "text": "Limited Features",
+            "count": "515"
+          },
+          {
+            "text": "Limited Options",
+            "count": "491"
+          },
+          {
+            "text": "Expensive",
+            "count": "421"
+          },
+          {
+            "text": "Missing Features",
+            "count": "414"
+          },
+          {
+            "text": "Limited Templates",
+            "count": "400"
+          }
+        ],
+        "pricing": [
+          {
+            "price": "Free",
+            "package": "Canva Free"
+          },
+          {
+            "price": "$15.00",
+            "package": "Canva Pro",
+            "price_info": "1 person Per Month"
+          },
+          {
+            "price": "$10.00",
+            "package": "Canva Teams",
+            "price_info": "1 Person (minimum 3 people) Per Month"
+          }
+        ],
+        "reviews": {
+          "data": [
             {
-                "id": "177388",
-                "product_name": "Powerpack",
-                "main_category": "Battery Storage Systems Providers",
-                "categories": [
-                    "Battery Storage Systems"
-                ],
-                "description": "Powerpack supports a host of applications that offer commercial consumers and energy providers greater control, efficiency and reliability across the electric grid.",
-                "rating": {
-                    "g2": 3.8
+              "review_id": 9516779,
+              "review_title": "Simplicity and Creativity",
+              "review_content": "What do you like best about Canva Enterprise?\n- lots of creative help and options for whatever direction you wish to go into\n- very simple and user-friendly\n- well made and provides every feature you would want (sort of a better Word)\n- it provides tons of templates and lots of pictures\n\nWhat do you dislike about Canva Enterprise?\n- they keep it a bit too simple. They should let you implement your own font.\n- I find so many of the pictures and icons that they provide that are the best quality must require a pro account\n\nWhat problems is Canva Enterprise solving and how is that benefiting you?\nCanva has helped my business to create simple yet effective ads and posters. The website allows users to implement the visualizations in their heads onto a page. The website does a tremendous job of helping the user be creative.",
+              "review_question_answers": [
+                {
+                  "answer": "- lots of creative help and options for whatever direction you wish to go into\n- very simple and user-friendly\n- well made and provides every feature you would want (sort of a better Word)\n- it provides tons of templates and lots of pictures",
+                  "question": "What do you like best about Canva Enterprise?"
                 },
-                "star_distribution": {
-                    "g2": {
-                        "1": 0,
-                        "2": 0,
-                        "3": 1,
-                        "4": 0,
-                        "5": 1
-                    }
+                {
+                  "answer": "- they keep it a bit too simple. They should let you implement your own font.\n- I find so many of the pictures and icons that they provide that are the best quality must require a pro account",
+                  "question": "What do you dislike about Canva Enterprise?"
                 },
-                "pros_list": [],
-                "cons_list": [],
-                "pricing": [],
-                "reviews": {
-                    "data": [
-                        {
-                            "review_id": 8555613,
-                            "review_title": "very easy and covinient",
-                            "review_content": "What do you like best about Powerpack?\nhaving a stationaty energy powerpack for yourslef is better than easy\n\nWhat do you dislike about Powerpack?\nnothing i think its one of the most easy things to use\n\nWhat problems is Powerpack solving and how is that benefiting you?\npower pack makes charging your vehicle very easy and convienient",
-                            "review_question_answers": [
-                                {
-                                    "question": "What do you like best about Powerpack?",
-                                    "answer": "having a stationaty energy powerpack for yourslef is better than easy"
-                                },
-                                {
-                                    "question": "What do you dislike about Powerpack?",
-                                    "answer": "nothing i think its one of the most easy things to use"
-                                },
-                                {
-                                    "question": "What problems is Powerpack solving and how is that benefiting you?",
-                                    "answer": "power pack makes charging your vehicle very easy and convienient"
-                                }
-                            ],
-                            "review_rating": 4.5,
-                            "publish_date": "2023-09-01T00:00:00",
-                            "reviewer_company_size": "Small-Business(50 or fewer emp.)",
-                            "review_link": "https://www.g2.com/products/powerpack/reviews/powerpack-review-8555613",
-                            "provider": "g2"
-                        },
-                        {
-                            "review_id": 1100483,
-                            "review_title": "my ever favorite vehicle",
-                            "review_content": "What do you like best about Powerpack?\nthe best thing is all computerized and easy to operate and less fuel consumption\n\nWhat do you dislike about Powerpack?\nnothing for dislike ... except its all electronic so need extra care while service\n\nWhat problems is Powerpack solving and how is that benefiting you?\npower pack is complete paperless desk and its easy to use and sharing with others.",
-                            "review_question_answers": [
-                                {
-                                    "question": "What do you like best about Powerpack?",
-                                    "answer": "the best thing is all computerized and easy to operate and less fuel consumption"
-                                },
-                                {
-                                    "question": "What do you dislike about Powerpack?",
-                                    "answer": "nothing for dislike ... except its all electronic so need extra care while service"
-                                },
-                                {
-                                    "question": "What problems is Powerpack solving and how is that benefiting you?",
-                                    "answer": "power pack is complete paperless desk and its easy to use and sharing with others."
-                                }
-                            ],
-                            "review_rating": 3.0,
-                            "publish_date": "2018-11-03T00:00:00",
-                            "reviewer_company_size": "Small-Business(50 or fewer emp.)",
-                            "review_link": "https://www.g2.com/products/powerpack/reviews/powerpack-review-1100483",
-                            "provider": "g2"
-                        }
-                    ],
-                    "total": 2,
-                    "total_by_provider": {
-                        "g2": 2
-                    }
+                {
+                  "answer": "Canva has helped my business to create simple yet effective ads and posters. The website allows users to implement the visualizations in their heads onto a page. The website does a tremendous job of helping the user be creative.",
+                  "question": "What problems is Canva Enterprise solving and how is that benefiting you?"
                 }
+              ],
+              "review_rating": 4,
+              "publish_date": "2024-04-08T00:00:00",
+              "reviewer_company_size": "Enterprise(> 1000 emp.)",
+              "review_link": "https://www.g2.com/products/canva-enterprise/reviews/canva-enterprise-review-9516779",
+              "provider": "g2"
+            },
+            {
+              "review_id": 9088961,
+              "review_title": "About Canva Being Handy tool for every small digital requirements",
+              "review_content": "What do you like best about Canva Enterprise?\nFirst of free to use and has Many many varieties of templates, yes premium templates are better but free designs are not much of a difference\nSecondly video transition and animations are easy to use, even non professional editer can also do editing\nAnd best seen software in the market that is more accessible compared to others, so I use it frequently to design templates for my Presentation and as little as creating a label too, I never had a problem to consult a customer support but I access customer support through AI powered chat support which would solve more of he issues\n\nWhat do you dislike about Canva Enterprise?\nMuch of good templates are pro only and the only downfall is the premium costs high which would drag it towards negative side other than that it's marvelous\n\nWhat problems is Canva Enterprise solving and how is that benefiting you?\nThe major problem Canva is solving is definitely time, I would take more than an hour create a simple 10s clip but with Canva I would do it in just 5 to 10mins, which benefits a lot",
+              "review_question_answers": [
+                {
+                  "answer": "First of free to use and has Many many varieties of templates, yes premium templates are better but free designs are not much of a difference\nSecondly video transition and animations are easy to use, even non professional editer can also do editing\nAnd best seen software in the market that is more accessible compared to others, so I use it frequently to design templates for my Presentation and as little as creating a label too, I never had a problem to consult a customer support but I access customer support through AI powered chat support which would solve more of he issues",
+                  "question": "What do you like best about Canva Enterprise?"
+                },
+                {
+                  "answer": "Much of good templates are pro only and the only downfall is the premium costs high which would drag it towards negative side other than that it's marvelous",
+                  "question": "What do you dislike about Canva Enterprise?"
+                },
+                {
+                  "answer": "The major problem Canva is solving is definitely time, I would take more than an hour create a simple 10s clip but with Canva I would do it in just 5 to 10mins, which benefits a lot",
+                  "question": "What problems is Canva Enterprise solving and how is that benefiting you?"
+                }
+              ],
+              "review_rating": 5,
+              "publish_date": "2024-01-06T00:00:00",
+              "reviewer_company_size": "Enterprise(> 1000 emp.)",
+              "review_link": "https://www.g2.com/products/canva-enterprise/reviews/canva-enterprise-review-9088961",
+              "provider": "g2"
+            },
+            {
+              "review_id": 10319234,
+              "review_title": "Efficient way to generate branded content",
+              "review_content": "What do you like best about Canva Enterprise?\nI like the use of branded templates, fonts and high quality images available. Use extensively for linkedin post and a4 flyers\n\nWhat do you dislike about Canva Enterprise?\nOur photo imagery has a certain kind of tone/style. It would be great if this was a kind of categorisation of the imagery.\n\nWhat problems is Canva Enterprise solving and how is that benefiting you?\nCreate consistent branded materials, provides image content for our marketing materials",
+              "review_question_answers": [
+                {
+                  "answer": "I like the use of branded templates, fonts and high quality images available. Use extensively for linkedin post and a4 flyers",
+                  "question": "What do you like best about Canva Enterprise?"
+                },
+                {
+                  "answer": "Our photo imagery has a certain kind of tone/style. It would be great if this was a kind of categorisation of the imagery.",
+                  "question": "What do you dislike about Canva Enterprise?"
+                },
+                {
+                  "answer": "Create consistent branded materials, provides image content for our marketing materials",
+                  "question": "What problems is Canva Enterprise solving and how is that benefiting you?"
+                }
+              ],
+              "review_rating": 4.5,
+              "publish_date": "2024-09-30T00:00:00",
+              "reviewer_company_size": "Small-Business(50 or fewer emp.)",
+              "review_link": "https://www.g2.com/products/canva-enterprise/reviews/canva-enterprise-review-10319234",
+              "provider": "g2"
+            },
+            {
+              "review_id": 9442704,
+              "review_title": "One of the best digital graphics generator",
+              "review_content": "What do you like best about Canva Enterprise?\nIt have so many templates to choose from.\nIt allows to create content in bulk using bulk create feature.\nOne of the best thing about Canva is Anyone without design background can also make Creative Graphics and Videos in easy manner.\nWe can easily add our content like images, videos and audios in any of the templates.\n\nWhat do you dislike about Canva Enterprise?\nThere is only one thing I don't like about Canva, it does not allow creation of bulk create with multiple pages/design in one template.\n\nWhat problems is Canva Enterprise solving and how is that benefiting you?\nWe use Canva for developing marketing graphics and videos for social media campaigns often. It allows to save time and increase efficiency for festive promotional campaigns.",
+              "review_question_answers": [
+                {
+                  "answer": "It have so many templates to choose from.\nIt allows to create content in bulk using bulk create feature.\nOne of the best thing about Canva is Anyone without design background can also make Creative Graphics and Videos in easy manner.\nWe can easily add our content like images, videos and audios in any of the templates.",
+                  "question": "What do you like best about Canva Enterprise?"
+                },
+                {
+                  "answer": "There is only one thing I don't like about Canva, it does not allow creation of bulk create with multiple pages/design in one template.",
+                  "question": "What do you dislike about Canva Enterprise?"
+                },
+                {
+                  "answer": "We use Canva for developing marketing graphics and videos for social media campaigns often. It allows to save time and increase efficiency for festive promotional campaigns.",
+                  "question": "What problems is Canva Enterprise solving and how is that benefiting you?"
+                }
+              ],
+              "review_rating": 4,
+              "publish_date": "2024-03-18T00:00:00",
+              "reviewer_company_size": "Enterprise(> 1000 emp.)",
+              "review_link": "https://www.g2.com/products/canva-enterprise/reviews/canva-enterprise-review-9442704",
+              "provider": "g2"
+            },
+            {
+              "review_id": 9844104,
+              "review_title": "A great help when designing resources",
+              "review_content": "What do you like best about Canva Enterprise?\nIt is an easy to use and accessible platform. It helps our team create and implement solutions to creating educational resources.\n\nWhat do you dislike about Canva Enterprise?\nThere is a slight learning curve, but once mastered, it is very accessible.\n\nWhat problems is Canva Enterprise solving and how is that benefiting you?\nIt is an accessible platform that allows our training team to develop educational resources simply and without the need for external support.",
+              "review_question_answers": [
+                {
+                  "answer": "It is an easy to use and accessible platform. It helps our team create and implement solutions to creating educational resources.",
+                  "question": "What do you like best about Canva Enterprise?"
+                },
+                {
+                  "answer": "There is a slight learning curve, but once mastered, it is very accessible.",
+                  "question": "What do you dislike about Canva Enterprise?"
+                },
+                {
+                  "answer": "It is an accessible platform that allows our training team to develop educational resources simply and without the need for external support.",
+                  "question": "What problems is Canva Enterprise solving and how is that benefiting you?"
+                }
+              ],
+              "review_rating": 4,
+              "publish_date": "2024-06-28T00:00:00",
+              "reviewer_company_size": "Small-Business(50 or fewer emp.)",
+              "review_link": "https://www.g2.com/products/canva-enterprise/reviews/canva-enterprise-review-9844104",
+              "provider": "g2"
+            },
+            {
+              "review_id": 9012439,
+              "review_title": "Great Tool for all the creative and presentation needs",
+              "review_content": "What do you like best about Canva Enterprise?\nEase of access of the software on different platforms.\nAvailablity of various free tools and templates.\nUser friendly even for a beginner.\nCost-friendly premium plans.\nEasy to integrate and collaborate with other users.\nCan be used as many times as required and changing the elements is very easy.\nAvailability of social media scheduling.\n\nWhat do you dislike about Canva Enterprise?\nLot of good templated are available in only pro version.\nLimitation on using certain elements while using the free version.\nUnable to download high quality content on free account.\nAlignment could be a miss certain times.\n\nWhat problems is Canva Enterprise solving and how is that benefiting you?\nDue to the availability of multiple templates it helps with the problem of difficult designing. Earlier people did not have any ideas about how to use certain designing tools and hence they had to seek professional help which could be on the costly side. However, as Canva now provides so many tools and templated, it is easy to get inspiration and use certain ideas to improve the end result without much of professional help. Any layman can now open the user-friendly website and start designing or editing as per their thoughts and ideas.",
+              "review_question_answers": [
+                {
+                  "answer": "Ease of access of the software on different platforms.\nAvailablity of various free tools and templates.\nUser friendly even for a beginner.\nCost-friendly premium plans.\nEasy to integrate and collaborate with other users.\nCan be used as many times as required and changing the elements is very easy.\nAvailability of social media scheduling.",
+                  "question": "What do you like best about Canva Enterprise?"
+                },
+                {
+                  "answer": "Lot of good templated are available in only pro version.\nLimitation on using certain elements while using the free version.\nUnable to download high quality content on free account.\nAlignment could be a miss certain times.",
+                  "question": "What do you dislike about Canva Enterprise?"
+                },
+                {
+                  "answer": "Due to the availability of multiple templates it helps with the problem of difficult designing. Earlier people did not have any ideas about how to use certain designing tools and hence they had to seek professional help which could be on the costly side. However, as Canva now provides so many tools and templated, it is easy to get inspiration and use certain ideas to improve the end result without much of professional help. Any layman can now open the user-friendly website and start designing or editing as per their thoughts and ideas.",
+                  "question": "What problems is Canva Enterprise solving and how is that benefiting you?"
+                }
+              ],
+              "review_rating": 5,
+              "publish_date": "2023-12-14T00:00:00",
+              "reviewer_company_size": "Enterprise(> 1000 emp.)",
+              "review_link": "https://www.g2.com/products/canva-enterprise/reviews/canva-enterprise-review-9012439",
+              "provider": "g2"
+            },
+            {
+              "review_id": 8995948,
+              "review_title": "THE MOST CONVENIENT EDITING APP",
+              "review_content": "What do you like best about Canva Enterprise?\nCanva is a very convenient app! You can edit photos and you can also edit document files. It has a lot of features you can use to edit and you can download it on different format based on your need.\n\nWhat do you dislike about Canva Enterprise?\nAs of now, I honestly don't have anything to dislike about canva. Because for me it's the best of bestest app.\n\nWhat problems is Canva Enterprise solving and how is that benefiting you?\nWhen I need to edit file or even photos, I can easily do it in canva. Most especially in photo editing, you're not going to have a hard time putting elements on the same place with the same size as it also have a guide which is very nice, since not all editing app have that kind of feature. Also, when I'm done editing, I can download the photos or pubmats in the file format I need, such as jpg, png, or even pfd file format. Lastly, if you edited multiple photos, you can download it all in one time which is one of the best feature of this app for me, as it saves time for editors like me.",
+              "review_question_answers": [
+                {
+                  "answer": "Canva is a very convenient app! You can edit photos and you can also edit document files. It has a lot of features you can use to edit and you can download it on different format based on your need.",
+                  "question": "What do you like best about Canva Enterprise?"
+                },
+                {
+                  "answer": "As of now, I honestly don't have anything to dislike about canva. Because for me it's the best of bestest app.",
+                  "question": "What do you dislike about Canva Enterprise?"
+                },
+                {
+                  "answer": "When I need to edit file or even photos, I can easily do it in canva. Most especially in photo editing, you're not going to have a hard time putting elements on the same place with the same size as it also have a guide which is very nice, since not all editing app have that kind of feature. Also, when I'm done editing, I can download the photos or pubmats in the file format I need, such as jpg, png, or even pfd file format. Lastly, if you edited multiple photos, you can download it all in one time which is one of the best feature of this app for me, as it saves time for editors like me.",
+                  "question": "What problems is Canva Enterprise solving and how is that benefiting you?"
+                }
+              ],
+              "review_rating": 5,
+              "publish_date": "2023-12-13T00:00:00",
+              "reviewer_company_size": "Enterprise(> 1000 emp.)",
+              "review_link": "https://www.g2.com/products/canva-enterprise/reviews/canva-enterprise-review-8995948",
+              "provider": "g2"
+            },
+            {
+              "review_id": 8937976,
+              "review_title": "Canva: The All-in-One Tool for Professional Design",
+              "review_content": "What do you like best about Canva Enterprise?\nCanva's ease of use is unmatched. This platform allows me to create professional designs in minutes, thanks to its intuitive interface and wide variety of ready-to-use templates. In addition, the ability to collaborate in real time with colleagues streamlines our workflows, improving efficiency in creating visual content for presentations and social media. Seamless integration with other tools and platforms is another highlight, allowing us to easily incorporate our designs into various contexts without complications.\n\nWhat do you dislike about Canva Enterprise?\nOccasionally, I notice that the customization options for certain aspects, like the accuracy of object positioning, could be more advanced. In professional settings, it's crucial to have finer control over the design, and enhancing this functionality would better cater to the specific needs of advanced users.\n\nWhat problems is Canva Enterprise solving and how is that benefiting you?\nCanva has been a game-changer for me in creating visually appealing and professional designs. The ability to dive into its extensive library of templates and visual elements, along with real-time collaboration, has greatly streamlined my production of visual content for presentations and marketing materials. The export feature in various formats has made it much easier to adapt my designs to different platforms and communication channels, providing me with the versatility that significantly enhances my visual presence and ensures brand consistency in my work. In short, Canva has become an indispensable tool for me as a professional aiming to make a visual impact in this competitive business world.",
+              "review_question_answers": [
+                {
+                  "answer": "Canva's ease of use is unmatched. This platform allows me to create professional designs in minutes, thanks to its intuitive interface and wide variety of ready-to-use templates. In addition, the ability to collaborate in real time with colleagues streamlines our workflows, improving efficiency in creating visual content for presentations and social media. Seamless integration with other tools and platforms is another highlight, allowing us to easily incorporate our designs into various contexts without complications.",
+                  "question": "What do you like best about Canva Enterprise?"
+                },
+                {
+                  "answer": "Occasionally, I notice that the customization options for certain aspects, like the accuracy of object positioning, could be more advanced. In professional settings, it's crucial to have finer control over the design, and enhancing this functionality would better cater to the specific needs of advanced users.",
+                  "question": "What do you dislike about Canva Enterprise?"
+                },
+                {
+                  "answer": "Canva has been a game-changer for me in creating visually appealing and professional designs. The ability to dive into its extensive library of templates and visual elements, along with real-time collaboration, has greatly streamlined my production of visual content for presentations and marketing materials. The export feature in various formats has made it much easier to adapt my designs to different platforms and communication channels, providing me with the versatility that significantly enhances my visual presence and ensures brand consistency in my work. In short, Canva has become an indispensable tool for me as a professional aiming to make a visual impact in this competitive business world.",
+                  "question": "What problems is Canva Enterprise solving and how is that benefiting you?"
+                }
+              ],
+              "review_rating": 5,
+              "publish_date": "2023-11-28T00:00:00",
+              "reviewer_company_size": "Enterprise(> 1000 emp.)",
+              "review_link": "https://www.g2.com/products/canva-enterprise/reviews/canva-enterprise-review-8937976",
+              "provider": "g2"
+            },
+            {
+              "review_id": 9871742,
+              "review_title": "Best Photo & Video Editor",
+              "review_content": "What do you like best about Canva Enterprise?\nI love canva really useful app for photo & video Editing, with many fonts, templates, social Media post etc\n\nWhat do you dislike about Canva Enterprise?\nFew more creative features should be added\n\nWhat problems is Canva Enterprise solving and how is that benefiting you?\nCanva is helping to make a attractive template for social media posts",
+              "review_question_answers": [
+                {
+                  "answer": "I love canva really useful app for photo & video Editing, with many fonts, templates, social Media post etc",
+                  "question": "What do you like best about Canva Enterprise?"
+                },
+                {
+                  "answer": "Few more creative features should be added",
+                  "question": "What do you dislike about Canva Enterprise?"
+                },
+                {
+                  "answer": "Canva is helping to make a attractive template for social media posts",
+                  "question": "What problems is Canva Enterprise solving and how is that benefiting you?"
+                }
+              ],
+              "review_rating": 5,
+              "publish_date": "2024-07-08T00:00:00",
+              "reviewer_company_size": "Enterprise(> 1000 emp.)",
+              "review_link": "https://www.g2.com/products/canva-enterprise/reviews/canva-enterprise-review-9871742",
+              "provider": "g2"
+            },
+            {
+              "review_id": 9853203,
+              "review_title": "Editors should be using Canva!",
+              "review_content": "What do you like best about Canva Enterprise?\nCanva is super accessible. it is simple to use, has a smooth transition from prior systems, easy to implement, and features several useful tools. I use it constantly for both my personal and work life.\n\nWhat do you dislike about Canva Enterprise?\nHonestly, I have not come across any fault.\n\nWhat problems is Canva Enterprise solving and how is that benefiting you?\nIt is the easiest system to use compared to everything else I have tried. It allows me to create what I need to, easy and fast. I feel happy with the results.",
+              "review_question_answers": [
+                {
+                  "answer": "Canva is super accessible. it is simple to use, has a smooth transition from prior systems, easy to implement, and features several useful tools. I use it constantly for both my personal and work life.",
+                  "question": "What do you like best about Canva Enterprise?"
+                },
+                {
+                  "answer": "Honestly, I have not come across any fault.",
+                  "question": "What do you dislike about Canva Enterprise?"
+                },
+                {
+                  "answer": "It is the easiest system to use compared to everything else I have tried. It allows me to create what I need to, easy and fast. I feel happy with the results.",
+                  "question": "What problems is Canva Enterprise solving and how is that benefiting you?"
+                }
+              ],
+              "review_rating": 5,
+              "publish_date": "2024-07-01T00:00:00",
+              "reviewer_company_size": "Small-Business(50 or fewer emp.)",
+              "review_link": "https://www.g2.com/products/canva-enterprise/reviews/canva-enterprise-review-9853203",
+              "provider": "g2"
             }
-        ]
-    },
-    "limit": 10,
-    "offset": 0,
-    "credits_consumed": 1.5
+          ],
+          "total": 6670,
+          "total_by_provider": {
+            "g2": 6670
+          }
+        }
+      }
+    ]
+  },
+  "limit": 10,
+  "offset": 0,
+  "credits_consumed": 1.5
 }
 ```
