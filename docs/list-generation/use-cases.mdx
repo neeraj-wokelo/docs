@@ -2,142 +2,90 @@
 title: "Use Cases"
 ---
 
-## Sales & Business Development
-
 ### Find Prospects by Funding Stage
 
-Build lists of recently funded companies for outreach:
+Build lists of recently funded companies for outreach. Here is a sample payload
 
 ```json
 {
-  "filters": {
-    "funding_detail.funding_overview.funding_stage": ["series_a", "series_b"],
-    "funding_detail.funding_overview.last_funding_date": {"gte": "2024-01-01"},
-    "location.hq.country": ["USA"]
-  },
-  "sections": ["firmographic", "funding_detail", "business_model"],
+  "limit": 100,
+  "sections": [
+    "firmographic",
+    "funding_detail",
+    "business_model"
+  ],
   "sort_by": "revenue_estimate",
   "sort_order": "desc",
-  "limit": 100
-}
-```
-
-### Identify Expansion-Ready Companies
-
-```text
-Companies with:
-- $10M+ revenue
-- 200+ employees
-- Recent funding rounds
-- No existing market presence in target region
-```
-
-```json
-{
   "filters": {
-    "financial_estimate.revenue_estimate": ["1m_5m", "5m_10m"],
-    "firmographic.headcount_range": ["201-500", "501-1000"],
-    "funding_detail.funding_overview.total_funding_usd": {"gte": 10000000},
-    "location.market_served.markets": {"exclude": ["YOUR_REGION"]}
-  },
-  "sections": ["firmographic", "financial_estimate", "location"],
-  "limit": 50
-}
-```
-
-## Investment Research
-
-### Track Funded Companies in a Sector
-
-Monitor funding activity in specific industries:
-
-```json
-{
-  "filters": {
-    "industry.naics_codes": ["5112", "5182"],
-    "funding_detail.funding_overview.funding_stage": ["seed", "series_a"],
-    "firmographic.founded_year": {"gte": 2020}
-  },
-  "sections": ["firmographic", "funding_detail", "technology"],
-  "sort_by": "total_funding",
-  "sort_order": "desc",
-  "limit": 100
+    "funding_detail.funding_overview.funding_stage": [
+      "series_a",
+      "series_b"
+    ],
+    "location.hq.country": [
+      "USA"
+    ],
+    "funding_detail.funding_overview.last_funding_date": {
+      "gte": "2024-01-01"
+    }
+  }
 }
 ```
 
 ### Find AI-Mature Companies
 
+Here is a sample payload
+
 ```json
 {
-  "filters": {
-    "technology.ai_maturity.scale": {"gte": 3, "lte": 5},
-    "firmographic.company_type": ["private"]
-  },
-  "sections": ["firmographic", "technology", "company_assessment"],
+  "limit": 50,
+  "sections": [
+    "firmographic",
+    "technology",
+    "company_assessment"
+  ],
   "sort_by": "founded_year",
   "sort_order": "desc",
-  "limit": 50
-}
-```
-
-## Market Intelligence
-
-### Competitive Landscape
-
-Build a list of direct competitors:
-
-```json
-{
   "filters": {
-    "business_model.offering_type": ["saas"],
-    "business_model.gtm_type": ["b2b"],
-    "industry.industry": ["design_software"],
-    "location.hq.region": ["north_america"]
-  },
-  "sections": ["firmographic", "business_model", "company_assessment"],
-  "sort_by": "revenue_estimate",
-  "sort_order": "desc",
-  "limit": 50
+    "firmographic.company_type": [
+      "private"
+    ],
+    "technology.ai_maturity.scale": [
+      3,
+      4,
+      5
+    ]
+  }
 }
 ```
 
 ### Find Companies by Business Model
 
-Subscription-based SaaS companies with self-serve GTM:
+Subscription-based SaaS companies with PLG motion.
 
 ```json
 {
+  "limit": 50,
+  "sections": [
+    "firmographic",
+    "business_model"
+  ],
   "filters": {
-    "business_model.offering_type": ["saas"],
-    "business_model.gtm_motion": ["self_serve_plg"],
-    "business_model.revenue_model": ["subscription_recurring"]
-  },
-  "sections": ["firmographic", "business_model"],
-  "limit": 100
+    "business_model.offering_type": [
+      "software"
+    ],
+    "business_model.gtm_motion": [
+      "product_led_growth"
+    ],
+    "business_model.revenue_model": [
+      "subscription_recurring"
+    ]
+  }
 }
 ```
 
-## Partnership & Sales
+### Open ended query
 
-### Find Potential Partners
-
-```json
-{
-  "filters": {
-    "technology.has_api": true,
-    "firmographic.headcount_range": ["1001-5000", "5001-10000"],
-    "location.market_served.is_global": true
-  },
-  "sections": ["firmographic", "technology", "business_model"],
-  "limit": 50
-}
-```
-
-## Custom Queries with Natural Language
-
-Use the `query` parameter for quick exploration:
-
-### "Healthcare SaaS companies in Europe that raised funding in 2025"
+Sample payloads
 
 ```json
 {
@@ -146,8 +94,6 @@ Use the `query` parameter for quick exploration:
   "limit": 50
 }
 ```
-
-### "AI startups with over \$50M in funding"
 
 ```json
 {
