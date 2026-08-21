@@ -27,6 +27,14 @@
 - [Best Practices](https://docs.akta.pro/docs/company-data/best-practices.md): Requesting sections efficiently, handling enterprise-tier sections, and resolving company identifiers.
 - [API reference](https://docs.akta.pro/api-reference/company-data.md): Enriches a company with firmographics, business model, headcount, traffic, funding, financials, acquisitions, and investment data.
 
+## List Generation API
+
+- [Overview](https://docs.akta.pro/docs/list-generation/overview.md): Generate targeted lists of companies matching a set of firmographic, industry, and behavioral filters, ready to export or feed into downstream workflows.
+- [Quick Start](https://docs.akta.pro/docs/list-generation/quickstart.md): Make your first List Generation call and return a filtered list of matching companies.
+- [Use cases](https://docs.akta.pro/docs/list-generation/use-cases.md): Prospecting lists, TAM sizing, competitive set building, and account list refresh workflows.
+- [Best Practices](https://docs.akta.pro/docs/list-generation/best-practices.md): Structuring filter combinations, managing list size and pagination, and refreshing lists efficiently.
+- [API reference](https://docs.akta.pro/api-reference/listgen-api.md): Run a company list based on the requested filters and return the companies that match.
+
 ## Alternative Signals
 
 ### Employee Reviews API
@@ -84,6 +92,11 @@
 - [Overview](https://docs.akta.pro/docs/supporting-apis/industry-search.md): Resolve an industry from a free-text query into matching industry codes ranked by similarity.
 - [API reference](https://docs.akta.pro/api-reference/supporting-apis/industry-search.md): Resolves an industry from a free-text query and returns matching industry codes ranked by similarity.
 
+### Filter Builder API
+
+- [Overview](https://docs.akta.pro/docs/supporting-apis/filterbuilder.md): Resolve free-text filter criteria into the structured filter values accepted by other akta.pro endpoints, such as List Generation.
+- [API reference](https://docs.akta.pro/api-reference/supporting-apis/filter-builder.md): Translates free-text filter criteria into structured, validated filter values ready to pass to other endpoints.
+
 ### Company Addition API
 
 - [Overview](https://docs.akta.pro/docs/supporting-apis/company-addition.md): Submit a company that isn't yet in akta.pro's database for addition; a free, asynchronous two-step endpoint tracked via the Request Status API or a webhook.
@@ -117,6 +130,7 @@
 - [NAICS Codes](https://docs.akta.pro/naics-codes.md): Reference list of NAICS industry classification codes used across the API.
 - [SIC Codes](https://docs.akta.pro/sic-codes.md): Reference list of SIC industry classification codes used across the API.
 - [ISO Country Codes](https://docs.akta.pro/country-codes.md): Reference list of ISO country codes used for location fields across the API.
+- [M49 Region Codes](https://docs.akta.pro/region-codes.md): Reference list of UN M49 region codes used for geographic grouping fields across the API.
 
 ## Resources
 

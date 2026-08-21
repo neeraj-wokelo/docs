@@ -120,12 +120,45 @@ const response = await fetch(
 
 const { data } = await response.json();
 console.log(data);`
+    },
+    listgen: {
+      cURL: `curl -X POST "https://api.akta.pro/api/v1/list/generate/companies/" \\
+  -H "x-api-key: YOUR_API_KEY" \\
+  -H "Content-Type: application/json" \\
+  -d '{"limit":50,"query":"Series A companies in Europe working in climate tech"}'`,
+      Python: `import requests
+url = "https://api.akta.pro/api/v1/list/generate/companies/"
+headers = {"x-api-key": "YOUR_API_KEY"}
+payload = {
+  "limit": 50,
+  "query": "Series A companies in Europe working in climate tech"
+}
+response = requests.post(url, headers=headers, json=payload)
+data = response.json()
+print(data["count"], "companies")`,
+      JavaScript: `const response = await fetch(
+  "https://api.akta.pro/api/v1/list/generate/companies/",
+  {
+    method: "POST",
+    headers: {
+      "x-api-key": "YOUR_API_KEY",
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+  "limit": 50,
+  "query": "Series A companies in Europe working in climate tech"
+}),
+  }
+);
+const data = await response.json();
+console.log(data.count, "companies");`
     }
   };
 
   const tabs = [
     { id: 'news', label: 'News Signals', href: '/api-reference/news' },
-    { id: 'company', label: 'Company Data', href: '/api-reference/company-enrichment' }
+    { id: 'company', label: 'Company Data', href: '/api-reference/company-enrichment' },
+    { id: 'listgen', label: 'ListGen', href: '/api-reference/listgen' }
   ];
 
   const languages = ['cURL', 'Python', 'JavaScript'];
