@@ -6,6 +6,10 @@ The akta.pro List Generation API builds targeted lists of companies using either
 
 You pass either a `query` string or a `filters` object as the request body, and receive a paginated array of matching companies immediately in the response.
 
+<Note>
+  The List Generation API is available on **Subscription** and **Enterprise** plans only. It is not included in the Pay-as-you-go plan. See [Pricing](/getting-started/pricing) for plan details.
+</Note>
+
 ## Two ways to build a list
 
 **Structured Filters** : Apply precise criteria across 10 filter groups (firmographic, business model, financials, location, technology, funding, and more) using exact-match, range, boolean, or nested conditions. Use this when you know exactly which attributes define your target list. For example, "US-based, Series B\+ SaaS companies with an API, founded after 2018."

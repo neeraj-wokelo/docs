@@ -11,7 +11,7 @@ This endpoint does not return any companies itself, it only returns the equivale
 **Endpoint**
 
 ```text
-POST https://api.akta.pro/api/v1/company/list/translate-query/
+POST https://api.akta.pro/api/v1/list/filter-builder/
 ```
 
 Pass a single `query` field in the JSON request body. The backend interprets the location, funding stage, industry, and other filterable attributes mentioned in the query and resolves them to the corresponding structured filter keys and values used by List Generation.
@@ -43,7 +43,7 @@ x-api-key: <YOUR_API_KEY>
 <CodeGroup>
 
 ```bash cURL
-curl -X POST "https://api.akta.pro/api/v1/company/list/translate-query/" \
+curl -X POST "https://api.akta.pro/api/v1/list/filter-builder/" \
   -H "x-api-key: YOUR_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{"query": "Series A companies in US working in Climate Tech"}'
@@ -52,7 +52,7 @@ curl -X POST "https://api.akta.pro/api/v1/company/list/translate-query/" \
 ```python Python
 import requests
 
-url = "https://api.akta.pro/api/v1/company/list/translate-query/"
+url = "https://api.akta.pro/api/v1/list/filter-builder/"
 headers = {"x-api-key": "YOUR_API_KEY"}
 payload = {"query": "Series A companies in US working in Climate Tech"}
 
@@ -114,7 +114,7 @@ HEADERS = {"x-api-key": "your-api-key", "Content-Type": "application/json"}
 
 # Step 1: Translate the query
 translate = requests.post(
-    "https://api.akta.pro/api/v1/company/list/translate-query/",
+    "https://api.akta.pro/api/v1/list/filter-builder/",
     headers=HEADERS,
     json={"query": "series a companies in mumbai working in climate tech"}
 )
@@ -123,7 +123,7 @@ filters = translate.json()["data"]["filters"]
 
 # Step 2: Use the returned filters in List Generation
 generate = requests.post(
-    "https://api.akta.pro/api/v1/company/list/generate",
+    "https://api.akta.pro/api/v1/list/generate/companies/",
     headers=HEADERS,
     json={
         "filters": filters,
