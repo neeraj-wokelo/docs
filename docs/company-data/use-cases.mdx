@@ -7,24 +7,24 @@ title: "Use cases"
 <CodeGroup>
 
 ```bash cURL
-curl --location 'https://api.akta.pro/api/v1/company/enrichment?company=htpps%3A%2F%2Fulteig.com&sections=firmographics%2C%20gtm_and_business_model' \
---header 'x-api-key: YOUR API KEY' \
---data ''
+curl -G "https://api.akta.pro/api/v1/company/enrichment/?company=0005ujn&sections=firmographic%2Cbusiness_model" \
+  -H "x-api-key: YOUR_API_KEY"
 ```
 
 ```python Python
 import requests
 
-url = "https://api.akta.pro/api/v1/company/enrichment?company=htpps://ulteig.com&sections=firmographics, gtm_and_business_model"
-
-payload = ""
-headers = {
-  'x-api-key': 'your api key'
+url = "https://api.akta.pro/api/v1/company/enrichment/"
+headers = {"x-api-key": "YOUR_API_KEY"}
+params = {
+    "company": "0005ujn",
+    "sections": "firmographic,business_model"
 }
 
-response = requests.request("GET", url, headers=headers, data=payload)
+response = requests.get(url, headers=headers, params=params)
+data = response.json()
 
-print(response.text)
+print(data["data"])
 ```
 
 </CodeGroup>
@@ -33,66 +33,217 @@ print(response.text)
 
 ```json expandable
 {
-    "data": {
-        "uuid": "00081ss-ulteig",
-        "firmographics": {
-            "name": "Ulteig",
-            "website": "http://ulteig.com",
-            "location": "Austin, United States",
-            "founded_year": 1944,
-            "type": "private",
-            "operating_status": "Operating",
-            "ticker": "",
-            "region": "North America",
-            "country_code": "United States",
-            "product_category": "Civil Engineering Infrastructure Services",
-            "core_offering": "Ulteig is a civil engineering company that provides comprehensive engineering design, program management, and field services across various sectors including power, renewable energy, transportation, and water management.",
-            "product_catalog": [
-                "engineering design services",
-                "program management",
-                "environmental planning and services",
-                "construction management",
-                "land surveying"
-            ]
-        },
-        "gtm_and_business_model": {
-            "business_model_classification": "B2B",
-            "technology_classification": "NO",
-            "marketplace_classification": "NO",
-            "offering_type": "Services",
-            "customer_segments": [
-                "municipalities",
-                "power generation companies",
-                "renewable energy firms",
-                "transportation agencies",
-                "water management authorities"
-            ],
-            "revenue_streams": [
-                "Service fees"
-            ],
-            "pricing_strategy": [
-                "Fixed fee for services",
-                "Variable pricing based on project scale"
-            ],
-            "cost_structure": [
-                "Personnel",
-                "Operations",
-                "Technology or R&D",
-                "Marketing or Sales"
-            ],
-            "value_proposition": "Ulteig leverages over 75 years of experience to deliver reliable and innovative infrastructure solutions, ensuring client success and project integrity.",
-            "technology": [
-                "3D modeling capabilities",
-                "GIS technology integration"
-            ],
-            "distribution": [
-                "Direct sales to clients in various sectors",
-                "Project-based engagements with municipalities and corporations",
-                "Strong presence in North American markets"
-            ]
-        }
+  "data": {
+    "uuid": "0005ujn",
+    "firmographic": {
+      "name": "Ulteig",
+      "legal_name": "Ulteig Engineers, Inc.",
+      "website": "ulteig.com",
+      "company_type": {
+        "code": "Private",
+        "label": "Private"
+      },
+      "founded_year": 1944,
+      "company_description": "Ulteig Engineers, Inc. is an employee-owned consulting engineering firm founded in 1944 and headquartered in Fargo, North Dakota, with additional offices in Denver, Minneapolis, and Austin and operations across North America. The company serves public and private clients across four branded Lifeline Sectors: Power, Renewables, Transportation, and Water, delivering infrastructure engineering, technical, and consulting services including grid modernization, transmission and distribution design, renewable energy owner's engineering, bridge and highway engineering, and watershed and stormwater planning.\n\nThe firm monetizes primarily through professional services on a project-based, custom-quoted model, with an emerging recurring-revenue layer from its SiteSense® SCADA/EMS platform (built on Ignition by Inductive Automation) which monitors utility-scale solar, wind, and BESS assets and is supported by 45+ GW of cumulative experience. Its proprietary technology stack includes the trademarked PathFinder® decision-making engine, PinPoint® GIS-based project management platform, and the Developer Services Suite for renewable energy developers, supplemented by advanced energy modeling using PLEXOS and 3D design tools from Bentley Systems.\n\nThe go-to-market is relationship-driven enterprise field sales targeting utilities, electric cooperatives, IPPs, developers, contractors, and federal/state/local transportation and water agencies. Distribution relies on direct outreach, an Insights/Knowledge Center content hub, industry conference presence, and a Lifeline Sector Scholarship program, with no third-party channel or marketplace model. Recent strategic emphasis, anchored by a newly created CDO function and a Bentley Systems veteran added to the board, signals an intentional pivot toward digital and AI-enabled service delivery layered on top of the core engineering practice.",
+      "company_description_short": "Ulteig Engineers is an employee-owned consulting engineering firm founded in 1944 serving utilities, IPPs, developers, contractors, and government agencies across North America in Power, Renewables, Transportation, and Water infrastructure.",
+      "operating_status": {
+        "code": "operating",
+        "label": "Operating"
+      },
+      "ownership_category": {
+        "code": "management_employee_owned",
+        "label": "Management Employee Owned"
+      },
+      "headcount_range": "1001-5000",
+      "logo_url": "https://files.akta.pro/logos/00/05/uj/946283a8-a5a9-5bc7-a1e3-a50661db0616.png"
     },
-    "credits_consumed": 1.5
+    "business_model": {
+      "gtm_motion": [
+        {
+          "description": "Ulteig operates as a consulting engineering firm serving North American clients across Lifeline Sectors of Power, Renewables, Transportation and Water. The company targets both public and private sector clients including government agencies, utilities, cooperatives, developers, IPPs, and contractors. Sales motion appears to be relationship-based enterprise field sales through direct outreach, industry conferences, thought leadership content, and the company website's contact/consultation forms. The company emphasizes collaborative approaches and long-term partnerships with clients.",
+          "source": [
+            "https://ulteig.com/"
+          ],
+          "type": {
+            "code": "enterprise_field_sales",
+            "label": "Enterprise Field Sales"
+          }
+        },
+        {
+          "description": "Ulteig leverages thought leadership content marketing through its Insights/Knowledge Center, publishing technical articles, research findings, and industry perspectives. The company participates in industry conferences, presentations and panels to establish expertise and generate leads. Community engagement through programs like Introduce a Girl to Engineering Day and scholarship programs help build brand awareness and relationships with future talent and clients.",
+          "source": [
+            "https://ulteig.com/sectors/"
+          ],
+          "type": {
+            "code": "sales_led",
+            "label": "Sales Led"
+          }
+        }
+      ],
+      "revenue_model": [
+        {
+          "description": "Professional engineering consulting services across infrastructure sectors including power, renewables, transportation and water. Revenue generated through project-based engagements, technical consulting, and specialized engineering services for government agencies, utilities, developers and contractors.",
+          "source": [
+            "https://ulteig.com/"
+          ],
+          "title": "Engineering Consulting Services",
+          "type": {
+            "code": "professional_services",
+            "label": "Professional Services"
+          }
+        },
+        {
+          "description": "SCADA/EMS hardware, software and implementation solutions for utility-scale renewable energy sites. Includes ongoing monitoring services, system integration, and long-term service agreements for solar, wind and energy storage installations.",
+          "source": [
+            "https://ulteig.com/expertise/"
+          ],
+          "title": "Technology Solutions (SiteSense)",
+          "type": {
+            "code": "subscription_recurring",
+            "label": "Subscription Recurring"
+          }
+        },
+        {
+          "description": "Energy market modeling, resource planning, and production cost analysis services using specialized software platforms like PLEXOS. Includes transmission planning and grid optimization analysis for utilities and developers.",
+          "source": [
+            "https://ulteig.com/knowledge/ulteig-is-helping-to-transition-power-flow-ratings-to-a-dynamic-future/"
+          ],
+          "title": "Advanced Energy Modeling Services",
+          "type": {
+            "code": "professional_services",
+            "label": "Professional Services"
+          }
+        }
+      ],
+      "marketing_channels": [
+        {
+          "description": "Company publishes technical articles, research findings, industry perspectives and thought leadership content covering power, renewables, transportation and water infrastructure topics. Features expert perspectives from team members.",
+          "source": [
+            "https://ulteig.com/insights/"
+          ],
+          "stage": {
+            "code": "top_of_funnel",
+            "label": "Top of Funnel"
+          },
+          "title": "Insights/Knowledge Center Blog",
+          "type": {
+            "code": "content_marketing_blog",
+            "label": "Content Marketing/ Blog"
+          }
+        },
+        {
+          "description": "Active participation in industry conferences, panels, and technical sessions across the United States covering infrastructure, energy and grid modernization topics.",
+          "source": [
+            "https://ulteig.com/insight/2025-thought-leadership-roundup-perspectives-and-practical-expertise-shaping-the-future-of-infrastructure/"
+          ],
+          "stage": {
+            "code": "mid_funnel",
+            "label": "Mid funnel"
+          },
+          "title": "Industry Conferences & Presentations",
+          "type": {
+            "code": "events_conferences",
+            "label": "Events/ conferences"
+          }
+        },
+        {
+          "description": "Lifeline Sector Scholarship Program supporting students in power, renewables, transportation and water sectors. Community engagement through Introduce a Girl to Engineering Day events.",
+          "source": [
+            "https://ulteig.com/insight/2025-ulteig-lifeline-sector-scholarship-recipients-announced/"
+          ],
+          "stage": {
+            "code": "top_of_funnel",
+            "label": "Top of Funnel"
+          },
+          "title": "Scholarship & STEM Programs",
+          "type": {
+            "code": "community_developer_relations",
+            "label": "Community/ Developer relations"
+          }
+        },
+        {
+          "description": "Active social media presence including Instagram with employee stories and company updates. Professional networking engagement through LinkedIn.",
+          "source": [
+            "https://ulteig.com/sectors/water/"
+          ],
+          "stage": {
+            "code": "top_of_funnel",
+            "label": "Top of Funnel"
+          },
+          "title": "LinkedIn & Social Media",
+          "type": {
+            "code": "organic_social",
+            "label": "Organic social"
+          }
+        },
+        {
+          "description": "Earned media coverage through awards recognition, industry publications, and regional business media highlighting company culture and expertise.",
+          "source": [
+            "https://ulteig.com/knowledge/ulteig-recognized-as-a-top-workplace-by-usa-today/"
+          ],
+          "stage": {
+            "code": "top_of_funnel",
+            "label": "Top of Funnel"
+          },
+          "title": "PR & Media Coverage",
+          "type": {
+            "code": "pr_earned_media",
+            "label": "PR/ Earned Media"
+          }
+        }
+      ],
+      "distribution_channels": [
+        {
+          "description": "Direct engagement with government agencies, utilities, cooperatives and large developers through consultation forms, phone outreach (888-858-3441), and email (connect@ulteig.com). Relationship-based professional services sales motion.",
+          "scope": "North America",
+          "source": [
+            "https://ulteig.com/"
+          ],
+          "target_buyer": {
+            "code": "enterprise",
+            "label": "Enterprise"
+          },
+          "title": "Direct Enterprise Sales",
+          "type": {
+            "code": "direct_sales",
+            "label": "Direct Sales (field/enterprise)"
+          }
+        },
+        {
+          "description": "Direct recruitment of engineering talent through dedicated careers portal at recruiting2.ultipro.com with structured application process.",
+          "scope": "Regional",
+          "source": [
+            "https://ulteig.com/careers/"
+          ],
+          "target_buyer": {
+            "code": "enterprise",
+            "label": "Enterprise"
+          },
+          "title": "Career Page & Recruitment",
+          "type": {
+            "code": "direct_sales",
+            "label": "Direct Sales (field/enterprise)"
+          }
+        }
+      ],
+      "cost_components": [
+        "Personnel",
+        "Operations",
+        "Technology or R&D",
+        "Marketing or Sales",
+        "Infrastructure"
+      ],
+      "gtm_type": {
+        "code": "b2b",
+        "label": "B2B"
+      },
+      "offering_type": {
+        "code": "services",
+        "label": "Services"
+      }
+    }
+  },
+  "credits_consumed": 4
 }
 ```
 
@@ -166,7 +317,6 @@ for domain, data in results.items():
     print(
         f"{firm.get('name', domain):<20} "
         f"{firm.get('operating_status', {}).get('label', '—'):<12} "
-        f"{model.get('gtm_type', '—'):<15} "
         f"{firm.get('headcount_range', '—')}"
     )
 ```
