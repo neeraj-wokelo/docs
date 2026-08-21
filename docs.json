@@ -127,7 +127,7 @@
                   "docs/supporting-apis/industry-search",
                   "docs/supporting-apis/company-addition",
                   "docs/supporting-apis/request-status-api",
-                  "docs/supporting-apis/filter-builder"
+                  "docs/supporting-apis/filterbuilder"
                 ]
               }
             ]
