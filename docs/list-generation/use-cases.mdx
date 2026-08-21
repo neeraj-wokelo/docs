@@ -22,8 +22,6 @@ Build lists of recently funded companies for outreach:
 }
 ```
 
-**Use case**: Find companies that recently raised capital and may be ready to purchase tools or services.
-
 ### Identify Expansion-Ready Companies
 
 ```text
@@ -105,9 +103,7 @@ Build a list of direct competitors:
 
 ### Find Companies by Business Model
 
-```text
 Subscription-based SaaS companies with self-serve GTM:
-```
 
 ```json
 {
@@ -133,22 +129,6 @@ Subscription-based SaaS companies with self-serve GTM:
     "location.market_served.is_global": true
   },
   "sections": ["firmographic", "technology", "business_model"],
-  "limit": 50
-}
-```
-
-### Target Enterprise Companies
-
-```json
-{
-  "filters": {
-    "funding_detail.funding_overview.funding_stage": ["series_c", "late"],
-    "firmographic.headcount_range": ["5001-10000", "10001+"],
-    "firmographic.company_type": ["private"]
-  },
-  "sections": ["firmographic", "company_assessment", "business_model"],
-  "sort_by": "valuation_estimate",
-  "sort_order": "desc",
   "limit": 50
 }
 ```
