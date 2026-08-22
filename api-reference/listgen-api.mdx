@@ -58,7 +58,7 @@ Results are ranked by akta.pro relevance by default and can be enriched with add
       | `firmographic.company_type` | string\[\] | `private`, `public` |
       | `firmographic.ownership_category` | string\[\] | `corporate_owned`, `family_owned`, `founder_individual_operated_bootstrapped`, `management_employee_owned`, `nonprofit_foundation_owned`, `private_equity_controlled`, `public`, `state_government_owned`, `venture_growth_investor_backed` |
       | `firmographic.operating_status` | string\[\] | `acquired`, `closed`, `ipo`, `operating` |
-      | `firmographic.founded_year` | object | Range object. Accepts `gte` and/or `lte` (integer, four-digit year). |
+      | `firmographic.founded_year` | object | Range object. Accepts `gte` and/or `lte` (integer, four-digit year). <br />Eg. \{"gte": 2010, "lte": 2014 \} |
     </Accordion>
 
     <Accordion title="Business Model Filters">
@@ -93,6 +93,7 @@ Results are ranked by akta.pro relevance by default and can be enriched with add
       | `location.market_served.markets` | string\[\] | Any valid 3-letter ISO alpha-3 country code (e.g. `USA`, `CHN`). Refer [here](/country-codes). |
       | `location.market_served.is_global` | boolean | `true`, `false` |
       | `location.offices.country` | string\[\] | Any valid 3-letter ISO 3166-1 country code (e.g. `USA`, `DZA`). Refer [here](/country-codes). |
+      | `location.offices.city` | string\[\] | Free text — any city name (e.g. `Berlin`) |
     </Accordion>
 
     <Accordion title="Strategic Signal Filters">
@@ -100,13 +101,13 @@ Results are ranked by akta.pro relevance by default and can be enriched with add
       | --- | --- | --- |
       | `strategic_signal.partnership.name` | string\[\] | Free text — any partner/company name (e.g. `sequoia`) |
       | `strategic_signal.partnership.type` | string\[\] | `channel_reseller_distributor`, `gtm_marketing`, `implementation_si_consulting`, `oem_whitelabel_licensing`, `strategic_codevelopment`, `technology_integration`, `others` |
-      | `strategic_signal.partnership.strategic_tier` | string | Free text |
+      | `strategic_signal.partnership.strategic_tier` | string\[\] | Free text |
     </Accordion>
 
     <Accordion title="Customer Profile Filters">
       | Field | Type | Accepted Values |
       | --- | --- | --- |
-      | `customer_profile.select_customer.name` | string\[\] | Free text — any customer/company name (e.g. `Tata`, `Birla`) |
+      | `customer_profile.select_customer.name` | string\[\] | Free text — any customer/company name (e.g. `Microsoft`, `Tesla`) |
     </Accordion>
 
     <Accordion title="Industry Filters">
@@ -116,17 +117,19 @@ Results are ranked by akta.pro relevance by default and can be enriched with add
       | `industry.sic` | string\[\] | SIC industry codes. See the [SIC Code List](/sic-codes). Matches a company carrying any of the selected codes. |
       | `industry.industry` | string\[\] | akta.pro taxonomy industry codes. Use the [Industry Search API](/api-reference/supporting-apis/industry-search) to find matching codes. Matches any of the selected industries. |
     </Accordion>
+  </AccordionGroup>
 
-    <Accordion title="Technology Filters">
-      | Field | Type | Accepted Values |
-      | --- | --- | --- |
-      | `technology.ai_maturity.scale` | string\[\] | `ai_assisted`, `ai_featured`, `ai_differentiated`, `ai_native`, `ai_foundational` |
-      | `technology.api_detail.has_api` | boolean | `true`, `false` |
-      | `technology.app_detail.has_app` | boolean | `true`, `false` |
-      | `technology.is_technology_focussed` | boolean | `true`, `false` |
-    </Accordion>
+  <Accordion title="Technology Filters">
+    | Field | Type | Accepted Values |
+    | --- | --- | --- |
+    | `technology.ai_maturity.scale` | number\[\] | `0`, `1`, `2`, `3`, `4`, `5`<br /><br />0 — No AI<br />1 — AI Assisted<br />2 — AI Featured<br />3 — AI Differentiated<br />4 — AI Native<br />5 — AI Foundational |
+    | `technology.api_detail.has_api` | boolean | `true`, `false` |
+    | `technology.app_detail.has_app` | boolean | `true`, `false` |
+    | `technology.is_technology_focussed` | boolean | `true`, `false` |
+  </Accordion>
 
-    <Accordion title="Funding Detail Filters (Enterprise only)">
+  <AccordionGroup>
+    <Accordion title="Funding Detail Filters">
       | Field | Type | Accepted Values |
       | --- | --- | --- |
       | `funding_detail.funding_overview.funding_stage` | string\[\] | `acquired`, `angel`, `corporate_funded`, `crowdfunded`, `debt_funded`, `initial_coin_offering`, `non_equity_assistance`, `post_ipo_debt`, `post_ipo_equity`, `pre_seed`, `private_equity`, `public`, `seed`, `series_a`, `series_b`, `series_c`, `series_d`, `series_e`, `series_f`, `series_g`, `series_h`, `series_i`, `series_j`, `venture_funded` |
