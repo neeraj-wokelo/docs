@@ -1376,7 +1376,7 @@
         }
       }
     },
-    "/v1/company/list/generate": {
+    "/v1/list/generate/companies/": {
       "post": {
         "description": "Build targeted company lists using structured filters or natural language queries, with optional data enrichment.",
         "operationId": "generateCompanyList",
@@ -1416,7 +1416,7 @@
         }
       }
     },
-    "/v1/company/list/translate-query": {
+    "/v1/list/filter-builder/": {
       "post": {
         "description": "Converts natural language queries into structured filter conditions for the List Generation API.",
         "operationId": "translateQuery",
