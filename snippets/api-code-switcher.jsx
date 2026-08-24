@@ -158,7 +158,7 @@ console.log(data.count, "companies");`
   const tabs = [
     { id: 'news', label: 'News Signals', href: '/api-reference/news' },
     { id: 'company', label: 'Company Data', href: '/api-reference/company-enrichment' },
-    { id: 'listgen', label: 'ListGen', href: '/api-reference/listgen' }
+    { id: 'listgen', label: 'List Generation', href: '/api-reference/listgen' }
   ];
 
   const languages = ['cURL', 'Python', 'JavaScript'];
