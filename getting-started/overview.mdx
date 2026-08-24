@@ -49,6 +49,32 @@ title: "Overview"
     </Warning>
   </Step>
   <Step title="Make your first API request">
+    Make sure to replace YOUR\_API\_KEY with the actual API key in the code snippets below.
+
+    <CodeGroup>
+
+    ```text cURL
+    curl -G "https://api.akta.pro/api/v1/company/search/?query=canva" \
+      -H "x-api-key: YOUR_API_KEY"
+    ```
+
+    ```text Python
+    import requests
+    
+    url = "https://api.akta.pro/api/v1/company/search/"
+    headers = {"x-api-key": "YOUR_API_KEY"}
+    params = {"query": "canva"}
+    
+    response = requests.get(url, headers=headers, params=params)
+    data = response.json()
+    
+    for company in data["data"]:
+        print(company["name"], company["website"])
+        print(company["company_status"], company["product_category"])
+        print()
+    ```
+
+    </CodeGroup>
   </Step>
 </Steps>
 
