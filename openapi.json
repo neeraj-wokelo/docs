@@ -573,6 +573,7 @@
           "credits_consumed": {"type": "number", "format": "float", "description": "Credits consumed. Returns 0 when no enrichment sections requested."}
         }
       },
+      
       "Error": {
         "type": "object",
         "properties": {
@@ -1448,5 +1449,3 @@
     }
   }
 }
-
-
