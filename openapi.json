@@ -599,6 +599,10 @@
     {
       "name": "Supporting APIs",
       "description": "Utility endpoints for request tracking"
+    },
+    {
+      "name": "List Generation",
+      "description": "Build targeted company lists using structured filters or natural language queries"
     }
   ],
   "paths": {
