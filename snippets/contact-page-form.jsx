@@ -243,7 +243,7 @@ const Error = ({ text }) => (
         </button>
 
          <span className="text-gray-500 dark:text-white/70 max-md:text-xs">
-          By clicking "Request API access, you agree to akta.pro's{" "}
+          By clicking "Request API Demo", you agree to akta.pro's{" "}
           <a className="underline" href="https://akta.pro/legal?tab=privacy">
             Privacy Policy
           </a>{" "} and {" "}
