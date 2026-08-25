@@ -50,14 +50,14 @@ for article in data["data"]:
   unique_article: "false"
 });
 const response = await fetch(
-  \`https://api.akta.pro/api/v1/news/?${params}\`,
+  \`https://api.akta.pro/api/v1/news/?\${params}\`,
   { headers: { "x-api-key": "YOUR_API_KEY" } }
 );
 if (!response.ok) {
   // 4xx bodies carry { detail }, 5xx carry { error }
   const body = await response.json().catch(() => ({}));
   throw new Error(
-    \`Request failed [${response.status}]: ${body.detail ?? body.error ?? response.statusText}\`
+    \`Request failed [\${response.status}]: \${body.detail ?? body.error ?? response.statusText}\`
   );
 }
 const { status, data, total } = await response.json();
@@ -97,14 +97,14 @@ print(data["data"])`,
   sections: "firmographic"
 });
 const response = await fetch(
-  \`https://api.akta.pro/api/v1/company/enrichment/?${params}\`,
+  \`https://api.akta.pro/api/v1/company/enrichment/?\${params}\`,
   { headers: { "x-api-key": "YOUR_API_KEY" } }
 );
 if (!response.ok) {
   // 4xx bodies carry { detail }, 5xx carry { error }
   const body = await response.json().catch(() => ({}));
   throw new Error(
-    \`Request failed [${response.status}]: ${body.detail ?? body.error ?? response.statusText}\`
+    \`Request failed [\${response.status}]: \${body.detail ?? body.error ?? response.statusText}\`
   );
 }
 const { data } = await response.json();
@@ -153,7 +153,7 @@ if (!response.ok) {
   // 4xx bodies carry { detail }, 5xx carry { error }
   const body = await response.json().catch(() => ({}));
   throw new Error(
-    \`Request failed [${response.status}]: ${body.detail ?? body.error ?? response.statusText}\`
+    \`Request failed [\${response.status}]: \${body.detail ?? body.error ?? response.statusText}\`
   );
 }
 const data = await response.json();
