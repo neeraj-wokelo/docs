@@ -181,6 +181,7 @@
       },
       {
         "tab": "API Reference",
+        "openapi": "openapi.json",
         "groups": [
           {
             "group": "Core APIs",
@@ -277,6 +278,7 @@
       "name": "x-api-key"
     }
   }
+  
 },
 "appearance": {
   "default": "dark"
