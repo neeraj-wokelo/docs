@@ -19,78 +19,55 @@ export const ApiCodeSwitcher = () => {
       cURL: `curl -G "https://api.akta.pro/api/v1/news/?company=00000l1&unique_article=false" \\
   -H "x-api-key: YOUR_API_KEY"`,
       Python: `import requests
+
 url = "https://api.akta.pro/api/v1/news/"
 headers = {"x-api-key": "YOUR_API_KEY"}
 params = {
-    "company": "000036f",
-    "unique_article": "true"
+    "company": "00000l1",
+    "unique_article": "false"
 }
-response = requests.get(url, headers=headers, params=params)
+
+try:
+    response = requests.get(url, headers=headers, params=params)
+    response.raise_for_status()
+except requests.HTTPError as err:
+    raise RuntimeError(
+        f"Request failed [{err.response.status_code}]: {err.response.text}"
+    ) from err
+
 data = response.json()
-print(f"Total matching articles: {data['total']} (showing {data['count']} at offset {data['offset']})")
-print()
+
+# data["status"] == "success"
+# data["total"]  — total matching articles
 for article in data["data"]:
-    # Pull the primary tag out of the tags list (falls back to first tag if none flagged primary)
-    primary_tag = next((t["name"] for t in article.get("tags", []) if t.get("is_primary")), None)
-    if primary_tag is None and article.get("tags"):
-        primary_tag = article["tags"][0]["name"]
     print(article["title"])
-    print(article["published_date"], "|", article["publisher"])
-    print(primary_tag, "|", article["sentiment"], f"({article['sentiment_score']})")
+    print(article["published_date"], article["publisher"])
     print(article["ai_summary"])
     print(article["url"])
     print()`,
-      JavaScript: `const url = "https://api.akta.pro/api/v1/news/";
-
-const headers = {
-  "x-api-key": "YOUR_API_KEY"
-};
-
-const params = new URLSearchParams({
-  company: "000036f",
-  unique_article: "true"
+      JavaScript: `const params = new URLSearchParams({
+  company: "00000l1",
+  unique_article: "false"
 });
-
-async function fetchNews() {
-  const response = await fetch(
-    url + "?" + params.toString(),
-    {
-      method: "GET",
-      headers
-    }
+const response = await fetch(
+  \`https://api.akta.pro/api/v1/news/?${params}\`,
+  { headers: { "x-api-key": "YOUR_API_KEY" } }
+);
+if (!response.ok) {
+  // 4xx bodies carry { detail }, 5xx carry { error }
+  const body = await response.json().catch(() => ({}));
+  throw new Error(
+    \`Request failed [${response.status}]: ${body.detail ?? body.error ?? response.statusText}\`
   );
-
-  if (!response.ok) {
-    throw new Error(\`Request failed with status \${response.status}\`);
-  }
-
-  const data = await response.json();
-
-  console.log(
-    \`Total matching articles: \${data.total} (showing \${data.count} at offset \${data.offset})\`
-  );
-
-  for (const article of data.data) {
-    const tags = article.tags || [];
-
-    let primaryTag = tags.find(tag => tag.is_primary)?.name;
-
-    if (!primaryTag && tags.length) {
-      primaryTag = tags[0].name;
-    }
-
-    console.log(article.title);
-    console.log(\`\${article.published_date} | \${article.publisher}\`);
-    console.log(
-      \`\${primaryTag} | \${article.sentiment} (\${article.sentiment_score})\`
-    );
-    console.log(article.ai_summary);
-    console.log(article.url);
-    console.log("");
-  }
 }
-
-fetchNews().catch(console.error);`,
+const { status, data, total } = await response.json();
+// status === "success", total = total matching articles
+for (const article of data) {
+  console.log(article.title);
+  console.log(article.published_date, article.publisher);
+  console.log(article.ai_summary);
+  console.log(article.url);
+}`,
     },
     company: {
       cURL: `curl -G "https://api.akta.pro/api/v1/company/enrichment/?company=00000l1&sections=firmographic" \\
@@ -104,7 +81,14 @@ params = {
     "sections": "firmographic"
 }
 
-response = requests.get(url, headers=headers, params=params)
+try:
+    response = requests.get(url, headers=headers, params=params)
+    response.raise_for_status()
+except requests.HTTPError as err:
+    raise RuntimeError(
+        f"Request failed [{err.response.status_code}]: {err.response.text}"
+    ) from err
+
 data = response.json()
 
 print(data["data"])`,
@@ -112,12 +96,17 @@ print(data["data"])`,
   company: "00000l1",
   sections: "firmographic"
 });
-
 const response = await fetch(
-  \`https://api.akta.pro/api/v1/company/enrichment/?\${params}\`,
+  \`https://api.akta.pro/api/v1/company/enrichment/?${params}\`,
   { headers: { "x-api-key": "YOUR_API_KEY" } }
 );
-
+if (!response.ok) {
+  // 4xx bodies carry { detail }, 5xx carry { error }
+  const body = await response.json().catch(() => ({}));
+  throw new Error(
+    \`Request failed [${response.status}]: ${body.detail ?? body.error ?? response.statusText}\`
+  );
+}
 const { data } = await response.json();
 console.log(data);`
     },
@@ -127,14 +116,24 @@ console.log(data);`
   -H "Content-Type: application/json" \\
   -d '{"limit":50,"query":"Series A companies in Europe working in climate tech"}'`,
       Python: `import requests
+
 url = "https://api.akta.pro/api/v1/list/generate/companies/"
 headers = {"x-api-key": "YOUR_API_KEY"}
 payload = {
   "limit": 50,
   "query": "Series A companies in Europe working in climate tech"
 }
-response = requests.post(url, headers=headers, json=payload)
+
+try:
+    response = requests.post(url, headers=headers, json=payload)
+    response.raise_for_status()
+except requests.HTTPError as err:
+    raise RuntimeError(
+        f"Request failed [{err.response.status_code}]: {err.response.text}"
+    ) from err
+
 data = response.json()
+
 print(data["count"], "companies")`,
       JavaScript: `const response = await fetch(
   "https://api.akta.pro/api/v1/list/generate/companies/",
@@ -150,6 +149,13 @@ print(data["count"], "companies")`,
 }),
   }
 );
+if (!response.ok) {
+  // 4xx bodies carry { detail }, 5xx carry { error }
+  const body = await response.json().catch(() => ({}));
+  throw new Error(
+    \`Request failed [${response.status}]: ${body.detail ?? body.error ?? response.statusText}\`
+  );
+}
 const data = await response.json();
 console.log(data.count, "companies");`
     }
