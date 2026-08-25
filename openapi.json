@@ -14,7 +14,7 @@
   },
   "servers": [
     {
-      "url": "https://api.akta.pro",
+      "url": "https://api.akta.pro/api",
       "description": "Production server"
     }
   ],
