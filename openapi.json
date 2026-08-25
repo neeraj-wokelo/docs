@@ -14,7 +14,7 @@
   },
   "servers": [
     {
-      "url": "https://api.akta.pro/api",
+      "url": "https://api.akta.pro",
       "description": "Production server"
     }
   ],
@@ -601,7 +601,7 @@
     }
   ],
   "paths": {
-    "/v1/news": {
+    "/api/v1/news": {
       "get": {
         "tags": ["News"],
         "operationId": "getNews",
@@ -808,7 +808,7 @@
         }
       }
     },
-    "/v1/company/search": {
+    "/api/v1/company/search": {
       "get": {
         "tags": ["Company"],
         "operationId": "companySearch",
@@ -854,7 +854,7 @@
         }
       }
     },
-    "/v1/company/enrichment": {
+    "/api/v1/company/enrichment": {
       "get": {
         "tags": ["Company"],
         "operationId": "companyEnrichment",
@@ -911,7 +911,7 @@
         }
       }
     },
-    "/v1/company/product-reviews": {
+    "/api/v1/company/product-reviews": {
       "get": {
         "tags": ["Reviews"],
         "operationId": "getProductReviews",
@@ -982,7 +982,7 @@
         }
       }
     },
-    "/v1/company/employee-reviews": {
+    "/api/v1/company/employee-reviews": {
       "get": {
         "tags": ["Reviews"],
         "operationId": "getEmployeeReviews",
@@ -1035,7 +1035,7 @@
         }
       }
     },
-    "/v1/industry/search": {
+    "/api/v1/industry/search": {
       "get": {
         "tags": ["Company"],
         "operationId": "industrySearch",
@@ -1089,7 +1089,7 @@
         }
       }
     },
-    "/v1/company/headcount-trends": {
+    "/api/v1/company/headcount-trends": {
       "get": {
         "tags": ["Company"],
         "operationId": "getHeadcountTrends",
@@ -1138,7 +1138,7 @@
         }
       }
     },
-    "/v1/company/jobs": {
+    "/api/v1/company/jobs": {
       "get": {
         "tags": ["Company"],
         "operationId": "getJobPosts",
@@ -1193,7 +1193,7 @@
         }
       }
     },
-    "/v1/company/posts": {
+    "/api/v1/company/posts": {
       "get": {
         "tags": ["Company"],
         "operationId": "getSocialPosts",
@@ -1247,7 +1247,7 @@
         }
       }
     },
-    "/v1/company/website-traffic": {
+    "/api/v1/company/website-traffic": {
       "get": {
         "tags": ["Company"],
         "operationId": "getWebsiteTraffic",
@@ -1292,7 +1292,7 @@
         }
       }
     },
-    "/v1/company/addition-requests": {
+    "/api/v1/company/addition-requests": {
       "post": {
         "tags": ["Company"],
         "operationId": "createCompanyAdditionRequest",
@@ -1335,7 +1335,7 @@
         }
       }
     },
-    "/v1/status/{request_id}": {
+    "/api/v1/status/{request_id}": {
       "get": {
         "tags": ["Supporting APIs"],
         "operationId": "getRequestStatus",
@@ -1376,7 +1376,7 @@
         }
       }
     },
-    "/v1/list/generate/companies/": {
+    "/api/v1/list/generate/companies/": {
       "post": {
         "description": "Build targeted company lists using structured filters or natural language queries, with optional data enrichment.",
         "operationId": "generateCompanyList",
@@ -1416,7 +1416,7 @@
         }
       }
     },
-    "/v1/list/filter-builder/": {
+    "/api/v1/list/filter-builder/": {
       "post": {
         "description": "Converts natural language queries into structured filter conditions for the List Generation API.",
         "operationId": "translateQuery",
