@@ -602,7 +602,7 @@
     }
   ],
   "paths": {
-    "/api/v1/news": {
+    "/v1/news": {
       "get": {
         "tags": ["News"],
         "operationId": "getNews",
@@ -809,7 +809,7 @@
         }
       }
     },
-    "/api/v1/company/search": {
+    "/v1/company/search": {
       "get": {
         "tags": ["Company"],
         "operationId": "companySearch",
@@ -855,7 +855,7 @@
         }
       }
     },
-    "/api/v1/company/enrichment": {
+    "/v1/company/enrichment": {
       "get": {
         "tags": ["Company"],
         "operationId": "companyEnrichment",
@@ -912,7 +912,7 @@
         }
       }
     },
-    "/api/v1/company/product-reviews": {
+    "/v1/company/product-reviews": {
       "get": {
         "tags": ["Reviews"],
         "operationId": "getProductReviews",
@@ -983,7 +983,7 @@
         }
       }
     },
-    "/api/v1/company/employee-reviews": {
+    "/v1/company/employee-reviews": {
       "get": {
         "tags": ["Reviews"],
         "operationId": "getEmployeeReviews",
@@ -1036,7 +1036,7 @@
         }
       }
     },
-    "/api/v1/industry/search": {
+    "/v1/industry/search": {
       "get": {
         "tags": ["Company"],
         "operationId": "industrySearch",
@@ -1090,7 +1090,7 @@
         }
       }
     },
-    "/api/v1/company/headcount-trends": {
+    "/v1/company/headcount-trends": {
       "get": {
         "tags": ["Company"],
         "operationId": "getHeadcountTrends",
@@ -1139,7 +1139,7 @@
         }
       }
     },
-    "/api/v1/company/jobs": {
+    "/v1/company/jobs": {
       "get": {
         "tags": ["Company"],
         "operationId": "getJobPosts",
@@ -1194,7 +1194,7 @@
         }
       }
     },
-    "/api/v1/company/posts": {
+    "/v1/company/posts": {
       "get": {
         "tags": ["Company"],
         "operationId": "getSocialPosts",
@@ -1248,7 +1248,7 @@
         }
       }
     },
-    "/api/v1/company/website-traffic": {
+    "/v1/company/website-traffic": {
       "get": {
         "tags": ["Company"],
         "operationId": "getWebsiteTraffic",
@@ -1293,7 +1293,7 @@
         }
       }
     },
-    "/api/v1/company/addition-requests": {
+    "/v1/company/addition-requests": {
       "post": {
         "tags": ["Company"],
         "operationId": "createCompanyAdditionRequest",
@@ -1336,7 +1336,7 @@
         }
       }
     },
-    "/api/v1/status/{request_id}": {
+    "/v1/status/{request_id}": {
       "get": {
         "tags": ["Supporting APIs"],
         "operationId": "getRequestStatus",
@@ -1377,7 +1377,7 @@
         }
       }
     },
-    "/api/v1/list/generate/companies/": {
+    "/v1/list/generate/companies/": {
       "post": {
         "description": "Build targeted company lists using structured filters or natural language queries, with optional data enrichment.",
         "operationId": "generateCompanyList",
@@ -1417,7 +1417,7 @@
         }
       }
     },
-    "/api/v1/list/filter-builder/": {
+    "/v1/list/filter-builder/": {
       "post": {
         "description": "Converts natural language queries into structured filter conditions for the List Generation API.",
         "operationId": "translateQuery",
