@@ -45,14 +45,6 @@ The Social Posts API returns social media posts published by a company, sourced 
   Default = 0
 </ParamField>
 
-#### Example Request
-
-```bash
-curl -G "https://api.akta.pro/api/v1/company/posts/" \
-  --data-urlencode "company=00000l1" \
-  -H "x-api-key: YOUR_API_KEY"
-```
-
 ## Response
 
 #### Successful Response Fields
@@ -99,7 +91,7 @@ Returns a JSON object with the following structure:
   Format of the post. Example values: `image`, `document`, `linkedInVideo`, `text`.
 </ResponseField>
 
-<ResponseField name="link" type="string">
+<ResponseField name="url" type="string">
   Link to the original post on the source platform.
 </ResponseField>
 
@@ -169,7 +161,7 @@ Returns a JSON object with the following structure:
   Number of comments on the post.
 </ResponseField>
 
-<ResponseField name="reposts_Count" type="integer">
+<ResponseField name="reposts_count" type="integer">
   Number of times the post was reposted / shared.
 </ResponseField>
 

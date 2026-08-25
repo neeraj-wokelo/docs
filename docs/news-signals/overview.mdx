@@ -25,7 +25,7 @@ Every filter parameter is optional. You can scope results to a specific company 
 - **Industry intelligence** : resolve an industry via the Industry Search API, then pass the resulting code to monitor deal flow, regulatory activity, or innovation signals across an entire sector
 - **Open-ended topic monitoring** : pass a free-text `query` to track a theme, event, or narrative that spans multiple companies and industries, without needing to resolve it to a company or industry code first
 - **Entity tracking** : filter or post-process by `entity_person_list`, `entity_location_list`, `entity_product_list`, or `entity_event_list` to follow specific people, places, products, or events across coverage
-- **LLM pipeline enrichment** : use `full_text` as input to summarisation, classification, or embedding models, pre-filtered by `type` and `sentiment`
+- **LLM pipeline enrichment** : use `full_text` as input to summarisation, classification, or embedding models, pre-filtered by `type_list` and `sentiment_list`
 
 <Info>
   This API is synchronous. Results are returned directly in the HTTP response. No job submission or polling required.

@@ -21,24 +21,24 @@ API keys are issued from your Akta account. Contact [support@akta.pro](mailto:su
 <CodeGroup>
 
 ```bash cURL
-curl --location 'https://api.akta.pro/api/v1/company/enrichment?company=canva.com&sections=firmographic' \
-  --header 'x-api-key: <YOUR_API_KEY>'
+curl -G "https://api.akta.pro/api/v1/company/enrichment/?company=00000l1&sections=firmographic" \
+  -H "x-api-key: YOUR_API_KEY"
 ```
 
 ```python Python
 import requests
 
-response = requests.get(
-    "https://api.akta.pro/api/v1/company/enrichment",
-    headers={"x-api-key": "<YOUR_API_KEY>"},
-    params={
-        "company":  "canva.com",
-        "sections": "firmographic"
-    }
-)
-data = response.json()["data"]
-print(f"{data['firmographics']['name']} — {data['firmographics']['company_status']}")
-print(f"Total funding: ${data['funding']['overall']['total_funding'] / 1e9:.1f}B")
+url = "https://api.akta.pro/api/v1/company/enrichment/"
+headers = {"x-api-key": "YOUR_API_KEY"}
+params = {
+    "company": "00000l1",
+    "sections": "firmographic"
+}
+
+response = requests.get(url, headers=headers, params=params)
+data = response.json()
+
+print(data["data"])
 ```
 
 </CodeGroup>

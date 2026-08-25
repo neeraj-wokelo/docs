@@ -249,11 +249,11 @@ status = requests.get(
 )
 uuid = status.json()["uuid"]
 
-# Step 3: Use the UUID in the Company Data API
-enrich = requests.post(
+# Step 3: Use the UUID in the Company Data (Enrichment) API — this is a GET with query params
+enrich = requests.get(
     "https://api.akta.pro/api/v1/company/enrichment",
-    headers={**HEADERS, "Content-Type": "application/json"},
-    json={"company": uuid, "sections": ["firmographic", "funding_details"]},
+    headers=HEADERS,
+    params={"company": uuid, "sections": "firmographic,funding_detail"},
 )
 print(enrich.json()["data"]["firmographic"]["name"])
 ```

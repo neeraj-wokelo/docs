@@ -28,13 +28,13 @@ This is a **synchronous GET API**. Pass parameters in the URL and receive enrich
 | `mna_and_investment` | Acquisitions and investments _(enterprise tier only)_ | `acquisitions`, `investments`, `acquirers`, `deal_value`, `deal_date` |
 
 <Info>
-  `funding_detail` and `mna_and_investment` are only available on the enterprise plan. Requesting them on other plans returns those sections empty rather than an error — check your response for missing sections if you expect this data.
+  `funding_detail` and `mna_and_investment` are only available on the enterprise plan. Requesting them on other plans returns 403 error.
 </Info>
 
 **Common use cases:**
 
 - **CRM enrichment on demand** : call the API from a webhook or automation to instantly populate Salesforce, HubSpot, or DealCloud records when a new company is added, using `firmographic` \+ `location` \+ `management_profile` as the base record
-- **Deal screening data pull** : request `firmographic` \+ `financial_estimate` \+ `funding_details` \+ `mna_investment` for a shortlist of targets to build a fast pre-IC data pack
+- **Deal screening data pull** : request `firmographic` \+ `financial_estimate` \+ `funding_detail` \+ `mna_and_investment` for a shortlist of targets to build a fast pre-IC data pack
 - **Funding intelligence** : pull `funding_details` and `financial_estimate` for a set of companies to map raise history, identify stage, and track total capital deployed
 - **Traffic and growth signals** : combine `digital_presence` and `financial_estimate` to proxy revenue trajectory and growth momentum for private companies
 - **Competitive and market mapping** : use `industry`, `product_offering`, and `strategic_signal` together to compare positioning, differentiators, and recent moves across a peer set
