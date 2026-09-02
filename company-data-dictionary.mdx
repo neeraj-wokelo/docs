@@ -4,7 +4,7 @@ description: "Reference schema for every field returned across Akta company data
 hidden: true
 ---
 
-akta.pro company data is organized into **15 Level-1 (L1) sections** — the same sections you select via `company_data(sections=[...])`. Each L1 section groups a set of **Level-2 (L2) fields**. Expand a section below to see its fields and types, then view sample output from real companies.
+akta.pro company data is organized into **15 Level-1 (L1) sections** — the same sections you select via Company Data API `(sections=[...])`. Each L1 section groups a set of **Level-2 (L2) fields**. Expand a section below to see its fields and types, then view sample output from real companies.
 
 ## Sections
 
@@ -83,7 +83,7 @@ akta.pro company data is organized into **15 Level-1 (L1) sections** — the sam
     | **Field** | **Type** | **Description** |
     | :-- | :-- | :-- |
     | `hq` | object (city, country, region) | Headquarters location of the company. |
-    | `market_served` | object (is\_global, ...) | Indicates whether the company serves a global market and related market-served metadata. |
+    | `market_served` | object (is_global, ...) | Indicates whether the company serves a global market and related market-served metadata. |
     | `offices` | array of objects (city, country, type, description, source) | List of company office locations and their type (e.g., Headquarters). |
 
     **View Samples**
@@ -193,7 +193,7 @@ akta.pro company data is organized into **15 Level-1 (L1) sections** — the sam
 
     | **Field** | **Type** | **Description** |
     | :-- | :-- | :-- |
-    | `subsidiaries` | array of objects (name, business\_focus, acquired\_on, relationship\_type, type) | Subsidiary brands/entities owned by the company, including acquisition date and relationship type. |
+    | `subsidiaries` | array of objects (name, business_focus, acquired_on, relationship_type, type) | Subsidiary brands/entities owned by the company, including acquisition date and relationship type. |
 
     **View Samples**
 
@@ -272,7 +272,7 @@ akta.pro company data is organized into **15 Level-1 (L1) sections** — the sam
     | `problem_solved` | string | The core problem(s) the product/service addresses for customers. |
     | `quantifiable_outcome` | array of strings | Quantifiable outcomes or statistics demonstrating product impact. |
     | `product_overview` | string | Detailed overview of the full product portfolio and capabilities. |
-    | `product_and_service` | array of objects (name, category, description, source, url, image\_url) | Individual products and services offered, with category and links. |
+    | `product_and_service` | array of objects (name, category, description, source, url, image_url) | Individual products and services offered, with category and links. |
 
     **View Samples**
 
@@ -385,7 +385,7 @@ akta.pro company data is organized into **15 Level-1 (L1) sections** — the sam
     | **Field** | **Type** | **Description** |
     | :-- | :-- | :-- |
     | `keyword` | array of strings | Descriptive keywords/tags associated with the company's industry. |
-    | `industry` | array of objects (code, label, is\_primary) | Proprietary industry classification codes and labels. |
+    | `industry` | array of objects (code, label, is_primary) | Proprietary industry classification codes and labels. |
     | `naics` | array of objects (code, label) | NAICS industry classification codes. |
     | `sic` | array of objects (code, label) | SIC industry classification codes. |
     | `product_category` | string | High-level product category classification. |
@@ -485,7 +485,7 @@ akta.pro company data is organized into **15 Level-1 (L1) sections** — the sam
     | **Field** | **Type** | **Description** |
     | :-- | :-- | :-- |
     | `revenue_estimate` | object (code, label) | Estimated revenue of the company range bracket. |
-    | `valuation_estimate` | object (code, label) | Estimated company valuation range bucket (e.g., \$25B\+). |
+    | `valuation_estimate` | object (code, label) | Estimated company valuation range bucket (e.g., \$25B+). |
 
     **View Samples**
 
@@ -526,9 +526,9 @@ akta.pro company data is organized into **15 Level-1 (L1) sections** — the sam
 
     | **Field** | **Type** | **Description** |
     | :-- | :-- | :-- |
-    | `funding_overview` | object (funding\_stage, last\_funding\_date, total\_funding) | Summary of the company's overall funding stage and total capital raised. |
-    | `funding_rounds` | array of objects (round, amount\_usd, date, pre\_money\_valuation, investors, total\_investors, id, news) | Individual funding/financing rounds with amounts, dates, and investors. |
-    | `investors` | array of objects (name, type, uuid, website, date\_of\_entry, rounds\_participated) | List of investors and the rounds they participated in. |
+    | `funding_overview` | object (funding_stage, last_funding_date, total_funding) | Summary of the company's overall funding stage and total capital raised. |
+    | `funding_rounds` | array of objects (round, amount_usd, date, pre_money_valuation, investors, total_investors, id, news) | Individual funding/financing rounds with amounts, dates, and investors. |
+    | `investors` | array of objects (name, type, uuid, website, date_of_entry, rounds_participated) | List of investors and the rounds they participated in. |
 
     **View Samples**
 
@@ -5498,8 +5498,8 @@ akta.pro company data is organized into **15 Level-1 (L1) sections** — the sam
 
     | **Field** | **Type** | **Description** |
     | :-- | :-- | :-- |
-    | `mna` | array of objects (acquiree, acquisition\_type, announced\_date, amount\_usd, status, id, news) | Mergers and acquisitions made by the company. |
-    | `investment` | array of objects (investee, round, lead\_investor, announced\_date, funding\_round\_id, id, news) | Outbound investments made by the company into other companies. |
+    | `mna` | array of objects (acquiree, acquisition_type, announced_date, amount_usd, status, id, news) | Mergers and acquisitions made by the company. |
+    | `investment` | array of objects (investee, round, lead_investor, announced_date, funding_round_id, id, news) | Outbound investments made by the company into other companies. |
 
     **View Samples**
 
@@ -5910,9 +5910,9 @@ akta.pro company data is organized into **15 Level-1 (L1) sections** — the sam
     | `gtm_motion` | array of objects (description, source, type) | Go-to-market motions used to acquire customers (e.g., Product Led Growth, Enterprise Field Sales, Community Led). |
     | `revenue_model` | array of objects (title, description, source, type) | Revenue streams and monetization models (e.g., subscription, freemium). |
     | `marketing_channels` | array of objects (title, description, stage, source, type) | Marketing channels used across the funnel (content, social, SEO, events, PR, etc.). |
-    | `distribution_channels` | array of objects (title, description, scope, target\_buyer, source, type) | Channels through which the product/service is distributed to customers. |
+    | `distribution_channels` | array of objects (title, description, scope, target_buyer, source, type) | Channels through which the product/service is distributed to customers. |
     | `cost_components` | array of strings | Major cost categories for the business (e.g., Personnel, Technology or R&D, Infrastructure). |
-    | `pricing_details` | array of objects (description, model, notes, billing\_cadence, source) | Pricing tiers, billing cadence, and plan details. |
+    | `pricing_details` | array of objects (description, model, notes, billing_cadence, source) | Pricing tiers, billing cadence, and plan details. |
     | `gtm_type` | string | Overall go-to-market orientation (e.g., B2B, B2C, BOTH). |
     | `offering_type` | object (code, label) | Nature of the offering (e.g., Software, Hardware, Service). |
 
@@ -7581,7 +7581,7 @@ akta.pro company data is organized into **15 Level-1 (L1) sections** — the sam
     | **Field** | **Type** | **Description** |
     | :-- | :-- | :-- |
     | `number_of_profiles` | integer | Count of management profiles included. |
-    | `profiles` | array of objects (name, designation, designation\_category, overview, profile\_commentary, previous\_companies, start\_date, source) | Individual executive/leadership profiles including role, background, and commentary. |
+    | `profiles` | array of objects (name, designation, designation_category, overview, profile_commentary, previous_companies, start_date, source) | Individual executive/leadership profiles including role, background, and commentary. |
 
     **View Samples**
 
@@ -7824,7 +7824,7 @@ akta.pro company data is organized into **15 Level-1 (L1) sections** — the sam
     | **Field** | **Type** | **Description** |
     | :-- | :-- | :-- |
     | `scale_indicator` | array of objects (type, value, description, source) | Quantitative scale metrics (e.g., MAU, revenue, market share, geographic reach). |
-    | `partnership` | array of objects (name, description, type, strategic\_tier, announced\_on, source) | Strategic partnerships and technology integrations. |
+    | `partnership` | array of objects (name, description, type, strategic_tier, announced_on, source) | Strategic partnerships and technology integrations. |
     | `recent_move` | array of objects (type, description, date, source) | Recent strategic actions (product launches, acquisitions, IPO moves, etc.). |
     | `leadership_change` | array of objects (title, description, type, source) | Notable leadership/executive changes. |
     | `expansion_highlight` | array of objects (type, description) | Highlights of geographic, vertical, product, or channel expansion. |
@@ -8658,9 +8658,9 @@ akta.pro company data is organized into **15 Level-1 (L1) sections** — the sam
 
     | **Field** | **Type** | **Description** |
     | :-- | :-- | :-- |
-    | `segment` | array of objects (title, description, type, is\_primary, pain\_point\_addressed, use\_case, source) | Customer segments served by the company. |
-    | `icp` | array of objects (profile, target\_buyer, buyer\_persona, firmographic\_size, geography, industry\_vertical, pain\_points, primary\_use\_case, purchase\_trigger, sales\_cycle\_length, sales\_motion, buying\_structure, evidence\_proof\_points) | Ideal customer profile definitions for each segment. |
-    | `select_customer` | array of objects (name, industry, use\_case, type, source) | Named/notable customers of the company. |
+    | `segment` | array of objects (title, description, type, is_primary, pain_point_addressed, use_case, source) | Customer segments served by the company. |
+    | `icp` | array of objects (profile, target_buyer, buyer_persona, firmographic_size, geography, industry_vertical, pain_points, primary_use_case, purchase_trigger, sales_cycle_length, sales_motion, buying_structure, evidence_proof_points) | Ideal customer profile definitions for each segment. |
+    | `select_customer` | array of objects (name, industry, use_case, type, source) | Named/notable customers of the company. |
 
     **View Samples**
 
@@ -9497,11 +9497,11 @@ akta.pro company data is organized into **15 Level-1 (L1) sections** — the sam
     | **Field** | **Type** | **Description** |
     | :-- | :-- | :-- |
     | `is_technology_focussed` | boolean | Indicates whether the company is fundamentally a technology-focused company. |
-    | `api_detail` | object (has\_api, has\_mcp, docs\_url, sdk\_language, description) | Details on the company's API/developer platform, including MCP support. |
+    | `api_detail` | object (has_api, has_mcp, docs_url, sdk_language, description) | Details on the company's API/developer platform, including MCP support. |
     | `integration` | array of objects (title, description, type, source) | Third-party technology and platform integrations. |
     | `ai_capability` | array of objects (type, description, source) | AI capabilities by modality (text, image, video, audio, multimodal, agentic, etc.). |
     | `ai_maturity` | object (scale) | Score/rating representing the company's AI maturity level. |
-    | `app_detail` | object (has\_app, app\_url) | Mobile app availability and store links (App Store, Play Store). |
+    | `app_detail` | object (has_app, app_url) | Mobile app availability and store links (App Store, Play Store). |
     | `feature` | array of objects (title, description, differentiator, source) | Key product features and their differentiators. |
     | `core_technology` | string | Description of the company's core underlying technology. |
 
