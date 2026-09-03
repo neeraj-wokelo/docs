@@ -7,6 +7,9 @@
     "light": "#41af97",
     "dark": "#1D7C6D"
   },
+     "seo": {
+  "indexing": "all"
+},
   "favicon": "/images/SVG(dark).png",
   "navigation": {
     "root": "/home",
