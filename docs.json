@@ -69,8 +69,7 @@
                     "pages": [
                       "docs/alternative-data/headcount-trends/overview",
                       "docs/alternative-data/headcount-trends/quick-start",
-                      "docs/alternative-data/headcount-trends/use-cases",
-                      "best-practices-5"
+                      "docs/alternative-data/headcount-trends/use-cases"
                     ]
                   },
                   {
@@ -78,8 +77,7 @@
                     "pages": [
                       "docs/alternative-data/website-traffic/overview",
                       "docs/alternative-data/website-traffic/quick-start",
-                      "docs/alternative-data/website-traffic/use-cases",
-                      "best-practices-4"
+                      "docs/alternative-data/website-traffic/use-cases"
                     ]
                   },
                   {
@@ -87,8 +85,7 @@
                     "pages": [
                       "docs/alternative-data/job-posts/overview",
                       "docs/alternative-data/job-posts/quick-start",
-                      "docs/alternative-data/job-posts/use-cases",
-                      "best-practices-7"
+                      "docs/alternative-data/job-posts/use-cases"
                     ]
                   },
                   {
@@ -96,8 +93,7 @@
                     "pages": [
                       "docs/alternative-data/social-posts/overview",
                       "docs/alternative-data/social-posts/quick-start",
-                      "docs/alternative-data/social-posts/use-cases",
-                      "best-practices-6"
+                      "docs/alternative-data/social-posts/use-cases"
                     ]
                   },
                   {
@@ -105,8 +101,7 @@
                     "pages": [
                       "docs/alternative-data/employee-reviews/overview",
                       "docs/alternative-data/employee-reviews/quick-start",
-                      "docs/alternative-data/employee-reviews/use-cases",
-                      "best-practices-3"
+                      "docs/alternative-data/employee-reviews/use-cases"
                     ]
                   },
                   {
@@ -151,8 +146,7 @@
                 "pages": [
                   "docs/developer-tools/mcp/setup",
                   "docs/developer-tools/mcp/tools",
-                  "docs/developer-tools/mcp/credits",
-                  "docs/developer-tools/mcp/use-cases"
+                  "docs/developer-tools/mcp/credits"
                 ]
               },
               {
@@ -160,8 +154,7 @@
                 "pages": [
                   "docs/developer-tools/cli/setup",
                   "docs/developer-tools/cli/commands",
-                  "docs/developer-tools/cli/credits",
-                  "docs/developer-tools/cli/use-cases"
+                  "docs/developer-tools/cli/credits"
                 ]
               }
             ]
