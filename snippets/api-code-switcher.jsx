@@ -215,7 +215,7 @@ console.log(data.count, "companies");`
   onClick={() => { if (!isActive) setActiveTab(tab.id); }}
   className={`
     mint-block mint-w-full mint-rounded-[14px] mint-p-4 mint-border mint-leading-[1.35]
-    mint-transition-all mint-duration-150 mint-cursor-pointer mint-select-none {" "} 
+    mint-transition-all mint-duration-150 mint-cursor-pointer mint-select-none  
     ${isActive
       ? `dark:mint-text-white mint-text-black`
       : "mint-bg-[#F6F6F6] mint-border-[#D4D4D4] dark:mint-bg-transparent dark:mint-text-white dark:mint-border-[rgba(109,109,109,0.42)]"
