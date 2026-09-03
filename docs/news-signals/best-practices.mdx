@@ -1,6 +1,7 @@
 ---
-title: "Best Practices"
+title: "News Signals API Best Practices"
 description: "Best practices for using news api."
+sidebarTitle: "Best Practices"
 ---
 
 **Always pass website URL or UUID for** `company `**and not the display name**
@@ -73,7 +74,7 @@ The filter parameters work independently and additively which means all active f
 - `type_list` : filters by the event type tag (e.g. `Equity Fund-Raising`, `Layoffs`). [View full list](/news-types) to see all accepted values
 - `news_score_list` : filters by relevance tier (`High`, `Medium`, `Low`). Use `High` for daily monitoring briefings where signal density matters; use `all` for research pulls where recall is more important than precision
 
-Combining them narrows the result set aggressively. For example, `sentiment_list=negative` \+ `news_score_list=High` returns only high-relevance adverse articles which could be useful for portfolio risk monitoring but may miss lower-profile negative signals if used for comprehensive diligence:
+Combining them narrows the result set aggressively. For example, `sentiment_list=negative` + `news_score_list=High` returns only high-relevance adverse articles which could be useful for portfolio risk monitoring but may miss lower-profile negative signals if used for comprehensive diligence:
 
 ```python
 # Portfolio monitoring — high-signal adverse articles only

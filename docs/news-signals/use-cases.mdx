@@ -1,6 +1,7 @@
 ---
-title: "Use cases"
+title: "News Signals API Use cases"
 description: "Company monitoring, industry intelligence, open-ended topic monitoring, and entity tracking."
+sidebarTitle: "Use cases"
 ---
 
 ### Company news : positive funding and deal activity
@@ -9,8 +10,8 @@ Fetch all positive news about a company over a date range, filtered to funding a
 
 Use the following filters:
 
-- sentiment\_list filter to fetch only positive news.
-- type\_list filter - CM01, CM03 to filter only the news related to funding and M&A activity. Refer to the complete list of news type filters [here](/news-types).
+- sentiment_list filter to fetch only positive news.
+- type_list filter - CM01, CM03 to filter only the news related to funding and M&A activity. Refer to the complete list of news type filters [here](/news-types).
 
 <CodeGroup>
 
@@ -1716,7 +1717,7 @@ Some signals worth monitoring could be say commodity price movement, a macro tre
 Use the following filters:
 
 - query filter set to the open-ended theme you want to track, e.g. `crude oil price developments`.
-- sentiment\_list or countries filters, optionally, to narrow the results further.
+- sentiment_list or countries filters, optionally, to narrow the results further.
 
 <CodeGroup>
 
@@ -2948,7 +2949,7 @@ print(response.text)
 
 ### Industry news monitoring
 
-Monitor all the high impact news in a sector. In this case, use `industry` field to specify the industry name. Also use news\_score\_list to filter only the High impact news.
+Monitor all the high impact news in a sector. In this case, use `industry` field to specify the industry name. Also use news_score_list to filter only the High impact news.
 
 <Tip>
   Industry filters accept industry **codes**, not free-text names. Use the [Industry Search API](/api-reference/supporting-apis/industry-search) to resolve a topic like `"warehouse automation"` into the codes to pass into this endpoint.
@@ -4135,8 +4136,8 @@ Rather than filtering by which company published or was mentioned in an article,
 
 Use the following filters:
 
-- entity\_person\_list filter set to the person's name, e.g. `Elon Musk`, to track every article that names them.
-- entity\_event\_list filter works the same way for a named event, e.g. `Iran war`, if you want to follow coverage of a specific event instead of a person.
+- entity_person_list filter set to the person's name, e.g. `Elon Musk`, to track every article that names them.
+- entity_event_list filter works the same way for a named event, e.g. `Iran war`, if you want to follow coverage of a specific event instead of a person.
 
 <CodeGroup>
 

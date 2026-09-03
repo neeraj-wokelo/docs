@@ -136,15 +136,7 @@
             "group": "Resources",
             "pages": [
               "references",
-              "webhook-config",
-              "news-types",
-              "country-codes",
-              "naics-codes",
-              "sic-codes",
-              "iab-codes",
-              "iptc-codes",
-              "company-data-dictionary",
-              "region-codes"
+              "webhook-config"
             ],
             "icon": "books",
             "expanded": true
@@ -176,7 +168,21 @@
           },
           "playground",
           "discord",
-          "website"
+          "website",
+          {
+            "group": "Hidden",
+            "hidden": true,
+            "pages": [
+              "region-codes",
+              "company-data-dictionary",
+              "iptc-codes",
+              "news-types",
+              "naics-codes",
+              "country-codes",
+              "sic-codes",
+              "iab-codes"
+            ]
+          }
         ]
       },
       {
