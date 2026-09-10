@@ -133,8 +133,7 @@
           {
             "group": "Resources",
             "pages": [
-              "references",
-              "webhook-config"
+              "references"
             ],
             "icon": "books",
             "expanded": true
