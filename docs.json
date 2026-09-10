@@ -7,8 +7,11 @@
     "light": "#41af97",
     "dark": "#1D7C6D"
   },
-     "seo": {
-  "indexing": "all"
+    "seo": {
+  "indexing": "all",
+  "metatags": {
+    "canonical": "https://docs.akta.pro"
+  }
 },
   "favicon": "/images/SVG(dark).png",
   "navigation": {
