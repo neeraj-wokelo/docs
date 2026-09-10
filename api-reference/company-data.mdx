@@ -71,8 +71,11 @@ Returns a JSON object with the following structure:
     "firmographic": {
       "name": "Canva",
       "legal_name": "Canva",
-      "website": "canva.com",
-      "company_type": "Private",
+      "website": "http://www.canva.com",
+      "company_type": {
+        "code": "private",
+        "label": "Private"
+      },
       "founded_year": 2013,
       "company_description": "Canva is an online visual communication and design platform founded in 2013 and headquartered in Sydney, Australia. Its core product is the Canva Visual Suite, a horizontal workspace combining design, documents (Docs), spreadsheets (Sheets), whiteboards, presentations, video, photo editing, websites, and print on a single cloud-based platform with web, mobile, and desktop clients. The platform is anchored by Magic Studio — a suite of generative AI features including Magic Write, Magic Media, Magic Eraser, Magic Layers, Magic Resize, Magic Charts, and Magic Insights — and was extended in May 2026 with Canva AI 2.0, which introduced Conversational Design, Agentic Orchestration, Object-Based Intelligence, and Living Memory powered by proprietary in-house models.\n\nCanva monetizes through a freemium-to-paid subscription funnel: a free tier, Pro at $120/year (~$15/month), per-seat Teams, and custom-priced Enterprise with SSO and compliance controls. Free tiers also serve Education (including a statewide Andhra Pradesh rollout) and verified Nonprofits. The company has expanded aggressively through acquisitions — Flourish (data visualization, 2022), Kaleido AI (2021), Affinity / Serif (professional design tools, 2024, made free), Leonardo.Ai (AI image generation, 2024), Doohly (digital out-of-home, 2026, $30M), and Ortto, SimTheory, MangoAI, and MagicBrief (marketing automation and AI, 2025–2026) — and through a Connected App strategy that embeds Canva inside ChatGPT, Claude, Gemini, Copilot, and Perplexity. Canva also operates an Apps Marketplace, Templates Marketplace, and developer platform with API and Model Context Protocol (MCP) availability.\n\nAt the most recent reporting, Canva had 265 million monthly active users and 31 million paying subscribers across 190+ countries, served 95%+ of Fortune 500, and reported annualized revenue of approximately $4B for 2025 with eight consecutive years of profitability. The company is privately held, valued at up to $65B following a mid-2025 secondary share sale, and is reportedly considering a US IPO in late 2026.",
       "company_description_short": "Canva is a cloud-based visual communication platform serving individuals, SMBs, enterprises, educators, and nonprofits with an integrated design, document, video, and AI workspace used by 265 million people monthly.",
@@ -84,8 +87,7 @@ Returns a JSON object with the following structure:
         "code": "venture_growth_investor_backed",
         "label": "Venture Growth Investor Backed"
       },
-      "headcount_range": "1001-5000",
-      "website_screenshot": "https://host.wokelo.ai/screenshots/00/00/0l/5eaeb8bf-30e5-5649-884f-97d430a4cd35.png"
+      "headcount_range": "1001-5000"
     },
     "business_model": {
       "gtm_motion": [
@@ -196,7 +198,7 @@ Returns a JSON object with the following structure:
           ],
           "stage": {
             "code": "top_of_funnel",
-            "label": "Top-of-funnel"
+            "label": "Top of Funnel"
           },
           "title": "Design School and Learn Blog",
           "type": {
@@ -211,7 +213,7 @@ Returns a JSON object with the following structure:
           ],
           "stage": {
             "code": "top_of_funnel",
-            "label": "Top-of-funnel"
+            "label": "Top of Funnel"
           },
           "title": "Social Media (LinkedIn, Instagram, Facebook, TikTok, Pinterest, X, YouTube)",
           "type": {
@@ -226,7 +228,7 @@ Returns a JSON object with the following structure:
           ],
           "stage": {
             "code": "top_of_funnel",
-            "label": "Top-of-funnel"
+            "label": "Top of Funnel"
           },
           "title": "SEO/Organic Search",
           "type": {
@@ -241,7 +243,7 @@ Returns a JSON object with the following structure:
           ],
           "stage": {
             "code": "mid_funnel",
-            "label": "Mid-funnel"
+            "label": "Mid funnel"
           },
           "title": "Canva Events (Canva Create, Canva in Real Life)",
           "type": {
@@ -256,7 +258,7 @@ Returns a JSON object with the following structure:
           ],
           "stage": {
             "code": "mid_funnel",
-            "label": "Mid-funnel"
+            "label": "Mid funnel"
           },
           "title": "Cannes Lions Activation",
           "type": {
@@ -271,7 +273,7 @@ Returns a JSON object with the following structure:
           ],
           "stage": {
             "code": "top_of_funnel",
-            "label": "Top-of-funnel"
+            "label": "Top of Funnel"
           },
           "title": "Brand Campaigns (Squirrelites, 'The Thing That Makes Anything A Thing')",
           "type": {
@@ -286,7 +288,7 @@ Returns a JSON object with the following structure:
           ],
           "stage": {
             "code": "top_of_funnel",
-            "label": "Top-of-funnel"
+            "label": "Top of Funnel"
           },
           "title": "AI Assistant Integrations (ChatGPT, Claude, Gemini, Copilot)",
           "type": {
@@ -301,7 +303,7 @@ Returns a JSON object with the following structure:
           ],
           "stage": {
             "code": "top_of_funnel",
-            "label": "Top-of-funnel"
+            "label": "Top of Funnel"
           },
           "title": "Education Partnerships",
           "type": {
@@ -316,7 +318,7 @@ Returns a JSON object with the following structure:
           ],
           "stage": {
             "code": "top_of_funnel",
-            "label": "Top-of-funnel"
+            "label": "Top of Funnel"
           },
           "title": "Podcast (Prompted Podcast - AI creativity podcast)",
           "type": {
@@ -326,22 +328,6 @@ Returns a JSON object with the following structure:
         }
       ],
       "distribution_channels": [
-        {
-          "description": "Canva Connected Apps integrated into major AI assistants, enabling design creation within those platforms",
-          "scope": "Global",
-          "source": [
-            "https://www.cityam.com/canva-brings-on-brand-editable-design-into-google-gemini/"
-          ],
-          "target_buyer": {
-            "code": "enterprise",
-            "label": "Enterprise"
-          },
-          "title": "AI Assistant Integrations (ChatGPT, Claude, Gemini, Copilot)",
-          "type": {
-            "code": "oem_embedded_whitelabel",
-            "label": "OEM/ Embedded/ White-label"
-          }
-        },
         {
           "description": "Primary self-serve distribution through browser-based platform with free tier and direct upgrade path to Pro subscription",
           "scope": "Global",
@@ -436,6 +422,22 @@ Returns a JSON object with the following structure:
           "type": {
             "code": "marketplace_app_store",
             "label": "Marketplace/ app store"
+          }
+        },
+        {
+          "description": "Canva Connected Apps integrated into major AI assistants, enabling design creation within those platforms",
+          "scope": "Global",
+          "source": [
+            "https://www.cityam.com/canva-brings-on-brand-editable-design-into-google-gemini/"
+          ],
+          "target_buyer": {
+            "code": "enterprise",
+            "label": "Enterprise"
+          },
+          "title": "AI Assistant Integrations (ChatGPT, Claude, Gemini, Copilot)",
+          "type": {
+            "code": "oem_embedded_whitelabel",
+            "label": "OEM/ Embedded/ White-label"
           }
         }
       ],
@@ -538,7 +540,10 @@ Returns a JSON object with the following structure:
           ]
         }
       ],
-      "gtm_type": "BOTH",
+      "gtm_type": {
+        "code": "b2b_and_b2c",
+        "label": "B2B and B2C"
+      },
       "offering_type": {
         "code": "software",
         "label": "Software"
@@ -1002,11 +1007,11 @@ Returns a JSON object with the following structure:
     },
     "financial_estimate": {
       "revenue_estimate": {
-        "code": "1B-5B",
+        "code": "1b_5b",
         "label": "$1B-$5B"
       },
       "valuation_estimate": {
-        "code": "OVER-25B",
+        "code": "over_25b",
         "label": "$25B+"
       }
     },
@@ -1038,22 +1043,9 @@ Returns a JSON object with the following structure:
       "number_of_profiles": 10,
       "profiles": [
         {
-          "designation": "Chief Technology Officer",
-          "designation_category": {
-            "code": "CXO",
-            "label": "CXO"
-          },
-          "name": "Dave Hearnden",
-          "overview": "Chief Technology Officer of Canva leading global engineering and platform technology.",
-          "profile_commentary": "Listed as CTO in the leadership roster. Listed alongside Simon Newton, who is separately identified as head of technology taking over CTO duties from Brendan Humphreys following his June 2026 departure.",
-          "source": [
-            "http://canva.com/"
-          ]
-        },
-        {
           "designation": "Co-founder & CEO",
           "designation_category": {
-            "code": "Chief Executive Officer",
+            "code": "chief_executive_officer",
             "label": "Chief Executive Officer"
           },
           "name": "Melanie Perkins",
@@ -1067,7 +1059,7 @@ Returns a JSON object with the following structure:
         {
           "designation": "Co-founder & COO",
           "designation_category": {
-            "code": "Co-founder",
+            "code": "co_founder",
             "label": "Co-founder"
           },
           "name": "Cliff Obrecht",
@@ -1081,7 +1073,7 @@ Returns a JSON object with the following structure:
         {
           "designation": "Co-founder & Chief Product Officer",
           "designation_category": {
-            "code": "Co-founder",
+            "code": "co_founder",
             "label": "Co-founder"
           },
           "name": "Cameron Adams",
@@ -1095,7 +1087,7 @@ Returns a JSON object with the following structure:
         {
           "designation": "Chief Financial Officer",
           "designation_category": {
-            "code": "CXO",
+            "code": "cxo",
             "label": "CXO"
           },
           "name": "Kelly Steckelberg",
@@ -1108,7 +1100,7 @@ Returns a JSON object with the following structure:
         {
           "designation": "Chief Marketing Officer",
           "designation_category": {
-            "code": "CXO",
+            "code": "cxo",
             "label": "CXO"
           },
           "name": "Zach Kitschke",
@@ -1121,7 +1113,7 @@ Returns a JSON object with the following structure:
         {
           "designation": "Chief Evangelist",
           "designation_category": {
-            "code": "CXO",
+            "code": "cxo",
             "label": "CXO"
           },
           "name": "Guy Kawasaki",
@@ -1134,7 +1126,7 @@ Returns a JSON object with the following structure:
         {
           "designation": "Chief Legal Officer & Corporate Development",
           "designation_category": {
-            "code": "CXO",
+            "code": "cxo",
             "label": "CXO"
           },
           "name": "Todd Carpenter",
@@ -1145,9 +1137,22 @@ Returns a JSON object with the following structure:
           ]
         },
         {
+          "designation": "Chief Technology Officer",
+          "designation_category": {
+            "code": "cxo",
+            "label": "CXO"
+          },
+          "name": "Dave Hearnden",
+          "overview": "Chief Technology Officer of Canva leading global engineering and platform technology.",
+          "profile_commentary": "Listed as CTO in the leadership roster. Listed alongside Simon Newton, who is separately identified as head of technology taking over CTO duties from Brendan Humphreys following his June 2026 departure.",
+          "source": [
+            "http://canva.com/"
+          ]
+        },
+        {
           "designation": "Head of Technology",
           "designation_category": {
-            "code": "CXO",
+            "code": "cxo",
             "label": "CXO"
           },
           "name": "Simon Newton",
@@ -1165,7 +1170,7 @@ Returns a JSON object with the following structure:
         {
           "designation": "Chief People Officer",
           "designation_category": {
-            "code": "CXO",
+            "code": "cxo",
             "label": "CXO"
           },
           "name": "Jennie Rogerson",
@@ -1255,6 +1260,15 @@ Returns a JSON object with the following structure:
       "product_overview": "Canva is a visual communication and design platform offering a comprehensive Visual Suite with AI-powered tools for creating graphics, presentations, videos, documents, spreadsheets, whiteboards, websites, and print materials. The platform is anchored by Magic Studio, Canva's AI suite encompassing generative AI (Magic Media, Dream Lab, Create a Video), natural language tools (Magic Write, Magic Formulas), computer vision features (Magic Eraser, Magic Edit, Background Remover, Magic Grab), and analytics (Magic Insights, Magic Charts). Canva AI 2.0, announced May 2026, introduced agentic capabilities and conversational design powered by proprietary models. Key products include Canva Docs (visual-first documents), Canva Sheets (visual spreadsheets with AI data analysis), Canva Whiteboard (collaborative brainstorming), Canva Presentations (AI-powered slides), Canva for Social Media (creation and scheduling), Canva Photo Editor, Canva Video Editor, Canva Print, and Canva Website Builder. The platform operates on a freemium model with subscription tiers (Pro, Teams, Business, Enterprise, Education, Nonprofit). Canva has expanded through acquisitions including Flourish (data visualization, 2022), Affinity Suite (professional design tools, 2024), Leonardo AI (AI image generation, 2024), and Doohly (digital outdoor advertising, 2026). The platform serves over 250 million monthly active users across 190 countries.",
       "product_and_service": [
         {
+          "category": "Visual Design Platform",
+          "description": "Canva's core design platform providing AI-powered visual content creation including graphics, presentations, videos, documents, websites, and print materials. Serves as the unified workspace combining all Canva tools and AI capabilities.",
+          "name": "Canva Visual Suite",
+          "source": [
+            "http://canva.com/"
+          ],
+          "url": "https://www.canva.com/visual-suite/"
+        },
+        {
           "category": "AI Creative Suite",
           "description": "Canva's AI-powered creative suite encompassing generative AI across text, image, video, audio, and code, powering conversational design and agentic workflows across the platform.",
           "name": "Magic Studio",
@@ -1273,13 +1287,49 @@ Returns a JSON object with the following structure:
           "url": "https://www.canva.com/canva-ai/"
         },
         {
-          "category": "Higher Education Subscription",
-          "description": "Higher education subscription with academic success tools, accessibility features, brand management, and security controls for college and university use.",
-          "name": "Canva for Campus",
+          "category": "Productivity / Documents",
+          "description": "Visual-first document creator enabling AI-powered document creation with Magic Write, embedded Canva designs, real-time collaboration, comments, reactions, and templates for business and educational use cases.",
+          "name": "Canva Docs",
           "source": [
-            "http://canva.com/"
+            "https://www.canva.com/docs/"
           ],
-          "url": "https://www.canva.com/for-campus/"
+          "url": "https://www.canva.com/docs/"
+        },
+        {
+          "category": "Productivity / Spreadsheets",
+          "description": "Visual-first spreadsheet software combining data management with design capabilities. Features Magic Charts, Magic Insights, Magic Formulas, Bulk Create, and Data Connectors to external sources.",
+          "name": "Canva Sheets",
+          "source": [
+            "https://www.canva.com/sheets/"
+          ],
+          "url": "https://www.canva.com/sheets/"
+        },
+        {
+          "category": "Collaboration / Whiteboard",
+          "description": "Free online collaborative whiteboard providing unlimited canvas space for brainstorming, strategy sessions, flowcharts, mind maps, and visual planning with real-time collaboration, templates, and sticky notes.",
+          "name": "Canva Whiteboard",
+          "source": [
+            "https://www.canva.com/online-whiteboard/"
+          ],
+          "url": "https://www.canva.com/online-whiteboard/"
+        },
+        {
+          "category": "Presentations",
+          "description": "AI-powered presentation builder with cinematic visuals, smart collaboration, Magic Write for content generation, automated animations, presenter tools, offline presenting, and export to PowerPoint, PDF, or video.",
+          "name": "Canva Presentations",
+          "source": [
+            "https://www.canva.com/presentations/"
+          ],
+          "url": "https://www.canva.com/presentations/"
+        },
+        {
+          "category": "Social Media",
+          "description": "Comprehensive social media content creation platform enabling design, scheduling, publishing, and tracking of social media content across TikTok, Instagram, Facebook, YouTube, LinkedIn, and Pinterest, powered by AI and integrated with Content Planner.",
+          "name": "Canva Social Media",
+          "source": [
+            "https://www.canva.com/social-media/"
+          ],
+          "url": "https://www.canva.com/social-media/"
         },
         {
           "category": "Photo Editing",
@@ -1423,64 +1473,13 @@ Returns a JSON object with the following structure:
           "url": "https://www.canva.com/pro/"
         },
         {
-          "category": "Productivity / Documents",
-          "description": "Visual-first document creator enabling AI-powered document creation with Magic Write, embedded Canva designs, real-time collaboration, comments, reactions, and templates for business and educational use cases.",
-          "image_url": "TQ649DQTK6M2M6V8EXL8IG3LVUBEVITUF7BAXEHEX4DGYGGFV4.png",
-          "name": "Canva Docs",
-          "source": [
-            "https://www.canva.com/docs/"
-          ],
-          "url": "https://www.canva.com/docs/"
-        },
-        {
-          "category": "Presentations",
-          "description": "AI-powered presentation builder with cinematic visuals, smart collaboration, Magic Write for content generation, automated animations, presenter tools, offline presenting, and export to PowerPoint, PDF, or video.",
-          "image_url": "0EX7KV8N2BT2BJ3UK8HPZBCRU3XGKWAO7A576F33BPIHGBTMF.png",
-          "name": "Canva Presentations",
-          "source": [
-            "https://www.canva.com/presentations/"
-          ],
-          "url": "https://www.canva.com/presentations/"
-        },
-        {
-          "category": "Collaboration / Whiteboard",
-          "description": "Free online collaborative whiteboard providing unlimited canvas space for brainstorming, strategy sessions, flowcharts, mind maps, and visual planning with real-time collaboration, templates, and sticky notes.",
-          "image_url": "0U28MDBUYYE3Y3WH9LUTKYIW773H6UQ0DN3XWEG1L49ZR2JW62.png",
-          "name": "Canva Whiteboard",
-          "source": [
-            "https://www.canva.com/online-whiteboard/"
-          ],
-          "url": "https://www.canva.com/online-whiteboard/"
-        },
-        {
-          "category": "Visual Design Platform",
-          "description": "Canva's core design platform providing AI-powered visual content creation including graphics, presentations, videos, documents, websites, and print materials. Serves as the unified workspace combining all Canva tools and AI capabilities.",
-          "image_url": "K5A608H3MIC1869I23B6NQ2R1EJ6IQG86BGQ46WPBES3I6WYD3.jpg",
-          "name": "Canva Visual Suite",
+          "category": "Higher Education Subscription",
+          "description": "Higher education subscription with academic success tools, accessibility features, brand management, and security controls for college and university use.",
+          "name": "Canva for Campus",
           "source": [
             "http://canva.com/"
           ],
-          "url": "https://www.canva.com/visual-suite/"
-        },
-        {
-          "category": "Productivity / Spreadsheets",
-          "description": "Visual-first spreadsheet software combining data management with design capabilities. Features Magic Charts, Magic Insights, Magic Formulas, Bulk Create, and Data Connectors to external sources.",
-          "image_url": "PZ308665DCQJGA3UXRR2YCUY350LUPA08XSXDSFXKPC7TR7016.png",
-          "name": "Canva Sheets",
-          "source": [
-            "https://www.canva.com/sheets/"
-          ],
-          "url": "https://www.canva.com/sheets/"
-        },
-        {
-          "category": "Social Media",
-          "description": "Comprehensive social media content creation platform enabling design, scheduling, publishing, and tracking of social media content across TikTok, Instagram, Facebook, YouTube, LinkedIn, and Pinterest, powered by AI and integrated with Content Planner.",
-          "image_url": "SU0CBDAMF3AKF8RLJAP2EJ3W9AISAVJHMFYUBEWH4UYOGJ0U66.png",
-          "name": "Canva Social Media",
-          "source": [
-            "https://www.canva.com/social-media/"
-          ],
-          "url": "https://www.canva.com/social-media/"
+          "url": "https://www.canva.com/for-campus/"
         }
       ]
     },
@@ -1531,7 +1530,7 @@ Returns a JSON object with the following structure:
           "value": "95%+ of Fortune 500"
         },
         {
-          "description": "Valuation following secondary share sale. One source mentions $65 billion valuation (WX2OYTTS9E) following mid-2025 secondary share sale, and another mentions $60 billion (WX5SAWKZ5D). Most recent reliable figure is $42 billion from May 2026 sources.",
+          "description": "Valuation following secondary share sale. One source mentions $65 billion valuation following mid-2025 secondary share sale, and another mentions $60 billion. Most recent reliable figure is $42 billion from May 2026 sources.",
           "source": [
             "https://tech-insider.org/au/australian-tech-startups-2026/"
           ],
@@ -1542,7 +1541,7 @@ Returns a JSON object with the following structure:
           "value": "USD 42 billion"
         },
         {
-          "description": "Annualized revenue for 2025. Earlier sources (2024) reported $2 billion annualized revenue (WXC96BKVMJ, WXFKGSDOYR). Some sources cite $3 billion (WX25REZY0P).",
+          "description": "Annualized revenue for 2025. Earlier sources (2024) reported $2 billion annualized revenue. Some sources cite $3 billion.",
           "source": [
             "https://www.01net.com/actualites/canva-complete-son-tour-des-ia-apres-claude-et-chatgpt-cest-gemini-qui-fait-son-entree.html"
           ],
@@ -1642,23 +1641,6 @@ Returns a JSON object with the following structure:
         }
       ],
       "partnership": [
-        {
-          "announced_on": {
-            "day": 29,
-            "month": 5,
-            "year": 2026
-          },
-          "description": "Marketing app integration for email marketing automation connected with Canva design capabilities.",
-          "name": "Klaviyo",
-          "source": [
-            "https://www.digitaltrends.com/computing/canva-adds-new-editing-tools-payments-and-previews-to-save-you-from-embarrassing-crops/"
-          ],
-          "strategic_tier": "Core",
-          "type": {
-            "code": "technology_integration",
-            "label": "Technology or Integration"
-          }
-        },
         {
           "announced_on": {
             "day": 25,
@@ -1965,6 +1947,23 @@ Returns a JSON object with the following structure:
           },
           "description": "Direct publishing integration for Meta Ads (Facebook, Instagram) within Canva's marketing platform workflow.",
           "name": "Meta Ads",
+          "source": [
+            "https://www.digitaltrends.com/computing/canva-adds-new-editing-tools-payments-and-previews-to-save-you-from-embarrassing-crops/"
+          ],
+          "strategic_tier": "Core",
+          "type": {
+            "code": "technology_integration",
+            "label": "Technology or Integration"
+          }
+        },
+        {
+          "announced_on": {
+            "day": 29,
+            "month": 5,
+            "year": 2026
+          },
+          "description": "Marketing app integration for email marketing automation connected with Canva design capabilities.",
+          "name": "Klaviyo",
           "source": [
             "https://www.digitaltrends.com/computing/canva-adds-new-editing-tools-payments-and-previews-to-save-you-from-embarrassing-crops/"
           ],
@@ -2700,11 +2699,7 @@ Returns a JSON object with the following structure:
         "description": "Canva offers a developer platform and API for building integrations and applications. The Canva Developers platform (canva.com/developers/) enables third-party integrations and app development. Canva also participates in the Model Context Protocol (MCP) ecosystem, with Canva supporting Enterprise-Managed Authorization (EMA) extensions for zero-touch AI agent authentication through Okta's Cross App Access framework.",
         "docs_url": "https://www.canva.com/developers/",
         "has_api": true,
-        "has_mcp": true,
-        "sdk_language": {
-          "code": "not_specified",
-          "label": "Not specified"
-        }
+        "has_mcp": true
       },
       "integration": [
         {
@@ -2902,7 +2897,7 @@ Returns a JSON object with the following structure:
           "title": "Google Gemini",
           "type": {
             "code": "ai_ml",
-            "label": "ai_ml"
+            "label": "AI/ ML"
           }
         },
         {
@@ -2913,7 +2908,7 @@ Returns a JSON object with the following structure:
           "title": "Anthropic Claude",
           "type": {
             "code": "ai_ml",
-            "label": "ai_ml"
+            "label": "AI/ ML"
           }
         },
         {
@@ -2956,8 +2951,8 @@ Returns a JSON object with the following structure:
           ],
           "title": "DocuSign",
           "type": {
-            "code": "other",
-            "label": "Other"
+            "code": "others",
+            "label": "Others"
           }
         },
         {
@@ -2968,7 +2963,7 @@ Returns a JSON object with the following structure:
           "title": "Google Workspace",
           "type": {
             "code": "productivity",
-            "label": "productivity"
+            "label": "Productivity/ Collaboration"
           }
         },
         {
@@ -2979,7 +2974,7 @@ Returns a JSON object with the following structure:
           "title": "Microsoft 365",
           "type": {
             "code": "productivity",
-            "label": "productivity"
+            "label": "Productivity/ Collaboration"
           }
         },
         {
@@ -2989,8 +2984,8 @@ Returns a JSON object with the following structure:
           ],
           "title": "Perplexity Computer",
           "type": {
-            "code": "other",
-            "label": "Other"
+            "code": "others",
+            "label": "Others"
           }
         },
         {
@@ -3000,8 +2995,8 @@ Returns a JSON object with the following structure:
           ],
           "title": "Land id",
           "type": {
-            "code": "other",
-            "label": "Other"
+            "code": "others",
+            "label": "Others"
           }
         },
         {
@@ -3011,8 +3006,8 @@ Returns a JSON object with the following structure:
           ],
           "title": "Lofty",
           "type": {
-            "code": "other",
-            "label": "Other"
+            "code": "others",
+            "label": "Others"
           }
         }
       ],
@@ -3159,7 +3154,7 @@ Returns a JSON object with the following structure:
         }
       ],
       "ai_maturity": {
-        "scale": 0
+        "label": "Unknown"
       },
       "app_detail": {
         "has_app": true,
@@ -3277,7 +3272,7 @@ Returns a JSON object with the following structure:
           "month": 6,
           "year": 2026
         },
-        "total_funding": 2533450682
+        "total_funding_usd": 2533450682
       },
       "funding_rounds": [
         {
@@ -3300,7 +3295,7 @@ Returns a JSON object with the following structure:
             }
           ],
           "round": {
-            "code": "Private equity round",
+            "code": "private_equity_round",
             "label": "Private equity round"
           },
           "total_investors": 1
@@ -3313,15 +3308,6 @@ Returns a JSON object with the following structure:
           },
           "id": 5660,
           "investors": [
-            {
-              "lead_investor": false,
-              "name": "Dominari Securities",
-              "type": {
-                "code": "private",
-                "label": "Private"
-              },
-              "uuid": "0005rgw"
-            },
             {
               "lead_investor": true,
               "name": "Fidelity",
@@ -3339,155 +3325,214 @@ Returns a JSON object with the following structure:
                 "label": "Private"
               },
               "uuid": "0000bcq"
+            },
+            {
+              "lead_investor": false,
+              "name": "Dominari Securities",
+              "type": {
+                "code": "private",
+                "label": "Private"
+              },
+              "uuid": "0005rgw"
             }
           ],
           "round": {
-            "code": "Secondary Market",
+            "code": "secondary_market",
             "label": "Secondary Market"
           },
           "total_investors": 3
         },
         {
-          "amount_usd": 85000000,
           "date": {
-            "day": 16,
+            "day": 31,
             "month": 10,
-            "year": 2019
+            "year": 2024
           },
-          "id": 255820,
-          "investors": [
-            {
-              "lead_investor": false,
-              "name": "Bessemer Venture Partners",
-              "type": {
-                "code": "private",
-                "label": "Private"
-              },
-              "uuid": "000003h"
-            },
-            {
-              "lead_investor": false,
-              "name": "Blackbird Ventures",
-              "type": {
-                "code": "private",
-                "label": "Private"
-              },
-              "uuid": "000007c"
-            },
-            {
-              "lead_investor": true,
-              "name": "Bond",
-              "type": {
-                "code": "private",
-                "label": "Private"
-              },
-              "uuid": "000003z"
-            },
-            {
-              "lead_investor": false,
-              "name": "Felicis",
-              "type": {
-                "code": "private",
-                "label": "Private"
-              },
-              "uuid": "00002ta"
-            },
-            {
-              "lead_investor": false,
-              "name": "General Catalyst",
-              "type": {
-                "code": "private",
-                "label": "Private"
-              },
-              "uuid": "000000r"
-            },
-            {
-              "lead_investor": false,
-              "name": "HSG",
-              "type": {
-                "code": "private",
-                "label": "Private"
-              },
-              "uuid": "0000093"
-            }
-          ],
-          "pre_money_valuation": 3115000000,
+          "id": 228892,
           "round": {
-            "code": "Series E",
-            "label": "Series E"
-          },
-          "total_investors": 6
+            "code": "secondary_market",
+            "label": "Secondary Market"
+          }
         },
         {
-          "amount_usd": 60000000,
+          "amount_usd": 328506478,
           "date": {
-            "day": 22,
-            "month": 6,
-            "year": 2020
+            "day": 2,
+            "month": 5,
+            "year": 2024
           },
-          "id": 248709,
+          "id": 273430,
+          "investors": [
+            {
+              "lead_investor": true,
+              "name": "Quadrant Private Equity",
+              "type": {
+                "code": "private",
+                "label": "Private"
+              },
+              "uuid": "0000qao"
+            },
+            {
+              "lead_investor": false,
+              "name": "Premji Invest",
+              "type": {
+                "code": "private",
+                "label": "Private"
+              },
+              "uuid": "00021co"
+            }
+          ],
+          "round": {
+            "code": "secondary_market",
+            "label": "Secondary Market"
+          },
+          "total_investors": 2
+        },
+        {
+          "amount_usd": 8000000,
+          "date": {
+            "day": 1,
+            "month": 5,
+            "year": 2024
+          },
+          "id": 271642,
+          "investors": [
+            {
+              "lead_investor": true,
+              "name": "Stack Capital",
+              "type": {
+                "code": "public",
+                "label": "Public"
+              },
+              "uuid": "0000puh"
+            }
+          ],
+          "news": [
+            {
+              "publisher": "stackcapitalgroup",
+              "title": "Stack Capital invested 8 million USD into Canva, a global online visual communication platform, which reported having over 170 million monthly active users across 190 countries and annualized revenues exceeding 2 billion USD.",
+              "url": "https://www.stackcapitalgroup.com/stack-capital-invests-8-million-usd-into-canva"
+            },
+            {
+              "publisher": "globenewswire",
+              "title": "Stack Capital invested $8 million USD into Canva, a global online visual communication platform, as part of its private investment activities. Canva has over 170 million monthly active users globally, with revenues exceeding $2 billion annually, and counts major brands among its enterprise clients.",
+              "url": "https://www.globenewswire.com/news-release/2024/05/01/2873118/0/en/stack-capital-invests-8-million-usd-into-canva.html"
+            }
+          ],
+          "round": {
+            "code": "private_equity_round",
+            "label": "Private equity round"
+          },
+          "total_investors": 1
+        },
+        {
+          "date": {
+            "day": 15,
+            "month": 2,
+            "year": 2024
+          },
+          "id": 303503,
           "investors": [
             {
               "lead_investor": false,
-              "name": "Bessemer Venture Partners",
+              "name": "March Capital",
               "type": {
                 "code": "private",
                 "label": "Private"
               },
-              "uuid": "000003h"
-            },
-            {
-              "lead_investor": true,
-              "name": "Blackbird Ventures",
-              "type": {
-                "code": "private",
-                "label": "Private"
-              },
-              "uuid": "000007c"
+              "uuid": "000086d"
             },
             {
               "lead_investor": false,
-              "name": "Bond",
+              "name": "Ventioneers",
               "type": {
                 "code": "private",
                 "label": "Private"
               },
-              "uuid": "000003z"
-            },
-            {
-              "lead_investor": false,
-              "name": "Felicis",
-              "type": {
-                "code": "private",
-                "label": "Private"
-              },
-              "uuid": "00002ta"
-            },
-            {
-              "lead_investor": false,
-              "name": "General Catalyst",
-              "type": {
-                "code": "private",
-                "label": "Private"
-              },
-              "uuid": "000000r"
-            },
-            {
-              "lead_investor": true,
-              "name": "HSG",
-              "type": {
-                "code": "private",
-                "label": "Private"
-              },
-              "uuid": "0000093"
+              "uuid": "0004ho3"
             }
           ],
-          "pre_money_valuation": 5940000000,
           "round": {
-            "code": "Series Unknown",
+            "code": "series_unknown",
             "label": "Series Unknown"
           },
-          "total_investors": 6
+          "total_investors": 2
+        },
+        {
+          "amount_usd": 1599389204,
+          "date": {
+            "day": 18,
+            "month": 1,
+            "year": 2024
+          },
+          "id": 655825,
+          "investors": [
+            {
+              "lead_investor": false,
+              "name": "Irving Investors",
+              "type": {
+                "code": "private",
+                "label": "Private"
+              },
+              "uuid": "0000myl"
+            },
+            {
+              "lead_investor": false,
+              "name": "Arrowshare Ventures",
+              "type": {
+                "code": "private",
+                "label": "Private"
+              },
+              "uuid": "0000qyd"
+            }
+          ],
+          "round": {
+            "code": "secondary_market",
+            "label": "Secondary Market"
+          },
+          "total_investors": 2
+        },
+        {
+          "date": {
+            "day": 8,
+            "month": 8,
+            "year": 2023
+          },
+          "id": 248031,
+          "investors": [
+            {
+              "lead_investor": true,
+              "name": "Coatue",
+              "type": {
+                "code": "private",
+                "label": "Private"
+              },
+              "uuid": "00000fs"
+            },
+            {
+              "lead_investor": true,
+              "name": "ICONIQ Growth",
+              "type": {
+                "code": "private",
+                "label": "Private"
+              },
+              "uuid": "00002oq"
+            },
+            {
+              "lead_investor": false,
+              "name": "Athletic Ventures",
+              "type": {
+                "code": "private",
+                "label": "Private"
+              },
+              "uuid": "0007nnf"
+            }
+          ],
+          "round": {
+            "code": "secondary_market",
+            "label": "Secondary Market"
+          },
+          "total_investors": 3
         },
         {
           "amount_usd": 200000000,
@@ -3500,12 +3545,12 @@ Returns a JSON object with the following structure:
           "investors": [
             {
               "lead_investor": false,
-              "name": "Airtree Ventures",
+              "name": "Franklin Templeton",
               "type": {
                 "code": "private",
                 "label": "Private"
               },
-              "uuid": "00002gz"
+              "uuid": "000000m"
             },
             {
               "lead_investor": false,
@@ -3527,12 +3572,21 @@ Returns a JSON object with the following structure:
             },
             {
               "lead_investor": false,
-              "name": "Dragoneer Investment Group",
+              "name": "K5 Global",
               "type": {
                 "code": "private",
                 "label": "Private"
               },
-              "uuid": "00009mu"
+              "uuid": "00000jb"
+            },
+            {
+              "lead_investor": false,
+              "name": "Airtree Ventures",
+              "type": {
+                "code": "private",
+                "label": "Private"
+              },
+              "uuid": "00002gz"
             },
             {
               "lead_investor": false,
@@ -3544,13 +3598,22 @@ Returns a JSON object with the following structure:
               "uuid": "00002ta"
             },
             {
+              "lead_investor": true,
+              "name": "T. Rowe Price",
+              "type": {
+                "code": "public",
+                "label": "Public"
+              },
+              "uuid": "00006tx"
+            },
+            {
               "lead_investor": false,
-              "name": "Franklin Templeton",
+              "name": "Dragoneer Investment Group",
               "type": {
                 "code": "private",
                 "label": "Private"
               },
-              "uuid": "000000m"
+              "uuid": "00009mu"
             },
             {
               "lead_investor": false,
@@ -3563,30 +3626,12 @@ Returns a JSON object with the following structure:
             },
             {
               "lead_investor": false,
-              "name": "K5 Global",
-              "type": {
-                "code": "private",
-                "label": "Private"
-              },
-              "uuid": "00000jb"
-            },
-            {
-              "lead_investor": false,
               "name": "Sequoia Capital Global Equities",
               "type": {
                 "code": "private",
                 "label": "Private"
               },
               "uuid": "0007uwd"
-            },
-            {
-              "lead_investor": true,
-              "name": "T. Rowe Price",
-              "type": {
-                "code": "public",
-                "label": "Public"
-              },
-              "uuid": "00006tx"
             }
           ],
           "news": [
@@ -3613,10 +3658,294 @@ Returns a JSON object with the following structure:
           ],
           "pre_money_valuation": 39800000000,
           "round": {
-            "code": "Series F",
+            "code": "series_f",
             "label": "Series F"
           },
           "total_investors": 11
+        },
+        {
+          "amount_usd": 71000000,
+          "date": {
+            "day": 6,
+            "month": 4,
+            "year": 2021
+          },
+          "id": 302586,
+          "investors": [
+            {
+              "lead_investor": false,
+              "name": "Blackbird Ventures",
+              "type": {
+                "code": "private",
+                "label": "Private"
+              },
+              "uuid": "000007c"
+            },
+            {
+              "lead_investor": true,
+              "name": "T. Rowe Price",
+              "type": {
+                "code": "public",
+                "label": "Public"
+              },
+              "uuid": "00006tx"
+            },
+            {
+              "lead_investor": true,
+              "name": "Dragoneer Investment Group",
+              "type": {
+                "code": "private",
+                "label": "Private"
+              },
+              "uuid": "00009mu"
+            },
+            {
+              "lead_investor": false,
+              "name": "Skip Capital",
+              "type": {
+                "code": "private",
+                "label": "Private"
+              },
+              "uuid": "0003abe"
+            }
+          ],
+          "pre_money_valuation": 14929000000,
+          "round": {
+            "code": "series_unknown",
+            "label": "Series Unknown"
+          },
+          "total_investors": 4
+        },
+        {
+          "amount_usd": 60000000,
+          "date": {
+            "day": 22,
+            "month": 6,
+            "year": 2020
+          },
+          "id": 248709,
+          "investors": [
+            {
+              "lead_investor": false,
+              "name": "General Catalyst",
+              "type": {
+                "code": "private",
+                "label": "Private"
+              },
+              "uuid": "000000r"
+            },
+            {
+              "lead_investor": false,
+              "name": "Bessemer Venture Partners",
+              "type": {
+                "code": "private",
+                "label": "Private"
+              },
+              "uuid": "000003h"
+            },
+            {
+              "lead_investor": false,
+              "name": "Bond",
+              "type": {
+                "code": "private",
+                "label": "Private"
+              },
+              "uuid": "000003z"
+            },
+            {
+              "lead_investor": true,
+              "name": "Blackbird Ventures",
+              "type": {
+                "code": "private",
+                "label": "Private"
+              },
+              "uuid": "000007c"
+            },
+            {
+              "lead_investor": true,
+              "name": "HSG",
+              "type": {
+                "code": "private",
+                "label": "Private"
+              },
+              "uuid": "0000093"
+            },
+            {
+              "lead_investor": false,
+              "name": "Felicis",
+              "type": {
+                "code": "private",
+                "label": "Private"
+              },
+              "uuid": "00002ta"
+            },
+            {
+              "lead_investor": true,
+              "name": "HSG",
+              "type": {
+                "code": "private",
+                "label": "Private"
+              },
+              "uuid": "0006a8j"
+            },
+            {
+              "lead_investor": true,
+              "name": "HSG",
+              "type": {
+                "code": "private",
+                "label": "Private"
+              },
+              "uuid": "00c7l18"
+            }
+          ],
+          "pre_money_valuation": 5940000000,
+          "round": {
+            "code": "series_unknown",
+            "label": "Series Unknown"
+          },
+          "total_investors": 6
+        },
+        {
+          "amount_usd": 85000000,
+          "date": {
+            "day": 16,
+            "month": 10,
+            "year": 2019
+          },
+          "id": 255820,
+          "investors": [
+            {
+              "lead_investor": false,
+              "name": "General Catalyst",
+              "type": {
+                "code": "private",
+                "label": "Private"
+              },
+              "uuid": "000000r"
+            },
+            {
+              "lead_investor": false,
+              "name": "Bessemer Venture Partners",
+              "type": {
+                "code": "private",
+                "label": "Private"
+              },
+              "uuid": "000003h"
+            },
+            {
+              "lead_investor": true,
+              "name": "Bond",
+              "type": {
+                "code": "private",
+                "label": "Private"
+              },
+              "uuid": "000003z"
+            },
+            {
+              "lead_investor": false,
+              "name": "Blackbird Ventures",
+              "type": {
+                "code": "private",
+                "label": "Private"
+              },
+              "uuid": "000007c"
+            },
+            {
+              "lead_investor": false,
+              "name": "HSG",
+              "type": {
+                "code": "private",
+                "label": "Private"
+              },
+              "uuid": "0000093"
+            },
+            {
+              "lead_investor": false,
+              "name": "Felicis",
+              "type": {
+                "code": "private",
+                "label": "Private"
+              },
+              "uuid": "00002ta"
+            },
+            {
+              "lead_investor": false,
+              "name": "HSG",
+              "type": {
+                "code": "private",
+                "label": "Private"
+              },
+              "uuid": "0006a8j"
+            },
+            {
+              "lead_investor": false,
+              "name": "HSG",
+              "type": {
+                "code": "private",
+                "label": "Private"
+              },
+              "uuid": "00c7l18"
+            }
+          ],
+          "pre_money_valuation": 3115000000,
+          "round": {
+            "code": "series_e",
+            "label": "Series E"
+          },
+          "total_investors": 6
+        },
+        {
+          "amount_usd": 70000000,
+          "date": {
+            "day": 20,
+            "month": 5,
+            "year": 2019
+          },
+          "id": 243014,
+          "investors": [
+            {
+              "lead_investor": true,
+              "name": "General Catalyst",
+              "type": {
+                "code": "private",
+                "label": "Private"
+              },
+              "uuid": "000000r"
+            },
+            {
+              "lead_investor": true,
+              "name": "Bond",
+              "type": {
+                "code": "private",
+                "label": "Private"
+              },
+              "uuid": "000003z"
+            },
+            {
+              "lead_investor": false,
+              "name": "Blackbird Ventures",
+              "type": {
+                "code": "private",
+                "label": "Private"
+              },
+              "uuid": "000007c"
+            },
+            {
+              "lead_investor": true,
+              "name": "Felicis",
+              "type": {
+                "code": "private",
+                "label": "Private"
+              },
+              "uuid": "00002ta"
+            }
+          ],
+          "pre_money_valuation": 2430000000,
+          "round": {
+            "code": "series_d",
+            "label": "Series D"
+          },
+          "total_investors": 4
         },
         {
           "amount_usd": 40000000,
@@ -3635,6 +3964,15 @@ Returns a JSON object with the following structure:
                 "label": "Private"
               },
               "uuid": "000007c"
+            },
+            {
+              "lead_investor": true,
+              "name": "HSG",
+              "type": {
+                "code": "private",
+                "label": "Private"
+              },
+              "uuid": "0000093"
             },
             {
               "lead_investor": false,
@@ -3661,7 +3999,7 @@ Returns a JSON object with the following structure:
                 "code": "private",
                 "label": "Private"
               },
-              "uuid": "0000093"
+              "uuid": "0006a8j"
             },
             {
               "lead_investor": false,
@@ -3671,6 +4009,15 @@ Returns a JSON object with the following structure:
                 "label": "Private"
               },
               "uuid": "000ag7j"
+            },
+            {
+              "lead_investor": true,
+              "name": "HSG",
+              "type": {
+                "code": "private",
+                "label": "Private"
+              },
+              "uuid": "00c7l18"
             },
             {
               "lead_investor": false,
@@ -3684,7 +4031,7 @@ Returns a JSON object with the following structure:
           ],
           "pre_money_valuation": 960000000,
           "round": {
-            "code": "Series C",
+            "code": "series_c",
             "label": "Series C"
           },
           "total_investors": 6
@@ -3719,63 +4066,10 @@ Returns a JSON object with the following structure:
           ],
           "pre_money_valuation": 330000000,
           "round": {
-            "code": "Series B",
+            "code": "series_b",
             "label": "Series B"
           },
           "total_investors": 3
-        },
-        {
-          "amount_usd": 70000000,
-          "date": {
-            "day": 20,
-            "month": 5,
-            "year": 2019
-          },
-          "id": 243014,
-          "investors": [
-            {
-              "lead_investor": false,
-              "name": "Blackbird Ventures",
-              "type": {
-                "code": "private",
-                "label": "Private"
-              },
-              "uuid": "000007c"
-            },
-            {
-              "lead_investor": true,
-              "name": "Bond",
-              "type": {
-                "code": "private",
-                "label": "Private"
-              },
-              "uuid": "000003z"
-            },
-            {
-              "lead_investor": true,
-              "name": "Felicis",
-              "type": {
-                "code": "private",
-                "label": "Private"
-              },
-              "uuid": "00002ta"
-            },
-            {
-              "lead_investor": true,
-              "name": "General Catalyst",
-              "type": {
-                "code": "private",
-                "label": "Private"
-              },
-              "uuid": "000000r"
-            }
-          ],
-          "pre_money_valuation": 2430000000,
-          "round": {
-            "code": "Series D",
-            "label": "Series D"
-          },
-          "total_investors": 4
         },
         {
           "amount_usd": 15000000,
@@ -3825,97 +4119,10 @@ Returns a JSON object with the following structure:
           ],
           "pre_money_valuation": 150000000,
           "round": {
-            "code": "Series A",
+            "code": "series_a",
             "label": "Series A"
           },
           "total_investors": 7
-        },
-        {
-          "amount_usd": 71000000,
-          "date": {
-            "day": 6,
-            "month": 4,
-            "year": 2021
-          },
-          "id": 302586,
-          "investors": [
-            {
-              "lead_investor": false,
-              "name": "Blackbird Ventures",
-              "type": {
-                "code": "private",
-                "label": "Private"
-              },
-              "uuid": "000007c"
-            },
-            {
-              "lead_investor": true,
-              "name": "Dragoneer Investment Group",
-              "type": {
-                "code": "private",
-                "label": "Private"
-              },
-              "uuid": "00009mu"
-            },
-            {
-              "lead_investor": false,
-              "name": "Skip Capital",
-              "type": {
-                "code": "private",
-                "label": "Private"
-              },
-              "uuid": "0003abe"
-            },
-            {
-              "lead_investor": true,
-              "name": "T. Rowe Price",
-              "type": {
-                "code": "public",
-                "label": "Public"
-              },
-              "uuid": "00006tx"
-            }
-          ],
-          "pre_money_valuation": 14929000000,
-          "round": {
-            "code": "Series Unknown",
-            "label": "Series Unknown"
-          },
-          "total_investors": 4
-        },
-        {
-          "amount_usd": 1599389204,
-          "date": {
-            "day": 18,
-            "month": 1,
-            "year": 2024
-          },
-          "id": 655825,
-          "investors": [
-            {
-              "lead_investor": false,
-              "name": "Arrowshare Ventures",
-              "type": {
-                "code": "private",
-                "label": "Private"
-              },
-              "uuid": "0000qyd"
-            },
-            {
-              "lead_investor": false,
-              "name": "Irving Investors",
-              "type": {
-                "code": "private",
-                "label": "Private"
-              },
-              "uuid": "0000myl"
-            }
-          ],
-          "round": {
-            "code": "Secondary Market",
-            "label": "Secondary Market"
-          },
-          "total_investors": 2
         },
         {
           "amount_usd": 6000000,
@@ -3928,6 +4135,15 @@ Returns a JSON object with the following structure:
           "investors": [
             {
               "lead_investor": false,
+              "name": "Blackbird Ventures",
+              "type": {
+                "code": "private",
+                "label": "Private"
+              },
+              "uuid": "000007c"
+            },
+            {
+              "lead_investor": false,
               "name": "Airtree Ventures",
               "type": {
                 "code": "private",
@@ -3936,13 +4152,22 @@ Returns a JSON object with the following structure:
               "uuid": "00002gz"
             },
             {
-              "lead_investor": false,
-              "name": "Blackbird Ventures",
+              "lead_investor": true,
+              "name": "Matrix",
               "type": {
                 "code": "private",
                 "label": "Private"
               },
-              "uuid": "000007c"
+              "uuid": "00004t9"
+            },
+            {
+              "lead_investor": false,
+              "name": "Shasta Ventures",
+              "type": {
+                "code": "private",
+                "label": "Private"
+              },
+              "uuid": "00008up"
             },
             {
               "lead_investor": false,
@@ -3952,303 +4177,13 @@ Returns a JSON object with the following structure:
                 "label": "Private"
               },
               "uuid": "0000jdb"
-            },
-            {
-              "lead_investor": true,
-              "name": "Matrix",
-              "type": {
-                "code": "private",
-                "label": "Private"
-              },
-              "uuid": "00004t9"
-            },
-            {
-              "lead_investor": false,
-              "name": "Shasta Ventures",
-              "type": {
-                "code": "private",
-                "label": "Private"
-              },
-              "uuid": "00008up"
             }
           ],
           "round": {
-            "code": "Series A",
+            "code": "series_a",
             "label": "Series A"
           },
           "total_investors": 5
-        },
-        {
-          "date": {
-            "day": 8,
-            "month": 8,
-            "year": 2023
-          },
-          "id": 248031,
-          "investors": [
-            {
-              "lead_investor": false,
-              "name": "Athletic Ventures",
-              "type": {
-                "code": "private",
-                "label": "Private"
-              },
-              "uuid": "0007nnf"
-            },
-            {
-              "lead_investor": true,
-              "name": "Coatue",
-              "type": {
-                "code": "private",
-                "label": "Private"
-              },
-              "uuid": "00000fs"
-            },
-            {
-              "lead_investor": true,
-              "name": "ICONIQ Growth",
-              "type": {
-                "code": "private",
-                "label": "Private"
-              },
-              "uuid": "00002oq"
-            }
-          ],
-          "round": {
-            "code": "Secondary Market",
-            "label": "Secondary Market"
-          },
-          "total_investors": 3
-        },
-        {
-          "amount_usd": 328506478,
-          "date": {
-            "day": 2,
-            "month": 5,
-            "year": 2024
-          },
-          "id": 273430,
-          "investors": [
-            {
-              "lead_investor": false,
-              "name": "Premji Invest",
-              "type": {
-                "code": "private",
-                "label": "Private"
-              },
-              "uuid": "00021co"
-            },
-            {
-              "lead_investor": true,
-              "name": "Quadrant Private Equity",
-              "type": {
-                "code": "private",
-                "label": "Private"
-              },
-              "uuid": "0000qao"
-            }
-          ],
-          "round": {
-            "code": "Secondary Market",
-            "label": "Secondary Market"
-          },
-          "total_investors": 2
-        },
-        {
-          "amount_usd": 250000,
-          "date": {
-            "day": 20,
-            "month": 6,
-            "year": 2014
-          },
-          "id": 593614,
-          "round": {
-            "code": "Debt-Funded",
-            "label": "Debt-Funded"
-          }
-        },
-        {
-          "amount_usd": 8000000,
-          "date": {
-            "day": 1,
-            "month": 5,
-            "year": 2024
-          },
-          "id": 271642,
-          "investors": [
-            {
-              "lead_investor": true,
-              "name": "Stack Capital",
-              "type": {
-                "code": "public",
-                "label": "Public"
-              },
-              "uuid": "0000puh"
-            }
-          ],
-          "news": [
-            {
-              "publisher": "stackcapitalgroup",
-              "title": "Stack Capital invested 8 million USD into Canva, a global online visual communication platform, which reported having over 170 million monthly active users across 190 countries and annualized revenues exceeding 2 billion USD.",
-              "url": "https://www.stackcapitalgroup.com/stack-capital-invests-8-million-usd-into-canva"
-            },
-            {
-              "publisher": "globenewswire",
-              "title": "Stack Capital invested $8 million USD into Canva, a global online visual communication platform, as part of its private investment activities. Canva has over 170 million monthly active users globally, with revenues exceeding $2 billion annually, and counts major brands among its enterprise clients.",
-              "url": "https://www.globenewswire.com/news-release/2024/05/01/2873118/0/en/stack-capital-invests-8-million-usd-into-canva.html"
-            }
-          ],
-          "round": {
-            "code": "Private equity round",
-            "label": "Private equity round"
-          },
-          "total_investors": 1
-        },
-        {
-          "date": {
-            "day": 11,
-            "month": 6,
-            "year": 2013
-          },
-          "id": 314523,
-          "round": {
-            "code": "Convertible note",
-            "label": "Convertible note"
-          },
-          "total_investors": 1
-        },
-        {
-          "amount_usd": 6600000,
-          "date": {
-            "day": 19,
-            "month": 3,
-            "year": 2013
-          },
-          "id": 222232,
-          "investors": [
-            {
-              "lead_investor": false,
-              "name": "500 Global",
-              "type": {
-                "code": "private",
-                "label": "Private"
-              },
-              "uuid": "000000o"
-            },
-            {
-              "lead_investor": false,
-              "name": "Blackbird Ventures",
-              "type": {
-                "code": "private",
-                "label": "Private"
-              },
-              "uuid": "000007c"
-            },
-            {
-              "lead_investor": false,
-              "name": "Elevation Capital",
-              "type": {
-                "code": "private",
-                "label": "Private"
-              },
-              "uuid": "000pwrr"
-            },
-            {
-              "lead_investor": false,
-              "name": "Founders Fund",
-              "type": {
-                "code": "private",
-                "label": "Private"
-              },
-              "uuid": "00000g6"
-            },
-            {
-              "lead_investor": false,
-              "name": "InterWest Partners",
-              "type": {
-                "code": "private",
-                "label": "Private"
-              },
-              "uuid": "003vmhk"
-            },
-            {
-              "lead_investor": false,
-              "name": "Investible",
-              "type": {
-                "code": "private",
-                "label": "Private"
-              },
-              "uuid": "00006yj"
-            },
-            {
-              "lead_investor": false,
-              "name": "Matrix",
-              "type": {
-                "code": "private",
-                "label": "Private"
-              },
-              "uuid": "00004t9"
-            },
-            {
-              "lead_investor": false,
-              "name": "Shasta Ventures",
-              "type": {
-                "code": "private",
-                "label": "Private"
-              },
-              "uuid": "00008up"
-            },
-            {
-              "lead_investor": false,
-              "name": "Square Peg Capital",
-              "type": {
-                "code": "private",
-                "label": "Private"
-              },
-              "uuid": "0000z9q"
-            }
-          ],
-          "round": {
-            "code": "Seed",
-            "label": "Seed"
-          },
-          "total_investors": 16
-        },
-        {
-          "date": {
-            "day": 31,
-            "month": 10,
-            "year": 2024
-          },
-          "id": 228892,
-          "round": {
-            "code": "Secondary Market",
-            "label": "Secondary Market"
-          }
-        },
-        {
-          "date": {
-            "day": 15,
-            "month": 2,
-            "year": 2024
-          },
-          "id": 303503,
-          "investors": [
-            {
-              "lead_investor": false,
-              "name": "Ventioneers",
-              "type": {
-                "code": "private",
-                "label": "Private"
-              },
-              "uuid": "0004ho3"
-            }
-          ],
-          "round": {
-            "code": "Series Unknown",
-            "label": "Series Unknown"
-          },
-          "total_investors": 1
         },
         {
           "amount_usd": 3600000,
@@ -4306,10 +4241,133 @@ Returns a JSON object with the following structure:
             }
           ],
           "round": {
-            "code": "Seed",
+            "code": "seed",
             "label": "Seed"
           },
           "total_investors": 5
+        },
+        {
+          "amount_usd": 250000,
+          "date": {
+            "day": 20,
+            "month": 6,
+            "year": 2014
+          },
+          "id": 593614,
+          "round": {
+            "code": "debt_funded",
+            "label": "Debt-Funded"
+          }
+        },
+        {
+          "date": {
+            "day": 11,
+            "month": 6,
+            "year": 2013
+          },
+          "id": 314523,
+          "round": {
+            "code": "convertible_note",
+            "label": "Convertible note"
+          },
+          "total_investors": 1
+        },
+        {
+          "amount_usd": 6600000,
+          "date": {
+            "day": 19,
+            "month": 3,
+            "year": 2013
+          },
+          "id": 222232,
+          "investors": [
+            {
+              "lead_investor": false,
+              "name": "500 Global",
+              "type": {
+                "code": "private",
+                "label": "Private"
+              },
+              "uuid": "000000o"
+            },
+            {
+              "lead_investor": false,
+              "name": "Blackbird Ventures",
+              "type": {
+                "code": "private",
+                "label": "Private"
+              },
+              "uuid": "000007c"
+            },
+            {
+              "lead_investor": false,
+              "name": "Founders Fund",
+              "type": {
+                "code": "private",
+                "label": "Private"
+              },
+              "uuid": "00000g6"
+            },
+            {
+              "lead_investor": false,
+              "name": "Matrix",
+              "type": {
+                "code": "private",
+                "label": "Private"
+              },
+              "uuid": "00004t9"
+            },
+            {
+              "lead_investor": false,
+              "name": "Investible",
+              "type": {
+                "code": "private",
+                "label": "Private"
+              },
+              "uuid": "00006yj"
+            },
+            {
+              "lead_investor": false,
+              "name": "Shasta Ventures",
+              "type": {
+                "code": "private",
+                "label": "Private"
+              },
+              "uuid": "00008up"
+            },
+            {
+              "lead_investor": false,
+              "name": "Square Peg Capital",
+              "type": {
+                "code": "private",
+                "label": "Private"
+              },
+              "uuid": "0000z9q"
+            },
+            {
+              "lead_investor": false,
+              "name": "Elevation Capital",
+              "type": {
+                "code": "private",
+                "label": "Private"
+              },
+              "uuid": "000pwrr"
+            },
+            {
+              "lead_investor": false,
+              "name": "InterWest Partners",
+              "type": {
+                "code": "private",
+                "label": "Private"
+              },
+              "uuid": "003vmhk"
+            }
+          ],
+          "round": {
+            "code": "seed",
+            "label": "Seed"
+          },
+          "total_investors": 16
         },
         {
           "amount_usd": 105000,
@@ -4320,7 +4378,7 @@ Returns a JSON object with the following structure:
           },
           "id": 318490,
           "round": {
-            "code": "Debt-Funded",
+            "code": "debt_funded",
             "label": "Debt-Funded"
           },
           "total_investors": 1
@@ -4336,7 +4394,7 @@ Returns a JSON object with the following structure:
           "name": "Robinhood Ventures",
           "rounds_participated": [
             {
-              "code": "Private equity round",
+              "code": "private_equity_round",
               "label": "Private equity round"
             }
           ],
@@ -4352,30 +4410,10 @@ Returns a JSON object with the following structure:
             "month": 8,
             "year": 2025
           },
-          "name": "Dominari Securities",
-          "rounds_participated": [
-            {
-              "code": "Secondary Market",
-              "label": "Secondary Market"
-            }
-          ],
-          "type": {
-            "code": "private",
-            "label": "Private"
-          },
-          "uuid": "0005rgw",
-          "website": "http://www.dominarisecurities.com"
-        },
-        {
-          "date_of_entry": {
-            "day": 20,
-            "month": 8,
-            "year": 2025
-          },
           "name": "Fidelity",
           "rounds_participated": [
             {
-              "code": "Secondary Market",
+              "code": "secondary_market",
               "label": "Secondary Market"
             }
           ],
@@ -4395,7 +4433,7 @@ Returns a JSON object with the following structure:
           "name": "J.P. Morgan Asset Management",
           "rounds_participated": [
             {
-              "code": "Secondary Market",
+              "code": "secondary_market",
               "label": "Secondary Market"
             }
           ],
@@ -4408,494 +4446,14 @@ Returns a JSON object with the following structure:
         },
         {
           "date_of_entry": {
-            "day": 16,
-            "month": 10,
-            "year": 2019
-          },
-          "name": "Bessemer Venture Partners",
-          "rounds_participated": [
-            {
-              "code": "Series E",
-              "label": "Series E"
-            },
-            {
-              "code": "Series Unknown",
-              "label": "Series Unknown"
-            },
-            {
-              "code": "Series F",
-              "label": "Series F"
-            }
-          ],
-          "type": {
-            "code": "private",
-            "label": "Private"
-          },
-          "uuid": "000003h",
-          "website": "http://www.bvp.com"
-        },
-        {
-          "date_of_entry": {
-            "day": 19,
-            "month": 3,
-            "year": 2013
-          },
-          "name": "Blackbird Ventures",
-          "rounds_participated": [
-            {
-              "code": "Series E",
-              "label": "Series E"
-            },
-            {
-              "code": "Series Unknown",
-              "label": "Series Unknown"
-            },
-            {
-              "code": "Series F",
-              "label": "Series F"
-            },
-            {
-              "code": "Series C",
-              "label": "Series C"
-            },
-            {
-              "code": "Series B",
-              "label": "Series B"
-            },
-            {
-              "code": "Series D",
-              "label": "Series D"
-            },
-            {
-              "code": "Series A",
-              "label": "Series A"
-            },
-            {
-              "code": "Seed",
-              "label": "Seed"
-            }
-          ],
-          "type": {
-            "code": "private",
-            "label": "Private"
-          },
-          "uuid": "000007c",
-          "website": "http://www.blackbird.vc"
-        },
-        {
-          "date_of_entry": {
             "day": 20,
-            "month": 5,
-            "year": 2019
+            "month": 8,
+            "year": 2025
           },
-          "name": "Bond",
+          "name": "Dominari Securities",
           "rounds_participated": [
             {
-              "code": "Series E",
-              "label": "Series E"
-            },
-            {
-              "code": "Series Unknown",
-              "label": "Series Unknown"
-            },
-            {
-              "code": "Series D",
-              "label": "Series D"
-            }
-          ],
-          "type": {
-            "code": "private",
-            "label": "Private"
-          },
-          "uuid": "000003z",
-          "website": "https://www.bondcap.com"
-        },
-        {
-          "date_of_entry": {
-            "day": 6,
-            "month": 10,
-            "year": 2015
-          },
-          "name": "Felicis",
-          "rounds_participated": [
-            {
-              "code": "Series E",
-              "label": "Series E"
-            },
-            {
-              "code": "Series Unknown",
-              "label": "Series Unknown"
-            },
-            {
-              "code": "Series F",
-              "label": "Series F"
-            },
-            {
-              "code": "Series C",
-              "label": "Series C"
-            },
-            {
-              "code": "Series B",
-              "label": "Series B"
-            },
-            {
-              "code": "Series D",
-              "label": "Series D"
-            },
-            {
-              "code": "Series A",
-              "label": "Series A"
-            }
-          ],
-          "type": {
-            "code": "private",
-            "label": "Private"
-          },
-          "uuid": "00002ta",
-          "website": "http://www.felicis.com"
-        },
-        {
-          "date_of_entry": {
-            "day": 20,
-            "month": 5,
-            "year": 2019
-          },
-          "name": "General Catalyst",
-          "rounds_participated": [
-            {
-              "code": "Series E",
-              "label": "Series E"
-            },
-            {
-              "code": "Series Unknown",
-              "label": "Series Unknown"
-            },
-            {
-              "code": "Series D",
-              "label": "Series D"
-            }
-          ],
-          "type": {
-            "code": "private",
-            "label": "Private"
-          },
-          "uuid": "000000r",
-          "website": "http://www.generalcatalyst.com"
-        },
-        {
-          "date_of_entry": {
-            "day": 9,
-            "month": 1,
-            "year": 2018
-          },
-          "name": "HSG",
-          "rounds_participated": [
-            {
-              "code": "Series E",
-              "label": "Series E"
-            },
-            {
-              "code": "Series Unknown",
-              "label": "Series Unknown"
-            },
-            {
-              "code": "Series C",
-              "label": "Series C"
-            }
-          ],
-          "type": {
-            "code": "private",
-            "label": "Private"
-          },
-          "uuid": "0000093",
-          "website": "https://www.hsgcap.com"
-        },
-        {
-          "date_of_entry": {
-            "day": 3,
-            "month": 4,
-            "year": 2015
-          },
-          "name": "Airtree Ventures",
-          "rounds_participated": [
-            {
-              "code": "Series F",
-              "label": "Series F"
-            },
-            {
-              "code": "Series A",
-              "label": "Series A"
-            }
-          ],
-          "type": {
-            "code": "private",
-            "label": "Private"
-          },
-          "uuid": "00002gz",
-          "website": "http://www.airtree.vc"
-        },
-        {
-          "date_of_entry": {
-            "day": 6,
-            "month": 4,
-            "year": 2021
-          },
-          "name": "Dragoneer Investment Group",
-          "rounds_participated": [
-            {
-              "code": "Series F",
-              "label": "Series F"
-            },
-            {
-              "code": "Series Unknown",
-              "label": "Series Unknown"
-            }
-          ],
-          "type": {
-            "code": "private",
-            "label": "Private"
-          },
-          "uuid": "00009mu",
-          "website": "https://www.dragoneer.com"
-        },
-        {
-          "date_of_entry": {
-            "day": 14,
-            "month": 9,
-            "year": 2021
-          },
-          "name": "Franklin Templeton",
-          "rounds_participated": [
-            {
-              "code": "Series F",
-              "label": "Series F"
-            }
-          ],
-          "type": {
-            "code": "private",
-            "label": "Private"
-          },
-          "uuid": "000000m",
-          "website": "http://www.franklintempleton.com"
-        },
-        {
-          "date_of_entry": {
-            "day": 14,
-            "month": 9,
-            "year": 2021
-          },
-          "name": "Greenoaks",
-          "rounds_participated": [
-            {
-              "code": "Series F",
-              "label": "Series F"
-            }
-          ],
-          "type": {
-            "code": "private",
-            "label": "Private"
-          },
-          "uuid": "0000hm7",
-          "website": "https://www.greenoaks.com"
-        },
-        {
-          "date_of_entry": {
-            "day": 14,
-            "month": 9,
-            "year": 2021
-          },
-          "name": "K5 Global",
-          "rounds_participated": [
-            {
-              "code": "Series F",
-              "label": "Series F"
-            }
-          ],
-          "type": {
-            "code": "private",
-            "label": "Private"
-          },
-          "uuid": "00000jb",
-          "website": "http://www.k5global.com/"
-        },
-        {
-          "date_of_entry": {
-            "day": 14,
-            "month": 9,
-            "year": 2021
-          },
-          "name": "Sequoia Capital Global Equities",
-          "rounds_participated": [
-            {
-              "code": "Series F",
-              "label": "Series F"
-            }
-          ],
-          "type": {
-            "code": "private",
-            "label": "Private"
-          },
-          "uuid": "0007uwd",
-          "website": "https://www.sequoiacap.com/scge"
-        },
-        {
-          "date_of_entry": {
-            "day": 6,
-            "month": 4,
-            "year": 2021
-          },
-          "name": "T. Rowe Price",
-          "rounds_participated": [
-            {
-              "code": "Series F",
-              "label": "Series F"
-            },
-            {
-              "code": "Series Unknown",
-              "label": "Series Unknown"
-            }
-          ],
-          "type": {
-            "code": "public",
-            "label": "Public"
-          },
-          "uuid": "00006tx",
-          "website": "http://www.troweprice.com"
-        },
-        {
-          "date_of_entry": {
-            "day": 9,
-            "month": 1,
-            "year": 2018
-          },
-          "name": "Five V Capital",
-          "rounds_participated": [
-            {
-              "code": "Series C",
-              "label": "Series C"
-            }
-          ],
-          "type": {
-            "code": "private",
-            "label": "Private"
-          },
-          "uuid": "0000blt",
-          "website": "http://www.fivevcapital.com"
-        },
-        {
-          "date_of_entry": {
-            "day": 9,
-            "month": 1,
-            "year": 2018
-          },
-          "name": "Saniel Ventures",
-          "rounds_participated": [
-            {
-              "code": "Series C",
-              "label": "Series C"
-            }
-          ],
-          "type": {
-            "code": "private",
-            "label": "Private"
-          },
-          "uuid": "000ag7j",
-          "website": "https://saniel.vc"
-        },
-        {
-          "date_of_entry": {
-            "day": 9,
-            "month": 1,
-            "year": 2018
-          },
-          "name": "YXS Capital",
-          "rounds_participated": [
-            {
-              "code": "Series C",
-              "label": "Series C"
-            }
-          ],
-          "type": {
-            "code": "private",
-            "label": "Private"
-          },
-          "uuid": "00q5cy2",
-          "website": "https://www.yxscapital.com/"
-        },
-        {
-          "date_of_entry": {
-            "day": 19,
-            "month": 3,
-            "year": 2013
-          },
-          "name": "Matrix",
-          "rounds_participated": [
-            {
-              "code": "Series A",
-              "label": "Series A"
-            },
-            {
-              "code": "Seed",
-              "label": "Seed"
-            }
-          ],
-          "type": {
-            "code": "private",
-            "label": "Private"
-          },
-          "uuid": "00004t9",
-          "website": "https://www.matrix.vc"
-        },
-        {
-          "date_of_entry": {
-            "day": 6,
-            "month": 10,
-            "year": 2015
-          },
-          "name": "Vayner/RSE",
-          "rounds_participated": [
-            {
-              "code": "Series A",
-              "label": "Series A"
-            }
-          ],
-          "type": {
-            "code": "private",
-            "label": "Private"
-          },
-          "uuid": "00095id",
-          "website": "http://vaynerrse.com/"
-        },
-        {
-          "date_of_entry": {
-            "day": 6,
-            "month": 4,
-            "year": 2021
-          },
-          "name": "Skip Capital",
-          "rounds_participated": [
-            {
-              "code": "Series Unknown",
-              "label": "Series Unknown"
-            }
-          ],
-          "type": {
-            "code": "private",
-            "label": "Private"
-          },
-          "uuid": "0003abe",
-          "website": "https://www.skipcapital.com"
-        },
-        {
-          "date_of_entry": {
-            "day": 18,
-            "month": 1,
-            "year": 2024
-          },
-          "name": "Arrowshare Ventures",
-          "rounds_participated": [
-            {
-              "code": "Secondary Market",
+              "code": "secondary_market",
               "label": "Secondary Market"
             }
           ],
@@ -4903,8 +4461,108 @@ Returns a JSON object with the following structure:
             "code": "private",
             "label": "Private"
           },
-          "uuid": "0000qyd",
-          "website": "https://ars.ventures/"
+          "uuid": "0005rgw",
+          "website": "http://www.dominarisecurities.com"
+        },
+        {
+          "date_of_entry": {
+            "day": 2,
+            "month": 5,
+            "year": 2024
+          },
+          "name": "Quadrant Private Equity",
+          "rounds_participated": [
+            {
+              "code": "secondary_market",
+              "label": "Secondary Market"
+            }
+          ],
+          "type": {
+            "code": "private",
+            "label": "Private"
+          },
+          "uuid": "0000qao",
+          "website": "http://quadrantpe.com.au/"
+        },
+        {
+          "date_of_entry": {
+            "day": 2,
+            "month": 5,
+            "year": 2024
+          },
+          "name": "Premji Invest",
+          "rounds_participated": [
+            {
+              "code": "secondary_market",
+              "label": "Secondary Market"
+            }
+          ],
+          "type": {
+            "code": "private",
+            "label": "Private"
+          },
+          "uuid": "00021co",
+          "website": "https://www.premjiinvest.com"
+        },
+        {
+          "date_of_entry": {
+            "day": 1,
+            "month": 5,
+            "year": 2024
+          },
+          "name": "Stack Capital",
+          "rounds_participated": [
+            {
+              "code": "private_equity_round",
+              "label": "Private equity round"
+            }
+          ],
+          "type": {
+            "code": "public",
+            "label": "Public"
+          },
+          "uuid": "0000puh",
+          "website": "https://www.stackcapitalgroup.com"
+        },
+        {
+          "date_of_entry": {
+            "day": 15,
+            "month": 2,
+            "year": 2024
+          },
+          "name": "March Capital",
+          "rounds_participated": [
+            {
+              "code": "series_unknown",
+              "label": "Series Unknown"
+            }
+          ],
+          "type": {
+            "code": "private",
+            "label": "Private"
+          },
+          "uuid": "000086d",
+          "website": "http://www.marchcp.com"
+        },
+        {
+          "date_of_entry": {
+            "day": 15,
+            "month": 2,
+            "year": 2024
+          },
+          "name": "Ventioneers",
+          "rounds_participated": [
+            {
+              "code": "series_unknown",
+              "label": "Series Unknown"
+            }
+          ],
+          "type": {
+            "code": "private",
+            "label": "Private"
+          },
+          "uuid": "0004ho3",
+          "website": "https://www.ventioneers.com"
         },
         {
           "date_of_entry": {
@@ -4915,7 +4573,7 @@ Returns a JSON object with the following structure:
           "name": "Irving Investors",
           "rounds_participated": [
             {
-              "code": "Secondary Market",
+              "code": "secondary_market",
               "label": "Secondary Market"
             }
           ],
@@ -4928,58 +4586,14 @@ Returns a JSON object with the following structure:
         },
         {
           "date_of_entry": {
-            "day": 3,
-            "month": 4,
-            "year": 2015
+            "day": 18,
+            "month": 1,
+            "year": 2024
           },
-          "name": "Global Founders Capital",
+          "name": "Arrowshare Ventures",
           "rounds_participated": [
             {
-              "code": "Series A",
-              "label": "Series A"
-            }
-          ],
-          "type": {
-            "code": "private",
-            "label": "Private"
-          },
-          "uuid": "0000jdb",
-          "website": "https://www.globalfounderscapital.com"
-        },
-        {
-          "date_of_entry": {
-            "day": 19,
-            "month": 3,
-            "year": 2013
-          },
-          "name": "Shasta Ventures",
-          "rounds_participated": [
-            {
-              "code": "Series A",
-              "label": "Series A"
-            },
-            {
-              "code": "Seed",
-              "label": "Seed"
-            }
-          ],
-          "type": {
-            "code": "private",
-            "label": "Private"
-          },
-          "uuid": "00008up",
-          "website": "https://www.shasta.vc"
-        },
-        {
-          "date_of_entry": {
-            "day": 8,
-            "month": 8,
-            "year": 2023
-          },
-          "name": "Athletic Ventures",
-          "rounds_participated": [
-            {
-              "code": "Secondary Market",
+              "code": "secondary_market",
               "label": "Secondary Market"
             }
           ],
@@ -4987,8 +4601,8 @@ Returns a JSON object with the following structure:
             "code": "private",
             "label": "Private"
           },
-          "uuid": "0007nnf",
-          "website": "https://www.athletic.vc"
+          "uuid": "0000qyd",
+          "website": "https://ars.ventures/"
         },
         {
           "date_of_entry": {
@@ -4999,7 +4613,7 @@ Returns a JSON object with the following structure:
           "name": "Coatue",
           "rounds_participated": [
             {
-              "code": "Secondary Market",
+              "code": "secondary_market",
               "label": "Secondary Market"
             }
           ],
@@ -5019,7 +4633,7 @@ Returns a JSON object with the following structure:
           "name": "ICONIQ Growth",
           "rounds_participated": [
             {
-              "code": "Secondary Market",
+              "code": "secondary_market",
               "label": "Secondary Market"
             }
           ],
@@ -5032,14 +4646,14 @@ Returns a JSON object with the following structure:
         },
         {
           "date_of_entry": {
-            "day": 2,
-            "month": 5,
-            "year": 2024
+            "day": 8,
+            "month": 8,
+            "year": 2023
           },
-          "name": "Premji Invest",
+          "name": "Athletic Ventures",
           "rounds_participated": [
             {
-              "code": "Secondary Market",
+              "code": "secondary_market",
               "label": "Secondary Market"
             }
           ],
@@ -5047,48 +4661,492 @@ Returns a JSON object with the following structure:
             "code": "private",
             "label": "Private"
           },
-          "uuid": "00021co",
-          "website": "https://www.premjiinvest.com"
+          "uuid": "0007nnf",
+          "website": "https://www.athletic.vc"
         },
         {
           "date_of_entry": {
-            "day": 2,
-            "month": 5,
-            "year": 2024
+            "day": 14,
+            "month": 9,
+            "year": 2021
           },
-          "name": "Quadrant Private Equity",
+          "name": "Franklin Templeton",
           "rounds_participated": [
             {
-              "code": "Secondary Market",
-              "label": "Secondary Market"
+              "code": "series_f",
+              "label": "Series F"
             }
           ],
           "type": {
             "code": "private",
             "label": "Private"
           },
-          "uuid": "0000qao",
-          "website": "http://quadrantpe.com.au/"
+          "uuid": "000000m",
+          "website": "http://www.franklintempleton.com"
         },
         {
           "date_of_entry": {
-            "day": 1,
-            "month": 5,
-            "year": 2024
+            "day": 14,
+            "month": 9,
+            "year": 2021
           },
-          "name": "Stack Capital",
+          "name": "K5 Global",
           "rounds_participated": [
             {
-              "code": "Private equity round",
-              "label": "Private equity round"
+              "code": "series_f",
+              "label": "Series F"
+            }
+          ],
+          "type": {
+            "code": "private",
+            "label": "Private"
+          },
+          "uuid": "00000jb",
+          "website": "http://www.k5global.com"
+        },
+        {
+          "date_of_entry": {
+            "day": 14,
+            "month": 9,
+            "year": 2021
+          },
+          "name": "Greenoaks",
+          "rounds_participated": [
+            {
+              "code": "series_f",
+              "label": "Series F"
+            }
+          ],
+          "type": {
+            "code": "private",
+            "label": "Private"
+          },
+          "uuid": "0000hm7",
+          "website": "https://www.greenoaks.com"
+        },
+        {
+          "date_of_entry": {
+            "day": 14,
+            "month": 9,
+            "year": 2021
+          },
+          "name": "Sequoia Capital Global Equities",
+          "rounds_participated": [
+            {
+              "code": "series_f",
+              "label": "Series F"
+            }
+          ],
+          "type": {
+            "code": "private",
+            "label": "Private"
+          },
+          "uuid": "0007uwd",
+          "website": "https://www.sequoiacap.com/scge"
+        },
+        {
+          "date_of_entry": {
+            "day": 6,
+            "month": 4,
+            "year": 2021
+          },
+          "name": "T. Rowe Price",
+          "rounds_participated": [
+            {
+              "code": "series_unknown",
+              "label": "Series Unknown"
+            },
+            {
+              "code": "series_f",
+              "label": "Series F"
             }
           ],
           "type": {
             "code": "public",
             "label": "Public"
           },
-          "uuid": "0000puh",
-          "website": "https://www.stackcapitalgroup.com"
+          "uuid": "00006tx",
+          "website": "http://www.troweprice.com"
+        },
+        {
+          "date_of_entry": {
+            "day": 6,
+            "month": 4,
+            "year": 2021
+          },
+          "name": "Dragoneer Investment Group",
+          "rounds_participated": [
+            {
+              "code": "series_unknown",
+              "label": "Series Unknown"
+            },
+            {
+              "code": "series_f",
+              "label": "Series F"
+            }
+          ],
+          "type": {
+            "code": "private",
+            "label": "Private"
+          },
+          "uuid": "00009mu",
+          "website": "https://www.dragoneer.com"
+        },
+        {
+          "date_of_entry": {
+            "day": 6,
+            "month": 4,
+            "year": 2021
+          },
+          "name": "Skip Capital",
+          "rounds_participated": [
+            {
+              "code": "series_unknown",
+              "label": "Series Unknown"
+            }
+          ],
+          "type": {
+            "code": "private",
+            "label": "Private"
+          },
+          "uuid": "0003abe",
+          "website": "https://www.skipcapital.com"
+        },
+        {
+          "date_of_entry": {
+            "day": 16,
+            "month": 10,
+            "year": 2019
+          },
+          "name": "Bessemer Venture Partners",
+          "rounds_participated": [
+            {
+              "code": "series_e",
+              "label": "Series E"
+            },
+            {
+              "code": "series_f",
+              "label": "Series F"
+            },
+            {
+              "code": "series_unknown",
+              "label": "Series Unknown"
+            }
+          ],
+          "type": {
+            "code": "private",
+            "label": "Private"
+          },
+          "uuid": "000003h",
+          "website": "http://www.bvp.com"
+        },
+        {
+          "date_of_entry": {
+            "day": 20,
+            "month": 5,
+            "year": 2019
+          },
+          "name": "General Catalyst",
+          "rounds_participated": [
+            {
+              "code": "series_e",
+              "label": "Series E"
+            },
+            {
+              "code": "series_unknown",
+              "label": "Series Unknown"
+            },
+            {
+              "code": "series_d",
+              "label": "Series D"
+            }
+          ],
+          "type": {
+            "code": "private",
+            "label": "Private"
+          },
+          "uuid": "000000r",
+          "website": "http://www.generalcatalyst.com"
+        },
+        {
+          "date_of_entry": {
+            "day": 20,
+            "month": 5,
+            "year": 2019
+          },
+          "name": "Bond",
+          "rounds_participated": [
+            {
+              "code": "series_e",
+              "label": "Series E"
+            },
+            {
+              "code": "series_unknown",
+              "label": "Series Unknown"
+            },
+            {
+              "code": "series_d",
+              "label": "Series D"
+            }
+          ],
+          "type": {
+            "code": "private",
+            "label": "Private"
+          },
+          "uuid": "000003z",
+          "website": "https://www.bondcap.com"
+        },
+        {
+          "date_of_entry": {
+            "day": 9,
+            "month": 1,
+            "year": 2018
+          },
+          "name": "HSG",
+          "rounds_participated": [
+            {
+              "code": "series_e",
+              "label": "Series E"
+            },
+            {
+              "code": "series_unknown",
+              "label": "Series Unknown"
+            },
+            {
+              "code": "series_c",
+              "label": "Series C"
+            }
+          ],
+          "type": {
+            "code": "private",
+            "label": "Private"
+          },
+          "uuid": "0000093",
+          "website": "https://www.hsgcap.com"
+        },
+        {
+          "date_of_entry": {
+            "day": 9,
+            "month": 1,
+            "year": 2018
+          },
+          "name": "Five V Capital",
+          "rounds_participated": [
+            {
+              "code": "series_c",
+              "label": "Series C"
+            }
+          ],
+          "type": {
+            "code": "private",
+            "label": "Private"
+          },
+          "uuid": "0000blt",
+          "website": "http://www.fivevcapital.com"
+        },
+        {
+          "date_of_entry": {
+            "day": 9,
+            "month": 1,
+            "year": 2018
+          },
+          "name": "HSG",
+          "rounds_participated": [
+            {
+              "code": "series_e",
+              "label": "Series E"
+            },
+            {
+              "code": "series_unknown",
+              "label": "Series Unknown"
+            },
+            {
+              "code": "series_c",
+              "label": "Series C"
+            }
+          ],
+          "type": {
+            "code": "private",
+            "label": "Private"
+          },
+          "uuid": "0006a8j",
+          "website": "https://www.hsgcap.com"
+        },
+        {
+          "date_of_entry": {
+            "day": 9,
+            "month": 1,
+            "year": 2018
+          },
+          "name": "Saniel Ventures",
+          "rounds_participated": [
+            {
+              "code": "series_c",
+              "label": "Series C"
+            }
+          ],
+          "type": {
+            "code": "private",
+            "label": "Private"
+          },
+          "uuid": "000ag7j",
+          "website": "https://saniel.vc"
+        },
+        {
+          "date_of_entry": {
+            "day": 9,
+            "month": 1,
+            "year": 2018
+          },
+          "name": "HSG",
+          "rounds_participated": [
+            {
+              "code": "series_e",
+              "label": "Series E"
+            },
+            {
+              "code": "series_unknown",
+              "label": "Series Unknown"
+            },
+            {
+              "code": "series_c",
+              "label": "Series C"
+            }
+          ],
+          "type": {
+            "code": "private",
+            "label": "Private"
+          },
+          "uuid": "00c7l18",
+          "website": "https://www.hsgcap.com"
+        },
+        {
+          "date_of_entry": {
+            "day": 9,
+            "month": 1,
+            "year": 2018
+          },
+          "name": "YXS Capital",
+          "rounds_participated": [
+            {
+              "code": "series_c",
+              "label": "Series C"
+            }
+          ],
+          "type": {
+            "code": "private",
+            "label": "Private"
+          },
+          "uuid": "00q5cy2",
+          "website": "https://www.yxscapital.com/"
+        },
+        {
+          "date_of_entry": {
+            "day": 6,
+            "month": 10,
+            "year": 2015
+          },
+          "name": "Felicis",
+          "rounds_participated": [
+            {
+              "code": "series_a",
+              "label": "Series A"
+            },
+            {
+              "code": "series_e",
+              "label": "Series E"
+            },
+            {
+              "code": "series_f",
+              "label": "Series F"
+            },
+            {
+              "code": "series_unknown",
+              "label": "Series Unknown"
+            },
+            {
+              "code": "series_c",
+              "label": "Series C"
+            },
+            {
+              "code": "series_b",
+              "label": "Series B"
+            },
+            {
+              "code": "series_d",
+              "label": "Series D"
+            }
+          ],
+          "type": {
+            "code": "private",
+            "label": "Private"
+          },
+          "uuid": "00002ta",
+          "website": "http://www.felicis.com"
+        },
+        {
+          "date_of_entry": {
+            "day": 6,
+            "month": 10,
+            "year": 2015
+          },
+          "name": "Vayner/RSE",
+          "rounds_participated": [
+            {
+              "code": "series_a",
+              "label": "Series A"
+            }
+          ],
+          "type": {
+            "code": "private",
+            "label": "Private"
+          },
+          "uuid": "00095id",
+          "website": "http://vaynerrse.com/"
+        },
+        {
+          "date_of_entry": {
+            "day": 3,
+            "month": 4,
+            "year": 2015
+          },
+          "name": "Airtree Ventures",
+          "rounds_participated": [
+            {
+              "code": "series_a",
+              "label": "Series A"
+            },
+            {
+              "code": "series_f",
+              "label": "Series F"
+            }
+          ],
+          "type": {
+            "code": "private",
+            "label": "Private"
+          },
+          "uuid": "00002gz",
+          "website": "http://www.airtree.vc"
+        },
+        {
+          "date_of_entry": {
+            "day": 3,
+            "month": 4,
+            "year": 2015
+          },
+          "name": "Global Founders Capital",
+          "rounds_participated": [
+            {
+              "code": "series_a",
+              "label": "Series A"
+            }
+          ],
+          "type": {
+            "code": "private",
+            "label": "Private"
+          },
+          "uuid": "0000jdb",
+          "website": "https://www.globalfounderscapital.com"
         },
         {
           "date_of_entry": {
@@ -5099,7 +5157,7 @@ Returns a JSON object with the following structure:
           "name": "500 Global",
           "rounds_participated": [
             {
-              "code": "Seed",
+              "code": "seed",
               "label": "Seed"
             }
           ],
@@ -5116,19 +5174,47 @@ Returns a JSON object with the following structure:
             "month": 3,
             "year": 2013
           },
-          "name": "Elevation Capital",
+          "name": "Blackbird Ventures",
           "rounds_participated": [
             {
-              "code": "Seed",
+              "code": "series_a",
+              "label": "Series A"
+            },
+            {
+              "code": "series_unknown",
+              "label": "Series Unknown"
+            },
+            {
+              "code": "series_e",
+              "label": "Series E"
+            },
+            {
+              "code": "series_f",
+              "label": "Series F"
+            },
+            {
+              "code": "seed",
               "label": "Seed"
+            },
+            {
+              "code": "series_c",
+              "label": "Series C"
+            },
+            {
+              "code": "series_b",
+              "label": "Series B"
+            },
+            {
+              "code": "series_d",
+              "label": "Series D"
             }
           ],
           "type": {
             "code": "private",
             "label": "Private"
           },
-          "uuid": "000pwrr",
-          "website": "http://www.elecap.com.au/"
+          "uuid": "000007c",
+          "website": "http://www.blackbird.vc"
         },
         {
           "date_of_entry": {
@@ -5139,7 +5225,7 @@ Returns a JSON object with the following structure:
           "name": "Founders Fund",
           "rounds_participated": [
             {
-              "code": "Seed",
+              "code": "seed",
               "label": "Seed"
             }
           ],
@@ -5156,10 +5242,14 @@ Returns a JSON object with the following structure:
             "month": 3,
             "year": 2013
           },
-          "name": "InterWest Partners",
+          "name": "Matrix",
           "rounds_participated": [
             {
-              "code": "Seed",
+              "code": "series_a",
+              "label": "Series A"
+            },
+            {
+              "code": "seed",
               "label": "Seed"
             }
           ],
@@ -5167,8 +5257,8 @@ Returns a JSON object with the following structure:
             "code": "private",
             "label": "Private"
           },
-          "uuid": "003vmhk",
-          "website": "http://www.interwest.com"
+          "uuid": "00004t9",
+          "website": "https://www.matrix.vc"
         },
         {
           "date_of_entry": {
@@ -5179,7 +5269,7 @@ Returns a JSON object with the following structure:
           "name": "Investible",
           "rounds_participated": [
             {
-              "code": "Seed",
+              "code": "seed",
               "label": "Seed"
             }
           ],
@@ -5196,10 +5286,34 @@ Returns a JSON object with the following structure:
             "month": 3,
             "year": 2013
           },
+          "name": "Shasta Ventures",
+          "rounds_participated": [
+            {
+              "code": "series_a",
+              "label": "Series A"
+            },
+            {
+              "code": "seed",
+              "label": "Seed"
+            }
+          ],
+          "type": {
+            "code": "private",
+            "label": "Private"
+          },
+          "uuid": "00008up",
+          "website": "https://www.shasta.vc"
+        },
+        {
+          "date_of_entry": {
+            "day": 19,
+            "month": 3,
+            "year": 2013
+          },
           "name": "Square Peg Capital",
           "rounds_participated": [
             {
-              "code": "Seed",
+              "code": "seed",
               "label": "Seed"
             }
           ],
@@ -5212,46 +5326,48 @@ Returns a JSON object with the following structure:
         },
         {
           "date_of_entry": {
-            "day": 15,
-            "month": 2,
-            "year": 2024
+            "day": 19,
+            "month": 3,
+            "year": 2013
           },
-          "name": "Ventioneers",
+          "name": "Elevation Capital",
           "rounds_participated": [
             {
-              "code": "Series Unknown",
-              "label": "Series Unknown"
+              "code": "seed",
+              "label": "Seed"
             }
           ],
           "type": {
             "code": "private",
             "label": "Private"
           },
-          "uuid": "0004ho3",
-          "website": "https://www.ventioneers.com"
+          "uuid": "000pwrr",
+          "website": "http://www.elecap.com.au/"
+        },
+        {
+          "date_of_entry": {
+            "day": 19,
+            "month": 3,
+            "year": 2013
+          },
+          "name": "InterWest Partners",
+          "rounds_participated": [
+            {
+              "code": "seed",
+              "label": "Seed"
+            }
+          ],
+          "type": {
+            "code": "private",
+            "label": "Private"
+          },
+          "uuid": "003vmhk",
+          "website": "http://www.interwest.com"
         }
       ]
     },
     "mna_and_investment": {
       "mna": [
-        {
-          "acquiree": {
-            "name": "Affinity",
-            "uuid": "000g1en",
-            "website": "https://affinity.serif.com"
-          },
-          "acquisition_type": {
-            "code": "acquisition",
-            "label": "acquisition"
-          },
-          "announced_date": {
-            "day": 26,
-            "month": 3,
-            "year": 2024
-          },
-          "id": 41747,
-          "status": "complete"
-        },
         {
           "acquiree": {
             "name": "Ortto",
@@ -5260,7 +5376,7 @@ Returns a JSON object with the following structure:
           },
           "acquisition_type": {
             "code": "acquisition",
-            "label": "acquisition"
+            "label": "Acquisition"
           },
           "announced_date": {
             "day": 8,
@@ -5272,13 +5388,31 @@ Returns a JSON object with the following structure:
         },
         {
           "acquiree": {
+            "name": "Simtheory",
+            "uuid": "0002wxa",
+            "website": "https://simtheory.ai"
+          },
+          "acquisition_type": {
+            "code": "acquisition",
+            "label": "Acquisition"
+          },
+          "announced_date": {
+            "day": 8,
+            "month": 4,
+            "year": 2026
+          },
+          "id": 2706186,
+          "status": "pending"
+        },
+        {
+          "acquiree": {
             "name": "Doohly",
             "uuid": "0003mhx",
             "website": "https://dooh.ly"
           },
           "acquisition_type": {
             "code": "acquisition",
-            "label": "acquisition"
+            "label": "Acquisition"
           },
           "amount_usd": 30000000,
           "announced_date": {
@@ -5298,13 +5432,103 @@ Returns a JSON object with the following structure:
         },
         {
           "acquiree": {
+            "name": "MangoAI",
+            "uuid": "00q3fhd",
+            "website": "https://mangoai.dev"
+          },
+          "acquisition_type": {
+            "code": "acquisition",
+            "label": "Acquisition"
+          },
+          "announced_date": {
+            "day": 23,
+            "month": 2,
+            "year": 2026
+          },
+          "id": 2653712,
+          "status": "pending"
+        },
+        {
+          "acquiree": {
+            "name": "Scene Group",
+            "uuid": "0003sk1",
+            "website": "https://cavalry.scenegroup.co/"
+          },
+          "acquisition_type": {
+            "code": "acquisition",
+            "label": "Acquisition"
+          },
+          "announced_date": {
+            "day": 23,
+            "month": 2,
+            "year": 2026
+          },
+          "id": 2700729,
+          "status": "pending"
+        },
+        {
+          "acquiree": {
+            "name": "MagicBrief",
+            "uuid": "0000mqo",
+            "website": "https://magicbrief.com/"
+          },
+          "acquisition_type": {
+            "code": "acquisition",
+            "label": "Acquisition"
+          },
+          "announced_date": {
+            "day": 17,
+            "month": 6,
+            "year": 2025
+          },
+          "id": 6349,
+          "status": "complete"
+        },
+        {
+          "acquiree": {
+            "name": "Leonardo.Ai",
+            "uuid": "0000bqx",
+            "website": "https://leonardo.ai"
+          },
+          "acquisition_type": {
+            "code": "acquisition",
+            "label": "Acquisition"
+          },
+          "announced_date": {
+            "day": 29,
+            "month": 7,
+            "year": 2024
+          },
+          "id": 38897,
+          "status": "complete"
+        },
+        {
+          "acquiree": {
+            "name": "Affinity",
+            "uuid": "000g1en",
+            "website": "https://affinity.serif.com"
+          },
+          "acquisition_type": {
+            "code": "acquisition",
+            "label": "Acquisition"
+          },
+          "announced_date": {
+            "day": 26,
+            "month": 3,
+            "year": 2024
+          },
+          "id": 41747,
+          "status": "complete"
+        },
+        {
+          "acquiree": {
             "name": "Flourish",
             "uuid": "00031n6",
             "website": "https://flourish.studio"
           },
           "acquisition_type": {
             "code": "acquisition",
-            "label": "acquisition"
+            "label": "Acquisition"
           },
           "announced_date": {
             "day": 2,
@@ -5339,7 +5563,7 @@ Returns a JSON object with the following structure:
           },
           "acquisition_type": {
             "code": "acquisition",
-            "label": "acquisition"
+            "label": "Acquisition"
           },
           "announced_date": {
             "day": 23,
@@ -5351,121 +5575,13 @@ Returns a JSON object with the following structure:
         },
         {
           "acquiree": {
-            "name": "Leonardo.Ai",
-            "uuid": "0000bqx",
-            "website": "https://leonardo.ai"
-          },
-          "acquisition_type": {
-            "code": "acquisition",
-            "label": "acquisition"
-          },
-          "announced_date": {
-            "day": 29,
-            "month": 7,
-            "year": 2024
-          },
-          "id": 38897,
-          "status": "complete"
-        },
-        {
-          "acquiree": {
-            "name": "MagicBrief",
-            "uuid": "0000mqo",
-            "website": "https://magicbrief.com/"
-          },
-          "acquisition_type": {
-            "code": "acquisition",
-            "label": "acquisition"
-          },
-          "announced_date": {
-            "day": 17,
-            "month": 6,
-            "year": 2025
-          },
-          "id": 6349,
-          "status": "complete"
-        },
-        {
-          "acquiree": {
-            "name": "MangoAI",
-            "uuid": "00q3fhd",
-            "website": "https://mangoai.dev"
-          },
-          "acquisition_type": {
-            "code": "acquisition",
-            "label": "acquisition"
-          },
-          "announced_date": {
-            "day": 23,
-            "month": 2,
-            "year": 2026
-          },
-          "id": 2653712,
-          "status": "pending"
-        },
-        {
-          "acquiree": {
-            "name": "Pixabay",
-            "uuid": "0009bv9",
-            "website": "https://pixabay.com"
-          },
-          "acquisition_type": {
-            "code": "acquisition",
-            "label": "acquisition"
-          },
-          "announced_date": {
-            "day": 17,
-            "month": 5,
-            "year": 2019
-          },
-          "id": 58355,
-          "status": "complete"
-        },
-        {
-          "acquiree": {
-            "name": "Scene Group",
-            "uuid": "0003sk1",
-            "website": "https://cavalry.scenegroup.co/"
-          },
-          "acquisition_type": {
-            "code": "acquisition",
-            "label": "acquisition"
-          },
-          "announced_date": {
-            "day": 23,
-            "month": 2,
-            "year": 2026
-          },
-          "id": 2700729,
-          "status": "pending"
-        },
-        {
-          "acquiree": {
-            "name": "Simtheory",
-            "uuid": "0002wxa",
-            "website": "https://simtheory.ai"
-          },
-          "acquisition_type": {
-            "code": "acquisition",
-            "label": "acquisition"
-          },
-          "announced_date": {
-            "day": 8,
-            "month": 4,
-            "year": 2026
-          },
-          "id": 2706186,
-          "status": "pending"
-        },
-        {
-          "acquiree": {
             "name": "Smartmockups",
             "uuid": "00071qf",
             "website": "https://smartmockups.com/"
           },
           "acquisition_type": {
             "code": "acquisition",
-            "label": "acquisition"
+            "label": "Acquisition"
           },
           "announced_date": {
             "day": 22,
@@ -5477,20 +5593,20 @@ Returns a JSON object with the following structure:
         },
         {
           "acquiree": {
-            "name": "Zeetings",
-            "uuid": "0009972",
-            "website": "http://www.zeetings.com/"
+            "name": "Pixabay",
+            "uuid": "0009bv9",
+            "website": "https://pixabay.com"
           },
           "acquisition_type": {
             "code": "acquisition",
-            "label": "acquisition"
+            "label": "Acquisition"
           },
           "announced_date": {
-            "day": 24,
-            "month": 4,
-            "year": 2018
+            "day": 17,
+            "month": 5,
+            "year": 2019
           },
-          "id": 62899,
+          "id": 58355,
           "status": "complete"
         },
         {
@@ -5501,7 +5617,7 @@ Returns a JSON object with the following structure:
           },
           "acquisition_type": {
             "code": "acquisition",
-            "label": "acquisition"
+            "label": "Acquisition"
           },
           "announced_date": {
             "day": 17,
@@ -5509,6 +5625,24 @@ Returns a JSON object with the following structure:
             "year": 2019
           },
           "id": 147978,
+          "status": "complete"
+        },
+        {
+          "acquiree": {
+            "name": "Zeetings",
+            "uuid": "0009972",
+            "website": "http://www.zeetings.com/"
+          },
+          "acquisition_type": {
+            "code": "acquisition",
+            "label": "Acquisition"
+          },
+          "announced_date": {
+            "day": 24,
+            "month": 4,
+            "year": 2018
+          },
+          "id": 62899,
           "status": "complete"
         }
       ],
@@ -5555,7 +5689,7 @@ Returns a JSON object with the following structure:
             }
           ],
           "round": {
-            "code": "Series B",
+            "code": "series_b",
             "label": "Series B"
           }
         },
@@ -5581,26 +5715,7 @@ Returns a JSON object with the following structure:
             }
           ],
           "round": {
-            "code": "Seed",
-            "label": "Seed"
-          }
-        },
-        {
-          "announced_date": {
-            "day": 28,
-            "month": 2,
-            "year": 2022
-          },
-          "funding_round_id": 117971,
-          "id": 1243878,
-          "investee": {
-            "name": "Calven",
-            "uuid": "000645v",
-            "website": "https://www.calven.com"
-          },
-          "lead_investor": false,
-          "round": {
-            "code": "Seed",
+            "code": "seed",
             "label": "Seed"
           }
         },
@@ -5619,14 +5734,33 @@ Returns a JSON object with the following structure:
           },
           "lead_investor": false,
           "round": {
-            "code": "Seed",
+            "code": "seed",
+            "label": "Seed"
+          }
+        },
+        {
+          "announced_date": {
+            "day": 28,
+            "month": 2,
+            "year": 2022
+          },
+          "funding_round_id": 117971,
+          "id": 1243878,
+          "investee": {
+            "name": "Calven",
+            "uuid": "000645v",
+            "website": "https://www.calven.com"
+          },
+          "lead_investor": false,
+          "round": {
+            "code": "seed",
             "label": "Seed"
           }
         }
       ]
     }
   },
-  "credits_consumed": 23
+  "credits_consumed": 24.5
 }
 ```
 
