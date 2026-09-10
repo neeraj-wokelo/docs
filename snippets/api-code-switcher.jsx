@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 
 export const ApiCodeSwitcher = () => {
   const [activeTab, setActiveTab] = useState('news');
-  const [activeLang, setActiveLang] = useState('cURL');
+  const [activeLang, setActiveLang] = useState('Python');
   const [copied, setCopied] = useState(false);
   const [isDark, setIsDark] = useState(document.documentElement.classList.contains('dark'));
 
@@ -167,7 +167,7 @@ console.log(data.count, "companies");`
     { id: 'listgen', label: 'List Generation', href: '/api-reference/listgen' }
   ];
 
-  const languages = ['cURL', 'Python', 'JavaScript'];
+  const languages = [ 'Python', 'JavaScript','cURL'];
 
   const handleCopy = () => {
     navigator.clipboard.writeText(codeExamples[activeTab][activeLang]);
