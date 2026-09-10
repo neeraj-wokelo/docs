@@ -8,6 +8,10 @@ openapi: "GET /v1/company/website-traffic"
 
 The Website Traffic API returns a company's website traffic signals, including visitor engagement metrics (bounce rate, pages per visit, time on site, total visits) for the most recent month, a historical series of estimated monthly visits, and a breakdown of traffic by acquisition source (organic search, paid search, social, direct, referral, and more). Results are returned in the API response.
 
+<Note>
+  The Website Traffic API is available on **Subscription** and **Enterprise** plans only. Requests on the **Pay-as-you-go** plan will return a `403` error. See [Pricing](/getting-started/pricing) for plan details.
+</Note>
+
 ## Endpoint Details
 
 - **Method:** GET
