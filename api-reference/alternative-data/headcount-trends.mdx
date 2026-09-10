@@ -8,6 +8,10 @@ openapi: "GET /v1/company/headcount-trends"
 
 The Headcount Trends API returns a company's employee headcount signals sourced from LinkedIn, including the current total employee count, month-over-month headcount history, growth rates over multiple lookback periods, and a breakdown of headcount by function (e.g. Engineering, Sales, Marketing). Results are returned in the API response.
 
+<Note>
+  The Headcount Trends API is available on **Subscription** and **Enterprise** plans only. Requests on the **Pay-as-you-go** plan will return a `403` error. See [Pricing](/getting-started/pricing) for plan details.
+</Note>
+
 ## Endpoint Details
 
 - **Method:** GET

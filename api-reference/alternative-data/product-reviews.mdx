@@ -8,6 +8,10 @@ openapi: "GET /v1/company/product-reviews"
 
 The Product Reviews API returns a company's product catalog and, optionally, detailed reviews for one or more of those products. When no `products` parameter is supplied, the response contains only the list of products belonging to the company. When `products` is supplied, the response is enriched with ratings, star distribution, pros, cons, pricing and individual review content sourced from review providers. Results are returned in the API response.
 
+<Note>
+  The Product Reviews API is available on **Subscription** and **Enterprise** plans only. Requests on the **Pay-as-you-go** plan will return a `403` error. See [Pricing](/getting-started/pricing) for plan details.
+</Note>
+
 ## Endpoint Details
 
 - **Method:** GET

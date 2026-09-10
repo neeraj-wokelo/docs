@@ -8,6 +8,10 @@ openapi: "GET /v1/company/employee-reviews"
 
 The Employee Reviews API returns a company's aggregated employee review signals along with individual reviews sourced from review providers such as Glassdoor. The response includes the overall rating, dimension-level ratings (culture, work-life balance, compensation, senior management, diversity and inclusion, business outlook, CEO approval, recommendation rate), and a paginated list of individual reviews with pros, cons, ratings, reviewer metadata and a link to the original review. Results are returned in the API response.
 
+<Note>
+  The Employee Reviews API is available on **Subscription** and **Enterprise** plans only. Requests on the **Pay-as-you-go** plan will return a `403` error. See [Pricing](/getting-started/pricing) for plan details.
+</Note>
+
 ## Endpoint Details
 
 - **Method:** GET

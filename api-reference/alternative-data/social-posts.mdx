@@ -8,6 +8,10 @@ openapi: "GET /v1/company/posts"
 
 The Social Posts API returns social media posts published by a company, sourced from platforms such as LinkedIn. Each post includes its content type, text, publish date, paid and repost flags, an AI-assigned classification, mentions, and a detailed breakdown of engagement metrics (reactions, likes, comments, reposts, and more). Tracking a company's posting cadence, content mix, and engagement is a useful proxy for brand activity and marketing momentum. Results are paginated and returned in the API response.
 
+<Note>
+  The Social Posts API is available on **Subscription** and **Enterprise** plans only. Requests on the **Pay-as-you-go** plan will return a `403` error. See [Pricing](/getting-started/pricing) for plan details.
+</Note>
+
 ## Endpoint Details
 
 - **Method:** GET
