@@ -184,14 +184,15 @@ console.log(data.count, "companies");`
           }
         }
         .api-code-switcher-scroll::-webkit-scrollbar {
-          height: 4px;
+          width: 2px;
+          height: 2px;
         }
         .api-code-switcher-scroll::-webkit-scrollbar-track {
           background: transparent;
         }
         .api-code-switcher-scroll::-webkit-scrollbar-thumb {
           background: rgba(128, 128, 128, 0.4);
-          border-radius: 2px;
+          border-radius: 1px;
         }
         .dark .api-code-switcher-scroll::-webkit-scrollbar-thumb {
           background: rgba(255, 255, 255, 0.2);
