@@ -23,7 +23,7 @@ Select a plan type below to see its global rate limit and the default limit for 
     | Industry Search | `/api/v1/industry/search/` | 100 / day |
     | Company Data | `/api/v1/company/enrichment/`\* | 100 / month |
     | Company Addition | `/api/v1/company/addition-requests/` | Not available |
-    | Filter Builder | `/api/v1/list/filter-builder/` | Not available |
+    | Filter Builder | `/api/v1/list/filter-builder/` | † |
     | Job Posts | `/api/v1/company/jobs/` | Not available |
     | Social Posts | `/api/v1/company/posts/` | Not available |
     | Product Reviews | `/api/v1/company/product-reviews/` | Not available |
@@ -31,7 +31,7 @@ Select a plan type below to see its global rate limit and the default limit for 
     | Employee Reviews | `/api/v1/company/employee-reviews/` | Not available |
     | Headcount Trends | `/api/v1/company/headcount-trends/` | Not available |
     | List Generation | `/api/v1/list/generate/companies/` | 100 / month |
-    | News Signals | `/api/v1/company/news/` | 10,000 / month |
+    | News Signals | `/api/v1/news/` | 10,000 / month |
 
     <Note>
       Alternative data endpoints (Job Posts, Social Posts, Product Reviews, Website Traffic, Employee Reviews, Headcount Trends) and Company Addition are not included on Pay as you go.
@@ -49,7 +49,7 @@ Select a plan type below to see its global rate limit and the default limit for 
     | Industry Search | `/api/v1/industry/search/` | 400 / day | 800 / day | 1,500 / day | 2,000 / day | 3,000 / day |
     | Company Data | `/api/v1/company/enrichment/`\* | 750 / mo | 1,500 / mo | 3,000 / mo | 7,500 / mo | 15,000 / mo |
     | Company Addition | `/api/v1/company/addition-requests/` | 100 / mo | 150 / mo | 200 / mo | 300 / mo | 500 / mo |
-    | Filter Builder | `/api/v1/list/filter-builder/` | ‡ | ‡ | ‡ | ‡ | ‡ |
+    | Filter Builder | `/api/v1/list/filter-builder/` | † | † | † | † | † |
     | Job Posts | `/api/v1/company/jobs/` | 10/min · 750/mo | 15/min · 1,500/mo | 20/min · 3,000/mo | 25/min · 7,500/mo | 30/min · 15,000/mo |
     | Social Posts | `/api/v1/company/posts/` | 10/min · 750/mo | 15/min · 1,500/mo | 20/min · 3,000/mo | 25/min · 7,500/mo | 30/min · 15,000/mo |
     | Product Reviews | `/api/v1/company/product-reviews/` | 10/min · 750/mo | 15/min · 1,500/mo | 20/min · 3,000/mo | 25/min · 7,500/mo | 30/min · 15,000/mo |
@@ -57,14 +57,14 @@ Select a plan type below to see its global rate limit and the default limit for 
     | Employee Reviews | `/api/v1/company/employee-reviews/` | 10/min · 750/mo | 15/min · 1,500/mo | 20/min · 3,000/mo | 25/min · 7,500/mo | 30/min · 15,000/mo |
     | Headcount Trends | `/api/v1/company/headcount-trends/` | 10/min · 750/mo | 15/min · 1,500/mo | 20/min · 3,000/mo | 25/min · 7,500/mo | 30/min · 15,000/mo |
     | List Generation | `/api/v1/list/generate/companies/` | 100 / mo | 150 / mo | 200 / mo | 300 / mo | 400 / mo |
-    | News Signals | `/api/v1/company/news/` | 25,000 / mo | 50,000 / mo | 100,000 / mo | 250,000 / mo | 500,000 / mo |
+    | News Signals | `/api/v1/news/` | 25,000 / mo | 50,000 / mo | 100,000 / mo | 250,000 / mo | 500,000 / mo |
   </Tab>
   <Tab title="Enterprise">
     Enterprise ships with custom rate limits. Contact sales to configure custom throughput for your account.
   </Tab>
 </Tabs>
 
-\* Includes the markdown and concise response variants of this endpoint — they share the same limit. † This limit applies across all calls to the API rather than a single endpoint path. ‡ No separate limit is configured for this endpoint beyond the plan's global per-minute limit.
+\* Includes the markdown and concise response variants of this endpoint — they share the same limit. † No separate limit is configured for this endpoint beyond the plan's global per-minute limit.
 
 <Info>
   "Not available" means the endpoint is not included in that plan and requests to it return a 403. Where both a per-minute and a per-month limit apply to the same endpoint, both are enforced — whichever is reached first will throttle the request.
