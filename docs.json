@@ -168,7 +168,7 @@
           "discord",
           "website",
           {
-            "group": "Hidden",
+            "group": "Taxonomy",
             "hidden": true,
             "pages": [
               "region-codes",

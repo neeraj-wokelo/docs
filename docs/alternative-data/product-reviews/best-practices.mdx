@@ -4,7 +4,7 @@ description: "Best practices for using product reviews API."
 sidebarTitle: "Best Practices"
 ---
 
-**Always call without** `products `**first. It's free and gives you the IDs you need**
+**Always call without** `products `**first. It gives you the IDs you need**
 
 The product list call costs 0.5 credits and returns all the `id` values required for subsequent review calls. Never hardcode product IDs. Always fetch them dynamically so your integration remains correct if a company's product catalog changes.
 
