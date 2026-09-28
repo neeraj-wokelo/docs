@@ -57,9 +57,9 @@ If a topic maps to multiple closely related industries, pass several codes rathe
 
 `credits_consumed` scales with the enrichment sections requested per company, not just with how many companies are returned.
 
-**Remember `funding_detail` and `mna_and_investment` are Enterprise-only**
+**Remember `funding_detail` and `mna_and_investment` are Subscription and Enterprise**
 
-Both the `funding_detail`/`mna_and_investment` enrichment sections and the corresponding `funding_detail.*` structured filters require an Enterprise plan. If your plan doesn't include Enterprise access, requests using these will not return the expected data — check your plan tier before building a workflow that depends on funding-stage or investor-level filtering.
+Both the `funding_detail`/`mna_and_investment` enrichment sections and the corresponding `funding_detail.*` structured filters are available on Subscription and Enterprise plans. If your plan doesn't include access to them, requests using these will not return the expected data — check your plan tier before building a workflow that depends on funding-stage or investor-level filtering.
 
 **Use `query` for exploration, `filters` for production workflows**
 

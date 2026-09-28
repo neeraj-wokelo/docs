@@ -143,7 +143,7 @@ Results are ranked by akta.pro relevance by default and can be enriched with add
 
 Filters from different groups can be combined in a single request. All conditions are combined with AND logic. A company must match every specified filter to be included in the results.
 
-The example below combines a firmographic filter, a location filter, a financial estimate range filter, a technology boolean filter, a business model filter, and an Enterprise-only funding detail nested filter:
+The example below combines a firmographic filter, a location filter, a financial estimate range filter, a technology boolean filter, a business model filter, and a Subscription/Enterprise funding detail nested filter:
 
 ```json
 {
@@ -165,7 +165,7 @@ The example below combines a firmographic filter, a location filter, a financial
 <ParamField body="sections" type="string[]">
   Additional data sections to include for each company in the results.
 
-  Available values: `firmographic`, `business_model`, `company_assessment`, `trust_signal`, `company_hierarchy`, `digital_presence`, `financial_estimate`, `location`, `management_profile`, `product_offering`, `strategic_signal`, `customer_profile`, `industry`, `technology`, `funding_detail` (Enterprise only), `mna_and_investment` (Enterprise only)
+  Available values: `firmographic`, `business_model`, `company_assessment`, `trust_signal`, `company_hierarchy`, `digital_presence`, `financial_estimate`, `location`, `management_profile`, `product_offering`, `strategic_signal`, `customer_profile`, `industry`, `technology`, `funding_detail` (Subscription, Enterprise), `mna_and_investment` (Subscription, Enterprise)
 
   If omitted, results include only basic identity fields (uuid, name, website).<br /><br />Note: These sections are not supported on Pay-as-you-go plan.
 </ParamField>

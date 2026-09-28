@@ -48,4 +48,4 @@ All akta.pro tools are **synchronous**. All tools returns its data immediately, 
 | `job_posts` | Open roles and hiring signal |
 | `social_posts` | Company social posts |
 
-A call to any of the tools above on a plan that doesn't cover it returns `403`. Enterprise-only `company_data` sections (`funding_detail`, `mna_and_investment`) don't error on lower tiers — they're silently skipped, and the returned Markdown notes what was dropped.
+A call to any of the tools above on a plan that doesn't cover it returns `403`. Subscription/Enterprise `company_data` sections (`funding_detail`, `mna_and_investment`) don't error on lower tiers — they're silently skipped, and the returned Markdown notes what was dropped.

@@ -26,11 +26,11 @@ This is a **synchronous GET API**. Pass parameters in the URL and receive enrich
 | `customer_profile` | Segments and customers | `segment`, `customer` |
 | `industry` | Industry classification | `primary_industry`, `sub_industry`, `naics_code`, `sic_code`, `sector` |
 | `technology` | Tech stack and AI capabilities | `is_technology_focussed`, `api_detail`, `integration`, `ai_capability`, `ai_maturity`, `app_detail`, `feature`, `core_technology` |
-| `funding_detail` | Rounds, amounts and dates _(enterprise tier only)_ | `total_raised`, `last_round`, `round_type`, `amount`, `date`, `investors` |
-| `mna_and_investment` | Acquisitions and investments _(enterprise tier only)_ | `acquisitions`, `investments`, `acquirers`, `deal_value`, `deal_date` |
+| `funding_detail` | Rounds, amounts and dates _(subscription and enterprise tier only)_ | `total_raised`, `last_round`, `round_type`, `amount`, `date`, `investors` |
+| `mna_and_investment` | Acquisitions and investments _(subscription and enterprise tier only)_ | `acquisitions`, `investments`, `acquirers`, `deal_value`, `deal_date` |
 
 <Info>
-  `funding_detail` and `mna_and_investment` are only available on the enterprise plan. Requesting them on other plans returns 403 error.
+  `funding_detail` and `mna_and_investment` are only available on subscription and enterprise plans. Requesting them on other plans returns 403 error.
 </Info>
 
 **Common use cases:**
