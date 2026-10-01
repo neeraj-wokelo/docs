@@ -667,8 +667,8 @@
             "name": "limit",
             "in": "query",
             "required": false,
-            "schema": {"type": "integer", "default": 10, "maximum": 1000},
-            "description": "Maximum number of news articles to return. Default = 10, Max = 1000."
+            "schema": {"type": "integer", "default": 10, "maximum": 100},
+            "description": "Maximum number of news articles to return. Default = 10, Max = 100."
           },
           {
             "name": "offset",
