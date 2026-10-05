@@ -25,12 +25,19 @@
     // -----------------------------------------------------------------------------
     // Silent identity funnel
     // -----------------------------------------------------------------------------
-    // Runs only after DD_RUM is initialized. If the visitor is logged in to the
-    // main akta.pro app (signalled by the cross-subdomain `akta_logged_in`
-    // cookie), pull the user profile from the API and link it to the RUM
-    // session. If the access token has expired, refresh it once and retry the
-    // profile call once. Every step is silent: no UI, no errors, no retries
-    // beyond the single chain below.
+    // Runs only after DD_RUM is initialized. Attempts to fetch the current
+    // user's profile from the akta.pro API and, on success, links that identity
+    // to the RUM session. If the access token has expired, refreshes it once
+    // and retries the profile call once. Every step is silent: no UI, no
+    // errors, no retries beyond the single chain below.
+    //
+    // Anonymous visitors will hit /user/profile, get 401, and the funnel ends
+    // silently — the wasted request is cheap and avoids depending on the
+    // `akta_logged_in` cookie (which may be HttpOnly, may be scoped to a
+    // different path, or may not exist on every subdomain).
+    //
+    // Debug: set `window.__AKTA_IDENTITY_DEBUG__ = true` in DevTools before
+    // reload to see step-by-step logs.
     // -----------------------------------------------------------------------------
     try {
       linkIdentity();
@@ -54,27 +61,39 @@
   var FETCH_TIMEOUT_MS = 5000;
   var identityStarted = false;
 
+  function debug() {
+    if (!window.__AKTA_IDENTITY_DEBUG__) return;
+    var args = Array.prototype.slice.call(arguments);
+    args.unshift('[akta-identity]');
+    try { console.log.apply(console, args); } catch (_) {}
+  }
+
   function linkIdentity() {
     if (identityStarted) return;
     identityStarted = true;
 
-    if (!hasLoggedInCookie()) return;
+    debug('funnel begin');
 
     fetchWithTimeout(API_BASE + PROFILE_PATH, { method: 'GET', credentials: 'include' }, FETCH_TIMEOUT_MS)
       .then(function (res) {
+        debug('profile response', res && res.status);
         if (res && res.status === 401) {
           return tryRefreshThenProfile();
         }
         return res;
       })
       .then(applyProfileToDatadog)
-      .catch(swallow);
+      .catch(function (err) {
+        debug('funnel error', err && err.message);
+        /* swallow — silent in production */
+      });
   }
 
   function tryRefreshThenProfile() {
+    debug('attempting token refresh');
     return fetchWithTimeout(API_BASE + REFRESH_PATH, { method: 'POST', credentials: 'include' }, FETCH_TIMEOUT_MS)
       .then(function (refreshRes) {
-        // Single refresh attempt — if it didn't succeed, give up silently.
+        debug('refresh response', refreshRes && refreshRes.status);
         if (!refreshRes || !(refreshRes.status >= 200 && refreshRes.status < 300)) {
           return null;
         }
@@ -85,7 +104,10 @@
   function applyProfileToDatadog(res) {
     if (!res || !(res.status >= 200 && res.status < 300)) return;
     return res.json().then(function (u) {
-      if (!u || !u.id) return;
+      if (!u || !u.id) {
+        debug('profile body had no id', u);
+        return;
+      }
       var name = [u.first_name, u.last_name].filter(Boolean).join(' ') || undefined;
 
       try {
@@ -98,15 +120,12 @@
         window.DD_RUM.setUserProperty('active_package_type', u.active_package_type || '');
         window.DD_RUM.setUserProperty('plan_code', (u.active_subscription && u.active_subscription.plan && u.active_subscription.plan.plan_code) || '');
         window.DD_RUM.setUserProperty('is_admin', u.is_admin ? 'true' : 'false');
-      } catch (_) {
-        /* swallow */
+        debug('identity linked', { id: u.id, email: u.email, name: name });
+      } catch (e) {
+        debug('setUser threw', e && e.message);
       }
-    }, swallow);
-  }
-
-  function hasLoggedInCookie() {
-    return document.cookie.split(';').some(function (c) {
-      return c.trim().indexOf('akta_logged_in=') === 0;
+    }, function (parseErr) {
+      debug('profile body parse error', parseErr && parseErr.message);
     });
   }
 
@@ -126,9 +145,5 @@
     return fetch(url, fetchInit).finally(function () {
       if (timer) clearTimeout(timer);
     });
-  }
-
-  function swallow() {
-    /* intentionally empty — every silent step ends here */
   }
 })();
