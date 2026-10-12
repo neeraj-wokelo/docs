@@ -282,7 +282,8 @@
     }
   },
   "playground": {
-    "display": "interactive"
+    "display": "interactive",
+    "proxy": false
   }
 
 },
