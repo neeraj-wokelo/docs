@@ -32,7 +32,8 @@
               "getting-started/overview",
               "getting-started/pricing",
               "getting-started/rate-limits",
-              "getting-started/error-codes"
+              "getting-started/error-codes",
+              "getting-started/performance"
             ],
             "icon": "rocket"
           },
