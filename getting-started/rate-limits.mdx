@@ -47,7 +47,7 @@ Select a plan type below to see its global rate limit and the default limit for 
     | Filter Options | `/api/v1/filters/options/` | 50 / day | 100 / day | 200 / day | 400 / day | 800 / day |
     | Company Search | `/api/v1/company/search/` | 400 / day | 800 / day | 1,500 / day | 2,000 / day | 3,000 / day |
     | Industry Search | `/api/v1/industry/search/` | 400 / day | 800 / day | 1,500 / day | 2,000 / day | 3,000 / day |
-    | Company Data | `/api/v1/company/enrichment/`\* | 750 / mo | 1,500 / mo | 3,000 / mo | 7,500 / mo | 15,000 / mo |
+    | Company Data | `/api/v1/company/enrichment/`\* | 1,500 / mo | 3,000 / mo | 6,000 / mo | 15,000 / mo | 30,000 / mo |
     | Company Addition | `/api/v1/company/addition-requests/` | 100 / mo | 150 / mo | 200 / mo | 300 / mo | 500 / mo |
     | Filter Builder | `/api/v1/list/filter-builder/` | † | † | † | † | † |
     | Job Posts | `/api/v1/company/jobs/` | 10/min · 750/mo | 15/min · 1,500/mo | 20/min · 3,000/mo | 25/min · 7,500/mo | 30/min · 15,000/mo |
@@ -64,7 +64,7 @@ Select a plan type below to see its global rate limit and the default limit for 
   </Tab>
 </Tabs>
 
-\* Includes the markdown and concise response variants of this endpoint — they share the same limit. † No separate limit is configured for this endpoint beyond the plan's global per-minute limit.
+\* Includes the markdown, concise, and feature variants (firmographic, peers, swot, financial_estimate, location, management_profile, product_offering, partnerships, customer_profile, industry, technology, funding_detail, mna_and_investment) of this endpoint — they share the same limit. † No separate limit is configured for this endpoint beyond the plan's global per-minute limit.
 
 <Info>
   "Not available" means the endpoint is not included in that plan and requests to it return a 403. Where both a per-minute and a per-month limit apply to the same endpoint, both are enforced — whichever is reached first will throttle the request.
