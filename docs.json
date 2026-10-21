@@ -128,8 +128,7 @@
                   "docs/supporting-apis/company-search",
                   "docs/supporting-apis/industry-search",
                   "docs/supporting-apis/company-addition",
-                  "docs/supporting-apis/request-status-api",
-                  "docs/supporting-apis/filterbuilder"
+                  "docs/supporting-apis/request-status-api"
                 ]
               }
             ]
@@ -214,8 +213,7 @@
               "api-reference/supporting-apis/company-search",
               "api-reference/supporting-apis/industry-search",
               "api-reference/supporting-apis/company-addition-api",
-              "api-reference/supporting-apis/status-api",
-              "api-reference/supporting-apis/filter-builder"
+              "api-reference/supporting-apis/status-api"
             ]
           }
         ]
