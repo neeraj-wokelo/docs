@@ -276,7 +276,7 @@
   },
   "api": {
   "mdx": {
-    "server": "https://api.akta.pro",
+    "server": "https://api.akta.pro/api",
     "auth": {
       "method": "key",
       "name": "x-api-key"
