@@ -46,6 +46,12 @@ Results are ranked by akta.pro relevance by default and can be enriched with add
   #### Available Filters
 
   <AccordionGroup>
+    <Accordion title="Search Filters">
+      | Field | Type | Accepted Values |
+      | --- | --- | --- |
+      | `search.free_text` | string | Free text search query |
+    </Accordion>
+
     <Accordion title="Firmographic Filters">
       | Field | Type | Accepted Values |
       | --- | --- | --- |
@@ -167,7 +173,7 @@ The example below combines a firmographic filter, a location filter, a financial
 <ParamField body="sort_by" type="string">
   Field to sort results by.
 
-  Available values: `relevance` (default), `revenue_estimate`, `valuation_estimate`, `employee_range`, `total_funding`, `founded_year`
+  Available values:  `revenue_estimate`, `valuation_estimate`, `employee_range`, `total_funding`, `founded_year` , `headcount`, `relevance`
 </ParamField>
 
 <ParamField body="sort_order" type="string">
@@ -183,13 +189,15 @@ The example below combines a firmographic filter, a location filter, a financial
 
   Default = 50
 
-  Max value = 500<br /><br />Note: on Pay-as-you-go plan, maximum 20 companies are allowed.
+  Max value = 100<br /><br />Note: on Pay-as-you-go plan, maximum 50 companies are allowed.
 </ParamField>
 
 <ParamField body="offset" type="integer">
   Number of results to skip for pagination.
 
   Default = 0
+
+  Note: For Starter, Build, Growth plans limit+offset ≤ 1000. For Pay-as-you-go plan, limit+offset ≤50
 </ParamField>
 
 ## Response

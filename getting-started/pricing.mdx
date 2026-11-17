@@ -10,9 +10,9 @@ akta.pro's APIs are priced in credits. Each API consumes a set number of credits
 
 The cost per credit and rate limit depend on your plan:
 
-| Plans | Pay as you go | Subscription | Enterprise |
-| --- | --- | --- | --- |
-| Cost per credit | \$0.05 | \$0.04 | Custom |
+| Plans | Pay as you go | Starter | Build | Growth | Enterprise |
+| --- | --- | --- | --- | --- | --- |
+| Cost per credit | \$0.06 | \$0.05 | \$0.05 | \$0.04 | Custom |
 
 ## News Signals
 
@@ -49,26 +49,26 @@ List Generation credit consumption is made up of a base cost, an additional cost
 
 | Component | Credits Consumed |
 | :-- | :-- |
-| Base cost per API call | 1.5 |
+| Base cost per API call | 0.1 |
 | Additional cost if using `query` instead of `filters` | 2.5 |
-| Per company returned | 0.2 |
+| Per company returned | 0.01 |
 | Per enrichment section requested | (Section cost, per Company Data table above) × companies returned |
 
 **Formula:**
 
 ```text
-Total credits = 1.5
+Total credits = 0.1
               + (2.5 if using `query`, else 0)
-              + (0.2 × companies returned)
+              + (0.01 × companies returned)
               + (sum of each requested section's cost × companies returned)
 ```
 
 **Example:** A `filters`-based request returning 50 companies, with `firmographic` (2 credits) and `location` (0.5 credits) sections requested:
 
 ```text
-1.5 (base) + 0 (filters, not query) + (0.2 × 50) + ((2 + 0.5) × 50)
-= 1.5 + 0 + 10 + 125
-= 136.5 credits
+0.1 (base) + 0 (filters, not query) + (0.01 × 50) + ((2 + 0.5) × 50)
+= 0.1 + 0 + 0.5 + 125
+= 125.6 credits
 ```
 
 <Note>
