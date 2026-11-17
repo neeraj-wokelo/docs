@@ -84,6 +84,12 @@ Results are ranked by akta.pro relevance by default and can be enriched with add
       | `financial_estimate.valuation_estimate` | string[] | `under_10m`, `10m_50m`, `50m_100m`, `100m_250m`, `250m_500m`, `500m_1b`, `1b_5b`, `5b_10b`, `10b_25b`, `over_25b` |
     </Accordion>
 
+    <Accordion title="Headcount">
+      | Field | Type | Accepted Values |
+      | --- | --- | --- |
+      | `firmographic.headcount` | object | Object with gte, lte as the keys to specify the range Eg."gte": 100, "lte": 1000 |
+    </Accordion>
+
     <Accordion title="Location Filters">
       | Field | Type | Accepted Values |
       | --- | --- | --- |
