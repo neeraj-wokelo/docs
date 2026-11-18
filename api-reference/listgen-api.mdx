@@ -57,6 +57,7 @@ Results are ranked by akta.pro relevance by default and can be enriched with add
       | --- | --- | --- |
       | `firmographic.company_type` | string[] | `private`, `public` |
       | `firmographic.ownership_category` | string[] | `corporate_owned`, `family_owned`, `founder_individual_operated_bootstrapped`, `management_employee_owned`, `nonprofit_foundation_owned`, `private_equity_controlled`, `public`, `state_government_owned`, `venture_growth_investor_backed` |
+      | `firmographic.headcount_range` | string[] | `1-10`, `11-50`, `51-100`, `101-250`, `251-500`, `501-1000`, `1001-5000`, `5001-10000`, `10001+` |
       | `firmographic.operating_status` | string[] | `acquired`, `closed`, `ipo`, `operating` |
       | `firmographic.founded_year` | object | Range object. Accepts `gte` and/or `lte` (integer, four-digit year). <br />Eg. \{"gte": 2010, "lte": 2014 \} |
     </Accordion>
@@ -82,12 +83,6 @@ Results are ranked by akta.pro relevance by default and can be enriched with add
       | --- | --- | --- |
       | `financial_estimate.revenue_estimate` | string[] | `pre_revenue`, `under_1m`, `1m_5m`, `5m_10m`, `10m_25m`, `25m_50m`, `50m_100m`, `100m_250m`, `250m_500m`, `500m_1b`, `1b_5b`, `over_5b` |
       | `financial_estimate.valuation_estimate` | string[] | `under_10m`, `10m_50m`, `50m_100m`, `100m_250m`, `250m_500m`, `500m_1b`, `1b_5b`, `5b_10b`, `10b_25b`, `over_25b` |
-    </Accordion>
-
-    <Accordion title="Headcount">
-      | Field | Type | Accepted Values |
-      | --- | --- | --- |
-      | `firmographic.headcount_range` | string[] | `1-10`, `11-50`, `51-100`, `101-250`, `251-500`, `501-1000`, `1001-5000`, `5001-10000`, `10001+` |
     </Accordion>
 
     <Accordion title="Location Filters">
