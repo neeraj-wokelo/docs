@@ -27,8 +27,8 @@ The Company Data API returns detailed company data across multiple sections such
   Company website (e.g. `https://canva.com`) or a company UUID (e.g. `00000l1`). The UUID can be obtained from the Company Search API.
 </ParamField>
 
-<ParamField query="sections" type="string[]">
-  Comma-separated list of sections to return. If omitted, all available sections are returned.
+<ParamField query="sections" type="string[]" required>
+  Comma-separated list of sections to return.
 
   Available values: `firmographic`, `business_model`, `company_assessment`, `trust_signal`, `company_hierarchy`, `digital_presence`, `financial_estimate`, `location`, `management_profile`, `product_offering`, `strategic_signal`, `customer_profile`, `industry`, `technology`
 
