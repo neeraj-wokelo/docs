@@ -1,0 +1,126 @@
+---
+title: "Filter Options"
+description: "Fetch the available options for one or more specific List Generation filters."
+---
+
+## Overview
+
+The Filter Options API returns the available values for one or more specific filter fields used by the [List Generation API](/api-reference/listgen-api). Pass the filter field names you're interested in — the same `field` values returned by the [Get Filters List API](/docs/filters-list) — and get back the options available for each one.
+
+Use this endpoint after calling Get Filters List: once you know which filter fields exist, use this endpoint to populate a dropdown, autocomplete, or picker with the actual selectable values for a given field, rather than hardcoding them.
+
+This is a **free endpoint** so it does not consume API credits.
+
+**Endpoint**
+
+```text
+POST https://api.akta.pro/api/v1/filters/options/
+```
+
+---
+
+## Authentication
+
+All requests must include an **API key** in the `x-api-key` HTTP header.
+
+```text
+x-api-key: <YOUR_API_KEY>
+```
+
+<Warning>
+  Never expose your API key in client-side code, browser requests, or public repositories. A missing or invalid key returns `401 Unauthorized`.
+</Warning>
+
+---
+
+## Request
+
+### Body parameter
+
+| Parameter | Type | Required | Description |
+| --- | --- | --- | --- |
+| `dropdowns` | object[] | **Required** | Array of objects, one per filter you want options for. Each object has a single `dropdown_type` key — a filter field name from the Get Filters List API (e.g. `firmographic.company_type`). |
+
+To fetch options for a single filter, pass one object in `dropdowns`. To fetch options for every filter in one call, pass one object per filter field.
+
+**Example request — single filter:**
+
+<CodeGroup>
+
+```bash cURL
+curl --location 'https://api.akta.pro/api/v1/filters/options/' \
+  --header 'x-api-key: <YOUR_API_KEY>' \
+  --header 'Content-Type: application/json' \
+  --data '{"dropdowns":[{"dropdown_type":"firmographic.company_type"}]}'
+```
+
+```python Python
+import requests
+
+response = requests.post(
+    "https://api.akta.pro/api/v1/filters/options/",
+    headers={"x-api-key": "<YOUR_API_KEY>"},
+    json={"dropdowns": [{"dropdown_type": "firmographic.company_type"}]}
+)
+
+options = response.json()["data"]
+print(options["firmographic.company_type"])
+```
+
+</CodeGroup>
+
+**Example request — multiple filters at once:**
+
+```json
+{
+  "dropdowns": [
+    {"dropdown_type": "firmographic.company_type"},
+    {"dropdown_type": "firmographic.ownership_category"},
+    {"dropdown_type": "firmographic.operating_status"},
+    {"dropdown_type": "funding_detail.funding_overview.funding_stage"},
+    {"dropdown_type": "financial_estimate.revenue_estimate"},
+    {"dropdown_type": "financial_estimate.valuation_estimate"},
+    {"dropdown_type": "location.hq.region"},
+    {"dropdown_type": "location.hq.country"},
+    {"dropdown_type": "business_model.gtm_type"},
+    {"dropdown_type": "business_model.gtm_motion"},
+    {"dropdown_type": "business_model.offering_type"},
+    {"dropdown_type": "company_assessment.customer_concentration.classification"},
+    {"dropdown_type": "technology.ai_maturity.scale"},
+    {"dropdown_type": "business_model.revenue_model"},
+    {"dropdown_type": "company_assessment.competitive_moat"},
+    {"dropdown_type": "location.market_served.markets.country"},
+    {"dropdown_type": "location.offices.country"},
+    {"dropdown_type": "strategic_signal.partnership.type"}
+  ]
+}
+```
+
+---
+
+## Response
+
+### Response envelope
+
+```json expandable
+{
+  "data": {
+    "firmographic.company_type": [
+      { "value": "private", "label": "Private" },
+      { "value": "public", "label": "Public" }
+    ],
+    "business_model.offering_type": [
+      { "value": "software", "label": "Software" },
+      { "value": "services", "label": "Services" },
+      { "value": "hardware_manufacturing", "label": "Hardware Manufacturing" },
+      { "value": "digital_commerce_content", "label": "Digital Commerce/Content" }
+    ],
+    "funding_detail.funding_overview.funding_stage": [
+      { "value": "seed", "label": "Seed" },
+      { "value": "series_a", "label": "Series A" },
+      { "value": "series_b", "label": "Series B" }
+    ]
+  },
+  "credits_consumed": 0.00
+}
+```

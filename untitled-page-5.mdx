@@ -1,0 +1,105 @@
+---
+title: "Filter Options API"
+description: "Returns the available options for one or more specific List Generation filter fields."
+api: "POST /v1/filters/options/"
+---
+
+## Overview
+
+The Get Filter Options API returns the selectable values for one or more filter fields, given a list of `dropdown_type` names. Pass the filter field names — the same `field` values returned by the Get Filters List API — and get back the options available for each one. This is a free endpoint and does not consume credits. Results are returned in the API response.
+
+## Endpoint Details
+
+- **Method:** POST
+- **Endpoint:** `/api/v1/filters/options/`
+
+## Authentication requirements
+
+- Include a valid API key in the `x-api-key` request header.
+
+## Request
+
+### Request Parameters
+
+#### Body Parameters
+
+<ParamField body="dropdowns" type="object[]" required>
+  Array of objects, one per filter you want options for. Each object has a single `dropdown_type` key — a filter field name from the Get Filters List API (e.g. `firmographic.company_type`).
+
+  To fetch options for every filter in one call, pass one object per filter field:
+
+  ```json
+  {
+    "dropdowns": [
+      {"dropdown_type": "firmographic.company_type"},
+      {"dropdown_type": "firmographic.ownership_category"},
+      {"dropdown_type": "firmographic.operating_status"},
+      {"dropdown_type": "funding_detail.funding_overview.funding_stage"},
+      {"dropdown_type": "financial_estimate.revenue_estimate"},
+      {"dropdown_type": "financial_estimate.valuation_estimate"},
+      {"dropdown_type": "location.hq.region"},
+      {"dropdown_type": "location.hq.country"},
+      {"dropdown_type": "business_model.gtm_type"},
+      {"dropdown_type": "business_model.gtm_motion"},
+      {"dropdown_type": "business_model.offering_type"},
+      {"dropdown_type": "company_assessment.customer_concentration.classification"},
+      {"dropdown_type": "technology.ai_maturity.scale"},
+      {"dropdown_type": "business_model.revenue_model"},
+      {"dropdown_type": "company_assessment.competitive_moat"},
+      {"dropdown_type": "location.market_served.markets.country"},
+      {"dropdown_type": "location.offices.country"},
+      {"dropdown_type": "strategic_signal.partnership.type"}
+    ]
+  }
+  ```
+</ParamField>
+
+#### Example Request
+
+```text
+POST /api/v1/filters/options
+x-api-key: <api-key>
+Content-Type: application/json
+
+{"dropdowns":[{"dropdown_type":"firmographic.company_type"}]}
+```
+
+## Response
+
+#### Successful Response Fields
+
+Returns a JSON object with the following structure:
+
+<ResponseField name="data" type="object">
+  Options keyed by the `dropdown_type` requested. Each value is an array of option objects for that filter. See **Option Object** below.
+</ResponseField>
+
+<ResponseField name="credits_consumed" type="float">
+  Credits consumed by the request. This endpoint is free and always returns `0.00`.
+</ResponseField>
+
+#### Option Object
+
+<ResponseField name="value" type="string">
+  The value to pass in `filters` when calling the List Generation API.
+</ResponseField>
+
+<ResponseField name="label" type="string">
+  Human-readable label for the value, suitable for displaying in a UI dropdown.
+</ResponseField>
+
+<ResponseExample>
+
+```json 200 expandable wrap
+{
+    "data": {
+        "firmographic.company_type": [
+            { "value": "private", "label": "Private" },
+            { "value": "public", "label": "Public" }
+        ]
+    },
+    "credits_consumed": 0.00
+}
+```
+
+</ResponseExample>

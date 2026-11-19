@@ -65,7 +65,9 @@
                   "docs/list-generation/overview",
                   "docs/list-generation/quickstart",
                   "docs/list-generation/use-cases",
-                  "docs/list-generation/best-practices"
+                  "docs/list-generation/best-practices",
+                  "untitled-page-2",
+                  "untitled-page-3"
                 ]
               },
               {
@@ -215,7 +217,9 @@
               "api-reference/supporting-apis/industry-search",
               "api-reference/supporting-apis/company-addition-api",
               "api-reference/supporting-apis/status-api",
-              "api-reference/supporting-apis/filter-builder"
+              "api-reference/supporting-apis/filter-builder",
+              "untitled-page-4",
+              "untitled-page-5"
             ]
           }
         ]

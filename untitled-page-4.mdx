@@ -1,0 +1,376 @@
+---
+title: "Filter List API"
+description: "Returns every filter accepted by the List Generation API, its value shape, and how to source its values."
+api: "GET /v1/filters/list/"
+---
+
+## Overview
+
+The Get Filters List API returns every filter accepted by the List Generation API — its key, the shape its value must take, a description, and whether its values must be looked up from the Get Filter Options API or supplied directly. This is a free endpoint and does not consume credits. It takes no parameters. Results are returned in the API response.
+
+## Endpoint Details
+
+- **Method:** GET
+- **Endpoint:** `/api/v1/filters/list/`
+
+## Authentication requirements
+
+- Include a valid API key in the `x-api-key` request header.
+
+## Request
+
+### Request Parameters
+
+This endpoint takes no query or body parameters.
+
+## Response
+
+#### Successful Response Fields
+
+Returns a JSON object with the following structure:
+
+<ResponseField name="count" type="integer">
+  Total number of filters returned.
+</ResponseField>
+
+<ResponseField name="usage" type="string">
+  A short guide describing how to use these filters with the Get Filter Options and List Generation APIs, and how `same_element_group` works.
+</ResponseField>
+
+<ResponseField name="filters" type="array">
+  Array of filter objects. See **Filter Object** below.
+</ResponseField>
+
+#### Filter Object
+
+<ResponseField name="filter" type="string">
+  The exact key to use inside `filters` when calling the List Generation API. Matches the field's path in the enrichment document. Example: `firmographic.company_type`.
+</ResponseField>
+
+<ResponseField name="value_shape" type="string">
+  The type and shape the filter's value must take. Examples: `string`, `list[string]`, `bool`, `int | list[int]`, or a range object such as `{"gte": int, "lte": int}`.
+</ResponseField>
+
+<ResponseField name="description" type="string">
+  What the filter matches, plus any usage notes — including when to prefer one related filter over another.
+</ResponseField>
+
+<ResponseField name="how_to_get_values" type="string">
+  Either `"look up with /list/options/"` or `"supply the value directly"`.
+</ResponseField>
+
+<ResponseField name="dropdown_type" type="string">
+  Present only when `how_to_get_values` is `"look up with /list/options/"`. Pass this exact string as the `dropdown_type` in a Get Filter Options request.
+</ResponseField>
+
+<ResponseField name="same_element_group" type="string">
+  Present only on filters over a nested array (offices, funding rounds, partnerships, markets served). Filters sharing the same `same_element_group` value must all match the same array element on a given company.
+</ResponseField>
+
+<ResponseExample>
+
+```json 200 expandable wrap
+{
+  "count": 43,
+  "usage": "Filters are keyed by the field's path in the enrichment document — the same address the enrichment API returns that field under. Pick the filters you need, and for any with a dropdown_type fetch its allowed values from POST /api/v1/company/list/options/ and use them verbatim — do not invent values, an unrecognised one matches nothing. Then send {\"<filter>\": <value>} to /company/list/generate/. Filters sharing a same_element_group must all match the same array element.",
+  "filters": [
+    {
+      "filter": "firmographic.company_type",
+      "value_shape": "string | list[string]",
+      "description": "Public vs Private company.",
+      "how_to_get_values": "look up with /list/options/",
+      "dropdown_type": "firmographic.company_type"
+    },
+    {
+      "filter": "firmographic.ownership_category",
+      "value_shape": "string | list[string]",
+      "description": "Who owns the company — PE-controlled, family-owned, founder-bootstrapped, VC-backed, state-owned, etc.",
+      "how_to_get_values": "look up with /list/options/",
+      "dropdown_type": "firmographic.ownership_category"
+    },
+    {
+      "filter": "firmographic.operating_status",
+      "value_shape": "string | list[string]",
+      "description": "Whether the company is still operating, acquired, closed, or has IPO'd.",
+      "how_to_get_values": "look up with /list/options/",
+      "dropdown_type": "firmographic.operating_status"
+    },
+    {
+      "filter": "firmographic.founded_year",
+      "value_shape": "{\"gte\": int, \"lte\": int}",
+      "description": "Year the company was founded. Inclusive range; either bound optional.",
+      "how_to_get_values": "supply the value directly"
+    },
+    {
+      "filter": "firmographic.headcount_range",
+      "value_shape": "string | list[string]",
+      "description": "Number of employees, as a band (e.g. '51-100'). A range that spans several bands needs every band it touches.",
+      "how_to_get_values": "look up with /list/options/",
+      "dropdown_type": "firmographic.headcount_range"
+    },
+    {
+      "filter": "industry.industry",
+      "value_shape": "list[string]",
+      "description": "Industry taxonomy codes. The primary way to filter by sector. Codes are opaque — resolve the user's sector wording to codes first. Matches primary OR secondary industry, at any taxonomy level: a broad l1/l2/l3 code matches every company beneath it in the hierarchy, and levels can be mixed in one list. Search the industry dropdown with level='all' when unsure how broad the user's wording is.",
+      "how_to_get_values": "look up with /list/options/",
+      "dropdown_type": "industry.industry"
+    },
+    {
+      "filter": "industry.naics",
+      "value_shape": "list[string]",
+      "description": "NAICS classification codes. Use when the user names NAICS explicitly; prefer industry.industry otherwise.",
+      "how_to_get_values": "look up with /list/options/",
+      "dropdown_type": "industry.naics"
+    },
+    {
+      "filter": "industry.sic",
+      "value_shape": "list[string]",
+      "description": "SIC classification codes. Use when the user names SIC explicitly; prefer industry.industry otherwise.",
+      "how_to_get_values": "look up with /list/options/",
+      "dropdown_type": "industry.sic"
+    },
+    {
+      "filter": "location.hq.region",
+      "value_shape": "list[string]",
+      "description": "Region of the headquarters as UN M49 codes ('150' = Europe, '155' = Western Europe, '021' = Northern America). Codes are opaque — resolve the user's wording with the dropdown first. A broad code matches every company beneath it: '019' (Americas) covers the USA, Brazil and everything between, so there is no need to list countries. Prefer this over location.hq.region.",
+      "how_to_get_values": "look up with /list/options/",
+      "dropdown_type": "location.hq.region"
+    },
+    {
+      "filter": "location.hq.country",
+      "value_shape": "string | list[string]",
+      "description": "Country of the headquarters.",
+      "how_to_get_values": "look up with /list/options/",
+      "dropdown_type": "location.hq.country"
+    },
+    {
+      "filter": "location.hq.city",
+      "value_shape": "string | list[string]",
+      "description": "City of the headquarters. No dropdown — pass the city name as stored, and prefer country/region when unsure.",
+      "how_to_get_values": "supply the value directly"
+    },
+    {
+      "filter": "location.market_served.is_global",
+      "value_shape": "bool",
+      "description": "True when the company claims a global footprint.",
+      "how_to_get_values": "supply the value directly"
+    },
+    {
+      "filter": "location.market_served.markets.country",
+      "value_shape": "list[string]",
+      "description": "Country the company sells into, as opposed to where it is based. ISO-3 code, as stored (upper-case).",
+      "how_to_get_values": "look up with /list/options/",
+      "dropdown_type": "location.market_served.markets.country",
+      "same_element_group": "location.market_served.markets"
+    },
+    {
+      "filter": "location.market_served.markets.region",
+      "value_shape": "list[string]",
+      "description": "Region the company sells into, matched as a case-insensitive substring. Substring rather than a dropdown because the stored values mix granularity — 'Europe', 'Western Europe', 'United States' and 'California' all appear — so 'Europe' should catch 'Western Europe' too. Combined with location.market_served.markets.country this means the SAME market entry is in that region AND country.",
+      "how_to_get_values": "supply the value directly",
+      "same_element_group": "location.market_served.markets"
+    },
+    {
+      "filter": "location.offices.city",
+      "value_shape": "list[string]",
+      "description": "City of an office. Combined with location.offices.country this means the SAME office is in that city AND country.",
+      "how_to_get_values": "supply the value directly",
+      "same_element_group": "location.offices"
+    },
+    {
+      "filter": "location.offices.country",
+      "value_shape": "list[string]",
+      "description": "Country of an office (anywhere the company has one, not just the HQ).",
+      "how_to_get_values": "look up with /list/options/",
+      "dropdown_type": "location.offices.country",
+      "same_element_group": "location.offices"
+    },
+    {
+      "filter": "financial_estimate.revenue_estimate",
+      "value_shape": "string | list[string]",
+      "description": "Estimated annual revenue, as a band.",
+      "how_to_get_values": "look up with /list/options/",
+      "dropdown_type": "financial_estimate.revenue_estimate"
+    },
+    {
+      "filter": "financial_estimate.valuation_estimate",
+      "value_shape": "string | list[string]",
+      "description": "Estimated company valuation, as a band.",
+      "how_to_get_values": "look up with /list/options/",
+      "dropdown_type": "financial_estimate.valuation_estimate"
+    },
+    {
+      "filter": "funding_detail.funding_overview.funding_stage",
+      "value_shape": "string | list[string]",
+      "description": "The company's latest/current funding stage. Use this for simple stage questions; use funding_detail.funding_rounds.* when the question is about a specific round.",
+      "how_to_get_values": "look up with /list/options/",
+      "dropdown_type": "funding_detail.funding_overview.funding_stage"
+    },
+    {
+      "filter": "funding_detail.funding_overview.total_funding_usd",
+      "value_shape": "{\"gte\": number, \"lte\": number}",
+      "description": "Total capital raised across all rounds, in USD.",
+      "how_to_get_values": "supply the value directly"
+    },
+    {
+      "filter": "funding_detail.funding_overview.last_funding_date",
+      "value_shape": "{\"gte\": \"YYYY-MM-DD\", \"lte\": \"YYYY-MM-DD\"}",
+      "description": "Date of the most recent funding round.",
+      "how_to_get_values": "supply the value directly"
+    },
+    {
+      "filter": "funding_detail.funding_overview.num_funding_rounds",
+      "value_shape": "{\"gte\": int, \"lte\": int}",
+      "description": "How many funding rounds the company has raised.",
+      "how_to_get_values": "supply the value directly"
+    },
+    {
+      "filter": "funding_detail.funding_rounds.round",
+      "value_shape": "list[string]",
+      "description": "Stage of a specific funding round.",
+      "how_to_get_values": "look up with /list/options/",
+      "dropdown_type": "funding_detail.funding_rounds.round",
+      "same_element_group": "funding_detail.funding_rounds"
+    },
+    {
+      "filter": "funding_detail.funding_rounds.date",
+      "value_shape": "{\"gte\": \"YYYY-MM-DD\", \"lte\": \"YYYY-MM-DD\"}",
+      "description": "When a specific funding round was raised.",
+      "how_to_get_values": "supply the value directly",
+      "same_element_group": "funding_detail.funding_rounds"
+    },
+    {
+      "filter": "funding_detail.funding_rounds.amount_usd",
+      "value_shape": "{\"gte\": number, \"lte\": number}",
+      "description": "Size of a specific funding round, in USD.",
+      "how_to_get_values": "supply the value directly",
+      "same_element_group": "funding_detail.funding_rounds"
+    },
+    {
+      "filter": "funding_detail.funding_rounds.investors.uuid",
+      "value_shape": "list[string]",
+      "description": "Investors in a specific round, by akta-pro company uuid. Resolve the investor's name to a uuid first.",
+      "how_to_get_values": "look up with /list/options/",
+      "dropdown_type": "funding_detail.funding_rounds.investors.uuid",
+      "same_element_group": "funding_detail.funding_rounds"
+    },
+    {
+      "filter": "funding_detail.funding_rounds.investors.name",
+      "value_shape": "list[string]",
+      "description": "Investors in a specific round, by name. Case-insensitive substring, so 'a16z' or 'Andreessen' both work — but two firms can share a name fragment, so prefer funding_detail.funding_rounds.investors.uuid when the investor is known.",
+      "how_to_get_values": "supply the value directly",
+      "same_element_group": "funding_detail.funding_rounds"
+    },
+    {
+      "filter": "funding_detail.funding_rounds.investors.lead_investor",
+      "value_shape": "bool",
+      "description": "Restrict the investor match to the round's lead investor.",
+      "how_to_get_values": "supply the value directly",
+      "same_element_group": "funding_detail.funding_rounds"
+    },
+    {
+      "filter": "business_model.gtm_type",
+      "value_shape": "string | list[string]",
+      "description": "Go-to-market type, e.g. B2B vs B2C.",
+      "how_to_get_values": "look up with /list/options/",
+      "dropdown_type": "business_model.gtm_type"
+    },
+    {
+      "filter": "business_model.gtm_motion",
+      "value_shape": "list[string]",
+      "description": "How the company sells — product-led, enterprise sales, channel/partner-led, etc.",
+      "how_to_get_values": "look up with /list/options/",
+      "dropdown_type": "business_model.gtm_motion"
+    },
+    {
+      "filter": "business_model.revenue_model",
+      "value_shape": "list[string]",
+      "description": "How the company charges — subscription, usage-based, licensing, transaction fees, etc.",
+      "how_to_get_values": "look up with /list/options/",
+      "dropdown_type": "business_model.revenue_model"
+    },
+    {
+      "filter": "business_model.offering_type",
+      "value_shape": "string | list[string]",
+      "description": "What the company sells: product, service, or both.",
+      "how_to_get_values": "look up with /list/options/",
+      "dropdown_type": "business_model.offering_type"
+    },
+    {
+      "filter": "company_assessment.customer_concentration.classification",
+      "value_shape": "string | list[string]",
+      "description": "How concentrated the customer base is.",
+      "how_to_get_values": "look up with /list/options/",
+      "dropdown_type": "company_assessment.customer_concentration.classification"
+    },
+    {
+      "filter": "company_assessment.competitive_moat",
+      "value_shape": "list[string]",
+      "description": "The company's competitive moat — network effects, switching costs, IP, scale, etc.",
+      "how_to_get_values": "look up with /list/options/",
+      "dropdown_type": "company_assessment.competitive_moat"
+    },
+    {
+      "filter": "technology.ai_maturity.scale",
+      "value_shape": "int | list[int]",
+      "description": "AI maturity as a numeric scale, 0 (No AI) to 5 (AI Foundational), higher meaning more AI-native. Multi-select: pass every scale value that should match — \"at least AI-differentiated\" is [3, 4, 5], not a range.",
+      "how_to_get_values": "look up with /list/options/",
+      "dropdown_type": "technology.ai_maturity.scale"
+    },
+    {
+      "filter": "technology.api_detail.has_api",
+      "value_shape": "bool",
+      "description": "True when the company offers an API.",
+      "how_to_get_values": "supply the value directly"
+    },
+    {
+      "filter": "technology.app_detail.has_app",
+      "value_shape": "bool",
+      "description": "True when the company offers a mobile/desktop app.",
+      "how_to_get_values": "supply the value directly"
+    },
+    {
+      "filter": "technology.is_technology_focussed",
+      "value_shape": "bool",
+      "description": "True when the company is technology-focused.",
+      "how_to_get_values": "supply the value directly"
+    },
+    {
+      "filter": "customer_profile.select_customer.name",
+      "value_shape": "string | list[string]",
+      "description": "Named customer. Case-insensitive substring match.",
+      "how_to_get_values": "supply the value directly"
+    },
+    {
+      "filter": "strategic_signal.partnership.name",
+      "value_shape": "list[string]",
+      "description": "Partner name. Case-insensitive substring match.",
+      "how_to_get_values": "supply the value directly",
+      "same_element_group": "strategic_signal.partnership"
+    },
+    {
+      "filter": "strategic_signal.partnership.type",
+      "value_shape": "list[string]",
+      "description": "Kind of partnership — reseller, technology, distribution, etc.",
+      "how_to_get_values": "look up with /list/options/",
+      "dropdown_type": "strategic_signal.partnership.type",
+      "same_element_group": "strategic_signal.partnership"
+    },
+    {
+      "filter": "strategic_signal.partnership.strategic_tier",
+      "value_shape": "list[string]",
+      "description": "How strategically important the partnership is.",
+      "how_to_get_values": "supply the value directly",
+      "same_element_group": "strategic_signal.partnership"
+    },
+    {
+      "filter": "search.free_text",
+      "value_shape": "string",
+      "description": "A few plain-English keywords naming the kind of business to find, e.g. 'cold-chain logistics'. At most 500 characters. Matched against each company's description, so it decides WHICH companies are found: the best 1000 matches inside the other filters. Put location, stage, funding and size in their own filters, not here.",
+      "how_to_get_values": "supply the value directly"
+    }
+  ]
+}
+```
+
+</ResponseExample>

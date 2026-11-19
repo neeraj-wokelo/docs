@@ -1,0 +1,80 @@
+---
+title: "Filters List"
+description: "Fetch the full list of filters that can be used with the List Generation API."
+---
+
+## Overview
+
+The Filters List API returns every filter accepted by the [List Generation API](/api-reference/listgen-api), along with the shape each filter's value should take, a description of what it matches, and — for filters backed by a fixed set of values — a `dropdown_type` you can use to look up the allowed values from the [Filter Options API](/docs/filters-options).
+
+Use this endpoint first when building a filter-driven UI or an LLM-based query builder: it tells you which filters exist, how to populate each one, and which filters must be applied together against the same underlying record.
+
+This is a **free endpoint** so it does not consume API credits.
+
+**Endpoint**
+
+```text
+GET https://api.akta.pro/api/v1/filters/list/
+```
+
+This endpoint takes no parameters.
+
+---
+
+## Authentication
+
+All requests must include an **API key** in the `x-api-key` HTTP header.
+
+```text
+x-api-key: <YOUR_API_KEY>
+```
+
+<Warning>
+  Never expose your API key in client-side code, browser requests, or public repositories. A missing or invalid key returns `401 Unauthorized`.
+</Warning>
+
+---
+
+## Request
+
+**Example request:**
+
+<CodeGroup>
+
+```bash cURL
+curl --location 'https://api.akta.pro/api/v1/filters/list/' \
+  --header 'x-api-key: <YOUR_API_KEY>'
+```
+
+```python Python
+import requests
+
+response = requests.get(
+    "https://api.akta.pro/api/v1/filters/list/",
+    headers={"x-api-key": "<YOUR_API_KEY>"}
+)
+
+filters = response.json()["filters"]
+print(f"{len(filters)} filters available")
+```
+
+</CodeGroup>
+
+---
+
+## Response
+
+### Filter object fields
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `filter` | string | The exact key to use inside `filters` when calling the List Generation API. Matches the field's path in the enrichment document (e.g. `firmographic.company_type`). |
+| `value_shape` | string | The type and shape the filter's value must take — e.g. `string`, `list[string]`, `bool`, or a range object like `{"gte": int, "lte": int}`. |
+| `description` | string | What the filter matches and any usage notes — including when to prefer one related filter over another. |
+| `how_to_get_values` | string | Either `"look up with /filters/options/"` (fetch allowed values from the [Filter Options API](/api-reference/filters-options)) or `"supply the value directly"` (free text, boolean, number, or date range — no fixed list). |
+| `dropdown_type` | string | _Present only when_ `how_to_get_values` is `"look up with /filters/options/"`. Pass this exact value as the `dropdown_type` in a Get Filter Options request. |
+| `same_element_group` | string | _Present only on filters over a nested array_ (e.g. offices, funding rounds, partnerships). |
+
+<Info>
+  `dropdown_type` is only present on filters backed by a fixed set of values. Filters without it — free-text fields, booleans, numbers, and date ranges — take their value directly with no lookup step.
+</Info>
